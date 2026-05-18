@@ -1,40 +1,70 @@
+"use client";
+
+import { useLang } from "./lang-provider";
+import {
+  PHONE_DISPLAY,
+  PHONE_TEL,
+  EMAIL,
+  EMAIL_HREF,
+  HOURS_LABEL,
+  HOURS_LABEL_ES,
+  HOURS_NOTE,
+  HOURS_NOTE_ES,
+  LEGAL_NAME,
+} from "@/lib/contact";
+import { SERVICE_CITIES } from "@/lib/content";
+
 export function Footer() {
+  const { t, lang } = useLang();
   return (
     <footer>
-      <div className="footer-grid">
-        <div className="footer-brand">
-          <a href="#" className="brand">
-            Grace<span className="ampersand"> &amp;</span> Co.
-          </a>
-          <p>Residential care for the homes of Northeast Florida.</p>
+      <div className="footer-inner">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <a href="#" className="brand">
+              <span className="brand-mark" aria-hidden>T</span>
+              <span className="brand-name">TORO<span className="accent">·</span>MOVERS</span>
+            </a>
+            <p>{t.footer.tagline}</p>
+          </div>
+
+          <div className="footer-col">
+            <h4>{lang === "es" ? "Contacto" : "Contact"}</h4>
+            <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
+            <a href={EMAIL_HREF}>{EMAIL}</a>
+            <p style={{ marginTop: 12 }}>{lang === "es" ? HOURS_LABEL_ES : HOURS_LABEL}</p>
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>
+              {lang === "es" ? HOURS_NOTE_ES : HOURS_NOTE}
+            </p>
+          </div>
+
+          <div className="footer-col">
+            <h4>{lang === "es" ? "Navegación" : "Menu"}</h4>
+            <a href="#services">{t.nav.services}</a>
+            <a href="#process">{t.nav.process}</a>
+            <a href="#areas">{t.nav.areas}</a>
+            <a href="#reviews">{t.nav.reviews}</a>
+            <a href="#faq">{t.nav.faq}</a>
+          </div>
         </div>
-        <div className="footer-col">
-          <h4>Service</h4>
-          <ul>
-            <li><a href="#">Deep Reset</a></li>
-            <li><a href="#">Maintenance</a></li>
-            <li><a href="#">Transition Care</a></li>
-          </ul>
+
+        <div>
+          <h4 style={{
+            fontSize: 11, fontWeight: 700,
+            letterSpacing: "0.2em", textTransform: "uppercase",
+            color: "var(--muted)", marginBottom: 12,
+          }}>
+            {t.footer.serviceArea}
+          </h4>
+          <p className="footer-cities">
+            {SERVICE_CITIES.map((c) => `${c}, FL`).join(" · ")}
+          </p>
         </div>
-        <div className="footer-col">
-          <h4>House</h4>
-          <ul>
-            <li><a href="#">Our standard</a></li>
-            <li><a href="#">Areas served</a></li>
-            <li><a href="#">Questions</a></li>
-          </ul>
+
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} {LEGAL_NAME}. {t.footer.legal}.</span>
+          <span>{lang === "es" ? "Hablamos español" : "Bilingual · Hablamos español"}</span>
         </div>
-        <div className="footer-col">
-          <h4>Contact</h4>
-          <ul>
-            <li><a href="mailto:hello@grace-co.com">hello@grace-co.com</a></li>
-            <li><a href="tel:9045550000">(904) 555&middot;0000</a></li>
-          </ul>
-        </div>
-      </div>
-      <div className="footer-bottom">
-        <span>&copy; 2026 Grace &amp; Co. &middot; Northeast Florida</span>
-        <span>Bonded &middot; Insured &middot; Background-checked</span>
       </div>
     </footer>
   );

@@ -1,26 +1,36 @@
-import { Reveal } from "./reveal";
+"use client";
+
+import { useLang } from "./lang-provider";
+import { REVIEWS } from "@/lib/content";
 
 export function FeatureQuote() {
+  const { t } = useLang();
   return (
-    <section className="feature-quote">
-      <div className="inner">
-        <Reveal>
-          <div className="section-eyebrow">
-            <span className="roman">IV</span> Client Review
+    <section className="block reviews" id="reviews">
+      <div className="block-inner">
+        <div className="reviews-head">
+          <div className="block-eyebrow">{t.reviews.eyebrow}</div>
+          <h2 className="block-h2">
+            {t.reviews.head} <em>{t.reviews.headItalic}</em>
+          </h2>
+          <div className="reviews-rating">
+            <span className="stars" aria-hidden>★★★★★</span>
+            <span>{t.reviews.rating}</span>
           </div>
-        </Reveal>
-        <Reveal delay={1} as="blockquote">
-          &ldquo;I work twelve-hour days. I used to dread Sundays &mdash; the
-          catch-up, the laundry, the dread of starting Monday in chaos.{" "}
-          <em className="gradient-text-light">
-            Now I don&apos;t think about it.
-          </em>{" "}
-          The house is simply right. That changes everything.&rdquo;
-        </Reveal>
-        <Reveal delay={2} as="cite">
-          <span className="name">Dr. M. Hernandez</span>
-          <span className="role">&mdash; Cardiologist, Ponte Vedra</span>
-        </Reveal>
+        </div>
+
+        <div className="reviews-grid">
+          {REVIEWS.map((r) => (
+            <article key={r.name} className="review-card">
+              <div className="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+              <p className="review-body">&ldquo;{r.body}&rdquo;</p>
+              <div className="review-attr">
+                <span className="review-name">{r.name}</span>
+                <span className="review-meta">{r.meta}</span>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

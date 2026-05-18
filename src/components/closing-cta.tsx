@@ -1,24 +1,27 @@
-import { Reveal } from "./reveal";
+"use client";
+
+import { useLang } from "./lang-provider";
 import { RequestButton } from "./request-button";
+import { PHONE_TEL } from "@/lib/contact";
 
 export function ClosingCta() {
+  const { t } = useLang();
   return (
-    <section className="closing-cta">
-      <Reveal>
-        <div className="section-eyebrow">
-          <span className="roman">VI</span>
-        </div>
-      </Reveal>
-      <Reveal delay={1}>
-        <h2>
-          Begin a relationship
-          <br />
-          <em className="gradient-text">worth keeping.</em>
+    <section className="block closing">
+      <div className="block-inner">
+        <div className="block-eyebrow">{t.closing.eyebrow}</div>
+        <h2 className="block-h2">
+          {t.closing.head} <em>{t.closing.headItalic}</em>
         </h2>
-      </Reveal>
-      <Reveal delay={2}>
-        <RequestButton />
-      </Reveal>
+        <p className="block-sub">{t.closing.sub}</p>
+
+        <div className="closing-cta-row">
+          <RequestButton label={t.closing.primary} />
+          <a href={PHONE_TEL} className="btn btn-outline">
+            {t.closing.secondary}
+          </a>
+        </div>
+      </div>
     </section>
   );
 }

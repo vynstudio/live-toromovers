@@ -1,44 +1,36 @@
-import { Reveal } from "./reveal";
+"use client";
 
-const areas = [
-  { name: "Jacksonville", county: "Duval", zip: "32202 — 32259" },
-  { name: "Ponte Vedra", county: "St. Johns", zip: "32081 — 32082" },
-  { name: "St. Augustine", county: "St. Johns", zip: "32080 — 32092" },
-];
+import { useLang } from "./lang-provider";
+import { AREAS_BY_COUNTY } from "@/lib/content";
 
 export function Areas() {
+  const { t, lang } = useLang();
   return (
-    <section className="areas-section" id="areas">
-      <div className="areas-grid">
-        <Reveal className="areas-intro">
-          <div className="section-eyebrow">
-            <span className="roman">III</span> Where we serve
-          </div>
-          <h2>
-            Northeast
-            <br />
-            Florida,
-            <br />
-            <em className="gradient-text">quietly.</em>
-          </h2>
-          <p>
-            Currently accepting a limited number of new clients in three coastal
-            communities. We would rather serve fewer homes beautifully.
-          </p>
-        </Reveal>
-        <div className="areas-list">
-          {areas.map((a, i) => (
-            <Reveal
-              key={a.name}
-              delay={i === 0 ? undefined : (i as 1 | 2 | 3)}
-              className="area-item"
-            >
-              <span className="area-name">{a.name}</span>
-              <span className="area-counties">{a.county}</span>
-              <span className="area-zip">{a.zip}</span>
-            </Reveal>
+    <section className="block areas" id="areas">
+      <div className="block-inner">
+        <div className="block-eyebrow">{t.areas.eyebrow}</div>
+        <h2 className="block-h2">
+          {t.areas.head} <em>{t.areas.headItalic}</em>
+        </h2>
+        <p className="block-sub">{t.areas.intro}</p>
+
+        <div className="areas-grid">
+          {AREAS_BY_COUNTY.map((c) => (
+            <div key={c.county} className="county-card">
+              <h3>{lang === "es" ? c.countyEs : c.county}</h3>
+              <div className="county-meta">
+                {c.cities.length} {lang === "es" ? "ciudades" : "cities"}
+              </div>
+              <ul>
+                {c.cities.map((city) => (
+                  <li key={city}>{city}</li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
+
+        <p className="areas-fallback">{t.areas.fallback}</p>
       </div>
     </section>
   );

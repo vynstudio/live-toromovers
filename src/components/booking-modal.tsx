@@ -2,15 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { useBooking } from "./booking-provider";
-import { SERVICE_LABEL, type ServiceType } from "@/lib/booking-schema";
+import { useLang } from "./lang-provider";
+import {
+  HELP_LABEL,
+  SIZE_LABEL,
+  type HelpType,
+  type MoveSize,
+} from "@/lib/booking-schema";
 
 type FormData = {
-  zip: string;
-  beds: string;
-  baths: string;
-  sqft: string;
-  service: ServiceType;
+  helpType: HelpType;
+  fromZip: string;
+  toZip: string;
+  size: MoveSize;
   date: string;
+  specialItems: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -18,20 +24,23 @@ type FormData = {
 };
 
 const DEFAULT: FormData = {
-  zip: "",
-  beds: "3",
-  baths: "2",
-  sqft: "1,500 — 2,500",
-  service: "deep",
+  helpType: "labor-truck",
+  fromZip: "",
+  toZip: "",
+  size: "two-br",
   date: "",
+  specialItems: "",
   firstName: "",
   lastName: "",
   email: "",
   phone: "",
 };
 
+const STEPS_COUNT = 5;
+
 export function BookingModal() {
   const { open, setOpen } = useBooking();
+  const { t, lang } = useLang();
   const [step, setStep] = useState(1);
   const [data, setData] = useState<FormData>(DEFAULT);
 
@@ -50,12 +59,10 @@ export function BookingModal() {
     return () => window.removeEventListener("keydown", onKey);
   }, [setOpen]);
 
-  const next = () => setStep((s) => Math.min(s + 1, 6));
+  const next = () => setStep((s) => Math.min(s + 1, STEPS_COUNT + 1));
   const prev = () => setStep((s) => Math.max(s - 1, 1));
 
-  const onConfirm = async () => {
-    // Production: call /api/checkout to create Stripe session → redirect.
-    // For now, simulate completion.
+  const onSubmit = async () => {
     try {
       await fetch("/api/booking", {
         method: "POST",
@@ -63,13 +70,16 @@ export function BookingModal() {
         body: JSON.stringify(data),
       });
     } catch {
-      /* swallow — stub */
+      /* stub */
     }
-    setStep(6);
+    setStep(STEPS_COUNT + 1);
   };
 
   const update = <K extends keyof FormData>(key: K, value: FormData[K]) =>
     setData((d) => ({ ...d, [key]: value }));
+
+  const helpOptions: HelpType[] = ["labor", "labor-truck", "hauling"];
+  const sizeOptions: MoveSize[] = ["studio", "one-br", "two-br", "three-br", "four-plus", "office"];
 
   return (
     <div
@@ -80,286 +90,237 @@ export function BookingModal() {
         }
       }}
     >
-      <div className="modal">
+      <div className="modal" role="dialog" aria-modal="true">
         <button
           className="modal-close"
           onClick={() => setOpen(false)}
           aria-label="Close"
         />
         <div className="modal-inner">
-          <div className="modal-brand">
-            Grace<span className="ampersand"> &amp;</span> Co.
+          <div className="modal-header">
+            <h2 className="modal-title">{t.quote.title}</h2>
+            <p className="modal-sub">{t.quote.sub}</p>
           </div>
-          <div className="modal-tag">Request service</div>
 
-          <div className="steps-bar">
-            {[1, 2, 3, 4, 5].map((n) => (
+          <div className="steps-bar" aria-hidden>
+            {Array.from({ length: STEPS_COUNT }).map((_, i) => (
               <div
-                key={n}
+                key={i}
                 className={`step-pip${
-                  step > n ? " done" : step === n ? " active" : ""
+                  step > i + 1 ? " done" : step === i + 1 ? " active" : ""
                 }`}
               />
             ))}
           </div>
 
+          {/* STEP 1 — Help type */}
           {step === 1 && (
-            <div className="modal-step active">
-              <div className="step-counter">i. &mdash; Residence</div>
-              <h3 className="step-title">Where is your home?</h3>
-              <p className="step-sub">
-                We currently serve Jacksonville, Ponte Vedra and St. Augustine.
-              </p>
-              <div className="field">
-                <label htmlFor="zip">Postal code</label>
-                <input
-                  id="zip"
-                  type="text"
-                  maxLength={5}
-                  placeholder="32082"
-                  value={data.zip}
-                  onChange={(e) => update("zip", e.target.value)}
-                />
-              </div>
-              <div className="modal-actions">
-                <span />
-                <button className="btn btn-primary" onClick={next}>
-                  Continue <span className="arrow" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="modal-step active">
-              <div className="step-counter">ii. &mdash; The home</div>
-              <h3 className="step-title">Tell us about the residence.</h3>
-              <p className="step-sub">Approximate is perfectly fine.</p>
-              <div className="field-row">
-                <div className="field">
-                  <label>Bedrooms</label>
-                  <select
-                    value={data.beds}
-                    onChange={(e) => update("beds", e.target.value)}
-                  >
-                    {["1", "2", "3", "4", "5+"].map((n) => (
-                      <option key={n}>{n}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="field">
-                  <label>Bathrooms</label>
-                  <select
-                    value={data.baths}
-                    onChange={(e) => update("baths", e.target.value)}
-                  >
-                    {["1", "2", "3", "4", "5+"].map((n) => (
-                      <option key={n}>{n}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="field">
-                <label>Approximate size</label>
-                <select
-                  value={data.sqft}
-                  onChange={(e) => update("sqft", e.target.value)}
-                >
-                  <option>Under 1,500 sqft</option>
-                  <option>1,500 — 2,500</option>
-                  <option>2,500 — 3,500</option>
-                  <option>3,500 — 5,000</option>
-                  <option>5,000+</option>
-                </select>
-              </div>
-              <div className="modal-actions">
-                <button className="btn-back" onClick={prev}>
-                  <span className="btn-back-icon">&larr;</span> Back
-                </button>
-                <button className="btn btn-primary" onClick={next}>
-                  Continue <span className="arrow" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="modal-step active">
-              <div className="step-counter">iii. &mdash; Service</div>
-              <h3 className="step-title">Which relationship suits you?</h3>
-              <p className="step-sub">All new clients begin with a deep reset.</p>
-              <div className="choice-grid">
-                {(
-                  [
-                    {
-                      v: "deep" as const,
-                      t: "Initial Deep Reset",
-                      d: "A complete reset. Required for all new clients.",
-                    },
-                    {
-                      v: "recurring" as const,
-                      t: "Deep Reset + Recurring",
-                      d: "Initial deep reset plus ongoing maintenance.",
-                    },
-                    {
-                      v: "movein" as const,
-                      t: "Transition Care",
-                      d: "Move-in, move-out, or pre-listing service.",
-                    },
-                  ]
-                ).map((c) => (
+            <div>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 20, marginBottom: 8 }}>
+                {t.quote.helpQ}
+              </h3>
+              <div className="choices">
+                {helpOptions.map((h) => (
                   <div
-                    key={c.v}
-                    className={`choice${data.service === c.v ? " selected" : ""}`}
-                    onClick={() => update("service", c.v)}
+                    key={h}
+                    className={`choice${data.helpType === h ? " selected" : ""}`}
+                    onClick={() => update("helpType", h)}
                   >
-                    <div className="choice-title">
-                      <span className="check" />
-                      {c.t}
-                    </div>
-                    <div className="choice-desc">{c.d}</div>
+                    <span className="choice-radio" aria-hidden />
+                    <span className="choice-label">{HELP_LABEL[h][lang]}</span>
                   </div>
                 ))}
               </div>
               <div className="modal-actions">
-                <button className="btn-back" onClick={prev}>
-                  <span className="btn-back-icon">&larr;</span> Back
-                </button>
-                <button className="btn btn-primary" onClick={next}>
-                  Continue <span className="arrow" />
+                <span />
+                <button type="button" className="btn btn-primary" onClick={next}>
+                  {t.quote.next} <span className="arrow" />
                 </button>
               </div>
             </div>
           )}
 
-          {step === 4 && (
-            <div className="modal-step active">
-              <div className="step-counter">iv. &mdash; Schedule &amp; contact</div>
-              <h3 className="step-title">When may we visit?</h3>
-              <p className="step-sub">
-                We will confirm the exact time within one business day.
-              </p>
+          {/* STEP 2 — From / To */}
+          {step === 2 && (
+            <div>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 20, marginBottom: 16 }}>
+                {t.quote.fromQ}
+              </h3>
               <div className="field">
-                <label htmlFor="date">Preferred date</label>
+                <label>{t.quote.fromQ}</label>
                 <input
-                  id="date"
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={5}
+                  placeholder={t.quote.fromPh}
+                  value={data.fromZip}
+                  onChange={(e) => update("fromZip", e.target.value)}
+                />
+              </div>
+              <div className="field">
+                <label>{t.quote.toQ}</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={5}
+                  placeholder={t.quote.toPh}
+                  value={data.toZip}
+                  onChange={(e) => update("toZip", e.target.value)}
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn-back" onClick={prev}>← {t.quote.back}</button>
+                <button type="button" className="btn btn-primary" onClick={next}>
+                  {t.quote.next} <span className="arrow" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3 — Size */}
+          {step === 3 && (
+            <div>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 20, marginBottom: 16 }}>
+                {t.quote.sizeQ}
+              </h3>
+              <div className="size-grid">
+                {sizeOptions.map((s) => (
+                  <button
+                    type="button"
+                    key={s}
+                    className={`size-chip${data.size === s ? " selected" : ""}`}
+                    onClick={() => update("size", s)}
+                  >
+                    {SIZE_LABEL[s][lang]}
+                  </button>
+                ))}
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn-back" onClick={prev}>← {t.quote.back}</button>
+                <button type="button" className="btn btn-primary" onClick={next}>
+                  {t.quote.next} <span className="arrow" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4 — Date + special */}
+          {step === 4 && (
+            <div>
+              <div className="field">
+                <label>{t.quote.dateQ}</label>
+                <input
                   type="date"
                   value={data.date}
                   onChange={(e) => update("date", e.target.value)}
                 />
               </div>
+              <div className="field">
+                <label>{t.quote.specialQ}</label>
+                <textarea
+                  placeholder={t.quote.specialPh}
+                  value={data.specialItems}
+                  onChange={(e) => update("specialItems", e.target.value)}
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="btn-back" onClick={prev}>← {t.quote.back}</button>
+                <button type="button" className="btn btn-primary" onClick={next}>
+                  {t.quote.next} <span className="arrow" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 5 — Contact + review + submit */}
+          {step === 5 && (
+            <div>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 20, marginBottom: 16 }}>
+                {t.quote.contactQ}
+              </h3>
               <div className="field-row">
                 <div className="field">
-                  <label>First name</label>
+                  <label>{t.quote.firstName}</label>
                   <input
                     type="text"
-                    placeholder="Margaret"
+                    autoComplete="given-name"
                     value={data.firstName}
                     onChange={(e) => update("firstName", e.target.value)}
                   />
                 </div>
                 <div className="field">
-                  <label>Last name</label>
+                  <label>{t.quote.lastName}</label>
                   <input
                     type="text"
-                    placeholder="Williams"
+                    autoComplete="family-name"
                     value={data.lastName}
                     onChange={(e) => update("lastName", e.target.value)}
                   />
                 </div>
               </div>
               <div className="field">
-                <label>Email</label>
+                <label>{t.quote.email}</label>
                 <input
                   type="email"
-                  placeholder="m.williams@residence.com"
+                  autoComplete="email"
                   value={data.email}
                   onChange={(e) => update("email", e.target.value)}
                 />
               </div>
               <div className="field">
-                <label>Telephone</label>
+                <label>{t.quote.phone}</label>
                 <input
                   type="tel"
-                  placeholder="(904) 555·0000"
+                  autoComplete="tel"
+                  placeholder="(689) 600-2720"
                   value={data.phone}
                   onChange={(e) => update("phone", e.target.value)}
                 />
               </div>
-              <div className="modal-actions">
-                <button className="btn-back" onClick={prev}>
-                  <span className="btn-back-icon">&larr;</span> Back
-                </button>
-                <button className="btn btn-primary" onClick={next}>
-                  Review <span className="arrow" />
-                </button>
-              </div>
-            </div>
-          )}
 
-          {step === 5 && (
-            <div className="modal-step active">
-              <div className="step-counter">v. &mdash; Confirm</div>
-              <h3 className="step-title">Confirm your reservation.</h3>
-              <p className="step-sub">
-                A refundable deposit secures your appointment. This amount is
-                applied directly to your first service invoice.
-              </p>
               <div className="summary">
                 <div className="summary-row">
-                  <span className="k">Service</span>
-                  <span className="v">{SERVICE_LABEL[data.service]}</span>
+                  <span className="k">{t.quote.stepLabels[0]}</span>
+                  <span className="v">{HELP_LABEL[data.helpType][lang]}</span>
                 </div>
                 <div className="summary-row">
-                  <span className="k">Residence</span>
-                  <span className="v">
-                    {data.beds} bed &middot; {data.baths} bath
-                  </span>
+                  <span className="k">{t.quote.stepLabels[1]}</span>
+                  <span className="v">{data.fromZip || "—"} → {data.toZip || "—"}</span>
                 </div>
                 <div className="summary-row">
-                  <span className="k">Area</span>
-                  <span className="v">
-                    Northeast FL &middot; {data.zip || "—"}
-                  </span>
+                  <span className="k">{t.quote.stepLabels[2]}</span>
+                  <span className="v">{SIZE_LABEL[data.size][lang]}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="k">{t.quote.stepLabels[3]}</span>
+                  <span className="v">{data.date || "—"}</span>
                 </div>
               </div>
-              <div className="deposit-block">
-                <span className="k">Refundable deposit</span>
-                <span className="v">$50</span>
-              </div>
-              <div className="deposit-note">
-                Your appointment is secured upon receipt of the deposit. Fully
-                refundable up to 48 hours prior to your scheduled service.
-                Processed securely via Stripe.
-              </div>
-              <button className="btn btn-primary" onClick={onConfirm}>
-                Confirm reservation <span className="arrow" />
+
+              <button type="button" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }} onClick={onSubmit}>
+                {t.quote.confirm} <span className="arrow" />
               </button>
+
               <div className="modal-actions">
-                <button className="btn-back" onClick={prev}>
-                  <span className="btn-back-icon">&larr;</span> Back
-                </button>
+                <button type="button" className="btn-back" onClick={prev}>← {t.quote.back}</button>
                 <span />
               </div>
             </div>
           )}
 
-          {step === 6 && (
-            <div className="modal-step active">
-              <div className="success">
-                <div className="success-mark" />
-                <h3 className="step-title">Reserved.</h3>
-                <p
-                  className="step-sub"
-                  style={{ maxWidth: 360, margin: "0 auto 32px" }}
-                >
-                  A confirmation has been sent to your inbox. We will reach out
-                  within one business day to arrange the precise time.
-                </p>
-                <button className="btn-back" onClick={() => setOpen(false)}>
-                  Close
-                </button>
-              </div>
+          {/* SUCCESS */}
+          {step === STEPS_COUNT + 1 && (
+            <div className="success">
+              <div className="success-mark" aria-hidden />
+              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 28, marginBottom: 12 }}>
+                {t.quote.successTitle}
+              </h3>
+              <p style={{ fontSize: 15, color: "var(--ink-soft)", lineHeight: 1.6, maxWidth: 380, margin: "0 auto 28px" }}>
+                {t.quote.successBody}
+              </p>
+              <button type="button" className="btn-back" onClick={() => setOpen(false)}>
+                Close
+              </button>
             </div>
           )}
         </div>
