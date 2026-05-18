@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import { useBooking } from "./booking-provider";
 import { useLang } from "./lang-provider";
+import { AddressInput } from "./address-input";
 import {
   HELP_LABEL,
-  SIZE_LABEL,
   RESIDENCE_LABEL,
   FLOOR_LABEL,
   type HelpType,
-  type MoveSize,
   type ResidenceType,
   type ApartmentFloor,
 } from "@/lib/booking-schema";
@@ -22,7 +21,6 @@ type FormData = {
   toAddress: string;
   toResidence: ResidenceType;
   toFloor?: ApartmentFloor;
-  size: MoveSize;
   date: string;
   specialItems: string;
   firstName: string;
@@ -39,7 +37,6 @@ const DEFAULT: FormData = {
   toAddress: "",
   toResidence: "house",
   toFloor: undefined,
-  size: "two-br",
   date: "",
   specialItems: "",
   firstName: "",
@@ -48,17 +45,9 @@ const DEFAULT: FormData = {
   phone: "",
 };
 
-const STEPS_COUNT = 6;
+const STEPS_COUNT = 5;
 
 const HELP_OPTIONS: HelpType[] = ["labor", "labor-truck", "hauling"];
-const SIZE_OPTIONS: MoveSize[] = [
-  "studio",
-  "one-br",
-  "two-br",
-  "three-br",
-  "four-plus",
-  "office",
-];
 const RESIDENCE_OPTIONS: ResidenceType[] = [
   "house",
   "apartment",
@@ -196,19 +185,13 @@ export function BookingModal() {
               <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 20, marginBottom: 16 }}>
                 {t.quote.fromQ}
               </h3>
-              {/* TODO: wire Google Places autocomplete to this input when
-                  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is provided. For now, the
-                  browser's saved-address autofill handles the same pattern
-                  via autoComplete="street-address". */}
               <div className="field">
                 <label>{t.quote.fromAddrLabel}</label>
-                <input
-                  type="text"
-                  autoComplete="street-address"
-                  inputMode="text"
-                  placeholder={t.quote.fromPh}
+                <AddressInput
                   value={data.fromAddress}
-                  onChange={(e) => update("fromAddress", e.target.value)}
+                  onChange={(v) => update("fromAddress", v)}
+                  placeholder={t.quote.fromPh}
+                  ariaLabel={t.quote.fromAddrLabel}
                 />
               </div>
 
@@ -263,13 +246,11 @@ export function BookingModal() {
               </h3>
               <div className="field">
                 <label>{t.quote.toAddrLabel}</label>
-                <input
-                  type="text"
-                  autoComplete="street-address"
-                  inputMode="text"
-                  placeholder={t.quote.toPh}
+                <AddressInput
                   value={data.toAddress}
-                  onChange={(e) => update("toAddress", e.target.value)}
+                  onChange={(v) => update("toAddress", v)}
+                  placeholder={t.quote.toPh}
+                  ariaLabel={t.quote.toAddrLabel}
                 />
               </div>
 
@@ -316,35 +297,8 @@ export function BookingModal() {
             </div>
           )}
 
-          {/* STEP 4 — Size */}
+          {/* STEP 4 — Date + special items */}
           {step === 4 && (
-            <div>
-              <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 20, marginBottom: 16 }}>
-                {t.quote.sizeQ}
-              </h3>
-              <div className="size-grid">
-                {SIZE_OPTIONS.map((s) => (
-                  <button
-                    type="button"
-                    key={s}
-                    className={`size-chip${data.size === s ? " selected" : ""}`}
-                    onClick={() => update("size", s)}
-                  >
-                    {SIZE_LABEL[s][lang]}
-                  </button>
-                ))}
-              </div>
-              <div className="modal-actions">
-                <button type="button" className="btn-back" onClick={prev}>← {t.quote.back}</button>
-                <button type="button" className="btn btn-primary" onClick={next}>
-                  {t.quote.next} <span className="arrow" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 5 — Date + special items */}
-          {step === 5 && (
             <div>
               <div className="field">
                 <label>{t.quote.dateQ}</label>
@@ -371,8 +325,8 @@ export function BookingModal() {
             </div>
           )}
 
-          {/* STEP 6 — Contact + review + submit */}
-          {step === 6 && (
+          {/* STEP 5 — Contact + review + submit */}
+          {step === 5 && (
             <div>
               <h3 style={{ fontFamily: "var(--font-serif)", fontSize: 20, marginBottom: 16 }}>
                 {t.quote.contactQ}
@@ -450,10 +404,6 @@ export function BookingModal() {
                 </div>
                 <div className="summary-row">
                   <span className="k">{t.quote.stepLabels[3]}</span>
-                  <span className="v">{SIZE_LABEL[data.size][lang]}</span>
-                </div>
-                <div className="summary-row">
-                  <span className="k">{t.quote.stepLabels[4]}</span>
                   <span className="v">{data.date || "—"}</span>
                 </div>
               </div>

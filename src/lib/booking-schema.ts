@@ -41,7 +41,10 @@ export const QuoteSchema = z.object({
   toResidence: ResidenceType,
   toFloor: ApartmentFloor.optional(),
 
-  size: MoveSize,
+  // Size kept optional for backward-compat with /api/booking; no longer
+  // asked in the form because the residence type + special items already
+  // give us what we need to quote.
+  size: MoveSize.optional(),
   date: z.string().min(1),
   specialItems: z.string().max(500).optional().default(""),
   firstName: z.string().min(1),

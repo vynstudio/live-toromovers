@@ -778,6 +778,42 @@ footer {
 }
 .tier:hover::after { opacity: 0.18; background-position: 100% 100%; }
 
+/* ADDRESS AUTOCOMPLETE (Mapbox-powered) */
+.address-input-wrap { position: relative; }
+.address-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  z-index: 20;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 4px;
+  margin: 0;
+  list-style: none;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  max-height: 280px;
+  overflow-y: auto;
+}
+.address-suggestion {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex; flex-direction: column; gap: 2px;
+  transition: background 0.15s;
+}
+.address-suggestion:hover,
+.address-suggestion.active { background: var(--bg-soft); }
+.addr-primary {
+  font-size: 14px; font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.addr-secondary {
+  font-size: 12px; color: var(--muted);
+  line-height: 1.35;
+}
+
 /* LOADING STATE */
 .btn-loading { pointer-events: none; opacity: 0.92; }
 .btn-loading .arrow { display: none; }

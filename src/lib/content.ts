@@ -383,7 +383,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
     quote: {
       title: "Free quote",
       sub: "60-second form. We respond the same day.",
-      stepLabels: ["Help", "From", "To", "Size", "Date", "You"],
+      stepLabels: ["Help", "From", "To", "Date", "You"],
       helpQ: "What kind of help do you need?",
       fromQ: "Where are you moving from?",
       toQ: "Where are you moving to?",
@@ -582,7 +582,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
     quote: {
       title: "Cotización gratis",
       sub: "Formulario de 60 segundos. Respondemos el mismo día.",
-      stepLabels: ["Ayuda", "Desde", "Hasta", "Tamaño", "Fecha", "Tú"],
+      stepLabels: ["Ayuda", "Desde", "Hasta", "Fecha", "Tú"],
       helpQ: "¿Qué tipo de ayuda necesitas?",
       fromQ: "¿Desde dónde te mudas?",
       toQ: "¿A dónde te mudas?",
