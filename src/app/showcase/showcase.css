@@ -1,0 +1,299 @@
+/* ───────── SHOWCASE — full-screen auto-advancing presentation ───────── */
+
+.showcase-root {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 200;
+  overflow: hidden;
+}
+
+.scene {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 80px;
+  opacity: 0;
+  transform: translateY(36px) scale(0.985);
+  transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.scene.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  z-index: 2;
+}
+.scene.past {
+  opacity: 0;
+  transform: translateY(-36px) scale(1.015);
+  z-index: 1;
+}
+.scene.future { z-index: 1; }
+
+@media (max-width: 720px) {
+  .scene { padding: 32px; }
+}
+
+.scene-dark {
+  background: var(--navy-deep);
+  color: #fff;
+}
+.scene-dark::before {
+  content: '';
+  position: absolute; top: -120px; right: -120px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--electric) 0%, transparent 60%);
+  opacity: 0.18; filter: blur(48px);
+  animation: scBlob 18s ease-in-out infinite;
+}
+@keyframes scBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-100px, 70px) scale(1.2); }
+}
+
+.scene-center {
+  text-align: center;
+  max-width: 1100px;
+  display: flex; flex-direction: column; align-items: center;
+  position: relative; z-index: 2;
+}
+.scene-narrow { max-width: 900px; }
+
+.sc-eyebrow {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--electric);
+  display: inline-flex; align-items: center; gap: 16px;
+  margin-bottom: 36px;
+}
+.sc-eyebrow::before, .sc-eyebrow::after {
+  content: ''; width: 28px; height: 1px; background: var(--electric);
+}
+.sc-eyebrow.electric { color: var(--electric-bright); }
+.sc-eyebrow.electric::before, .sc-eyebrow.electric::after {
+  background: var(--electric-bright);
+}
+
+.sc-logo {
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-size: clamp(72px, 11vw, 168px);
+  line-height: 1; letter-spacing: -0.028em;
+  color: var(--ink); margin-bottom: 24px;
+}
+.sc-logo .sc-amp {
+  font-style: italic; color: var(--electric);
+}
+.sc-logo-closing { font-size: clamp(64px, 9vw, 136px); }
+
+.sc-divider {
+  width: 64px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 20px 0 28px;
+}
+
+.sc-tagline {
+  font-family: var(--font-serif), serif; font-style: italic;
+  font-size: clamp(18px, 2.4vw, 28px);
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+}
+
+.sc-url {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--electric); margin-top: 20px;
+}
+
+.sc-h1-big {
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-size: clamp(68px, 10vw, 156px);
+  line-height: 0.96; letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.sc-h1-big em { font-style: italic; display: block; }
+
+.sc-h2 {
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-size: clamp(52px, 7vw, 108px);
+  line-height: 1.0; letter-spacing: -0.028em;
+  color: var(--ink); margin-bottom: 56px;
+}
+.sc-h2 em { font-style: italic; display: block; }
+.sc-h2-small { font-size: clamp(40px, 5vw, 68px); margin-bottom: 56px; }
+
+.sc-locations, .sc-process {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.sc-locations li, .sc-process li {
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-size: clamp(28px, 3.5vw, 48px);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  display: flex; align-items: baseline; gap: 24px;
+}
+.sc-roman {
+  font-family: var(--font-serif), serif; font-style: italic;
+  font-size: 0.55em; color: var(--electric); font-weight: 400;
+  min-width: 40px; text-align: right;
+}
+
+.scene-service {
+  display: grid; grid-template-columns: 1fr 1fr;
+  width: 100%; height: 100%;
+  max-width: 1500px;
+  gap: 0; align-items: stretch;
+}
+.scene-service.reverse .scene-service-photo { order: 2; }
+.scene-service.reverse .scene-service-text { order: 1; }
+
+.scene-service-photo {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #dce3f0, #b6c2d9);
+}
+.scene-service-photo img {
+  animation: scKenBurns 12s ease-in-out infinite;
+}
+@keyframes scKenBurns {
+  0%   { transform: scale(1.04) translate(0, 0); }
+  50%  { transform: scale(1.12) translate(-1.8%, -1.2%); }
+  100% { transform: scale(1.04) translate(0, 0); }
+}
+
+.scene-service-text {
+  padding: 80px 100px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.scene-service-text .sc-eyebrow { margin-bottom: 32px; }
+
+.sc-h2-service {
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-size: clamp(56px, 7vw, 112px);
+  line-height: 0.98; letter-spacing: -0.028em;
+  color: var(--ink); margin-bottom: 36px;
+}
+.sc-h2-service em { font-style: italic; display: block; }
+
+.sc-service-body {
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.6; color: var(--ink-soft);
+  max-width: 480px;
+}
+
+@media (max-width: 900px) {
+  .scene-service { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .scene-service.reverse .scene-service-photo { order: 1; }
+  .scene-service.reverse .scene-service-text { order: 2; }
+  .scene-service-text { padding: 40px 32px; }
+}
+
+.sc-quote {
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-style: italic;
+  font-size: clamp(32px, 5vw, 72px);
+  line-height: 1.18; letter-spacing: -0.022em;
+  color: #fff; margin-bottom: 48px;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 4px 24px rgba(7, 23, 61, 0.6);
+}
+.sc-cite {
+  font-style: normal;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.sc-cite-name {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 14px; letter-spacing: 0.08em;
+  color: #fff; font-weight: 500;
+}
+.sc-cite-role {
+  font-family: var(--font-serif), serif; font-style: italic;
+  font-size: 16px; color: rgba(255, 255, 255, 0.6);
+}
+
+.sc-promise {
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-size: clamp(40px, 6vw, 96px);
+  line-height: 1.15; letter-spacing: -0.025em;
+  color: var(--ink);
+  max-width: 1100px;
+}
+.sc-promise em { font-style: italic; }
+
+.sc-progress {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--line-soft);
+  z-index: 10;
+}
+.sc-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--electric), var(--electric-bright), var(--saffron));
+  transition: width 0.4s linear;
+}
+
+.sc-controls {
+  position: absolute;
+  bottom: 24px; right: 24px;
+  display: flex; gap: 12px;
+  z-index: 11;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.4s, transform 0.4s;
+  pointer-events: none;
+}
+.sc-controls.visible {
+  opacity: 1; transform: translateY(0);
+  pointer-events: auto;
+}
+.sc-controls button,
+.sc-controls .sc-exit {
+  width: 40px; height: 40px;
+  background: rgba(20, 17, 11, 0.55);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-family: var(--font-sans), sans-serif;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: background 0.3s, transform 0.3s;
+}
+.sc-controls button:hover,
+.sc-controls .sc-exit:hover {
+  background: var(--electric);
+  transform: translateY(-2px);
+}
+
+.sc-end-card {
+  position: absolute; inset: 0;
+  z-index: 20;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding-bottom: 120px;
+  gap: 16px;
+  pointer-events: none;
+  animation: scFadeIn 0.8s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.sc-end-btn {
+  pointer-events: auto;
+  padding: 16px 32px;
+  background: var(--ink); color: #fff;
+  border: none; cursor: pointer;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 13px; letter-spacing: 0.06em; font-weight: 500;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.3s;
+}
+.sc-end-btn:hover { background: var(--electric); transform: translateY(-2px); }
+.sc-end-link { background: transparent; color: var(--ink); }
+.sc-end-link:hover { background: var(--ink); color: #fff; }
+@keyframes scFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
