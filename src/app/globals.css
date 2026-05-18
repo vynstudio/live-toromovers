@@ -791,3 +791,182 @@ footer {
   animation: btnSpin 0.7s linear infinite;
 }
 @keyframes btnSpin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE OPTIMIZATION — comprehensive pass for ≤720px and ≤380px.
+   Lead-gen priorities: tap targets, thumb-zone CTAs, no horizontal
+   overflow, content above sticky bottom bar, iPhone safe areas.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Safe area + sticky CTA clearance */
+nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
+@media (max-width: 980px) {
+  body { padding-bottom: env(safe-area-inset-bottom, 0); }
+  footer { padding-bottom: 96px; }
+}
+
+@media (max-width: 720px) {
+  /* Nav */
+  nav.top { padding-left: 16px; padding-right: 16px; }
+  .brand { gap: 8px; }
+  .brand-mark { width: 28px; height: 28px; font-size: 15px; }
+  .brand-name { font-size: 14px; letter-spacing: 0.06em; }
+  .nav-right { gap: 6px; }
+  .lang-toggle { padding: 3px 6px; font-size: 10px; }
+  nav.top .btn-primary { padding: 11px 14px; font-size: 13px; min-height: 40px; }
+
+  /* Hero */
+  .hero { padding: 92px 18px 56px; }
+  .hero-badge { font-size: 11px; padding: 6px 12px; margin-bottom: 20px; gap: 6px; }
+  .hero h1 { font-size: clamp(34px, 9vw, 56px); margin-bottom: 20px; }
+  .hero-lede { font-size: 16px; margin-bottom: 28px; }
+  .hero-cta-row { gap: 10px; margin-bottom: 18px; }
+  .hero-cta-row .btn { width: 100%; min-height: 52px; }
+  .hero-note { font-size: 12px; }
+  .hero-note .sep { margin: 0 4px; }
+
+  /* Trust band: horizontal scroll on mobile (was wrapping awkwardly) */
+  .trust-band { padding: 12px 0; overflow-x: auto; }
+  .trust-band-inner {
+    flex-wrap: nowrap; justify-content: flex-start;
+    padding: 0 18px; gap: 18px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .trust-band-inner::-webkit-scrollbar { display: none; }
+  .trust-item { white-space: nowrap; font-size: 11px; flex-shrink: 0; }
+
+  /* Section rhythm */
+  section.block { padding: 56px 18px; }
+  .block-eyebrow { font-size: 11px; letter-spacing: 0.2em; margin-bottom: 14px; }
+  .block-eyebrow::before { width: 22px; }
+  .block-h2 { font-size: clamp(28px, 7vw, 40px); margin-bottom: 12px; }
+  .block-sub { font-size: 15px; margin-bottom: 28px; }
+
+  /* Stats band */
+  .stats-band { padding: 32px 18px; }
+  .stats-band-inner { gap: 24px 16px; }
+  .stat-value { font-size: clamp(32px, 8vw, 44px); }
+  .stat-label { font-size: 10px; letter-spacing: 0.12em; }
+
+  /* Services */
+  .tier { padding: 24px 20px 26px; }
+  .tier-title { font-size: 22px; margin-bottom: 8px; }
+  .tier-sub { font-size: 14px; margin-bottom: 16px; }
+  .tier-bullets li { padding: 6px 0; font-size: 13.5px; }
+  .tier .btn { width: 100%; min-height: 50px; }
+
+  /* About */
+  .about-grid { gap: 24px; }
+  .about-bullets li { padding: 12px 14px; font-size: 14px; }
+  .about-body p { font-size: 15px; }
+
+  /* Process */
+  .process-step { padding: 24px 20px; }
+  .process-step h3 { font-size: 20px; }
+  .process-step p { font-size: 14px; }
+  .process-step-num { font-size: 12px; }
+
+  /* Areas */
+  .county-card { padding: 20px 18px; }
+  .county-card h3 { font-size: 18px; }
+  .county-card li { font-size: 13.5px; padding: 4px 0; }
+  .areas-fallback { font-size: 13px; margin-top: 20px; }
+
+  /* Reviews */
+  .reviews-head { margin-bottom: 28px; }
+  .review-card { padding: 20px 18px; }
+  .review-body { font-size: 14px; margin-bottom: 16px; }
+  .review-name { font-size: 12px; }
+  .review-meta { font-size: 11px; }
+  .review-attr { padding-top: 12px; gap: 8px; }
+
+  /* FAQ — bigger tap target */
+  .faq-item { padding: 18px 0; }
+  .faq-q .question { font-size: 17px; line-height: 1.4; }
+  .faq-q .plus { width: 24px; height: 24px; }
+  .faq-q { gap: 16px; }
+  .faq-a { font-size: 14.5px; }
+  .faq-item.open .faq-a { max-height: 600px; }
+
+  /* Closing */
+  .closing { padding: 64px 18px 80px; }
+  .closing-cta-row { gap: 10px; width: 100%; }
+  .closing-cta-row .btn { width: 100%; min-height: 52px; }
+
+  /* Footer */
+  footer { padding: 48px 18px 96px; }
+  .footer-top { gap: 28px; padding-bottom: 24px; margin-bottom: 24px; }
+  .footer-brand p { font-size: 15px; }
+  .footer-col a { font-size: 14.5px; padding: 4px 0; }
+  .footer-cities { font-size: 12px; line-height: 1.85; }
+  .footer-bottom { font-size: 11px; gap: 8px; padding-top: 18px; }
+
+  /* Sticky CTA */
+  .sticky-cta { box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.08); }
+  .sticky-cta a, .sticky-cta button { font-size: 13.5px; min-height: 60px; padding: 14px 16px; }
+
+  /* Modal — bottom sheet polish with drag handle */
+  .modal { border-radius: 18px 18px 0 0; }
+  .modal::before {
+    content: ''; display: block;
+    width: 36px; height: 4px;
+    background: var(--line-strong);
+    border-radius: 99px;
+    margin: 10px auto 0;
+    position: sticky; top: 0; z-index: 2;
+  }
+  .modal-close { top: 14px; right: 14px; width: 32px; height: 32px; }
+  .modal-inner { padding: 24px 20px 28px; }
+  .modal-header { margin-bottom: 18px; }
+  .modal-title { font-size: 21px; }
+  .modal-sub { font-size: 13px; }
+  .steps-bar { margin-bottom: 20px; }
+  .field input, .field select, .field textarea { padding: 13px 14px; border-radius: 10px; }
+  .choice { padding: 14px 16px; }
+  .choice-label { font-size: 14.5px; }
+  .size-chip { padding: 13px 8px; font-size: 13.5px; min-height: 48px; }
+  .summary { padding: 16px 14px; }
+  .summary-row { padding: 8px 0; }
+  .summary-row .v { font-size: 13.5px; }
+}
+
+/* Smallest phones — 320px-380px */
+@media (max-width: 380px) {
+  .brand-mark { width: 26px; height: 26px; font-size: 14px; }
+  .brand-name { font-size: 12.5px; letter-spacing: 0.05em; }
+  nav.top .btn-primary { padding: 10px 11px; font-size: 12px; }
+  nav.top .btn-primary .arrow { display: none; }
+  .lang-toggle { padding: 2px 5px; font-size: 9.5px; }
+
+  .hero { padding: 86px 16px 48px; }
+  .hero-badge { font-size: 10.5px; padding: 5px 10px; gap: 5px; }
+  .hero h1 { font-size: clamp(30px, 9vw, 40px); margin-bottom: 18px; }
+  .hero-lede { font-size: 15px; line-height: 1.55; }
+
+  section.block { padding: 48px 16px; }
+  .block-h2 { font-size: clamp(26px, 7.5vw, 34px); }
+  .stat-value { font-size: clamp(28px, 9vw, 38px); }
+  .stat-label { font-size: 9.5px; letter-spacing: 0.1em; }
+
+  .tier { padding: 22px 18px 24px; }
+  .tier-title { font-size: 20px; }
+
+  .faq-q .question { font-size: 15.5px; }
+  .closing { padding: 56px 16px 72px; }
+}
+
+/* Landscape phones */
+@media (max-width: 920px) and (orientation: landscape) and (max-height: 500px) {
+  .hero { padding: 80px 24px 40px; min-height: auto; }
+  .hero h1 { font-size: clamp(28px, 6vw, 48px); margin-bottom: 14px; }
+  .hero-lede { font-size: 14px; margin-bottom: 18px; }
+  .hero-cta-row { flex-direction: row; flex-wrap: wrap; }
+  .hero-cta-row .btn { width: auto; flex: 1 1 200px; }
+}
+
+/* Dynamic viewport height — handles iOS Safari URL bar collapse */
+@supports (height: 100dvh) {
+  .modal-overlay { max-height: 100dvh; }
+  .modal { max-height: 92dvh; }
+}
