@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useLang } from "./lang-provider";
 import { GoogleAddressInput } from "./google-address-input";
 import { RouteMap } from "./route-map";
+import { Calendar } from "./calendar";
 import { type HelpType, type MoveSize } from "@/lib/booking-schema";
 import { newEventId, trackLead } from "@/lib/track";
 import { PHONE_DISPLAY } from "@/lib/contact";
@@ -166,9 +167,9 @@ export function QuoteForm() {
               <>
                 <h1>{es ? "Agenda tu mudanza" : "Schedule your move"}</h1>
                 <p className="quote-sub">{es ? "Elige el día y la ventana de llegada." : "Pick a day and arrival window."}</p>
-                <label className="quote-field"><span>{es ? "Fecha preferida" : "Preferred date"}</span>
-                  <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-                </label>
+                <div className="quote-field"><span>{es ? "Fecha preferida" : "Preferred date"}</span>
+                  <Calendar value={date} onChange={setDate} lang={es ? "es" : "en"} />
+                </div>
                 <div className="quote-windows">
                   {(["morning", "afternoon"] as const).map((w) => (
                     <button type="button" key={w} className={`quote-window${arrival === w ? " on" : ""}`} onClick={() => setArrival(w)}>

@@ -1,6 +1,4 @@
-"use client";
-
-import { useBooking } from "./booking-provider";
+import Link from "next/link";
 
 type Props = {
   label?: string;
@@ -9,23 +7,22 @@ type Props = {
   className?: string;
 };
 
+// Every quote/price CTA routes to the dedicated /quote wizard.
 export function RequestButton({
   label,
   variant = "primary",
   fullWidth = false,
   className = "",
 }: Props) {
-  const { setOpen } = useBooking();
   const variantClass = `btn-${variant}`;
   return (
-    <button
-      type="button"
+    <Link
+      href="/quote"
       className={`btn ${variantClass} ${className}`.trim()}
-      onClick={() => setOpen(true)}
       style={fullWidth ? { width: "100%" } : undefined}
     >
       {label ?? "Get free quote"}
       <span className="arrow" aria-hidden />
-    </button>
+    </Link>
   );
 }
