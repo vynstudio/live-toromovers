@@ -24,7 +24,7 @@ export function AdLanding() {
       <nav className="top scrolled">
         <span className="brand" aria-label="Toro Movers">
           <span className="brand-mark" aria-hidden>
-            T
+            <img src="/bull.svg" alt="" />
           </span>
           <span className="brand-name">
             TORO<span className="accent">·</span>MOVERS

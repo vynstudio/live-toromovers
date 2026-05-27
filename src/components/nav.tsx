@@ -20,7 +20,9 @@ export function Nav() {
   return (
     <nav className={`top${scrolled ? " scrolled" : ""}`}>
       <a href="#" className="brand" aria-label="Toro Movers — Home">
-        <span className="brand-mark" aria-hidden>T</span>
+        <span className="brand-mark" aria-hidden>
+          <img src="/bull.svg" alt="" />
+        </span>
         <span className="brand-name">
           TORO<span className="accent">·</span>MOVERS
         </span>

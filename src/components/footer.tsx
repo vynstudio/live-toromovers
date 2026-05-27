@@ -22,7 +22,9 @@ export function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <a href="#" className="brand">
-              <span className="brand-mark" aria-hidden>T</span>
+              <span className="brand-mark" aria-hidden>
+                <img src="/bull.svg" alt="" />
+              </span>
               <span className="brand-name">TORO<span className="accent">·</span>MOVERS</span>
             </a>
             <p>{t.footer.tagline}</p>
