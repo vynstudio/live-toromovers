@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createHash } from "crypto";
 import {
   BookingSchema,
   HELP_LABEL,
@@ -20,6 +21,8 @@ export async function POST(req: Request) {
   }
 
   const q = parsed.data;
+  const eventId =
+    body && typeof body.eventId === "string" ? body.eventId : undefined;
 
   const help = HELP_LABEL[q.helpType]?.en ?? q.helpType;
   const fromRes = RESIDENCE_LABEL[q.fromResidence]?.en ?? q.fromResidence;
@@ -28,7 +31,7 @@ export async function POST(req: Request) {
   const toFloor = q.toFloor ? ` · ${FLOOR_LABEL[q.toFloor]?.en ?? q.toFloor}` : "";
   const size = q.size ? (SIZE_LABEL[q.size]?.en ?? q.size) : "—";
 
-  // Plain-text summary reused by both channels.
+  // Plain-text summary reused by both notification channels.
   const text = [
     `🚚 New quote request — Toro Movers`,
     ``,
@@ -44,17 +47,21 @@ export async function POST(req: Request) {
     `${q.phone}`,
   ].join("\n");
 
-  // Fire both channels in parallel; never let one failure drop the lead.
-  const results = await Promise.allSettled([sendEmail(q, help, fromRes, toRes, fromFloor, toFloor, size, text), sendTelegram(text, q)]);
+  // Notify (email + Telegram) and report the conversion to Meta in parallel.
+  const results = await Promise.allSettled([
+    sendEmail(q, help, fromRes, toRes, fromFloor, toFloor, size, text),
+    sendTelegram(text, q),
+    sendMetaCapi(q, eventId, req),
+  ]);
   const emailed = results[0].status === "fulfilled" && results[0].value === true;
   const telegrammed = results[1].status === "fulfilled" && results[1].value === true;
+  const capi = results[2].status === "fulfilled" && results[2].value === true;
 
   if (!emailed && !telegrammed) {
-    // Last-resort durability: full lead lands in server logs.
-    console.error("[booking] NO channel delivered the lead:", JSON.stringify(q));
+    console.error("[booking] NO notification channel delivered the lead:", JSON.stringify(q));
   }
 
-  return NextResponse.json({ ok: true, emailed, telegrammed });
+  return NextResponse.json({ ok: true, emailed, telegrammed, capi });
 }
 
 async function sendEmail(
@@ -154,6 +161,83 @@ async function sendTelegram(text: string, q: QuoteInput): Promise<boolean> {
     return true;
   } catch (err) {
     console.error("[booking] Telegram threw:", err, "lead:", q.email);
+    return false;
+  }
+}
+
+const sha256 = (v: string) =>
+  createHash("sha256").update(v.trim().toLowerCase()).digest("hex");
+
+function cookie(req: Request, name: string): string | undefined {
+  const raw = req.headers.get("cookie") || "";
+  return new RegExp(`(?:^|;\\s*)${name}=([^;]+)`).exec(raw)?.[1];
+}
+
+/** Server-side Lead event to the Meta Conversions API. Shares event_id with
+ *  the browser pixel so Meta deduplicates; enriched with fbp/fbc/ip/ua. */
+async function sendMetaCapi(
+  q: QuoteInput,
+  eventId: string | undefined,
+  req: Request,
+): Promise<boolean> {
+  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+  const token = process.env.META_ACCESS_TOKEN;
+  if (!pixelId || !token) {
+    console.error("[booking] Meta pixel id / access token missing — CAPI skipped");
+    return false;
+  }
+
+  const digits = q.phone.replace(/\D/g, "");
+  const phone = digits.length === 10 ? `1${digits}` : digits;
+
+  const userData: Record<string, unknown> = {
+    em: [sha256(q.email)],
+    ph: [sha256(phone)],
+    fn: [sha256(q.firstName)],
+    ln: [sha256(q.lastName)],
+  };
+  const fbp = cookie(req, "_fbp");
+  const fbc = cookie(req, "_fbc");
+  if (fbp) userData.fbp = fbp;
+  if (fbc) userData.fbc = fbc;
+  const ua = req.headers.get("user-agent");
+  if (ua) userData.client_user_agent = ua;
+  const ip =
+    req.headers.get("x-nf-client-connection-ip") ||
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim();
+  if (ip) userData.client_ip_address = ip;
+
+  const payload = {
+    data: [
+      {
+        event_name: "Lead",
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        action_source: "website",
+        event_source_url:
+          req.headers.get("referer") || process.env.NEXT_PUBLIC_SITE_URL || undefined,
+        user_data: userData,
+      },
+    ],
+  };
+
+  try {
+    const res = await fetch(
+      `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${token}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+    );
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      console.error("[booking] Meta CAPI failed:", res.status, detail);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[booking] Meta CAPI threw:", err);
     return false;
   }
 }

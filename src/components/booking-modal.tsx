@@ -12,6 +12,7 @@ import {
   type ResidenceType,
   type ApartmentFloor,
 } from "@/lib/booking-schema";
+import { newEventId, trackLead } from "@/lib/track";
 
 type FormData = {
   helpType: HelpType;
@@ -84,14 +85,16 @@ export function BookingModal() {
 
   const onSubmit = async () => {
     setSubmitting(true);
+    const eventId = newEventId();
     try {
       await fetch("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, eventId }),
       });
+      trackLead(eventId);
     } catch {
-      /* stub */
+      /* network error — lead may not have been recorded */
     }
     setSubmitting(false);
     setStep(STEPS_COUNT + 1);
