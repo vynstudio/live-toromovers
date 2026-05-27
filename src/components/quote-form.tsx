@@ -9,12 +9,14 @@ import { newEventId, trackLead } from "@/lib/track";
 import { PHONE_DISPLAY } from "@/lib/contact";
 
 const STEPS = 4;
-const BEDROOMS = ["Studio", "1", "2", "3", "4", "5+"];
-const SQFT_EN = ["Under 800", "800–1,200", "1,200–2,000", "2,000–3,500", "3,500+"];
-const SQFT_ES = ["Menos de 800", "800–1,200", "1,200–2,000", "2,000–3,500", "3,500+"];
+const ROOMS = ["Studio", "1", "2", "3", "4", "5+"];
+const MOVING_TYPES_EN = ["Apartment", "House", "Studio", "Office", "Storage unit"];
+const MOVING_TYPES_ES = ["Apartamento", "Casa", "Estudio", "Oficina", "Trastero"];
+const FLOORS_EN = ["Ground floor", "2nd floor", "3rd floor", "4th+ floor"];
+const FLOORS_ES = ["Planta baja", "2.º piso", "3.º piso", "4.º+ piso"];
 
-// Map a bedroom count to our MoveSize enum (best-effort).
-const SIZE_BY_BEDROOMS: Record<string, MoveSize> = {
+// Map a room count to our MoveSize enum (best-effort).
+const SIZE_BY_ROOMS: Record<string, MoveSize> = {
   Studio: "studio",
   "1": "one-br",
   "2": "two-br",
@@ -27,16 +29,18 @@ const SIZE_BY_BEDROOMS: Record<string, MoveSize> = {
 export function QuoteForm() {
   const { t, lang } = useLang();
   const es = lang === "es";
-  const sqftOptions = es ? SQFT_ES : SQFT_EN;
+  const movingTypes = es ? MOVING_TYPES_ES : MOVING_TYPES_EN;
+  const floorOptions = es ? FLOORS_ES : FLOORS_EN;
 
   const [step, setStep] = useState(1);
   const [from, setFrom] = useState("");
   const [fromUnit, setFromUnit] = useState("");
   const [to, setTo] = useState("");
   const [toUnit, setToUnit] = useState("");
-  const [fromBeds, setFromBeds] = useState("2");
-  const [fromSqft, setFromSqft] = useState(sqftOptions[1]);
-  const [toBeds, setToBeds] = useState("2");
+  const [typeIdx, setTypeIdx] = useState(0);
+  const [rooms, setRooms] = useState("2");
+  const [floorIdx, setFloorIdx] = useState(0);
+  const [access, setAccess] = useState<"stairs" | "elevator">("stairs");
   const [arrival, setArrival] = useState<"morning" | "afternoon">("morning");
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
@@ -66,9 +70,12 @@ export function QuoteForm() {
     const lastName = parts.join(" ");
     const helpType: HelpType = "labor-truck";
     const arrivalLabel = arrival === "morning" ? "Morning (8AM–12PM)" : "Afternoon (12PM–4PM)";
+    const accessLabel = access === "elevator" ? "Elevator" : "Stairs";
     const specialItems =
-      `Origin: ${fromBeds} BR · ${fromSqft} sqft${fromUnit ? ` · ${fromUnit}` : ""}. ` +
-      `Destination: ${toBeds} BR${toUnit ? ` · ${toUnit}` : ""}. ` +
+      `Type: ${MOVING_TYPES_EN[typeIdx]}. ` +
+      `Rooms: ${rooms}. ` +
+      `Floor: ${FLOORS_EN[floorIdx]}. ` +
+      `Access: ${accessLabel}. ` +
       `Arrival: ${arrivalLabel}.`;
     try {
       await fetch("/api/booking", {
@@ -78,7 +85,7 @@ export function QuoteForm() {
           helpType,
           fromAddress: fromUnit ? `${from}, ${fromUnit}` : from,
           toAddress: toUnit ? `${to}, ${toUnit}` : to,
-          size: SIZE_BY_BEDROOMS[fromBeds],
+          size: SIZE_BY_ROOMS[rooms],
           date: date || undefined,
           specialItems,
           firstName,
@@ -131,20 +138,27 @@ export function QuoteForm() {
 
             {step === 2 && (
               <>
-                <h1>{es ? "Cuéntanos del espacio" : "Tell us about your space"}</h1>
-                <p className="quote-sub">{es ? "Tamaño aproximado de cada lugar." : "Approximate size of each place."}</p>
+                <h1>{es ? "Cuéntanos de tu mudanza" : "Tell us about your move"}</h1>
+                <p className="quote-sub">{es ? "Tipo, tamaño y acceso." : "Type, size, and access."}</p>
                 <div className="quote-row">
-                  <label className="quote-field"><span>{es ? "Recámaras (origen)" : "Bedrooms (from)"}</span>
-                    <select value={fromBeds} onChange={(e) => setFromBeds(e.target.value)}>{BEDROOMS.map((b) => <option key={b}>{b}</option>)}</select>
+                  <label className="quote-field"><span>{es ? "Tipo de mudanza" : "Moving type"}</span>
+                    <select value={typeIdx} onChange={(e) => setTypeIdx(Number(e.target.value))}>{movingTypes.map((tp, i) => <option key={tp} value={i}>{tp}</option>)}</select>
                   </label>
-                  <label className="quote-field"><span>{es ? "Pies² aprox." : "Approx. sqft"}</span>
-                    <select value={fromSqft} onChange={(e) => setFromSqft(e.target.value)}>{sqftOptions.map((s) => <option key={s}>{s}</option>)}</select>
+                  <label className="quote-field"><span>{es ? "Habitaciones" : "Rooms"}</span>
+                    <select value={rooms} onChange={(e) => setRooms(e.target.value)}>{ROOMS.map((r) => <option key={r}>{r}</option>)}</select>
                   </label>
                 </div>
-                <label className="quote-field"><span>{es ? "Recámaras (destino)" : "Bedrooms (to)"}</span>
-                  <select value={toBeds} onChange={(e) => setToBeds(e.target.value)}>{BEDROOMS.map((b) => <option key={b}>{b}</option>)}</select>
+                <label className="quote-field"><span>{es ? "Piso" : "Floor"}</span>
+                  <select value={floorIdx} onChange={(e) => setFloorIdx(Number(e.target.value))}>{floorOptions.map((f, i) => <option key={f} value={i}>{f}</option>)}</select>
                 </label>
-                <p className="quote-note">{es ? `Para casas de 3,500+ pies², llámanos: ${PHONE_DISPLAY}` : `For homes above 3,500 sqft, call us: ${PHONE_DISPLAY}`}</p>
+                <div className="quote-windows">
+                  {(["stairs", "elevator"] as const).map((a) => (
+                    <button type="button" key={a} className={`quote-window${access === a ? " on" : ""}`} onClick={() => setAccess(a)}>
+                      <strong>{a === "stairs" ? (es ? "Escaleras" : "Stairs") : (es ? "Ascensor" : "Elevator")}</strong>
+                      <span>{a === "stairs" ? (es ? "Sin ascensor" : "Walk-up access") : (es ? "Hay ascensor" : "Elevator available")}</span>
+                    </button>
+                  ))}
+                </div>
               </>
             )}
 

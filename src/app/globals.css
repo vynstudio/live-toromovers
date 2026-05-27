@@ -2,22 +2,23 @@
 
 :root {
   --bg: #FFFFFF;
-  --bg-soft: #FAFAF9;
-  --surface: #F4F2EE;
-  --surface-2: #E8E5DE;
+  --bg-soft: #F7F7F8;
+  --surface: #F2F2F4;
+  --surface-2: #E8E8EC;
   --ink: #0A0A0A;
   --ink-soft: #2A2A2A;
-  --muted: #6B6B6B;
-  --muted-soft: #8B8B8B;
-  --line: #E0DCD4;
-  --line-soft: #ECE9E1;
-  --line-strong: #C8C2B5;
-  --red: #C8442A;
-  --red-bright: #E55A3D;
-  --red-deep: #8C2E1B;
-  --red-soft: #FBE6E0;
-  --red-glow: rgba(200, 68, 42, 0.18);
-  --gold: #D49A33;
+  --muted: #6B6B72;
+  --muted-soft: #9A9AA2;
+  --line: #E6E6EA;
+  --line-soft: #F0F0F2;
+  --line-strong: #D2D2D8;
+  --red: #E11D33;
+  --red-bright: #F23048;
+  --red-deep: #B01228;
+  --red-soft: #FCE4E8;
+  --red-glow: rgba(225, 29, 51, 0.16);
+  --gold: #C9A227;
+  --gold-soft: #F3E9C9;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -191,8 +192,8 @@ nav.top.scrolled { border-bottom-color: var(--line); padding: 12px 24px; }
   display: flex; flex-direction: column; gap: 14px;
 }
 .quote-card h1 {
-  font-family: var(--font-serif), serif; font-weight: 600;
-  font-size: clamp(26px, 6vw, 34px); letter-spacing: -0.02em;
+  font-family: var(--font-serif), serif; font-weight: 400;
+  font-size: clamp(28px, 6vw, 38px); letter-spacing: -0.01em;
   color: var(--ink); margin: 0;
 }
 .quote-sub { color: var(--muted); font-size: 15px; margin: -6px 0 6px; }
@@ -334,7 +335,7 @@ nav.top.scrolled { border-bottom-color: var(--line); padding: 12px 24px; }
 .hero-badge .stars { color: var(--gold); letter-spacing: 0.1em; }
 .hero h1 {
   font-family: var(--font-serif), serif;
-  font-weight: 600;
+  font-weight: 400;
   font-size: clamp(36px, 8vw, 84px);
   line-height: 1.0; letter-spacing: -0.028em;
   color: #fff; margin-bottom: 24px;
