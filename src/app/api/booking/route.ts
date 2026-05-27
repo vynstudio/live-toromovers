@@ -11,6 +11,15 @@ import {
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
+
+  // Spam filter: honeypot filled, or submitted implausibly fast (bots) →
+  // pretend success without notifying anyone.
+  const hp = typeof body?.hp === "string" ? body.hp.trim() : "";
+  const elapsedMs = typeof body?.elapsedMs === "number" ? body.elapsedMs : Infinity;
+  if (hp !== "" || elapsedMs < 1500) {
+    return NextResponse.json({ ok: true });
+  }
+
   const parsed = BookingSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -31,6 +40,7 @@ export async function POST(req: Request) {
   const toFloor = q.toFloor ? ` · ${FLOOR_LABEL[q.toFloor]?.en ?? q.toFloor}` : "";
   const size = q.size ? (SIZE_LABEL[q.size]?.en ?? q.size) : "—";
   const fullName = `${q.firstName} ${q.lastName ?? ""}`.trim();
+  const distance = await computeRoute(q.fromAddress, q.toAddress);
 
   // Plain-text summary reused by both notification channels.
   const text = [
@@ -40,17 +50,19 @@ export async function POST(req: Request) {
     `Move date: ${q.date || "—"}`,
     `From: ${q.fromAddress}${fromRes ? ` (${fromRes}${fromFloor})` : ""}`,
     `To: ${q.toAddress}${toRes ? ` (${toRes}${toFloor})` : ""}`,
+    `Distance: ${distance || "—"}`,
     `Size: ${size}`,
     `Special items: ${q.specialItems || "—"}`,
     ``,
     fullName,
     `${q.email}`,
     `${q.phone}`,
+    `Source: ${q.source || "—"}`,
   ].join("\n");
 
   // Notify (email + Telegram) and report the conversion to Meta in parallel.
   const results = await Promise.allSettled([
-    sendEmail(q, help, fromRes, toRes, fromFloor, toFloor, size, fullName, text),
+    sendEmail(q, help, fromRes, toRes, fromFloor, toFloor, size, distance, fullName, text),
     sendTelegram(text, q),
     sendMetaCapi(q, eventId, req),
   ]);
@@ -73,6 +85,7 @@ async function sendEmail(
   fromFloor: string,
   toFloor: string,
   size: string,
+  distance: string,
   fullName: string,
   text: string,
 ): Promise<boolean> {
@@ -107,11 +120,13 @@ async function sendEmail(
       ${row("Move date", q.date || "—")}
       ${row("From", fromCell)}
       ${row("To", toCell)}
+      ${row("Distance", distance)}
       ${row("Size", size)}
       ${row("Special items", q.specialItems || "—")}
       ${row("Name", fullName)}
       ${row("Email", `<a href="mailto:${q.email}" style="color:#c0392b">${q.email}</a>`)}
       ${row("Phone", `<a href="tel:${q.phone}" style="color:#c0392b">${q.phone}</a>`)}
+      ${row("Source", q.source || "—")}
     </table>
   </div>`;
 
@@ -171,6 +186,40 @@ async function sendTelegram(text: string, q: QuoteInput): Promise<boolean> {
   } catch (err) {
     console.error("[booking] Telegram threw:", err, "lead:", q.email);
     return false;
+  }
+}
+
+/** Driving distance + time via the Google Routes API. Uses a server-side key
+ *  (GOOGLE_MAPS_SERVER_KEY — no referrer restriction, restricted to Routes API).
+ *  Returns e.g. "12.4 mi · 22 min drive", or "" when unavailable. */
+async function computeRoute(from: string, to: string): Promise<string> {
+  const key = process.env.GOOGLE_MAPS_SERVER_KEY;
+  if (!key || !from || !to) return "";
+  try {
+    const res = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": key,
+        "X-Goog-FieldMask": "routes.distanceMeters,routes.duration",
+      },
+      body: JSON.stringify({
+        origin: { address: from },
+        destination: { address: to },
+        travelMode: "DRIVE",
+      }),
+    });
+    if (!res.ok) return "";
+    const data = await res.json();
+    const r = data?.routes?.[0];
+    if (!r) return "";
+    const miles = r.distanceMeters ? r.distanceMeters / 1609.344 : 0;
+    const secs = r.duration ? parseInt(String(r.duration).replace(/\D/g, ""), 10) : 0;
+    const mins = Math.round(secs / 60);
+    const dur = mins >= 60 ? `${Math.floor(mins / 60)}h ${mins % 60}m` : `${mins} min`;
+    return miles ? `${miles.toFixed(1)} mi · ${dur} drive` : "";
+  } catch {
+    return "";
   }
 }
 

@@ -305,6 +305,9 @@ nav.top.scrolled { border-bottom-color: var(--line); padding: 12px 24px; }
 .cal-day.today { box-shadow: inset 0 0 0 1.5px var(--gold); }
 .cal-day.on, .cal-day.on:hover { background: var(--red); color: #fff; font-weight: 600; }
 
+/* honeypot — kept in the DOM but off-screen so only bots fill it */
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
 /* route map panel */
 .quote-map { display: none; }
 @media (min-width: 900px) {

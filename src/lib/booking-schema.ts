@@ -51,6 +51,8 @@ export const QuoteSchema = z.object({
   lastName: z.string().optional().default(""),
   email: z.string().email(),
   phone: z.string().min(7),
+  // Marketing attribution (UTMs / click ids) — informational only.
+  source: z.string().max(500).optional(),
 });
 export type QuoteInput = z.infer<typeof QuoteSchema>;
 

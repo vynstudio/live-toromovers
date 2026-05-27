@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import { useLang } from "./lang-provider";
 import { GoogleAddressInput } from "./google-address-input";
 import { RouteMap } from "./route-map";
 import { Calendar } from "./calendar";
 import { type HelpType, type MoveSize } from "@/lib/booking-schema";
 import { newEventId, trackLead } from "@/lib/track";
+import { getAttributionSummary } from "@/lib/utm";
 import { PHONE_DISPLAY } from "@/lib/contact";
 
 const STEPS = 4;
@@ -49,6 +50,8 @@ export function QuoteForm() {
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [hp, setHp] = useState(""); // honeypot — hidden from real users
+  const startRef = useRef(Date.now()); // form-open time, for the bot timing check
 
   const valid =
     step === 1
@@ -94,6 +97,9 @@ export function QuoteForm() {
           email,
           phone,
           eventId,
+          source: getAttributionSummary() || undefined,
+          hp,
+          elapsedMs: Date.now() - startRef.current,
         }),
       });
       trackLead(eventId);
@@ -119,6 +125,18 @@ export function QuoteForm() {
             <div className="quote-progress" aria-hidden>
               <span style={{ width: `${(step / STEPS) * 100}%` }} />
             </div>
+
+            {/* honeypot: hidden off-screen; only bots fill it */}
+            <input
+              className="hp-field"
+              type="text"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={hp}
+              onChange={(e) => setHp(e.target.value)}
+            />
 
             {step === 1 && (
               <>

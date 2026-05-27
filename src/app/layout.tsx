@@ -3,10 +3,9 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
-import { BookingProvider } from "@/components/booking-provider";
-import { BookingModal } from "@/components/booking-modal";
 import { RevealObserver } from "@/components/reveal-observer";
 import { Analytics } from "@/components/analytics";
+import { UtmCapture } from "@/components/utm-capture";
 import { SERVICE_CITIES } from "@/lib/content";
 import {
   PHONE_DISPLAY,
@@ -167,12 +166,10 @@ export default function RootLayout({
       </head>
       <body>
         <Analytics />
+        <UtmCapture />
         <LangProvider>
-          <BookingProvider>
-            {children}
-            <BookingModal />
-            <RevealObserver />
-          </BookingProvider>
+          {children}
+          <RevealObserver />
         </LangProvider>
       </body>
     </html>
