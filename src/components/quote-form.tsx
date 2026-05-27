@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useLang } from "./lang-provider";
 import { GoogleAddressInput } from "./google-address-input";
-import { GoogleRouteMap } from "./google-route-map";
+import { RouteMap } from "./route-map";
 import { type HelpType, type MoveSize } from "@/lib/booking-schema";
 import { newEventId, trackLead } from "@/lib/track";
 import { PHONE_DISPLAY } from "@/lib/contact";
@@ -196,7 +196,7 @@ export function QuoteForm() {
       </div>
 
       <div className="quote-map">
-        <GoogleRouteMap from={from} to={to} />
+        <RouteMap from={from} to={to} />
       </div>
     </div>
   );
