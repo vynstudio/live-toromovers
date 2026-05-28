@@ -354,7 +354,13 @@ export function QuoteForm() {
                 <button type="button" className="btn btn-outline" onClick={() => setStep((s) => s - 1)}>{t.quote.back}</button>
               )}
               <button className="btn btn-primary" type="submit" disabled={!valid || submitting}>
-                {submitting ? "…" : step < STEPS ? t.quote.next : es ? "Ver mi precio" : "Get my price"}
+                {submitting
+                  ? "…"
+                  : step < STEPS
+                    ? t.quote.next
+                    : step === 4 && phone.trim() && !verified
+                      ? (es ? "Verifica tu teléfono primero" : "Verify your phone first")
+                      : (es ? "Ver mi precio" : "Get my price")}
                 <span className="arrow" aria-hidden />
               </button>
             </div>
