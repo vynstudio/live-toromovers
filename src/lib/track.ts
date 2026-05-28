@@ -32,4 +32,28 @@ export function trackLead(eventId?: string): void {
   }
 }
 
+/** User started the quote funnel — addresses captured on the ad LP / step 1.
+ *  Lets Meta optimize for partial-funnel intent and lets us retarget abandoners. */
+export function trackInitiateCheckout(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("track", "InitiateCheckout");
+  } catch {}
+  try {
+    window.gtag?.("event", "begin_checkout");
+  } catch {}
+}
+
+/** Final funnel step — fires on /thank-you so Meta sees a clean conversion
+ *  landing event (in addition to the Lead event fired at submit). */
+export function trackCompleteRegistration(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("track", "CompleteRegistration");
+  } catch {}
+  try {
+    window.gtag?.("event", "sign_up");
+  } catch {}
+}
+
 export {};

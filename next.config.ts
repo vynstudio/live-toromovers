@@ -28,12 +28,13 @@ const CITY_LEGACY_REDIRECTS = [
 // Legacy content pages from the prior site, now consolidated into homepage
 // sections. Redirect (temporary) so old indexed URLs don't 404 — can be
 // rebuilt as full pages later (like the /movers-{city} pages) if needed.
+// "/thank-you" deliberately removed — it is now a real post-submit landing page
+// (see src/app/thank-you/), used as the final funnel-conversion step.
 const LEGACY_CONTENT = [
   { source: "/apartment-moves", destination: "/#services" },
   { source: "/home-moves", destination: "/#services" },
   { source: "/commercial-moves", destination: "/#services" },
   { source: "/about", destination: "/#about" },
-  { source: "/thank-you", destination: "/" },
 ];
 
 const nextConfig: NextConfig = {

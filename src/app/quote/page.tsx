@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { QuoteForm } from "@/components/quote-form";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
@@ -28,7 +29,9 @@ export default function QuotePage() {
         </a>
       </header>
       <div className="quote-wrap">
-        <QuoteForm />
+        <Suspense fallback={null}>
+          <QuoteForm />
+        </Suspense>
       </div>
     </main>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import { useLang } from "./lang-provider";
-import { RequestButton } from "./request-button";
 import { LangToggle } from "./lang-toggle";
 import { TrustBand } from "./trust-band";
 import { Services } from "./services";
@@ -10,14 +9,15 @@ import { Faq } from "./faq";
 import { ClosingCta } from "./closing-cta";
 import { Footer } from "./footer";
 import { StickyCta } from "./sticky-cta";
-import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
+import { AdQuoteStart } from "./ad-quote-start";
+import { PHONE_DISPLAY, PHONE_TEL, GOOGLE_RATING } from "@/lib/contact";
 
-// Focused paid-traffic landing page. Mounted at /ads/meta-orlando-movers and
-// /es/ads/meta-orlando-movers — the routes the Meta ads target. Minimal header
-// (no section nav) keeps the page conversion-focused; the quote modal is the
-// single primary action.
+// Paid-traffic landing page. Conversion-focused split hero: form (step-1 of
+// the quote wizard) on the left above-fold, single static photo on the right.
+// All CTAs ultimately reach /quote with addresses prefilled.
 export function AdLanding() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const es = lang === "es";
 
   return (
     <>
@@ -36,44 +36,42 @@ export function AdLanding() {
             {PHONE_DISPLAY}
           </a>
           <LangToggle />
-          <RequestButton label={t.nav.quote} />
         </div>
       </nav>
 
-      <section className="hero hero--media">
-        <div className="hero-slides" aria-hidden>
-          {/* Single static frame — no slideshow on the LP, keep it fast. */}
-          <img
-            src="/hero/slide-02.jpg"
-            alt=""
-            className="hero-slide is-active"
-            fetchPriority="high"
-            decoding="async"
-          />
+      <section className="ad-hero">
+        <div className="ad-hero-grid">
+          <div className="ad-hero-left">
+            <div className="ad-hero-badge">
+              <span className="stars" aria-hidden>★★★★★</span>
+              {GOOGLE_RATING} {es ? "en Google · 30+ reseñas · Asegurados" : "on Google · 30+ reviews · Fully insured"}
+            </div>
+            <h1 className="ad-hero-h1">
+              {es ? "Mudanzas en Florida Central" : "Central Florida movers"}
+              <em>{es ? " — precio justo, empresa familiar." : " — fair pricing, family-owned."}</em>
+            </h1>
+            <p className="ad-hero-lede">
+              {es
+                ? "$75 por persona, por hora. Sin tarifas ocultas. Cotización en 60 segundos."
+                : "$75 per mover, per hour. No hidden fees. Quote in 60 seconds."}
+            </p>
+            <AdQuoteStart />
+          </div>
+          <div className="ad-hero-right" aria-hidden>
+            <img
+              src="/hero/slide-02.jpg"
+              alt=""
+              fetchPriority="high"
+              decoding="async"
+            />
+          </div>
         </div>
-        <div className="hero-overlay" aria-hidden />
 
-        <div className="hero-inner">
-          <div className="hero-badge reveal">
-            <span className="stars" aria-hidden>
-              ★★★★★
-            </span>
-            {t.hero.badge}
-          </div>
-          <h1 className="reveal reveal-d1">
-            {t.hero.h1Line1}
-            <br />
-            {t.hero.h1Line2}
-            <span className="accent">{t.hero.h1Line3}</span>
-          </h1>
-          <p className="hero-lede reveal reveal-d2">{t.hero.lede}</p>
-          <div className="hero-cta-row reveal reveal-d3">
-            <RequestButton label={t.hero.ctaPrimary} />
-            <a href={PHONE_TEL} className="btn btn-outline">
-              {t.hero.ctaSecondary}
-            </a>
-          </div>
-          <div className="hero-note">{t.hero.note}</div>
+        <div className="ad-strip" aria-label={es ? "Datos rápidos" : "At a glance"}>
+          <div className="ad-strip-cell"><b>$75</b><span>{es ? "por persona / hora" : "per mover / hour"}</span></div>
+          <div className="ad-strip-cell"><b>{GOOGLE_RATING}★</b><span>{es ? "Google · 30+ reseñas" : "Google · 30+ reviews"}</span></div>
+          <div className="ad-strip-cell"><b>2h</b><span>{es ? "mínimo" : "minimum"}</span></div>
+          <div className="ad-strip-cell"><b>60s</b><span>{es ? "cotización" : "quote"}</span></div>
         </div>
       </section>
 

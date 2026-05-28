@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, type FormEvent } from "react";
+import { useEffect, useState, useRef, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLang } from "./lang-provider";
 import { GoogleAddressInput } from "./google-address-input";
 import { RouteMap } from "./route-map";
 import { Calendar } from "./calendar";
 import { type HelpType, type MoveSize } from "@/lib/booking-schema";
-import { newEventId, trackLead } from "@/lib/track";
+import { newEventId, trackInitiateCheckout, trackLead } from "@/lib/track";
 import { getAttributionSummary } from "@/lib/utm";
 import { PHONE_DISPLAY } from "@/lib/contact";
 
@@ -49,15 +50,97 @@ export function QuoteForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
   const [hp, setHp] = useState(""); // honeypot — hidden from real users
   const startRef = useRef(Date.now()); // form-open time, for the bot timing check
+
+  // SMS verification (step 4) — phone must be confirmed before submit.
+  const [codeRequested, setCodeRequested] = useState(false);
+  const [codeSending, setCodeSending] = useState(false);
+  const [code, setCode] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [verifyError, setVerifyError] = useState<string | null>(null);
+  const [devCode, setDevCode] = useState<string | undefined>(undefined);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Prefill step 1 from ad-LP query params (?from=&to=) and skip ahead. Fires
+  // the funnel "Initiate" event so Meta sees partial-step intent.
+  useEffect(() => {
+    const f = searchParams.get("from") ?? "";
+    const t = searchParams.get("to") ?? "";
+    if (f) setFrom(f);
+    if (t) setTo(t);
+    if (f.trim() && t.trim()) {
+      setStep(2);
+      trackInitiateCheckout();
+    }
+  }, [searchParams]);
+
+  // Resending the code or changing phone clears any prior verification.
+  useEffect(() => {
+    setVerified(false);
+    setCodeRequested(false);
+    setCode("");
+    setVerifyError(null);
+    setDevCode(undefined);
+  }, [phone]);
+
+  const sendCode = async () => {
+    if (!phone.trim() || codeSending) return;
+    setCodeSending(true);
+    setVerifyError(null);
+    try {
+      const res = await fetch("/api/verify/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        setVerifyError(es ? "No pudimos enviar el código. Revisa el número." : "Could not send the code. Check the number.");
+      } else {
+        setCodeRequested(true);
+        setDevCode(typeof data.devCode === "string" ? data.devCode : undefined);
+      }
+    } catch {
+      setVerifyError(es ? "Error de red. Intenta de nuevo." : "Network error. Try again.");
+    }
+    setCodeSending(false);
+  };
+
+  const verifyCode = async () => {
+    if (!/^\d{6}$/.test(code) || verifying) return;
+    setVerifying(true);
+    setVerifyError(null);
+    try {
+      const res = await fetch("/api/verify/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, code }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        setVerified(true);
+      } else {
+        setVerifyError(
+          data.error === "bad_code"
+            ? (es ? "Código incorrecto." : "Wrong code.")
+            : (es ? "Código expirado o inválido. Pide uno nuevo." : "Code expired or invalid. Send a new one."),
+        );
+      }
+    } catch {
+      setVerifyError(es ? "Error de red. Intenta de nuevo." : "Network error. Try again.");
+    }
+    setVerifying(false);
+  };
 
   const valid =
     step === 1
       ? from.trim() !== "" && to.trim() !== ""
       : step === 4
-        ? name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""
+        ? name.trim() !== "" && email.trim() !== "" && phone.trim() !== "" && verified
         : true;
 
   const submit = async (e: FormEvent) => {
@@ -107,20 +190,12 @@ export function QuoteForm() {
       /* never block the customer */
     }
     setSubmitting(false);
-    setDone(true);
+    router.push("/thank-you");
   };
 
   return (
     <div className="quote-grid">
       <div className="quote-pane">
-        {done ? (
-          <div className="quote-card quote-done">
-            <div className="quote-check" aria-hidden>✓</div>
-            <h1>{t.quote.successTitle}</h1>
-            <p className="quote-sub">{t.quote.successBody}</p>
-            <a href="/" className="btn btn-outline">{es ? "Volver al inicio" : "Back to home"}</a>
-          </div>
-        ) : (
           <form className="quote-card" onSubmit={submit}>
             <div className="quote-progress" aria-hidden>
               <span style={{ width: `${(step / STEPS) * 100}%` }} />
@@ -209,9 +284,68 @@ export function QuoteForm() {
                 <label className="quote-field"><span>{t.quote.email}</span>
                   <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" />
                 </label>
-                <label className="quote-field"><span>{t.quote.phone}</span>
-                  <input required type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={PHONE_DISPLAY} />
-                </label>
+                <div className="verify-row">
+                  <label className="quote-field">
+                    <span>{t.quote.phone}</span>
+                    <input
+                      required
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder={PHONE_DISPLAY}
+                      disabled={verified}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="verify-sendbtn"
+                    onClick={sendCode}
+                    disabled={!phone.trim() || codeSending || verified}
+                  >
+                    {verified
+                      ? (es ? "✓ Verificado" : "✓ Verified")
+                      : codeSending
+                        ? "…"
+                        : codeRequested
+                          ? (es ? "Reenviar" : "Resend")
+                          : (es ? "Enviar código" : "Send code")}
+                  </button>
+                </div>
+                {codeRequested && !verified && (
+                  <div className="verify-codebox">
+                    <span>{es ? "Código de 6 dígitos:" : "6-digit code:"}</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={6}
+                      value={code}
+                      onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      placeholder="000000"
+                      aria-label={es ? "Código de verificación" : "Verification code"}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={verifyCode}
+                      disabled={!/^\d{6}$/.test(code) || verifying}
+                      style={{ padding: "10px 16px", minHeight: 0, fontSize: 13.5 }}
+                    >
+                      {verifying ? "…" : (es ? "Verificar" : "Verify")}
+                    </button>
+                  </div>
+                )}
+                {devCode && !verified && (
+                  <div className="verify-dev">
+                    DEV (no OpenPhone): {es ? "tu código es" : "your code is"} <b>{devCode}</b>
+                  </div>
+                )}
+                {verified && (
+                  <div className="verify-status ok">✓ {es ? "Teléfono verificado." : "Phone verified."}</div>
+                )}
+                {verifyError && !verified && (
+                  <div className="verify-status err">⚠ {verifyError}</div>
+                )}
               </>
             )}
 
@@ -225,7 +359,6 @@ export function QuoteForm() {
               </button>
             </div>
           </form>
-        )}
       </div>
 
       <div className="quote-map">
