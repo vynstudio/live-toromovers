@@ -82,19 +82,22 @@ export function checkPass(token: string | undefined, phone: string): boolean {
   return !!data && data.phone === phone;
 }
 
-/** Send the verification code via OpenPhone. Falls back to a dev mode that
- *  logs to the server console + returns the code in the response — letting
- *  us test the full UX locally without OpenPhone credentials. */
+/** Send the verification code via OpenPhone (now Quo). Falls back to a dev
+ *  mode that logs to the server console + returns the code in the response —
+ *  letting us test the full UX locally without OpenPhone credentials.
+ *
+ *  The OpenPhone messages API expects `from` (sending number in E.164),
+ *  not `phoneNumberId`, so OPENPHONE_FROM_NUMBER stores the E.164 number. */
 export async function sendVerificationSms(
   phone: string,
   code: string,
 ): Promise<{ delivered: "openphone" | "dev"; devCode?: string }> {
   const apiKey = process.env.OPENPHONE_API_KEY;
-  const fromId = process.env.OPENPHONE_PHONE_NUMBER_ID;
+  const fromNumber = process.env.OPENPHONE_FROM_NUMBER;
 
-  if (!apiKey || !fromId) {
+  if (!apiKey || !fromNumber) {
     console.log(
-      `[verify/send] DEV mode (no OPENPHONE_API_KEY) — code for ${phone}: ${code}`,
+      `[verify/send] DEV mode (no OPENPHONE creds) — code for ${phone}: ${code}`,
     );
     return { delivered: "dev", devCode: code };
   }
@@ -107,7 +110,7 @@ export async function sendVerificationSms(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        phoneNumberId: fromId,
+        from: fromNumber,
         to: [phone],
         content: `Toro Movers: your verification code is ${code}. It expires in 10 minutes.`,
       }),
@@ -125,20 +128,20 @@ export async function sendVerificationSms(
   }
 }
 
-/** Send a post-submit confirmation SMS to the client via OpenPhone. */
+/** Send a post-submit confirmation SMS to the client via OpenPhone (Quo). */
 export async function sendConfirmationSms(
   phone: string,
   firstName: string,
 ): Promise<boolean> {
   const apiKey = process.env.OPENPHONE_API_KEY;
-  const fromId = process.env.OPENPHONE_PHONE_NUMBER_ID;
-  if (!apiKey || !fromId) return false;
+  const fromNumber = process.env.OPENPHONE_FROM_NUMBER;
+  if (!apiKey || !fromNumber) return false;
   try {
     const res = await fetch("https://api.openphone.com/v1/messages", {
       method: "POST",
       headers: { Authorization: apiKey, "Content-Type": "application/json" },
       body: JSON.stringify({
-        phoneNumberId: fromId,
+        from: fromNumber,
         to: [phone],
         content: `Hi ${firstName}, this is Toro Movers — we got your quote request and will call you shortly. Reply STOP to opt out.`,
       }),
