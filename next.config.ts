@@ -1,16 +1,16 @@
 import type { NextConfig } from "next";
 
-// Stopgap: the Meta ads point at landing-page routes that existed on the old
-// site but not on this rebuild, so paid traffic was hitting 404s. Send those
-// paths to the homepage (which has the quote form) until dedicated LPs are
-// rebuilt. Temporary (307) on purpose — so swapping in real LPs later isn't
-// blocked by cached permanent redirects. Query strings (UTMs) are preserved.
-// "/orlando-movers" deliberately removed from this list — it is now a real
-// indexed SEO city page (see src/app/orlando-movers/).
+// Legacy Meta/PPC landing slugs from the old site, now rebuilt as the dedicated
+// paid LP at /ads/meta-orlando-movers (split hero + inline step-1 quote form).
+// Previously these 307'd to "/" as a 404 stopgap; now they point at the real ad
+// LP so paid traffic keeps message-match and the above-fold form. Still 307
+// (temporary) on purpose until Ads Manager Final URLs are updated to the new
+// path — then flip to permanent:true (301). Query strings (UTMs/fbclid) are
+// preserved. "/orlando-movers" stays out — it is a real indexed SEO city page.
+const AD_LP = "/ads/meta-orlando-movers";
 const AD_LANDING_PATHS = [
   "/movers-orlando-lp",
   "/loading-help",
-  "/get-quote",
   "/lp",
   "/funnel",
   "/move-details",
@@ -47,10 +47,12 @@ const nextConfig: NextConfig = {
     return [
       ...AD_LANDING_PATHS.map((source) => ({
         source,
-        destination: "/",
+        destination: AD_LP,
         permanent: false,
       })),
-      { source: "/quote-lp/:path*", destination: "/", permanent: false },
+      { source: "/quote-lp/:path*", destination: AD_LP, permanent: false },
+      // Quote-intent slug → full wizard (not the ad LP) since intent is explicit.
+      { source: "/get-quote", destination: "/quote", permanent: false },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
     ];
