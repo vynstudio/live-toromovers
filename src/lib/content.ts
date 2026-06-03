@@ -225,15 +225,15 @@ export const content: { en: ContentShape; es: ContentShape } = {
       quote: "Free quote",
     },
     hero: {
-      badge: "4.9★ on Google · Top-rated movers in Central Florida",
+      badge: "4.9★ on Google · Insured, family-owned · Central Florida",
       h1Line1: "Central Florida",
       h1Line2: "movers.",
-      h1Line3: "Up-front pricing.",
+      h1Line3: "No hidden fees.",
       lede:
         "Family-owned moving company serving Orlando, Kissimmee, Lake Nona, Winter Garden, Clermont and 30+ Central Florida cities. Loading, unloading, packing, and full-service moves with our truck. Quote in 60 seconds — no hidden fees.",
       ctaPrimary: "Get free quote",
       ctaSecondary: "Call now · (689) 600-2720",
-      note: "Up-front pricing · 2-hour minimum · Bilingual crew",
+      note: "Up-front hourly pricing · 2-hour minimum · Bilingual crew · Same-week dates",
     },
     trust: [
       "4.9★ on Google",
@@ -424,15 +424,15 @@ export const content: { en: ContentShape; es: ContentShape } = {
       quote: "Cotización gratis",
     },
     hero: {
-      badge: "4.9★ en Google · Los mejores mudanceros de Florida Central",
+      badge: "4.9★ en Google · Asegurados y familiares · Florida Central",
       h1Line1: "Mudanceros de",
       h1Line2: "Florida Central.",
-      h1Line3: "Precios claros.",
+      h1Line3: "Sin tarifas ocultas.",
       lede:
         "Compañía de mudanzas familiar sirviendo a Orlando, Kissimmee, Lake Nona, Winter Garden, Clermont y 30+ ciudades de Florida Central. Carga, descarga, empaque y mudanzas completas con nuestro camión. Cotización en 60 segundos — sin tarifas ocultas.",
       ctaPrimary: "Cotización gratis",
       ctaSecondary: "Llamar · (689) 600-2720",
-      note: "Precios claros · Mínimo 2 horas · Cuadrilla bilingüe",
+      note: "Precios claros por hora · Mínimo 2 horas · Cuadrilla bilingüe · Fechas esta semana",
     },
     trust: [
       "4.9★ en Google",
