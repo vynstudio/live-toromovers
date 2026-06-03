@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:crm-hook": "node --test netlify/functions/crm-hook.test.ts"
+    "test:crm-hook": "node --test netlify/functions/crm-hook.test.ts",
+    "hubspot:setup": "node scripts/hubspot-setup.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
