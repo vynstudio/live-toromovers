@@ -53,15 +53,6 @@ export function QuoteForm() {
   const [hp, setHp] = useState(""); // honeypot — hidden from real users
   const startRef = useRef(Date.now()); // form-open time, for the bot timing check
 
-  // SMS verification (step 4) — phone must be confirmed before submit.
-  const [codeRequested, setCodeRequested] = useState(false);
-  const [codeSending, setCodeSending] = useState(false);
-  const [code, setCode] = useState("");
-  const [verifying, setVerifying] = useState(false);
-  const [verified, setVerified] = useState(false);
-  const [verifyError, setVerifyError] = useState<string | null>(null);
-  const [devCode, setDevCode] = useState<string | undefined>(undefined);
-
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -78,69 +69,25 @@ export function QuoteForm() {
     }
   }, [searchParams]);
 
-  // Resending the code or changing phone clears any prior verification.
-  useEffect(() => {
-    setVerified(false);
-    setCodeRequested(false);
-    setCode("");
-    setVerifyError(null);
-    setDevCode(undefined);
-  }, [phone]);
-
-  const sendCode = async () => {
-    if (!phone.trim() || codeSending) return;
-    setCodeSending(true);
-    setVerifyError(null);
-    try {
-      const res = await fetch("/api/verify/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) {
-        setVerifyError(es ? "No pudimos enviar el código. Revisa el número." : "Could not send the code. Check the number.");
-      } else {
-        setCodeRequested(true);
-        setDevCode(typeof data.devCode === "string" ? data.devCode : undefined);
-      }
-    } catch {
-      setVerifyError(es ? "Error de red. Intenta de nuevo." : "Network error. Try again.");
-    }
-    setCodeSending(false);
-  };
-
-  const verifyCode = async () => {
-    if (!/^\d{6}$/.test(code) || verifying) return;
-    setVerifying(true);
-    setVerifyError(null);
-    try {
-      const res = await fetch("/api/verify/check", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, code }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && data.ok) {
-        setVerified(true);
-      } else {
-        setVerifyError(
-          data.error === "bad_code"
-            ? (es ? "Código incorrecto." : "Wrong code.")
-            : (es ? "Código expirado o inválido. Pide uno nuevo." : "Code expired or invalid. Send a new one."),
-        );
-      }
-    } catch {
-      setVerifyError(es ? "Error de red. Intenta de nuevo." : "Network error. Try again.");
-    }
-    setVerifying(false);
+  // Format the phone as a US number as the user types; 10 digits = valid.
+  // Replaces hard SMS verification with low-friction soft validation.
+  const phoneDigits = phone.replace(/\D/g, "");
+  const phoneValid = phoneDigits.length === 10;
+  const onPhoneChange = (raw: string) => {
+    const d = raw.replace(/\D/g, "").slice(0, 10);
+    setPhone(
+      d.length > 6 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`
+      : d.length > 3 ? `(${d.slice(0, 3)}) ${d.slice(3)}`
+      : d.length > 0 ? `(${d}`
+      : "",
+    );
   };
 
   const valid =
     step === 1
       ? from.trim() !== "" && to.trim() !== ""
       : step === 4
-        ? name.trim() !== "" && email.trim() !== "" && phone.trim() !== "" && verified
+        ? name.trim() !== "" && email.trim() !== "" && phoneValid
         : true;
 
   const submit = async (e: FormEvent) => {
@@ -284,67 +231,24 @@ export function QuoteForm() {
                 <label className="quote-field"><span>{t.quote.email}</span>
                   <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" />
                 </label>
-                <div className="verify-row">
-                  <label className="quote-field">
-                    <span>{t.quote.phone}</span>
-                    <input
-                      required
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder={PHONE_DISPLAY}
-                      disabled={verified}
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className="verify-sendbtn"
-                    onClick={sendCode}
-                    disabled={!phone.trim() || codeSending || verified}
-                  >
-                    {verified
-                      ? (es ? "✓ Verificado" : "✓ Verified")
-                      : codeSending
-                        ? "…"
-                        : codeRequested
-                          ? (es ? "Reenviar" : "Resend")
-                          : (es ? "Enviar código" : "Send code")}
-                  </button>
-                </div>
-                {codeRequested && !verified && (
-                  <div className="verify-codebox">
-                    <span>{es ? "Código de 6 dígitos:" : "6-digit code:"}</span>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      pattern="[0-9]*"
-                      maxLength={6}
-                      value={code}
-                      onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                      placeholder="000000"
-                      aria-label={es ? "Código de verificación" : "Verification code"}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={verifyCode}
-                      disabled={!/^\d{6}$/.test(code) || verifying}
-                      style={{ padding: "10px 16px", minHeight: 0, fontSize: 13.5 }}
-                    >
-                      {verifying ? "…" : (es ? "Verificar" : "Verify")}
-                    </button>
+                <label className="quote-field">
+                  <span>{t.quote.phone}</span>
+                  <input
+                    required
+                    type="tel"
+                    inputMode="tel"
+                    value={phone}
+                    onChange={(e) => onPhoneChange(e.target.value)}
+                    placeholder={PHONE_DISPLAY}
+                    aria-describedby="phone-confirm"
+                  />
+                </label>
+                {phoneValid && (
+                  <div id="phone-confirm" className="verify-status ok">
+                    {es
+                      ? `Te enviaremos tu cotización a ${phone} — confirma que sea correcto.`
+                      : `We’ll send your quote to ${phone} — please confirm it’s correct.`}
                   </div>
-                )}
-                {devCode && !verified && (
-                  <div className="verify-dev">
-                    DEV (no OpenPhone): {es ? "tu código es" : "your code is"} <b>{devCode}</b>
-                  </div>
-                )}
-                {verified && (
-                  <div className="verify-status ok">✓ {es ? "Teléfono verificado." : "Phone verified."}</div>
-                )}
-                {verifyError && !verified && (
-                  <div className="verify-status err">⚠ {verifyError}</div>
                 )}
               </>
             )}
@@ -358,9 +262,7 @@ export function QuoteForm() {
                   ? "…"
                   : step < STEPS
                     ? t.quote.next
-                    : step === 4 && phone.trim() && !verified
-                      ? (es ? "Verifica tu teléfono primero" : "Verify your phone first")
-                      : (es ? "Ver mi precio" : "Get my price")}
+                    : (es ? "Ver mi precio" : "Get my price")}
                 <span className="arrow" aria-hidden />
               </button>
             </div>

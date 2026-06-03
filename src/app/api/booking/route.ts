@@ -8,12 +8,7 @@ import {
   SIZE_LABEL,
   type QuoteInput,
 } from "@/lib/booking-schema";
-import {
-  VERIFY_PASS_COOKIE,
-  checkPass,
-  normalizePhone,
-  sendConfirmationSms,
-} from "@/lib/verify";
+import { normalizePhone, sendConfirmationSms } from "@/lib/verify";
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
@@ -37,18 +32,6 @@ export async function POST(req: Request) {
 
   const q = parsed.data;
 
-  // Phone verification gate: the lead must come from a verified phone (SMS
-  // code confirmed via /api/verify/check). The verify_pass cookie binds the
-  // pass to the exact phone number; we re-normalize and compare.
-  const passCookie = req.headers
-    .get("cookie")
-    ?.match(new RegExp(`(?:^|;\\s*)${VERIFY_PASS_COOKIE}=([^;]+)`))?.[1];
-  if (!checkPass(passCookie, normalizePhone(q.phone))) {
-    return NextResponse.json(
-      { ok: false, error: "phone_not_verified" },
-      { status: 403 },
-    );
-  }
   const eventId =
     body && typeof body.eventId === "string" ? body.eventId : undefined;
 
