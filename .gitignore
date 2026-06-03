@@ -37,6 +37,9 @@ yarn-error.log*
 # netlify
 .netlify
 
+# local image source backups (originals before WebP optimization)
+.image-backups
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

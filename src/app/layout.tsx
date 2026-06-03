@@ -37,11 +37,11 @@ const SITE_URL =
 export const metadata: Metadata = {
   title: {
     default:
-      "Toro Movers — Family-owned Movers Orlando & Central Florida · 4.9★ Google",
+      "Toro Movers — Orlando & Central Florida Movers · 4.9★ Google",
     template: "%s · Toro Movers",
   },
   description:
-    "Insured Orlando moving company offering local moves, apartment moves, loading help, and full-service moves with truck across Central Florida. Up-front hourly pricing — quote in 60 seconds. Bilingual crew. 4.9★ on Google. (689) 600-2720.",
+    "Insured Orlando movers — local, apartment, loading help & full-service moves across Central Florida. Up-front hourly pricing, bilingual crew. Quote in 60s.",
   keywords: [
     "Orlando movers",
     "Central Florida movers",

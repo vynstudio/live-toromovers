@@ -59,7 +59,7 @@ export function AdLanding() {
           </div>
           <div className="ad-hero-right" aria-hidden>
             <img
-              src="/hero/slide-02.jpg"
+              src="/hero/slide-02.webp"
               alt=""
               fetchPriority="high"
               decoding="async"

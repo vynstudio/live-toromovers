@@ -5,20 +5,22 @@ import { useLang } from "./lang-provider";
 import Link from "next/link";
 import { PHONE_TEL } from "@/lib/contact";
 
+// WebP @1440px (q72) — ~60KB each vs ~200KB JPG. Originals kept in
+// .image-backups/hero/ (gitignored) if a re-export is ever needed.
 const SLIDES = [
-  "/hero/slide-01.jpg",
-  "/hero/slide-02.jpg",
-  "/hero/slide-03.jpg",
-  "/hero/slide-04.jpg",
-  "/hero/slide-05.jpg",
-  "/hero/slide-06.jpg",
-  "/hero/slide-07.jpg",
-  "/hero/slide-08.jpg",
-  "/hero/slide-09.jpg",
-  "/hero/slide-10.jpg",
-  "/hero/slide-11.jpg",
-  "/hero/slide-12.jpg",
-  "/hero/slide-13.jpg",
+  "/hero/slide-01.webp",
+  "/hero/slide-02.webp",
+  "/hero/slide-03.webp",
+  "/hero/slide-04.webp",
+  "/hero/slide-05.webp",
+  "/hero/slide-06.webp",
+  "/hero/slide-07.webp",
+  "/hero/slide-08.webp",
+  "/hero/slide-09.webp",
+  "/hero/slide-10.webp",
+  "/hero/slide-11.webp",
+  "/hero/slide-12.webp",
+  "/hero/slide-13.webp",
 ];
 const SLIDE_INTERVAL = 1500;
 

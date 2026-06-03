@@ -35,9 +35,10 @@ export const ORLANDO: CityData = {
   name: "Orlando",
   navLabel: "Orlando movers",
   metadata: {
-    title: "Orlando Movers — Family-Owned Moving Company | $75/Mover/Hour | Toro Movers",
+    // Base only — the root layout template appends " · Toro Movers".
+    title: "Orlando Movers — $75/Mover/Hour, Fully Insured",
     description:
-      "Family-owned moving company serving Orlando, FL — downtown, Lake Nona, Dr. Phillips, and surrounding areas. Fully insured. $75/mover/hour, no hidden fees. Free phone estimate.",
+      "Family-owned Orlando movers — downtown, Lake Nona, Dr. Phillips & nearby. Fully insured, $75/mover/hour, no hidden fees. Free phone estimate.",
   },
   h1: "Orlando Movers — Toro Movers",
   subline:
@@ -70,9 +71,9 @@ export const LAKE_MARY: CityData = {
   name: "Lake Mary",
   navLabel: "Lake Mary movers",
   metadata: {
-    title: "Lake Mary Movers — Family-Owned Moving Company | $75/Mover/Hour | Toro Movers",
+    title: "Lake Mary Movers — $75/Mover/Hour, Fully Insured",
     description:
-      "Family-owned moving company serving Lake Mary, FL — Heathrow, Markham Woods, Timacuan, and surrounding Seminole County areas. Fully insured. $75/mover/hour, no hidden fees.",
+      "Family-owned Lake Mary movers — Heathrow, Markham Woods, Timacuan & Seminole County. Fully insured, $75/mover/hour, no hidden fees.",
   },
   h1: "Lake Mary Movers — Toro Movers",
   subline:
@@ -105,9 +106,9 @@ export const WINTER_PARK: CityData = {
   name: "Winter Park",
   navLabel: "Winter Park movers",
   metadata: {
-    title: "Winter Park Movers — Family-Owned Moving Company | $75/Mover/Hour | Toro Movers",
+    title: "Winter Park Movers — $75/Mover/Hour, Fully Insured",
     description:
-      "Family-owned moving company serving Winter Park, FL — Park Avenue, Aloma, and surrounding historic and residential areas. Fully insured. $75/mover/hour, no hidden fees.",
+      "Family-owned Winter Park movers — Park Ave, Aloma & historic neighborhoods. Fully insured, $75/mover/hour, no hidden fees. Free estimate.",
   },
   h1: "Winter Park Movers — Toro Movers",
   subline:
