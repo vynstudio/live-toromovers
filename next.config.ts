@@ -53,6 +53,11 @@ const nextConfig: NextConfig = {
       { source: "/quote-lp/:path*", destination: AD_LP, permanent: false },
       // Quote-intent slug → full wizard (not the ad LP) since intent is explicit.
       { source: "/get-quote", destination: "/quote", permanent: false },
+      // Old destinations still live in paused Meta ads (winner "Quote LP"
+      // campaign). Without these they 404 on reactivation. Query strings
+      // (UTMs/fbclid) are preserved automatically. "/mudanza" is a Spanish ad.
+      { source: "/moving", destination: AD_LP, permanent: false },
+      { source: "/mudanza", destination: "/es/ads/meta-orlando-movers", permanent: false },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
     ];
