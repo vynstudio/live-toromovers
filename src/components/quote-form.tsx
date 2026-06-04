@@ -17,6 +17,11 @@ const MOVING_TYPES_EN = ["Apartment", "House", "Studio", "Office", "Storage unit
 const MOVING_TYPES_ES = ["Apartamento", "Casa", "Estudio", "Oficina", "Trastero"];
 const FLOORS_EN = ["Ground floor", "2nd floor", "3rd floor", "4th+ floor"];
 const FLOORS_ES = ["Planta baja", "2.º piso", "3.º piso", "4.º+ piso"];
+// Optional specific arrival time the client can request on top of the window.
+const ARRIVAL_TIMES = [
+  "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+  "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM",
+];
 
 // Map a room count to our MoveSize enum (best-effort).
 const SIZE_BY_ROOMS: Record<string, MoveSize> = {
@@ -45,6 +50,7 @@ export function QuoteForm() {
   const [floorIdx, setFloorIdx] = useState(0);
   const [access, setAccess] = useState<"stairs" | "elevator">("stairs");
   const [arrival, setArrival] = useState<"morning" | "afternoon">("morning");
+  const [arrivalTime, setArrivalTime] = useState("");
   const [date, setDate] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -103,7 +109,8 @@ export function QuoteForm() {
     const firstName = parts.shift() || name.trim();
     const lastName = parts.join(" ");
     const helpType: HelpType = "labor-truck";
-    const arrivalLabel = arrival === "morning" ? "Morning (8AM–12PM)" : "Afternoon (12PM–4PM)";
+    const windowLabel = arrival === "morning" ? "Morning (8AM–12PM)" : "Afternoon (12PM–4PM)";
+    const arrivalLabel = arrivalTime ? `${windowLabel} · preferred ${arrivalTime}` : windowLabel;
     const accessLabel = access === "elevator" ? "Elevator" : "Stairs";
     const specialItems =
       `Type: ${MOVING_TYPES_EN[typeIdx]}. ` +
@@ -219,6 +226,15 @@ export function QuoteForm() {
                     </button>
                   ))}
                 </div>
+                <label className="quote-field" style={{ marginTop: 14 }}>
+                  <span>{es ? "Hora preferida (opcional)" : "Preferred time (optional)"}</span>
+                  <select value={arrivalTime} onChange={(e) => setArrivalTime(e.target.value)}>
+                    <option value="">{es ? "Sin preferencia" : "No preference"}</option>
+                    {ARRIVAL_TIMES.map((tm) => (
+                      <option key={tm} value={tm}>{tm}</option>
+                    ))}
+                  </select>
+                </label>
               </>
             )}
 
