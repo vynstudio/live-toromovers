@@ -72,16 +72,18 @@ export async function POST(req: Request) {
     sendClientConfirmationEmail(q, fullName),
     sendConfirmationSms(normalizePhone(q.phone), q.firstName),
     postToN8n(q, fullName, distance, eventId),
+    createHubspotContact(q, fullName, help, distance, text),
   ]);
   const emailed = results[0].status === "fulfilled" && results[0].value === true;
   const telegrammed = results[1].status === "fulfilled" && results[1].value === true;
   const capi = results[2].status === "fulfilled" && results[2].value === true;
+  const crmed = results[6].status === "fulfilled" && results[6].value === true;
 
   if (!emailed && !telegrammed) {
     console.error("[booking] NO notification channel delivered the lead:", JSON.stringify(q));
   }
 
-  return NextResponse.json({ ok: true, emailed, telegrammed, capi });
+  return NextResponse.json({ ok: true, emailed, telegrammed, capi, crmed });
 }
 
 async function sendEmail(
@@ -377,6 +379,62 @@ async function postToN8n(
     return res.ok;
   } catch (err) {
     console.error("[booking] n8n webhook threw:", err);
+    return false;
+  }
+}
+
+/** Upsert the lead into HubSpot so follow-up (sequences, tasks, pipeline) can
+ *  start. Keyed on email so a returning customer updates the same contact
+ *  instead of creating a dupe. Only standard properties are used so it never
+ *  400s on a missing custom field. Gated on HUBSPOT_TOKEN (private app token). */
+async function createHubspotContact(
+  q: QuoteInput,
+  fullName: string,
+  help: string,
+  distance: string,
+  text: string,
+): Promise<boolean> {
+  const token = process.env.HUBSPOT_TOKEN;
+  if (!token) return false;
+  if (!q.email && !q.phone) return false; // nothing to key/contact on
+
+  const properties: Record<string, string> = {
+    firstname: q.firstName,
+    lifecyclestage: "lead",
+    hs_lead_status: "NEW",
+    message: text, // full move summary lands on the contact record
+  };
+  if (q.lastName) properties.lastname = q.lastName;
+  if (q.email) properties.email = q.email;
+  if (q.phone) properties.phone = q.phone;
+
+  // Upsert by email when we have one (avoids dupes on repeat requests);
+  // otherwise plain create.
+  const useUpsert = Boolean(q.email);
+  const url = useUpsert
+    ? "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert"
+    : "https://api.hubapi.com/crm/v3/objects/contacts";
+  const payload = useUpsert
+    ? { inputs: [{ idProperty: "email", id: q.email, properties }] }
+    : { properties };
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      console.error("[booking] HubSpot failed:", res.status, detail, "lead:", q.email || q.phone);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[booking] HubSpot threw:", err, "lead:", q.email || q.phone);
     return false;
   }
 }
