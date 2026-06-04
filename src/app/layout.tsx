@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Schibsted_Grotesk } from "next/font/google";
-import Script from "next/script";
+import { Schibsted_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
 import { RevealObserver } from "@/components/reveal-observer";
@@ -27,13 +26,12 @@ const serif = Schibsted_Grotesk({
   display: "swap",
 });
 
-// Single-family system: the same grotesque drives body/UI too, for a fully
-// minimal, one-typeface site. (Loaded under --font-sans so every existing
-// body/UI rule picks it up unchanged.)
-const sans = Schibsted_Grotesk({
+// Body/UI stays on Inter (optimized for small sizes / readability); the
+// Schibsted grotesque is reserved for display headings via --font-serif.
+const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -182,18 +180,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <head>
-        <Script
-          id="ld-moving-company"
+        {/* Plain server-rendered JSON-LD (NOT next/script) so the schema lands
+            as static HTML in the initial response — the reliable form for
+            Google rich results, rather than being injected client-side. */}
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(movingCompanyJsonLd),
           }}
         />
-        <Script
-          id="ld-faq"
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(faqJsonLd),
           }}
