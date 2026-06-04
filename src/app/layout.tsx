@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Schibsted_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
-import { RevealObserver } from "@/components/reveal-observer";
 import { Analytics } from "@/components/analytics";
 import { UtmCapture } from "@/components/utm-capture";
 import { SERVICE_CITIES, content } from "@/lib/content";
@@ -199,10 +198,7 @@ export default function RootLayout({
       <body>
         <Analytics />
         <UtmCapture />
-        <LangProvider>
-          {children}
-          <RevealObserver />
-        </LangProvider>
+        <LangProvider>{children}</LangProvider>
       </body>
     </html>
   );
