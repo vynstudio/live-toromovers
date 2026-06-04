@@ -17,9 +17,11 @@ export function CountUp({
   prefix = "",
   suffix = "",
 }: Props) {
-  const [val, setVal] = useState(0);
+  // Default to the REAL value so SSR / no-JS / crawler renders show the true
+  // number (never "0" — which Google would otherwise read as "0.0★ rating,
+  // 0+ moves"). The count-up animation is a progressive enhancement.
+  const [val, setVal] = useState(end);
   const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -30,11 +32,21 @@ export function CountUp({
       return;
     }
 
+    // Only animate when the element starts off-screen — resetting to 0 there is
+    // invisible, so the count-up plays as the user scrolls in, with no flash on
+    // load for stats already in view.
+    const rect = el.getBoundingClientRect();
+    const visibleOnLoad = rect.top < window.innerHeight && rect.bottom > 0;
+    if (visibleOnLoad) {
+      setVal(end);
+      return;
+    }
+
+    setVal(0);
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting && !started.current) {
-            started.current = true;
+          if (e.isIntersecting) {
             const start = performance.now();
             const tick = (t: number) => {
               const p = Math.min((t - start) / duration, 1);
