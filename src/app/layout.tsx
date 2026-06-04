@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Schibsted_Grotesk } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
 import { RevealObserver } from "@/components/reveal-observer";
 import { Analytics } from "@/components/analytics";
 import { UtmCapture } from "@/components/utm-capture";
-import { SERVICE_CITIES } from "@/lib/content";
+import { SERVICE_CITIES, content } from "@/lib/content";
 import {
   PHONE_DISPLAY,
   EMAIL,
@@ -16,18 +16,24 @@ import {
   GOOGLE_RATING,
 } from "@/lib/contact";
 
-const serif = Cormorant_Garamond({
+// Minimalist display face — clean modern grotesque replacing the old serif.
+// Variable kept as --font-serif to avoid churning ~25 heading rules; it now
+// resolves to Schibsted Grotesk everywhere the display face is used.
+const serif = Schibsted_Grotesk({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-const sans = Inter({
+// Single-family system: the same grotesque drives body/UI too, for a fully
+// minimal, one-typeface site. (Loaded under --font-sans so every existing
+// body/UI rule picks it up unchanged.)
+const sans = Schibsted_Grotesk({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -103,16 +109,25 @@ const movingCompanyJsonLd = {
   slogan: SLOGAN,
   description:
     "Family-owned Orlando moving company offering local moves, apartment moves, loading help, and full-service moves with truck across Central Florida. Bilingual crew. Up-front hourly pricing — quote in 60 seconds.",
+  "@id": `${SITE_URL}/#movingcompany`,
   url: SITE_URL,
   telephone: "+16896002720",
   email: EMAIL,
   image: `${SITE_URL}/opengraph-image`,
   priceRange: "$$",
+  knowsLanguage: ["en", "es"],
+  currenciesAccepted: "USD",
+  paymentAccepted: "Cash, Credit Card, Bank Transfer",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Orlando",
     addressRegion: "FL",
     addressCountry: "US",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 28.5384,
+    longitude: -81.3789,
   },
   areaServed: SERVICE_CITIES.map((name) => ({
     "@type": "City",
@@ -149,6 +164,18 @@ const movingCompanyJsonLd = {
   ],
 };
 
+// FAQ rich-result schema, sourced from the same copy rendered on the page so
+// the two never drift. Eligible for the FAQ snippet in Google search.
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: content.en.faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -161,6 +188,14 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(movingCompanyJsonLd),
+          }}
+        />
+        <Script
+          id="ld-faq"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd),
           }}
         />
       </head>
