@@ -127,6 +127,7 @@ export function QuoteForm() {
           email,
           phone,
           eventId,
+          lang,
           source: getAttributionSummary() || undefined,
           hp,
           elapsedMs: Date.now() - startRef.current,

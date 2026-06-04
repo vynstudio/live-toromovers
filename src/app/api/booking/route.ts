@@ -407,6 +407,7 @@ async function createHubspotContact(
   if (q.lastName) properties.lastname = q.lastName;
   if (q.email) properties.email = q.email;
   if (q.phone) properties.phone = q.phone;
+  if (q.lang) properties.hs_language = q.lang; // drives follow-up language
 
   // Upsert by email when we have one (avoids dupes on repeat requests);
   // otherwise plain create.

@@ -53,6 +53,8 @@ export const QuoteSchema = z.object({
   phone: z.string().min(7),
   // Marketing attribution (UTMs / click ids) — informational only.
   source: z.string().max(500).optional(),
+  // Page language at submit ("en" | "es") — drives follow-up message language.
+  lang: z.enum(["en", "es"]).optional(),
 });
 export type QuoteInput = z.infer<typeof QuoteSchema>;
 
