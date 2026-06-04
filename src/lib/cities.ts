@@ -349,6 +349,111 @@ export const ALTAMONTE_SPRINGS: CityData = {
   schema: { lat: 28.6611, lng: -81.3656 },
 };
 
+export const APOPKA: CityData = {
+  slug: "apopka-movers",
+  href: "/apopka-movers",
+  name: "Apopka",
+  navLabel: "Apopka movers",
+  metadata: {
+    title: "Apopka Movers — $75/Mover/Hour, Fully Insured",
+    description:
+      "Family-owned Apopka movers — Errol Estates, Rock Springs Ridge, Wekiva & north Orange County. Bilingual crews, fully insured, $75/mover/hour, no hidden fees.",
+  },
+  h1: "Apopka Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Apopka, including Errol Estates, Rock Springs Ridge, Wekiva, and the surrounding north Orange County area. Bilingual crews, fully insured, honest pricing.",
+  about: {
+    h2: "Apopka movers for growing homes.",
+    lead: "Toro Movers handles apartment, home, and family moves throughout Apopka and north Orange County. From new communities along the 429 corridor to established homes near Wekiwa Springs, the process stays the same: phone estimate, scheduled crew, no surprises. Hablamos español.",
+  },
+  neighborhoods: [
+    "Errol Estates",
+    "Rock Springs Ridge",
+    "Sweetwater Country Club",
+    "Wekiva",
+    "Lake Doe",
+    "Bear Lake",
+    "Kelly Park",
+    "Wekiwa Springs",
+  ],
+  uniqueAngle: {
+    eyebrow: "growth corridor & larger homes",
+    h2: "Built for Apopka.",
+    body: "Apopka has boomed along the SR-429 corridor, so many moves here are families trading apartments for single-family homes with more space, bigger garages, and longer driveways. Toro Movers runs bilingual crews, handles the bulky stuff that comes with a bigger home, and quotes by the hour up front — no surprises as you size up.",
+  },
+  schema: { lat: 28.6776, lng: -81.5106 },
+};
+
+export const ST_CLOUD: CityData = {
+  slug: "st-cloud-movers",
+  href: "/st-cloud-movers",
+  name: "St. Cloud",
+  navLabel: "St. Cloud movers",
+  metadata: {
+    title: "St. Cloud Movers — $75/Mover/Hour, Fully Insured",
+    description:
+      "Family-owned St. Cloud movers — Narcoossee, Anthem Park, Lakeshore & Osceola County. Bilingual crews, fully insured, $75/mover/hour, no hidden fees.",
+  },
+  h1: "St. Cloud Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving St. Cloud, including the Narcoossee corridor, Anthem Park, Lakeshore, and the surrounding Osceola County area. Bilingual crews, fully insured, honest pricing.",
+  about: {
+    h2: "St. Cloud movers for new homes.",
+    lead: "Toro Movers handles apartment, home, and new-construction moves throughout St. Cloud and south Osceola County. From brand-new builds near Narcoossee and Lake Nona to established homes by East Lake Toho, the process stays the same: phone estimate, scheduled crew, no surprises. Hablamos español.",
+  },
+  neighborhoods: [
+    "Narcoossee",
+    "Anthem Park",
+    "Lakeshore",
+    "Stevens Plantation",
+    "Canoe Creek",
+    "Gramercy Farms",
+    "Twin Lakes",
+    "Center Lake",
+  ],
+  uniqueAngle: {
+    eyebrow: "new construction & fast growth",
+    h2: "Built for fast-growing St. Cloud.",
+    body: "St. Cloud is one of the fastest-growing spots south of Lake Nona, so a lot of moves here are first-day move-ins to brand-new homes — builder schedules, fresh floors, and new-community streets that aren't on older maps yet. Toro Movers coordinates builder and HOA timing, protects new finishes, and gets you in without the surprises.",
+  },
+  schema: { lat: 28.2489, lng: -81.2812 },
+};
+
+export const WINDERMERE: CityData = {
+  slug: "windermere-movers",
+  href: "/windermere-movers",
+  name: "Windermere",
+  navLabel: "Windermere movers",
+  metadata: {
+    title: "Windermere Movers — $75/Mover/Hour, Fully Insured",
+    description:
+      "Family-owned Windermere movers — Isleworth, Keene's Pointe, Butler Bay & the Butler Chain. Fully insured, $75/mover/hour, careful with high-value homes.",
+  },
+  h1: "Windermere Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Windermere, including Isleworth, Keene's Pointe, Butler Bay, and the lakefront communities of the Butler Chain. Fully insured, honest pricing.",
+  about: {
+    h2: "Windermere movers for high-value homes.",
+    lead: "Toro Movers handles moves throughout Windermere — from gated golf communities to lakefront estates on the Butler Chain. Antique furniture, art, narrow guard gates, and long private drives all get the same careful process: phone estimate, scheduled crew, no surprises.",
+  },
+  neighborhoods: [
+    "Isleworth",
+    "Keene's Pointe",
+    "Butler Bay",
+    "Windermere Downs",
+    "Reserve at Belmere",
+    "Tildens Grove",
+    "Casabella",
+    "Lake Butler",
+  ],
+  uniqueAngle: {
+    eyebrow: "lakefront & gated luxury",
+    h2: "Built for Windermere estates.",
+    body: "Windermere is gated, lakefront, and high-value — guard-gate check-ins, certificates of insurance on file, long private driveways, and homes full of antiques, art, and custom pieces. Toro Movers carries the documentation these communities require, brings extra padding and floor protection for high-value interiors, and works deliberately so nothing gets rushed.",
+  },
+  schema: { lat: 28.4955, lng: -81.5348 },
+};
+
 export const CITIES: CityData[] = [
   ORLANDO,
   LAKE_MARY,
@@ -359,6 +464,9 @@ export const CITIES: CityData[] = [
   OVIEDO,
   WINTER_GARDEN,
   ALTAMONTE_SPRINGS,
+  APOPKA,
+  ST_CLOUD,
+  WINDERMERE,
 ];
 
 export function otherCities(slug: string): CityData[] {
