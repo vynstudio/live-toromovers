@@ -244,6 +244,111 @@ export const CLERMONT: CityData = {
   schema: { lat: 28.5494, lng: -81.7729 },
 };
 
+export const OVIEDO: CityData = {
+  slug: "oviedo-movers",
+  href: "/oviedo-movers",
+  name: "Oviedo",
+  navLabel: "Oviedo movers",
+  metadata: {
+    title: "Oviedo Movers — $75/Mover/Hour, Fully Insured",
+    description:
+      "Family-owned Oviedo movers — Alafaya Woods, Twin Rivers, Live Oak Reserve & Seminole County. Fully insured, $75/mover/hour, no hidden fees. Free estimate.",
+  },
+  h1: "Oviedo Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Oviedo, including Alafaya Woods, Twin Rivers, Live Oak Reserve, and the surrounding Seminole County area. Fully insured, honest pricing.",
+  about: {
+    h2: "Oviedo movers for family homes.",
+    lead: "Toro Movers handles apartment, home, and family moves throughout Oviedo and east Seminole County. From new subdivisions near Oviedo on the Park to established homes by the UCF area, every move runs on the same process: phone estimate, scheduled crew, no surprises.",
+  },
+  neighborhoods: [
+    "Alafaya Woods",
+    "Twin Rivers",
+    "Live Oak Reserve",
+    "Kingsbridge",
+    "Carillon",
+    "Stillwater",
+    "Oviedo on the Park",
+    "Riverside at Twin Rivers",
+  ],
+  uniqueAngle: {
+    eyebrow: "family homes & school moves",
+    h2: "Built for Oviedo families.",
+    body: "Oviedo is one of Central Florida's top family-and-schools destinations, so most moves here are families upsizing into single-family homes — often timed around the school calendar. Toro Movers books realistic family-move windows, handles the bulky stuff (beds, sectionals, garage gear) carefully, and keeps the day predictable: phone estimate, scheduled crew, no surprises.",
+  },
+  schema: { lat: 28.67, lng: -81.2081 },
+};
+
+export const WINTER_GARDEN: CityData = {
+  slug: "winter-garden-movers",
+  href: "/winter-garden-movers",
+  name: "Winter Garden",
+  navLabel: "Winter Garden movers",
+  metadata: {
+    title: "Winter Garden Movers — $75/Mover/Hour, Fully Insured",
+    description:
+      "Family-owned Winter Garden movers — Historic Downtown, Independence, Horizon West & west Orange County. Fully insured, $75/mover/hour, no hidden fees.",
+  },
+  h1: "Winter Garden Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Winter Garden, including Historic Downtown, Independence, the Hamlin / Horizon West area, and west Orange County. Fully insured, honest pricing.",
+  about: {
+    h2: "Winter Garden movers, growth and charm.",
+    lead: "Toro Movers handles apartment, home, and new-construction moves throughout Winter Garden and west Orange County. From historic homes near Plant Street to brand-new builds in Horizon West, the process stays the same: phone estimate, scheduled crew, no surprises.",
+  },
+  neighborhoods: [
+    "Historic Downtown / Plant Street",
+    "Independence",
+    "Stoneybrook West",
+    "Orchard Hills",
+    "Lakeview Preserve",
+    "Hamlin",
+    "Watermark",
+    "Tucker Oaks",
+  ],
+  uniqueAngle: {
+    eyebrow: "new construction & Horizon West",
+    h2: "Built for fast-growing Winter Garden.",
+    body: "Winter Garden is one of the fastest-growing corners of metro Orlando — Horizon West and Hamlin add new homes constantly, which means a steady stream of first-day move-ins with builder schedules, gated entries, and tight new-community streets. Toro Movers coordinates builder and HOA timing, protects fresh floors and paint, and gets you in without the surprises.",
+  },
+  schema: { lat: 28.5653, lng: -81.5862 },
+};
+
+export const ALTAMONTE_SPRINGS: CityData = {
+  slug: "altamonte-springs-movers",
+  href: "/altamonte-springs-movers",
+  name: "Altamonte Springs",
+  navLabel: "Altamonte Springs movers",
+  metadata: {
+    title: "Altamonte Springs Movers — $75/Mover/Hour, Insured",
+    description:
+      "Family-owned Altamonte Springs movers — Cranes Roost, Uptown, Sanlando & Seminole County apartments & condos. Fully insured, $75/mover/hour, no hidden fees.",
+  },
+  h1: "Altamonte Springs Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Altamonte Springs, including Uptown Altamonte, Cranes Roost, Sanlando Springs, and the surrounding Seminole County area. Fully insured, honest pricing.",
+  about: {
+    h2: "Altamonte movers for apartments & condos.",
+    lead: "Toro Movers handles apartment, condo, and home moves throughout Altamonte Springs and south Seminole County. From third-floor walk-ups near Uptown to condos by Cranes Roost, the process stays the same: phone estimate, scheduled crew, no surprises.",
+  },
+  neighborhoods: [
+    "Uptown Altamonte",
+    "Cranes Roost",
+    "Sanlando Springs",
+    "Spring Oaks",
+    "Lake Lotus",
+    "The Springs",
+    "Montgomery Club",
+    "Bear Lake",
+  ],
+  uniqueAngle: {
+    eyebrow: "apartment & condo moves",
+    h2: "Built for Altamonte apartments.",
+    body: "Altamonte Springs is dense with apartment and condo communities, which means stairs, elevators, narrow breezeways, and strict complex move-in windows. Toro Movers' hourly crews are built for exactly this — labor-only or labor-plus-truck, careful on walk-ups and tight turns, and quoted up front by the hour so a third-floor unit never turns into a surprise bill.",
+  },
+  schema: { lat: 28.6611, lng: -81.3656 },
+};
+
 export const CITIES: CityData[] = [
   ORLANDO,
   LAKE_MARY,
@@ -251,6 +356,9 @@ export const CITIES: CityData[] = [
   KISSIMMEE,
   SANFORD,
   CLERMONT,
+  OVIEDO,
+  WINTER_GARDEN,
+  ALTAMONTE_SPRINGS,
 ];
 
 export function otherCities(slug: string): CityData[] {
