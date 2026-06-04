@@ -7,13 +7,13 @@ const BASE =
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const anchors = [
+  // Real, indexable pages only. Homepage anchors (#services, #faq, …) were
+  // removed — they aren't pages and Google flagged them as blank. Funnel/LP
+  // routes (/quote, /intake, /thank-you, /ads/*) are intentionally excluded so
+  // they don't compete in organic search.
+  const pages = [
     { url: BASE, priority: 1.0, changeFrequency: "weekly" as const },
-    { url: `${BASE}/#services`, priority: 0.9, changeFrequency: "monthly" as const },
-    { url: `${BASE}/#process`, priority: 0.7, changeFrequency: "monthly" as const },
-    { url: `${BASE}/#areas`, priority: 0.8, changeFrequency: "monthly" as const },
-    { url: `${BASE}/#reviews`, priority: 0.8, changeFrequency: "weekly" as const },
-    { url: `${BASE}/#faq`, priority: 0.6, changeFrequency: "monthly" as const },
+    { url: `${BASE}/checklist`, priority: 0.7, changeFrequency: "monthly" as const },
   ];
 
   // City SEO landing pages — kept indexed, carried over from the prior site.
@@ -23,5 +23,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
   }));
 
-  return [...anchors, ...cities].map((p) => ({ ...p, lastModified: now }));
+  return [...pages, ...cities].map((p) => ({ ...p, lastModified: now }));
 }
