@@ -15,18 +15,18 @@ export function Hero() {
     <section className="hero hero--split">
       <div className="hero-inner">
         <div className="hero-copy">
-          <div className="hero-badge reveal">
+          <div className="hero-badge">
             <span className="stars" aria-hidden>★★★★★</span>
             {t.hero.badge}
           </div>
-          <h1 className="reveal reveal-d1">
+          <h1>
             {t.hero.h1Line1}
             <br />
             {t.hero.h1Line2}
             <span className="accent">{t.hero.h1Line3}</span>
           </h1>
-          <p className="hero-lede reveal reveal-d1">{t.hero.lede}</p>
-          <div className="hero-cta-row reveal reveal-d2">
+          <p className="hero-lede">{t.hero.lede}</p>
+          <div className="hero-cta-row">
             <Link href="/quote" className="btn btn-primary">
               {lang === "es" ? "Ver mi precio" : "Get my price"}
               <span className="arrow" aria-hidden />
@@ -38,9 +38,13 @@ export function Hero() {
           <div className="hero-note">{t.hero.note}</div>
         </div>
 
-        <div className="hero-media reveal reveal-d2">
+        <div className="hero-media">
           <img
             src={HERO_IMAGE}
+            srcSet="/hero/slide-01-760.webp 760w, /hero/slide-01-1140.webp 1140w, /hero/slide-01.webp 1440w"
+            sizes="(min-width: 980px) 560px, 100vw"
+            width={1440}
+            height={960}
             alt="Couple relaxing among moving boxes after their Central Florida move with Toro Movers"
             className="hero-media-img"
             fetchPriority="high"
