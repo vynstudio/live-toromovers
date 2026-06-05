@@ -5,7 +5,6 @@ import { StatsBand } from "@/components/stats-band";
 import { Services } from "@/components/services";
 import { EditorialQuote } from "@/components/editorial-quote";
 import { Process } from "@/components/process";
-import { Areas } from "@/components/areas";
 import { FeatureQuote } from "@/components/feature-quote";
 import { Faq } from "@/components/faq";
 import { ClosingCta } from "@/components/closing-cta";
@@ -22,7 +21,6 @@ export default function Home() {
       <EditorialQuote />
       <StatsBand />
       <Process />
-      <Areas />
       <FeatureQuote />
       <Faq />
       <ClosingCta />

@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { useLang } from "./lang-provider";
-import { CITIES } from "@/lib/cities";
 import {
   PHONE_DISPLAY,
   PHONE_TEL,
@@ -14,7 +12,19 @@ import {
   HOURS_NOTE_ES,
   LEGAL_NAME,
 } from "@/lib/contact";
-import { SERVICE_CITIES } from "@/lib/content";
+
+// Central Florida counties we cover — The Villages (Sumter/Lake/Marion)
+// down to Davenport (Polk), plus the Orlando-metro core.
+const COUNTIES = [
+  "Orange",
+  "Seminole",
+  "Osceola",
+  "Lake",
+  "Polk",
+  "Sumter",
+  "Marion",
+  "Volusia",
+];
 
 export function Footer() {
   const { t, lang } = useLang();
@@ -46,31 +56,21 @@ export function Footer() {
             <h4>{lang === "es" ? "Navegación" : "Menu"}</h4>
             <a href="#services">{t.nav.services}</a>
             <a href="#process">{t.nav.process}</a>
-            <a href="#areas">{t.nav.areas}</a>
             <a href="#reviews">{t.nav.reviews}</a>
             <a href="#faq">{t.nav.faq}</a>
           </div>
+        </div>
 
-          <div className="footer-col">
-            <h4>{lang === "es" ? "Ciudades" : "Movers by city"}</h4>
-            {CITIES.map((c) => (
-              <Link key={c.slug} href={c.href}>{c.navLabel}</Link>
+        <nav className="footer-cities" aria-label={lang === "es" ? "Condados" : "Counties we serve"}>
+          <h4 className="footer-cities-label">
+            {lang === "es" ? "Condados que cubrimos" : "Counties we serve"}
+          </h4>
+          <div className="footer-cities-links">
+            {COUNTIES.map((c) => (
+              <span key={c}>{c} County</span>
             ))}
           </div>
-        </div>
-
-        <div>
-          <h4 style={{
-            fontSize: 11, fontWeight: 700,
-            letterSpacing: "0.2em", textTransform: "uppercase",
-            color: "var(--muted)", marginBottom: 12,
-          }}>
-            {t.footer.serviceArea}
-          </h4>
-          <p className="footer-cities">
-            {SERVICE_CITIES.map((c) => `${c}, FL`).join(" · ")}
-          </p>
-        </div>
+        </nav>
 
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} {LEGAL_NAME}. {t.footer.legal}.</span>

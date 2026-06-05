@@ -31,7 +31,6 @@ export function Nav() {
       <div className="nav-links" aria-label="Main">
         <a href="#services">{t.nav.services}</a>
         <a href="#process">{t.nav.process}</a>
-        <a href="#areas">{t.nav.areas}</a>
         <a href="#reviews">{t.nav.reviews}</a>
         <a href="#faq">{t.nav.faq}</a>
       </div>
