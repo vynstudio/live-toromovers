@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useLang } from "./lang-provider";
+import { CITIES } from "@/lib/cities";
 import {
   PHONE_DISPLAY,
   PHONE_TEL,
@@ -12,19 +14,6 @@ import {
   HOURS_NOTE_ES,
   LEGAL_NAME,
 } from "@/lib/contact";
-
-// Central Florida counties we cover — The Villages (Sumter/Lake/Marion)
-// down to Davenport (Polk), plus the Orlando-metro core.
-const COUNTIES = [
-  "Orange",
-  "Seminole",
-  "Osceola",
-  "Lake",
-  "Polk",
-  "Sumter",
-  "Marion",
-  "Volusia",
-];
 
 export function Footer() {
   const { t, lang } = useLang();
@@ -61,13 +50,13 @@ export function Footer() {
           </div>
         </div>
 
-        <nav className="footer-cities" aria-label={lang === "es" ? "Condados" : "Counties we serve"}>
+        <nav className="footer-cities" aria-label={lang === "es" ? "Ciudades" : "Cities we serve"}>
           <h4 className="footer-cities-label">
-            {lang === "es" ? "Condados que cubrimos" : "Counties we serve"}
+            {lang === "es" ? "Mudanzas por ciudad" : "Movers by city"}
           </h4>
           <div className="footer-cities-links">
-            {COUNTIES.map((c) => (
-              <span key={c}>{c} County</span>
+            {CITIES.map((c) => (
+              <Link key={c.slug} href={c.href}>{c.name}</Link>
             ))}
           </div>
         </nav>
