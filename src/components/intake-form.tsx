@@ -6,6 +6,7 @@ import { GoogleAddressInput } from "./google-address-input";
 
 const HOME_TYPES = ["Apartment", "House", "Townhome", "Studio", "Office", "Storage unit"];
 const FLOORS = ["Ground floor", "2nd floor", "3rd floor", "4th floor", "5th+ floor"];
+const BEDROOMS = ["Studio", "1", "2", "3", "4", "5+"];
 const SPECIAL_OPTS = [
   "Piano",
   "Safe (>200 lb)",
@@ -25,7 +26,7 @@ type Data = {
   // basics
   name: string; phone: string; email: string; moveDate: string;
   // origin
-  fromAddress: string; fromHomeType: string;
+  fromAddress: string; fromHomeType: string; bedrooms: string;
   fromFloor: string; fromElevator: "yes" | "no" | ""; fromStairs: string;
   fromHoa: "yes" | "no" | ""; fromCoi: "yes" | "no" | "";
   fromParking: string; fromAccess: string;
@@ -49,7 +50,7 @@ type Data = {
 
 const initial: Data = {
   name: "", phone: "", email: "", moveDate: "",
-  fromAddress: "", fromHomeType: "", fromFloor: "", fromElevator: "", fromStairs: "",
+  fromAddress: "", fromHomeType: "", bedrooms: "", fromFloor: "", fromElevator: "", fromStairs: "",
   fromHoa: "", fromCoi: "", fromParking: "", fromAccess: "",
   toAddress: "", toHomeType: "", toFloor: "", toElevator: "", toStairs: "",
   toHoa: "", toCoi: "", toParking: "", toAccess: "",
@@ -68,23 +69,27 @@ const isMultiFloor = (homeType: string) =>
 // HOA / COI questions only matter for apartments + townhomes (buildings).
 const hasHoa = (homeType: string) =>
   ["Apartment", "Townhome"].includes(homeType);
+// Bedrooms applies to anything you live in; skip for office / storage.
+const hasBedrooms = (homeType: string) =>
+  !["Office", "Storage unit"].includes(homeType);
 
 // Step keys, evaluated against data to skip irrelevant ones.
 type StepKey =
   | "basics"
-  | "fromAddress" | "fromHomeType" | "fromFloor" | "fromHoa" | "fromParking"
+  | "fromAddress" | "fromHomeType" | "size" | "fromFloor" | "fromHoa" | "fromParking"
   | "toAddress" | "toHomeType" | "toFloor" | "toHoa" | "toParking"
   | "inventory" | "special" | "services" | "dayOf";
 
 const ALL_STEPS: StepKey[] = [
   "basics",
-  "fromAddress", "fromHomeType", "fromFloor", "fromHoa", "fromParking",
+  "fromAddress", "fromHomeType", "size", "fromFloor", "fromHoa", "fromParking",
   "toAddress", "toHomeType", "toFloor", "toHoa", "toParking",
   "inventory", "special", "services", "dayOf",
 ];
 
 function visibleSteps(d: Data): StepKey[] {
   return ALL_STEPS.filter((k) => {
+    if (k === "size") return hasBedrooms(d.fromHomeType);
     if (k === "fromFloor") return isMultiFloor(d.fromHomeType);
     if (k === "fromHoa") return hasHoa(d.fromHomeType);
     if (k === "toFloor") return isMultiFloor(d.toHomeType);
@@ -145,6 +150,7 @@ export function IntakeForm() {
         return !!(data.name.trim() && data.phone.trim() && data.email.trim());
       case "fromAddress": return !!data.fromAddress.trim();
       case "fromHomeType": return !!data.fromHomeType;
+      case "size": return !!data.bedrooms;
       case "fromFloor": return !!data.fromFloor && !!data.fromElevator;
       case "fromHoa": return !!data.fromHoa && !!data.fromCoi;
       case "fromParking": return true; // optional
@@ -179,6 +185,7 @@ export function IntakeForm() {
   const AUTO_ADVANCE: Partial<Record<StepKey, true>> = {
     fromHomeType: true,
     toHomeType: true,
+    size: true,
   };
   const advanceTimer = useRef<number | null>(null);
   const pickAndAdvance = (patch: Partial<Data>) => {
@@ -206,7 +213,7 @@ export function IntakeForm() {
         body: JSON.stringify({
           name: data.name, phone: data.phone, email: data.email, moveDate: data.moveDate,
           origin: {
-            address: data.fromAddress, homeType: data.fromHomeType,
+            address: data.fromAddress, homeType: data.fromHomeType, bedrooms: data.bedrooms,
             floor: data.fromFloor, elevator: data.fromElevator, stairsCount: data.fromStairs,
             parkingNotes: data.fromParking,
             hoaNotice: data.fromHoa === "yes",
@@ -324,6 +331,19 @@ export function IntakeForm() {
             value={data.fromHomeType}
             onChange={(v) => pickAndAdvance({ fromHomeType: v })}
             columns={2}
+          />
+        </>
+      )}
+
+      {currentKey === "size" && (
+        <>
+          <h2 className="iwiz-q">How many bedrooms?</h2>
+          <p className="iwiz-sub">Helps us size the crew and the truck.</p>
+          <Pills
+            options={BEDROOMS.map((b) => ({ value: b, label: b === "Studio" ? "Studio" : `${b} BR` }))}
+            value={data.bedrooms}
+            onChange={(v) => pickAndAdvance({ bedrooms: v })}
+            columns={3}
           />
         </>
       )}
