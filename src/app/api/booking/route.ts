@@ -8,7 +8,6 @@ import {
   SIZE_LABEL,
   type QuoteInput,
 } from "@/lib/booking-schema";
-import { normalizePhone, sendConfirmationSms } from "@/lib/verify";
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
@@ -62,22 +61,20 @@ export async function POST(req: Request) {
     `Source: ${q.source || "—"}`,
   ].join("\n");
 
-  // Notify (email-to-team + Telegram + Meta CAPI) and the client-facing
-  // confirmations (Resend email + OpenPhone SMS) + n8n webhook for follow-up
-  // automation — all in parallel; none can block the others.
+  // Internal lead alerts (email-to-team + Telegram), Meta CAPI, and the HubSpot
+  // upsert. Customer-facing SMS + email (send + follow-up) are handled by
+  // notifi.co off the HubSpot contact — not from here. All in parallel; none
+  // can block the others.
   const results = await Promise.allSettled([
     sendEmail(q, help, fromRes, toRes, fromFloor, toFloor, size, distance, fullName, text),
     sendTelegram(text, q),
     sendMetaCapi(q, eventId, req),
-    sendClientConfirmationEmail(q, fullName),
-    sendConfirmationSms(normalizePhone(q.phone), q.firstName),
-    postToN8n(q, fullName, distance, eventId),
     createHubspotContact(q, fullName, help, distance, text),
   ]);
   const emailed = results[0].status === "fulfilled" && results[0].value === true;
   const telegrammed = results[1].status === "fulfilled" && results[1].value === true;
   const capi = results[2].status === "fulfilled" && results[2].value === true;
-  const crmed = results[6].status === "fulfilled" && results[6].value === true;
+  const crmed = results[3].status === "fulfilled" && results[3].value === true;
 
   if (!emailed && !telegrammed) {
     console.error("[booking] NO notification channel delivered the lead:", JSON.stringify(q));
@@ -305,80 +302,6 @@ async function sendMetaCapi(
     return true;
   } catch (err) {
     console.error("[booking] Meta CAPI threw:", err);
-    return false;
-  }
-}
-
-/** Confirmation email to the CUSTOMER (separate from the lead-notification
- *  email that goes to hello@toromovers.net). Friendly, short, no quote yet —
- *  Diler closes the price on the phone. */
-async function sendClientConfirmationEmail(
-  q: QuoteInput,
-  fullName: string,
-): Promise<boolean> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
-  if (!apiKey || !q.email) return false;
-
-  const html = `
-  <div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#ffffff;font:15px/1.55 system-ui,sans-serif;color:#0A0A0A">
-    <h2 style="font:600 22px/1.3 system-ui,sans-serif;margin:0 0 12px">Thanks, ${q.firstName} — we got your request.</h2>
-    <p>A Toro Movers team member will call you shortly to confirm details and lock in your slot. You'll also get a text from us.</p>
-    <p style="margin-top:18px">If you'd like to speed things up, give us a call:</p>
-    <p style="font:600 17px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">(689) 600-2720</a></p>
-    <p style="color:#6B6B72;font-size:13px;margin-top:24px">Family-owned · Fully insured · $75 per mover / hour · Hablamos español</p>
-  </div>`;
-
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: `Toro Movers <${from}>`,
-        to: [q.email],
-        subject: `We got your moving request — Toro Movers`,
-        html,
-        text: `Hi ${q.firstName}, thanks for your request. We'll call you shortly. Speed it up by calling (689) 600-2720. — Toro Movers`,
-      }),
-    });
-    return res.ok;
-  } catch (err) {
-    console.error("[booking] client confirmation email threw:", err);
-    return false;
-  }
-}
-
-/** POST the lead to the n8n webhook so the follow-up automation (Telegram
- *  buttons, timed SMS/email reminders) can take over. Gated on env. */
-async function postToN8n(
-  q: QuoteInput,
-  fullName: string,
-  distance: string,
-  eventId: string | undefined,
-): Promise<boolean> {
-  const url = process.env.N8N_LEAD_WEBHOOK_URL;
-  if (!url) return false;
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        lead_id: eventId,
-        received_at: new Date().toISOString(),
-        name: fullName,
-        email: q.email,
-        phone: q.phone,
-        from_address: q.fromAddress,
-        to_address: q.toAddress,
-        distance: distance || null,
-        date: q.date || null,
-        special_items: q.specialItems || null,
-        source: q.source || null,
-      }),
-    });
-    return res.ok;
-  } catch (err) {
-    console.error("[booking] n8n webhook threw:", err);
     return false;
   }
 }

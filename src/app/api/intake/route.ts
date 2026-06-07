@@ -34,9 +34,10 @@ type IntakePayload = {
 
 function endpointSummary(e?: Endpoint): string {
   if (!e) return "—";
+  const br = e.bedrooms ? (e.bedrooms === "Studio" ? "Studio" : `${e.bedrooms} BR`) : "";
   const parts = [
     e.address || "(no address)",
-    e.homeType && `${e.homeType}, ${e.bedrooms || "?"} BR`,
+    e.homeType && (br ? `${e.homeType}, ${br}` : e.homeType),
     e.floor,
     e.elevator === "yes" ? "Elevator ✓" : e.elevator === "no" ? "No elevator" : null,
     e.stairsCount && `${e.stairsCount} stairs`,
@@ -92,13 +93,12 @@ export async function POST(req: Request) {
   const results = await Promise.allSettled([
     sendEmail(body, text),
     sendTelegram(text),
-    postToN8n(body),
     upsertHubspotContact(body, text),
   ]);
 
   const emailed = results[0].status === "fulfilled" && results[0].value === true;
   const telegrammed = results[1].status === "fulfilled" && results[1].value === true;
-  const crmed = results[3].status === "fulfilled" && results[3].value === true;
+  const crmed = results[2].status === "fulfilled" && results[2].value === true;
   if (!emailed && !telegrammed) {
     console.error("[intake] NO channel delivered the intake:", body.email, body.phone);
   }
@@ -197,22 +197,6 @@ async function upsertHubspotContact(body: IntakePayload, text: string): Promise<
     return true;
   } catch (err) {
     console.error("[intake] HubSpot threw:", err, "lead:", body.email);
-    return false;
-  }
-}
-
-async function postToN8n(body: IntakePayload): Promise<boolean> {
-  const url =
-    process.env.N8N_INTAKE_WEBHOOK_URL || process.env.N8N_LEAD_WEBHOOK_URL;
-  if (!url) return false;
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "intake", received_at: new Date().toISOString(), ...body }),
-    });
-    return res.ok;
-  } catch {
     return false;
   }
 }
