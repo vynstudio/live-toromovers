@@ -30,23 +30,45 @@ function PinIcon() {
 export function CityPage({ city }: { city: CityData }) {
   const others = otherCities(city.slug);
 
+  // One business, many service areas. The rating lives ONLY on the canonical
+  // homepage MovingCompany entity (#movingcompany) — we do NOT repeat an
+  // aggregateRating per city, which would duplicate one rating across 12
+  // "businesses" and read as fabricated review counts to Google. Each city
+  // node links back to the parent via parentOrganization, plus a breadcrumb.
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "MovingCompany",
-    name: `${BUSINESS_NAME} — ${city.name}`,
-    url: `${SITE_URL}${city.href}`,
-    telephone: PHONE_DISPLAY,
-    areaServed: { "@type": "City", name: `${city.name}, FL` },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: GOOGLE_RATING,
-      reviewCount: "30",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: city.schema.lat,
-      longitude: city.schema.lng,
-    },
+    "@graph": [
+      {
+        "@type": "MovingCompany",
+        "@id": `${SITE_URL}${city.href}#business`,
+        name: `${BUSINESS_NAME} — ${city.name}`,
+        url: `${SITE_URL}${city.href}`,
+        telephone: PHONE_DISPLAY,
+        areaServed: { "@type": "City", name: `${city.name}, FL` },
+        parentOrganization: {
+          "@type": "MovingCompany",
+          name: BUSINESS_NAME,
+          "@id": `${SITE_URL}/#movingcompany`,
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: city.schema.lat,
+          longitude: city.schema.lng,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: `${city.name} Movers`,
+            item: `${SITE_URL}${city.href}`,
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -71,7 +93,7 @@ export function CityPage({ city }: { city: CityData }) {
             </div>
             <div className="city-hero-meta">
               <span className="city-stars" aria-hidden>★★★★★</span>
-              <span>{GOOGLE_RATING} on Google · 30+ reviews</span>
+              <span>{GOOGLE_RATING} on Google</span>
               <span className="sep">·</span>
               <a href={PHONE_TEL} className="city-phone">{PHONE_DISPLAY}</a>
             </div>

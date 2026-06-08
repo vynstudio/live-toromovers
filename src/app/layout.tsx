@@ -4,14 +4,13 @@ import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
 import { Analytics } from "@/components/analytics";
 import { UtmCapture } from "@/components/utm-capture";
-import { SERVICE_CITIES, content } from "@/lib/content";
+import { SERVICE_CITIES, content, REVIEWS } from "@/lib/content";
 import {
   PHONE_DISPLAY,
   EMAIL,
   LEGAL_NAME,
   BUSINESS_NAME,
   SLOGAN,
-  GOOGLE_RATING,
 } from "@/lib/contact";
 
 // Minimalist display face — clean modern grotesque replacing the old serif.
@@ -35,7 +34,7 @@ const sans = Inter({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.netlify.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 
 export const metadata: Metadata = {
   title: {
@@ -145,12 +144,15 @@ const movingCompanyJsonLd = {
       closes: "19:00",
     },
   ],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: GOOGLE_RATING,
-    bestRating: "5",
-    ratingCount: "100",
-  },
+  // Real, named customer reviews (each with its own rating), kept in sync with
+  // the testimonials rendered on the page. We intentionally do NOT publish an
+  // aggregateRating or a review count — only the genuine individual reviews.
+  review: REVIEWS.map((r) => ({
+    "@type": "Review",
+    reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+    author: { "@type": "Person", name: r.name },
+    reviewBody: r.body,
+  })),
   makesOffer: [
     { "@type": "Offer", name: "Loading help · labor only" },
     { "@type": "Offer", name: "In-town move · labor + truck" },

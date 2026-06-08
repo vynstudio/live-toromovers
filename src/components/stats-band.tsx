@@ -2,6 +2,7 @@
 
 import { CountUp } from "./count-up";
 import { useLang } from "./lang-provider";
+import { GOOGLE_RATING } from "@/lib/contact";
 
 export function StatsBand() {
   const { lang } = useLang();
@@ -24,7 +25,9 @@ export function StatsBand() {
       <div className="stats-band-inner">
         <div className="stat reveal">
           <span className="stat-value">
-            <CountUp end={4.9} decimals={1} suffix="★" duration={1200} />
+            {/* Rating is static (not counted up) so it never flashes "0.0★",
+                which reads as a placeholder / hurts credibility. */}
+            {GOOGLE_RATING}★
           </span>
           <span className="stat-label">{labels.rating}</span>
         </div>
