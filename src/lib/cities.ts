@@ -23,6 +23,7 @@ export interface CityData {
     h2: string;
     body: string;
   };
+  faqs?: { q: string; a: string }[];
   schema: {
     lat: number;
     lng: number;
@@ -36,9 +37,9 @@ export const ORLANDO: CityData = {
   navLabel: "Orlando movers",
   metadata: {
     // Base only — the root layout template appends " · Toro Movers".
-    title: "Orlando Movers — $75/Mover/Hour, Fully Insured",
+    title: "Orlando Movers",
     description:
-      "Family-owned Orlando movers — downtown, Lake Nona, Dr. Phillips & nearby. Fully insured, $75/mover/hour, no hidden fees. Free phone estimate.",
+      "Family-owned Orlando movers — downtown, Lake Nona, Dr. Phillips & nearby. Fully insured, bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
   },
   h1: "Orlando Movers — Toro Movers",
   subline:
@@ -71,9 +72,9 @@ export const LAKE_MARY: CityData = {
   name: "Lake Mary",
   navLabel: "Lake Mary movers",
   metadata: {
-    title: "Lake Mary Movers — $75/Mover/Hour, Fully Insured",
+    title: "Lake Mary Movers",
     description:
-      "Family-owned Lake Mary movers — Heathrow, Markham Woods, Timacuan & Seminole County. Fully insured, $75/mover/hour, no hidden fees.",
+      "Family-owned Lake Mary movers — Heathrow, Markham Woods, Timacuan & Seminole County. Insured, bilingual, up-front hourly pricing, no hidden fees.",
   },
   h1: "Lake Mary Movers — Toro Movers",
   subline:
@@ -106,9 +107,9 @@ export const WINTER_PARK: CityData = {
   name: "Winter Park",
   navLabel: "Winter Park movers",
   metadata: {
-    title: "Winter Park Movers — $75/Mover/Hour, Fully Insured",
+    title: "Winter Park Movers",
     description:
-      "Family-owned Winter Park movers — Park Ave, Aloma & historic neighborhoods. Fully insured, $75/mover/hour, no hidden fees. Free estimate.",
+      "Family-owned Winter Park movers — Park Ave, Aloma & historic neighborhoods. Insured, careful with high-value homes, up-front hourly pricing. Free estimate.",
   },
   h1: "Winter Park Movers — Toro Movers",
   subline:
@@ -145,9 +146,9 @@ export const KISSIMMEE: CityData = {
   name: "Kissimmee",
   navLabel: "Kissimmee movers",
   metadata: {
-    title: "Kissimmee Movers — $75/Mover/Hour, Fully Insured",
+    title: "Kissimmee Movers",
     description:
-      "Family-owned Kissimmee movers — Celebration, Poinciana, Buenaventura Lakes & Osceola County. Bilingual crews, fully insured, $75/mover/hour, no hidden fees.",
+      "Family-owned Kissimmee movers — Celebration, Poinciana, Buenaventura Lakes & Osceola County. Bilingual, insured, up-front hourly pricing, no hidden fees.",
   },
   h1: "Kissimmee Movers — Toro Movers",
   subline:
@@ -180,9 +181,9 @@ export const SANFORD: CityData = {
   name: "Sanford",
   navLabel: "Sanford movers",
   metadata: {
-    title: "Sanford Movers — $75/Mover/Hour, Fully Insured",
+    title: "Sanford Movers",
     description:
-      "Family-owned Sanford movers — Historic Downtown, Lake Monroe, Mayfair & Seminole County. Fully insured, $75/mover/hour, no hidden fees. Free estimate.",
+      "Family-owned Sanford movers — Historic Downtown, Lake Monroe, Mayfair & Seminole County. Insured, bilingual, up-front hourly pricing. Free estimate.",
   },
   h1: "Sanford Movers — Toro Movers",
   subline:
@@ -215,9 +216,9 @@ export const CLERMONT: CityData = {
   name: "Clermont",
   navLabel: "Clermont movers",
   metadata: {
-    title: "Clermont Movers — $75/Mover/Hour, Fully Insured",
+    title: "Clermont Movers",
     description:
-      "Family-owned Clermont movers — Kings Ridge, Legends, Summit Greens & Lake County. Fully insured, $75/mover/hour, no hidden fees. Free estimate.",
+      "Family-owned Clermont movers — Kings Ridge, Legends, Summit Greens & Lake County. Insured, bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
   },
   h1: "Clermont Movers — Toro Movers",
   subline:
@@ -250,9 +251,9 @@ export const OVIEDO: CityData = {
   name: "Oviedo",
   navLabel: "Oviedo movers",
   metadata: {
-    title: "Oviedo Movers — $75/Mover/Hour, Fully Insured",
+    title: "Oviedo Movers",
     description:
-      "Family-owned Oviedo movers — Alafaya Woods, Twin Rivers, Live Oak Reserve & Seminole County. Fully insured, $75/mover/hour, no hidden fees. Free estimate.",
+      "Family-owned Oviedo movers — Alafaya Woods, Twin Rivers, Live Oak Reserve & Seminole County. Insured, bilingual, up-front hourly pricing. Free estimate.",
   },
   h1: "Oviedo Movers — Toro Movers",
   subline:
@@ -285,9 +286,9 @@ export const WINTER_GARDEN: CityData = {
   name: "Winter Garden",
   navLabel: "Winter Garden movers",
   metadata: {
-    title: "Winter Garden Movers — $75/Mover/Hour, Fully Insured",
+    title: "Winter Garden Movers",
     description:
-      "Family-owned Winter Garden movers — Historic Downtown, Independence, Horizon West & west Orange County. Fully insured, $75/mover/hour, no hidden fees.",
+      "Family-owned Winter Garden movers — Historic Downtown, Independence, Horizon West & west Orange County. Insured, bilingual, up-front hourly pricing.",
   },
   h1: "Winter Garden Movers — Toro Movers",
   subline:
@@ -320,9 +321,9 @@ export const ALTAMONTE_SPRINGS: CityData = {
   name: "Altamonte Springs",
   navLabel: "Altamonte Springs movers",
   metadata: {
-    title: "Altamonte Springs Movers — $75/Mover/Hour, Insured",
+    title: "Altamonte Springs Movers",
     description:
-      "Family-owned Altamonte Springs movers — Cranes Roost, Uptown, Sanlando & Seminole County apartments & condos. Fully insured, $75/mover/hour, no hidden fees.",
+      "Family-owned Altamonte Springs movers — Cranes Roost, Uptown, Sanlando & Seminole County apartments & condos. Insured, up-front hourly pricing.",
   },
   h1: "Altamonte Springs Movers — Toro Movers",
   subline:
@@ -355,9 +356,9 @@ export const APOPKA: CityData = {
   name: "Apopka",
   navLabel: "Apopka movers",
   metadata: {
-    title: "Apopka Movers — $75/Mover/Hour, Fully Insured",
+    title: "Apopka Movers",
     description:
-      "Family-owned Apopka movers — Errol Estates, Rock Springs Ridge, Wekiva & north Orange County. Bilingual crews, fully insured, $75/mover/hour, no hidden fees.",
+      "Family-owned Apopka movers — Errol Estates, Rock Springs Ridge, Wekiva & north Orange County. Bilingual, insured, up-front hourly pricing, no hidden fees.",
   },
   h1: "Apopka Movers — Toro Movers",
   subline:
@@ -390,9 +391,9 @@ export const ST_CLOUD: CityData = {
   name: "St. Cloud",
   navLabel: "St. Cloud movers",
   metadata: {
-    title: "St. Cloud Movers — $75/Mover/Hour, Fully Insured",
+    title: "St. Cloud Movers",
     description:
-      "Family-owned St. Cloud movers — Narcoossee, Anthem Park, Lakeshore & Osceola County. Bilingual crews, fully insured, $75/mover/hour, no hidden fees.",
+      "Family-owned St. Cloud movers — Narcoossee, Anthem Park, Lakeshore & Osceola County. Bilingual, insured, up-front hourly pricing, no hidden fees.",
   },
   h1: "St. Cloud Movers — Toro Movers",
   subline:
@@ -425,9 +426,9 @@ export const WINDERMERE: CityData = {
   name: "Windermere",
   navLabel: "Windermere movers",
   metadata: {
-    title: "Windermere Movers — $75/Mover/Hour, Fully Insured",
+    title: "Windermere Movers",
     description:
-      "Family-owned Windermere movers — Isleworth, Keene's Pointe, Butler Bay & the Butler Chain. Fully insured, $75/mover/hour, careful with high-value homes.",
+      "Family-owned Windermere movers — Isleworth, Keene's Pointe, Butler Bay & the Butler Chain. Insured, careful with high-value homes. Free estimate.",
   },
   h1: "Windermere Movers — Toro Movers",
   subline:
@@ -454,13 +455,113 @@ export const WINDERMERE: CityData = {
   schema: { lat: 28.4955, lng: -81.5348 },
 };
 
+export const MAITLAND: CityData = {
+  slug: "maitland-movers",
+  href: "/maitland-movers",
+  name: "Maitland",
+  navLabel: "Maitland movers",
+  metadata: {
+    title: "Maitland Movers",
+    description:
+      "Family-owned Maitland movers — Dommerich, Lake Maitland, Maitland Center & the Orange/Seminole line. Insured, bilingual, up-front hourly pricing.",
+  },
+  h1: "Maitland Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Maitland, including the Dommerich and Lake Maitland neighborhoods, the Maitland Center business district, and the surrounding Orange and Seminole County line. Fully insured, honest pricing.",
+  about: {
+    h2: "Maitland movers for homes and offices.",
+    lead: "Toro Movers handles apartment, home, and office moves throughout Maitland — from established lakeside homes near Lake Maitland to the offices of the Maitland Center business park. Every move runs on the same process: phone estimate, scheduled crew, no surprises.",
+  },
+  neighborhoods: [
+    "Dommerich",
+    "Lake Maitland",
+    "Maitland Center",
+    "Dommerich Estates",
+    "Kewannee",
+    "Lake Catherine",
+    "Sybelia",
+    "Hidden Estates",
+  ],
+  uniqueAngle: {
+    eyebrow: "lakeside homes & office park",
+    h2: "Built for Maitland.",
+    body: "Maitland mixes quiet, established lakeside neighborhoods with one of the area's busiest office parks at Maitland Center. That means careful residential moves around mature trees and narrow lake-road lots one day, and after-hours office moves the next. Toro Movers handles both — protecting older homes and scheduling commercial moves around the business day so nothing slows down.",
+  },
+  faqs: [
+    {
+      q: "Do you move homes near Lake Maitland and the Dommerich area?",
+      a: "Yes — established neighborhoods like Dommerich and the Lake Maitland area are core Maitland service areas for us. We plan truck access for narrow lake-road lots and protect older homes with extra padding and floor runners.",
+    },
+    {
+      q: "Can you move an office in Maitland Center?",
+      a: "Yes. We run commercial and office moves in the Maitland Center business district, scheduled after hours or on weekends so your team loses as little working time as possible. A certificate of insurance is provided for the building.",
+    },
+    {
+      q: "How is a Maitland move priced?",
+      a: "By the hour, with the rate and crew size agreed up front — no hidden fees and no per-mile charge. You only pay for the time the move actually takes.",
+    },
+  ],
+  schema: { lat: 28.6276, lng: -81.3631 },
+};
+
+export const DAVENPORT: CityData = {
+  slug: "davenport-movers",
+  href: "/davenport-movers",
+  name: "Davenport",
+  navLabel: "Davenport movers",
+  metadata: {
+    title: "Davenport Movers",
+    description:
+      "Family-owned Davenport movers — ChampionsGate, Providence, Ridgewood Lakes & the Four Corners area. Bilingual, insured, up-front hourly pricing.",
+  },
+  h1: "Davenport Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Davenport, including ChampionsGate, Providence, Ridgewood Lakes, the Four Corners area, and the surrounding northeast Polk County region. Bilingual crews, fully insured, honest pricing.",
+  about: {
+    h2: "Davenport movers for new homes and rentals.",
+    lead: "Toro Movers handles apartment, home, and vacation-rental moves throughout Davenport and the Four Corners area. From brand-new builds in ChampionsGate and Providence to furnished short-term rentals near the parks, every move runs on the same process: phone estimate, scheduled crew, no surprises. Hablamos español.",
+  },
+  neighborhoods: [
+    "ChampionsGate",
+    "Providence",
+    "Ridgewood Lakes",
+    "Loma del Sol",
+    "Bella Trae",
+    "Solterra Resort",
+    "Horse Creek",
+    "Town Center",
+  ],
+  uniqueAngle: {
+    eyebrow: "new construction & vacation rentals",
+    h2: "Built for fast-growing Davenport.",
+    body: "Davenport and the Four Corners area exploded with new construction and short-term rentals near the parks, so a lot of moves here are first-day move-ins to brand-new homes or fast turnovers on furnished rentals. Toro Movers coordinates builder and HOA timing, handles furnished-rental turnovers as easily as a family move, and quotes the drive honestly up front — no padded hours.",
+  },
+  faqs: [
+    {
+      q: "Do you serve ChampionsGate and the Four Corners area?",
+      a: "Yes — ChampionsGate, Providence, Solterra, and the wider Four Corners area are core Davenport service areas. We coordinate guard-gate check-ins and HOA arrival windows so move-in day isn't held up.",
+    },
+    {
+      q: "Can you handle a furnished vacation-rental turnover?",
+      a: "Yes. Furnished short-term rentals near the parks need fast, careful turnovers — we handle those as easily as a family-home move, billed by the hour.",
+    },
+    {
+      q: "Davenport is a bit outside Orlando — do you charge extra for the drive?",
+      a: "We bill by the hour and quote the drive honestly up front. There's no per-mile fee or fuel surcharge — you'll know the estimate before the day.",
+    },
+  ],
+  schema: { lat: 28.1614, lng: -81.6015 },
+};
+
 export const CITIES: CityData[] = [
   ORLANDO,
   LAKE_MARY,
   WINTER_PARK,
+  MAITLAND,
   KISSIMMEE,
   SANFORD,
   CLERMONT,
+  DAVENPORT,
   OVIEDO,
   WINTER_GARDEN,
   ALTAMONTE_SPRINGS,
