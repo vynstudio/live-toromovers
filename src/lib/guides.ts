@@ -113,4 +113,106 @@ export const ORLANDO_MOVE_PREP: GuideData = {
   ],
 };
 
-export const GUIDES: GuideData[] = [ORLANDO_MOVE_PREP];
+export const APARTMENT_CHECKLIST: GuideData = {
+  slug: "apartment-moving-checklist-orlando-renters",
+  href: "/blog/apartment-moving-checklist-orlando-renters",
+  metadata: {
+    title: "Orlando Apartment Moving Checklist",
+    description:
+      "A step-by-step apartment moving checklist for Orlando renters — notice, elevator & COI rules, utilities, packing, and protecting your deposit. From Toro Movers.",
+  },
+  h1: "Apartment Moving Checklist for Orlando Renters",
+  intro:
+    "Apartment moves have their own rules — move-out notice, elevator reservations, complex insurance requirements, and a deposit on the line. This renter-focused checklist keeps an Orlando apartment move on schedule, from a crew that does walk-ups and high-rises every week.",
+  datePublished: "2026-06-09",
+  readMins: 5,
+  sections: [
+    {
+      h2: "About 30 days out: give notice and read the lease",
+      body: [
+        "Most Orlando leases require written move-out notice — often 30 to 60 days — so check your exact terms before anything else. While you're in the lease, note the move-out conditions that affect your deposit: cleaning standards, wall-patching, and carpet expectations.",
+      ],
+      bullets: [
+        "Submit written move-out notice and keep a copy.",
+        "Confirm your lease-end date and the deposit-return timeline.",
+        "Ask the office what move-in/move-out rules apply (below).",
+      ],
+    },
+    {
+      h2: "Book movers and reserve the elevator or loading zone",
+      body: [
+        "Apartment communities and downtown high-rises usually limit when and where a truck can load. Lock these in early, especially for end-of-month dates:",
+      ],
+      bullets: [
+        "Book your movers and give them your floor, elevator/stairs, and parking details for an accurate hourly estimate.",
+        "Reserve the building's elevator or loading-dock window if required.",
+        "Confirm where the truck can park and how far the carry is to your door.",
+      ],
+    },
+    {
+      h2: "Sort the certificate of insurance (COI) early",
+      body: [
+        "Many Orlando complexes won't let a moving crew start without a certificate of insurance naming the property. This trips up more apartment moves than anything else. Ask the office for their exact COI requirements as soon as you book, and send them to your mover — a fully insured company provides the COI ahead of time at no drama.",
+      ],
+    },
+    {
+      h2: "Two weeks out: declutter, gather supplies, start packing",
+      body: [
+        "Because local moves are billed by the hour, packing well directly lowers your cost. Start with what you don't use daily.",
+      ],
+      bullets: [
+        "Donate or sell what you don't want to carry to the next place.",
+        "Get boxes, tape, and wrap — or have your movers bring supplies.",
+        "Pack non-essentials first; label every box by room and contents.",
+      ],
+    },
+    {
+      h2: "Update your address and transfer utilities",
+      body: [
+        "Switch services so you're not paying for the old unit or arriving to no power. In the Orlando area that usually means OUC or Duke Energy for electric, plus water and internet (Spectrum/AT&T).",
+      ],
+      bullets: [
+        "Schedule electric, water, and internet transfers for your move date.",
+        "Forward your mail with USPS and update your bank, license, and subscriptions.",
+        "Confirm the new complex has your move-in date and any access codes ready.",
+      ],
+    },
+    {
+      h2: "Move week: confirm everything and pack an essentials box",
+      body: [
+        "A day or two before, reconfirm the crew's arrival window, the elevator reservation, and parking. Then pack a clearly marked essentials box — chargers, meds, toiletries, a change of clothes — so your first night isn't a treasure hunt.",
+      ],
+    },
+    {
+      h2: "Move day: protect the unit and your deposit",
+      body: [
+        "Damage to the old or new unit is what costs renters their deposit. A careful crew pads door jambs, lays floor protection, and wraps furniture — and on move-out, take dated photos of the empty unit's condition before you hand back the keys.",
+      ],
+      bullets: [
+        "Walk both units with the crew and point out anything fragile or tight.",
+        "Photograph the empty old unit (and any pre-existing damage) for your records.",
+        "Do the move-out cleaning your lease requires, then return keys and get written confirmation.",
+      ],
+    },
+  ],
+  faqs: [
+    {
+      q: "Does my Orlando apartment complex require a certificate of insurance?",
+      a: "Many do — especially larger communities and downtown high-rises. They'll want a COI naming the property before the crew can start. We're fully insured and provide the certificate ahead of time; just send us your complex's requirements when you book.",
+    },
+    {
+      q: "Do you charge extra for stairs or a no-elevator building?",
+      a: "There's no separate stair fee. We bill by the hour, so a third-floor walk-up simply takes a little longer — and we tell you up front how your floor and access affect the estimate.",
+    },
+    {
+      q: "How long does an apartment move usually take?",
+      a: "Most one- and two-bedroom apartment moves are done in a few hours with a two-mover crew, depending on stairs, elevator wait, and how well everything is packed. You only pay for the time used.",
+    },
+    {
+      q: "Can you move me the same day I get my keys?",
+      a: "Often, yes — if there's an opening and your new complex has your access ready. Same-day and next-day apartment moves are common for us; call with your date and we'll tell you honestly what's available.",
+    },
+  ],
+};
+
+export const GUIDES: GuideData[] = [ORLANDO_MOVE_PREP, APARTMENT_CHECKLIST];
