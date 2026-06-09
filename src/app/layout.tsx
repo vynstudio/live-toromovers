@@ -4,15 +4,14 @@ import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
 import { Analytics } from "@/components/analytics";
 import { UtmCapture } from "@/components/utm-capture";
-import { SERVICE_CITIES, content, REVIEWS } from "@/lib/content";
+import { ClickTracking } from "@/components/click-tracking";
+import { SERVICE_CITIES } from "@/lib/content";
 import {
   PHONE_DISPLAY,
   EMAIL,
   LEGAL_NAME,
   BUSINESS_NAME,
   SLOGAN,
-  GOOGLE_RATING,
-  REVIEW_COUNT,
 } from "@/lib/contact";
 
 // Minimalist display face — clean modern grotesque replacing the old serif.
@@ -146,24 +145,6 @@ const movingCompanyJsonLd = {
       closes: "19:00",
     },
   ],
-  // Real Google rating + total review count. Required by Google when multiple
-  // `review` items are present (otherwise Search Console flags "multiple reviews
-  // without aggregateRating"). The count is the true Google total, not shown
-  // visibly on the site.
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: GOOGLE_RATING,
-    bestRating: "5",
-    reviewCount: REVIEW_COUNT,
-  },
-  // Real, named customer reviews shown as a sample on the page; the
-  // aggregateRating above reflects the full Google review total.
-  review: REVIEWS.map((r) => ({
-    "@type": "Review",
-    reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-    author: { "@type": "Person", name: r.name },
-    reviewBody: r.body,
-  })),
   makesOffer: [
     { "@type": "Offer", name: "Loading help · labor only" },
     { "@type": "Offer", name: "In-town move · labor + truck" },
@@ -172,18 +153,6 @@ const movingCompanyJsonLd = {
     { "@type": "Offer", name: "Storage moves" },
     { "@type": "Offer", name: "Furniture wrapping & protection" },
   ],
-};
-
-// FAQ rich-result schema, sourced from the same copy rendered on the page so
-// the two never drift. Eligible for the FAQ snippet in Google search.
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: content.en.faq.items.map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a },
-  })),
 };
 
 export default function RootLayout({
@@ -201,16 +170,11 @@ export default function RootLayout({
             __html: JSON.stringify(movingCompanyJsonLd),
           }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqJsonLd),
-          }}
-        />
       </head>
       <body>
         <Analytics />
         <UtmCapture />
+        <ClickTracking />
         <LangProvider>{children}</LangProvider>
       </body>
     </html>

@@ -3,7 +3,9 @@ import { Nav } from "./nav";
 import { TrustBand } from "./trust-band";
 import { ClosingCta } from "./closing-cta";
 import { Footer } from "./footer";
+import { FaqSection } from "./faq-section";
 import { otherCities, type CityData } from "@/lib/cities";
+import { SERVICES } from "@/lib/services";
 import {
   PHONE_DISPLAY,
   PHONE_TEL,
@@ -35,41 +37,49 @@ export function CityPage({ city }: { city: CityData }) {
   // aggregateRating per city, which would duplicate one rating across 12
   // "businesses" and read as fabricated review counts to Google. Each city
   // node links back to the parent via parentOrganization, plus a breadcrumb.
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
+  const graph: Record<string, unknown>[] = [
+    {
+      "@type": "MovingCompany",
+      "@id": `${SITE_URL}${city.href}#business`,
+      name: `${BUSINESS_NAME} — ${city.name}`,
+      url: `${SITE_URL}${city.href}`,
+      telephone: PHONE_DISPLAY,
+      areaServed: { "@type": "City", name: `${city.name}, FL` },
+      parentOrganization: {
         "@type": "MovingCompany",
-        "@id": `${SITE_URL}${city.href}#business`,
-        name: `${BUSINESS_NAME} — ${city.name}`,
-        url: `${SITE_URL}${city.href}`,
-        telephone: PHONE_DISPLAY,
-        areaServed: { "@type": "City", name: `${city.name}, FL` },
-        parentOrganization: {
-          "@type": "MovingCompany",
-          name: BUSINESS_NAME,
-          "@id": `${SITE_URL}/#movingcompany`,
-        },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: city.schema.lat,
-          longitude: city.schema.lng,
-        },
+        name: BUSINESS_NAME,
+        "@id": `${SITE_URL}/#movingcompany`,
       },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: `${city.name} Movers`,
-            item: `${SITE_URL}${city.href}`,
-          },
-        ],
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: city.schema.lat,
+        longitude: city.schema.lng,
       },
-    ],
-  };
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: `${city.name} Movers`,
+          item: `${SITE_URL}${city.href}`,
+        },
+      ],
+    },
+  ];
+  if (city.faqs?.length) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: city.faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+  }
+  const jsonLd = { "@context": "https://schema.org", "@graph": graph };
 
   return (
     <>
@@ -147,6 +157,39 @@ export function CityPage({ city }: { city: CityData }) {
             </div>
           </div>
         </section>
+
+        {/* Moving services — internal links */}
+        <section className="block">
+          <div className="block-inner">
+            <div className="city-two-col city-two-col--mb">
+              <div>
+                <div className="block-eyebrow">services</div>
+                <h2 className="block-h2">{city.name} moving services.</h2>
+              </div>
+              <p className="city-lead">
+                Whatever your {city.name} move needs — one local crew, billed by
+                the hour, fully insured.
+              </p>
+            </div>
+            <div className="city-others">
+              {SERVICES.map((s) => (
+                <Link key={s.slug} href={s.href} className="city-other">
+                  <span className="city-other-url">{s.href}</span>
+                  <h3 className="city-other-name">{s.name}</h3>
+                  <p className="city-other-desc">{s.subline}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* City FAQ */}
+        {city.faqs?.length ? (
+          <FaqSection
+            items={city.faqs}
+            heading={`${city.name} movers — common questions.`}
+          />
+        ) : null}
 
         {/* Other cities */}
         {others.length > 0 && (

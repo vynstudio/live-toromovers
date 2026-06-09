@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLang } from "./lang-provider";
 import { CITIES } from "@/lib/cities";
+import { SERVICES } from "@/lib/services";
 import {
   PHONE_DISPLAY,
   PHONE_TEL,
@@ -39,6 +40,16 @@ export function Footer() {
             <p style={{ fontSize: 13, color: "var(--muted)" }}>
               {lang === "es" ? HOURS_NOTE_ES : HOURS_NOTE}
             </p>
+          </div>
+
+          <div className="footer-col">
+            <h4>{lang === "es" ? "Servicios" : "Services"}</h4>
+            <Link href="/central-florida-movers">
+              {lang === "es" ? "Florida Central" : "Central Florida movers"}
+            </Link>
+            {SERVICES.map((s) => (
+              <Link key={s.slug} href={s.href}>{s.name}</Link>
+            ))}
           </div>
 
           <div className="footer-col">

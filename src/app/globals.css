@@ -1291,6 +1291,25 @@ section.block { padding: 64px 20px; position: relative; }
 .closing .btn-outline { border-color: rgba(255, 255, 255, 0.4); color: #fff; }
 .closing .btn-outline:hover { background: #fff; color: var(--ink); }
 
+/* SERVICE PAGE — value points + disclaimer */
+.svc-points {
+  display: grid; grid-template-columns: 1fr; gap: 18px;
+}
+@media (min-width: 760px) { .svc-points { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+.svc-point {
+  background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  padding: 24px 22px; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+}
+.svc-point-h3 {
+  font-family: var(--font-serif), serif; font-weight: 500;
+  font-size: 18px; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 8px;
+}
+.svc-point-body { font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); }
+.svc-disclaimer {
+  margin-top: 28px; font-size: 13px; line-height: 1.6; color: var(--muted);
+  max-width: 70ch;
+}
+
 /* FOOTER */
 footer {
   background: var(--navy-deep); /* navy = secondary brand surface */
@@ -1314,7 +1333,7 @@ footer .footer-bottom { color: rgba(255, 255, 255, 0.55); border-top-color: rgba
   padding-bottom: 32px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
-@media (min-width: 720px) { .footer-top { grid-template-columns: 1.6fr 1fr 1fr; gap: 48px; } }
+@media (min-width: 720px) { .footer-top { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; } }
 .footer-brand .brand { margin-bottom: 16px; }
 .footer-brand p {
   font-family: var(--font-serif), serif; font-style: italic;
