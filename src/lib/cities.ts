@@ -63,6 +63,20 @@ export const ORLANDO: CityData = {
     h2: "Orlando timing matters.",
     body: "Orlando’s traffic patterns affect moving day more than most cities. I-4 closures, theme park weekend congestion, and downtown construction zones can add hours to a move if the crew doesn’t know the area. Toro Movers crews work Orlando full-time and plan routes around city patterns — not Google Maps defaults.",
   },
+  faqs: [
+    {
+      q: "How does Orlando traffic affect my moving day?",
+      a: "More than most cities — I-4 work, theme-park weekend congestion, and downtown construction can add time if a crew doesn't know the area. Our Orlando crews plan routes around city patterns, not map-app defaults, and we quote the timing honestly up front.",
+    },
+    {
+      q: "Can you move a downtown Orlando high-rise or apartment?",
+      a: "Yes. We move downtown high-rises, Lake Nona apartments, and homes across Orange County regularly — reserving the freight elevator or loading zone where the building requires it and working within your complex's move-in window.",
+    },
+    {
+      q: "How is an Orlando move priced?",
+      a: "By the hour, with the crew size and rate agreed before the day — no per-mile charge, no fuel surcharge, no hidden fees. You only pay for the time the move actually takes.",
+    },
+  ],
   schema: { lat: 28.5384, lng: -81.3789 },
 };
 
@@ -98,6 +112,20 @@ export const LAKE_MARY: CityData = {
     h2: "Built for HOA neighborhoods.",
     body: "Many Lake Mary communities require advance notice, certificate of insurance on file, and specific arrival windows for moving trucks. Toro Movers carries the required documentation and coordinates with property management or HOA offices directly — so move-in day doesn’t get held up at the gate.",
   },
+  faqs: [
+    {
+      q: "My Lake Mary HOA needs a certificate of insurance — can you provide one?",
+      a: "Yes. Many Lake Mary and Heathrow communities require a COI on file and a set arrival window. We're fully insured and send the certificate naming your HOA or property management ahead of move day.",
+    },
+    {
+      q: "Do you move in gated communities like Heathrow or Markham Woods?",
+      a: "Regularly. We coordinate guard-gate check-ins and HOA arrival windows directly so move-in day doesn't get held up at the gate.",
+    },
+    {
+      q: "How far in advance should I book a Lake Mary move?",
+      a: "Sooner is better for gated communities that require advance notice, but we keep same-week availability across Seminole County. Call with your date and we'll tell you honestly what's open.",
+    },
+  ],
   schema: { lat: 28.7589, lng: -81.3178 },
 };
 
@@ -133,6 +161,20 @@ export const WINTER_PARK: CityData = {
     h2: "Built for Winter Park homes.",
     body: "Winter Park has more historic homes per capita than most Florida cities. Hardwood floors, original moldings, narrow doorways, and antique furniture require slower, more deliberate handling. Toro Movers crews are trained for high-value residential — and we always bring extra blankets, floor protection, and door-jamb padding for older homes.",
   },
+  faqs: [
+    {
+      q: "Are you careful with antiques and historic Winter Park homes?",
+      a: "Yes — Winter Park has more historic homes than most Florida cities, with hardwood floors, original moldings, and narrow doorways. We bring extra blankets, floor protection, and door-jamb padding and handle antique and high-value pieces deliberately.",
+    },
+    {
+      q: "Can you handle tight parking near Park Avenue?",
+      a: "We plan truck access ahead of time for Park Avenue and the older Olde Winter Park streets, where parking and driveways are tight, so loading doesn't hold up the move.",
+    },
+    {
+      q: "Do you move both homes and apartments in Winter Park?",
+      a: "Yes — from historic homes near Park Avenue to modern apartments and luxury residential, all on the same up-front hourly pricing.",
+    },
+  ],
   schema: { lat: 28.5999, lng: -81.3392 },
 };
 
@@ -172,6 +214,20 @@ export const KISSIMMEE: CityData = {
     h2: "Built for Kissimmee.",
     body: "Kissimmee mixes long-time residents, a large Spanish-speaking community, and a wave of short-term and vacation-rental homes near the parks. Toro Movers runs fully bilingual crews (English / Spanish) and handles fast turnovers on furnished rentals as easily as a family-home move — same honest hourly pricing, same careful handling, no surprises at the gate.",
   },
+  faqs: [
+    {
+      q: "¿Tienen cuadrilla bilingüe en Kissimmee?",
+      a: "Sí — our Kissimmee crews are fully bilingual (English / Spanish), so we can quote, schedule, and run your whole move in either language. Hablamos español.",
+    },
+    {
+      q: "Can you handle a vacation-rental or furnished-home turnover near the parks?",
+      a: "Yes. Kissimmee has a lot of short-term and furnished rentals near the parks — we handle fast turnovers on furnished homes as easily as a family move, billed by the hour.",
+    },
+    {
+      q: "Do you serve Celebration, Poinciana, and Buenaventura Lakes?",
+      a: "Yes — those are core Kissimmee service areas, along with the wider Osceola County region. Same honest hourly pricing, no surprises at the gate.",
+    },
+  ],
   schema: { lat: 28.292, lng: -81.4076 },
 };
 
@@ -207,6 +263,20 @@ export const SANFORD: CityData = {
     h2: "Built for historic Sanford.",
     body: "Sanford's historic district means brick streets, narrow lots, century-old homes, and tight downtown parking — conditions that slow down a crew that doesn't know the area. Toro Movers plans truck access ahead of time, brings extra floor and door-jamb protection for older homes, and works the historic core without the surprises that hold up move-in day.",
   },
+  faqs: [
+    {
+      q: "Can you move in Sanford's historic district with brick streets?",
+      a: "Yes. The historic district means brick streets, narrow lots, and tight downtown parking. We plan truck access ahead of time and bring extra floor and door-jamb protection for century-old homes.",
+    },
+    {
+      q: "Do you move homes along Lake Monroe and the waterfront?",
+      a: "Regularly — from the Lake Monroe waterfront to Mayfair and the newer neighborhoods, every Sanford move runs on the same process: phone estimate, scheduled crew, no surprises.",
+    },
+    {
+      q: "How is a Sanford move priced?",
+      a: "By the hour, agreed up front, with no per-mile or fuel charge. Older homes can take a little longer and we tell you that honestly before the day.",
+    },
+  ],
   schema: { lat: 28.8117, lng: -81.2731 },
 };
 
@@ -242,6 +312,20 @@ export const CLERMONT: CityData = {
     h2: "Built for Clermont.",
     body: "Clermont's rolling hills and gated 55+ communities like Kings Ridge and Summit Greens come with their own moving-day details: guard-gate check-ins, HOA arrival windows, and a longer haul to and from the Orlando metro. Toro Movers carries the documentation gated communities ask for, books realistic arrival times, and quotes the drive honestly up front — no padded hours, no surprises.",
   },
+  faqs: [
+    {
+      q: "Do you move in Clermont's gated 55+ communities like Kings Ridge?",
+      a: "Yes. Gated and 55+ communities like Kings Ridge and Summit Greens have guard-gate check-ins and HOA arrival windows — we carry the documentation they ask for and book realistic arrival times.",
+    },
+    {
+      q: "Clermont is a bit west of Orlando — do you charge extra for the drive?",
+      a: "We bill by the hour and quote the drive to and from the Orlando metro honestly up front. There's no per-mile fee or fuel surcharge.",
+    },
+    {
+      q: "Can you handle hilly driveways and larger Lake County homes?",
+      a: "Yes — Clermont's rolling hills and larger homes are routine for us. We plan access for long or steep driveways so loading stays efficient.",
+    },
+  ],
   schema: { lat: 28.5494, lng: -81.7729 },
 };
 
@@ -277,6 +361,20 @@ export const OVIEDO: CityData = {
     h2: "Built for Oviedo families.",
     body: "Oviedo is one of Central Florida's top family-and-schools destinations, so most moves here are families upsizing into single-family homes — often timed around the school calendar. Toro Movers books realistic family-move windows, handles the bulky stuff (beds, sectionals, garage gear) carefully, and keeps the day predictable: phone estimate, scheduled crew, no surprises.",
   },
+  faqs: [
+    {
+      q: "Can you schedule an Oviedo move around the school calendar?",
+      a: "Yes. Most Oviedo moves are families timing a move around school, so we book realistic family-move windows and keep the day predictable.",
+    },
+    {
+      q: "Do you move the bulky stuff — beds, sectionals, garage gear?",
+      a: "That's the typical Oviedo family-home job. We handle bulky furniture and garage gear carefully, disassembling and reassembling what's needed.",
+    },
+    {
+      q: "Do you serve the UCF-area and Alafaya neighborhoods?",
+      a: "Yes — from Alafaya Woods and Twin Rivers to the newer subdivisions near Oviedo on the Park, all on up-front hourly pricing.",
+    },
+  ],
   schema: { lat: 28.67, lng: -81.2081 },
 };
 
@@ -312,6 +410,20 @@ export const WINTER_GARDEN: CityData = {
     h2: "Built for fast-growing Winter Garden.",
     body: "Winter Garden is one of the fastest-growing corners of metro Orlando — Horizon West and Hamlin add new homes constantly, which means a steady stream of first-day move-ins with builder schedules, gated entries, and tight new-community streets. Toro Movers coordinates builder and HOA timing, protects fresh floors and paint, and gets you in without the surprises.",
   },
+  faqs: [
+    {
+      q: "Can you do a first-day move-in to a new build in Horizon West or Hamlin?",
+      a: "Yes. Winter Garden adds new homes constantly, so first-day move-ins are routine — we coordinate builder and HOA timing and protect fresh floors and paint.",
+    },
+    {
+      q: "Do you serve the Historic Downtown / Plant Street area?",
+      a: "Yes — from historic homes near Plant Street to brand-new builds in Horizon West, every Winter Garden move runs on the same process and honest hourly pricing.",
+    },
+    {
+      q: "Will a gated community arrival window be a problem?",
+      a: "No — newer Winter Garden communities often have gated entries and arrival windows, and we schedule and document around them so move-in isn't held up.",
+    },
+  ],
   schema: { lat: 28.5653, lng: -81.5862 },
 };
 
@@ -347,6 +459,20 @@ export const ALTAMONTE_SPRINGS: CityData = {
     h2: "Built for Altamonte apartments.",
     body: "Altamonte Springs is dense with apartment and condo communities, which means stairs, elevators, narrow breezeways, and strict complex move-in windows. Toro Movers' hourly crews are built for exactly this — labor-only or labor-plus-truck, careful on walk-ups and tight turns, and quoted up front by the hour so a third-floor unit never turns into a surprise bill.",
   },
+  faqs: [
+    {
+      q: "Do you charge extra for stairs or a third-floor Altamonte apartment?",
+      a: "No separate stair fee — we bill by the hour, so a higher floor or walk-up simply takes a little longer, and we tell you up front how that affects the estimate.",
+    },
+    {
+      q: "Can you work with apartment-complex move-in windows near Uptown or Cranes Roost?",
+      a: "Yes. Altamonte is dense with apartment and condo communities — we reserve elevators where needed and work within your complex's move-in window.",
+    },
+    {
+      q: "Do you do labor-only loading if I have my own truck or POD?",
+      a: "Yes — labor-only loading and unloading by the hour is one of our most-requested options in Altamonte's apartment communities.",
+    },
+  ],
   schema: { lat: 28.6611, lng: -81.3656 },
 };
 
@@ -382,6 +508,20 @@ export const APOPKA: CityData = {
     h2: "Built for Apopka.",
     body: "Apopka has boomed along the SR-429 corridor, so many moves here are families trading apartments for single-family homes with more space, bigger garages, and longer driveways. Toro Movers runs bilingual crews, handles the bulky stuff that comes with a bigger home, and quotes by the hour up front — no surprises as you size up.",
   },
+  faqs: [
+    {
+      q: "¿Tienen cuadrilla bilingüe en Apopka?",
+      a: "Sí — our Apopka crews are bilingual (English / Spanish) and can run your full move in either language. Hablamos español.",
+    },
+    {
+      q: "Can you handle a bigger home with a long driveway along the 429 corridor?",
+      a: "Yes. Many Apopka moves are families upsizing into single-family homes with bigger garages and longer driveways near the SR-429 corridor — we handle the bulky stuff and plan access ahead.",
+    },
+    {
+      q: "Do you serve Errol Estates, Rock Springs Ridge, and Wekiva?",
+      a: "Yes — those are core Apopka service areas across north Orange County, all on up-front hourly pricing with no hidden fees.",
+    },
+  ],
   schema: { lat: 28.6776, lng: -81.5106 },
 };
 
@@ -417,6 +557,20 @@ export const ST_CLOUD: CityData = {
     h2: "Built for fast-growing St. Cloud.",
     body: "St. Cloud is one of the fastest-growing spots south of Lake Nona, so a lot of moves here are first-day move-ins to brand-new homes — builder schedules, fresh floors, and new-community streets that aren't on older maps yet. Toro Movers coordinates builder and HOA timing, protects new finishes, and gets you in without the surprises.",
   },
+  faqs: [
+    {
+      q: "Can you do a first-day move-in to a new St. Cloud build near Narcoossee?",
+      a: "Yes. St. Cloud is one of the fastest-growing areas south of Lake Nona, so first-day move-ins to brand-new homes are routine — we coordinate builder and HOA timing and protect new finishes.",
+    },
+    {
+      q: "¿Hablan español en St. Cloud?",
+      a: "Sí — our St. Cloud crews are bilingual (English / Spanish) and can quote and run the move in either language.",
+    },
+    {
+      q: "St. Cloud is south of the metro — is there a travel charge?",
+      a: "We bill by the hour and quote the drive honestly up front. There's no per-mile fee or fuel surcharge across Osceola County.",
+    },
+  ],
   schema: { lat: 28.2489, lng: -81.2812 },
 };
 
@@ -452,6 +606,20 @@ export const WINDERMERE: CityData = {
     h2: "Built for Windermere estates.",
     body: "Windermere is gated, lakefront, and high-value — guard-gate check-ins, certificates of insurance on file, long private driveways, and homes full of antiques, art, and custom pieces. Toro Movers carries the documentation these communities require, brings extra padding and floor protection for high-value interiors, and works deliberately so nothing gets rushed.",
   },
+  faqs: [
+    {
+      q: "Do you carry insurance and a COI for gated Windermere communities like Isleworth?",
+      a: "Yes. Communities like Isleworth and Keene's Pointe require a certificate of insurance on file and guard-gate check-ins — we're fully insured and handle the documentation and access ahead of time.",
+    },
+    {
+      q: "Are you careful with antiques, art, and high-value furniture?",
+      a: "Yes — Windermere homes are often full of antiques, art, and custom pieces. We bring extra padding and floor protection and work deliberately so nothing gets rushed.",
+    },
+    {
+      q: "Can you handle long private driveways and lakefront estates?",
+      a: "Yes. We plan access for long private drives and the lakefront estates on the Butler Chain so loading and unloading stay efficient.",
+    },
+  ],
   schema: { lat: 28.4955, lng: -81.5348 },
 };
 
