@@ -215,4 +215,93 @@ export const APARTMENT_CHECKLIST: GuideData = {
   ],
 };
 
-export const GUIDES: GuideData[] = [ORLANDO_MOVE_PREP, APARTMENT_CHECKLIST];
+export const BEST_TIME_TO_MOVE: GuideData = {
+  slug: "best-time-to-move-central-florida",
+  href: "/blog/best-time-to-move-central-florida",
+  metadata: {
+    title: "Best Time to Move in Central Florida",
+    description:
+      "When's the best time to move in Central Florida? A local breakdown of the cheapest days, summer heat and hurricane season, snowbird timing, and booking smart.",
+  },
+  h1: "When Is the Best Time to Move in Central Florida?",
+  intro:
+    "Timing a local move in Central Florida is part budget, part weather, part availability. Here's how the calendar actually plays out around Orlando — and when to book for the easiest, smoothest day.",
+  datePublished: "2026-06-09",
+  readMins: 5,
+  sections: [
+    {
+      h2: "The short answer",
+      body: [
+        "For most people, a mid-month weekday in the fall or spring is the sweet spot: crews are easier to book, the weather is milder, and you avoid the end-of-month rush. That said, the best day is the one that fits your lease, your closing, and your schedule — the tips below help you book the smartest slot whenever you have to move.",
+      ],
+    },
+    {
+      h2: "Cheapest days: mid-month and mid-week",
+      body: [
+        "Because local moves are billed by the hour, the cost depends on your move — not the date. But timing still matters for availability and how rushed the day feels. Lease turnovers cluster at the end and start of each month, and weekends fill first, so those slots book out earliest.",
+      ],
+      bullets: [
+        "A mid-month weekday is usually the easiest to book and the least rushed.",
+        "The first and last few days of the month are the busiest — reserve early if that's your date.",
+        "If your date is flexible, ask which days that week have the most crew availability.",
+      ],
+    },
+    {
+      h2: "Summer: heat and afternoon storms",
+      body: [
+        "Central Florida summers (roughly June through September) are hot and humid, with near-daily afternoon thunderstorms. Summer moves are completely doable — we run them every week — but plan for them: start early in the morning to beat the heat and the rain, keep water on hand, and protect anything heat- or humidity-sensitive. A good crew pauses loading during a downpour to keep your floors and furniture dry.",
+      ],
+    },
+    {
+      h2: "Hurricane season: build in a little flexibility",
+      body: [
+        "Hurricane season runs June 1 through November 30. The vast majority of those days are perfectly fine to move, but if a named storm is in the forecast, keep your plans flexible — don't schedule a move for the day a system is expected to hit the area. Booking a little earlier in your window, rather than the last possible day, gives you room to shift if the weather turns.",
+      ],
+    },
+    {
+      h2: "Snowbird and seasonal timing",
+      body: [
+        "Central Florida sees an influx of seasonal residents from roughly October through April, which keeps movers, rentals, and roads busier through the cooler months. The flip side: the weather is at its best for moving. If you're moving in peak season, book further ahead than you would in summer.",
+      ],
+    },
+    {
+      h2: "Moving around the school calendar",
+      body: [
+        "Families often time a move for summer break so kids change schools cleanly, which makes June and July busy for family-size moves. If you have that flexibility, booking early in the summer break — and early in the day — beats the mid-summer crunch and the afternoon heat.",
+      ],
+    },
+    {
+      h2: "How to book the best slot",
+      bullets: [
+        "Call as soon as you know your date — earlier is always more options.",
+        "Be flexible on the day of the week if you can; mid-week is easier.",
+        "Have your addresses, rough size, and stairs/elevator details ready for an accurate up-front estimate.",
+        "For a busy end-of-month or peak-season date, reserve one to two weeks out.",
+      ],
+    },
+  ],
+  faqs: [
+    {
+      q: "What's the cheapest time to move in Orlando?",
+      a: "Since we bill by the hour, your cost tracks the move itself, not the calendar. A mid-month weekday is the easiest to book and the least rushed, and a good pack job lowers the hours either way. Avoid the end-of-month crunch if you want the most crew options.",
+    },
+    {
+      q: "Is it a bad idea to move during hurricane season?",
+      a: "Not at all — hurricane season covers half the year and most days are fine. Just keep your plans flexible if a named storm is forecast, and try to book earlier in your window rather than the very last day so you have room to shift if needed.",
+    },
+    {
+      q: "Should I move on a weekend?",
+      a: "You can, but weekends book first, so reserve early. A weekday move is usually easier to schedule and the crew isn't squeezing your job between others.",
+    },
+    {
+      q: "How far ahead should I book for a busy date?",
+      a: "For end-of-month or peak-season (fall and spring) dates, one to two weeks ahead is wise. We can often still fit in same-week moves when there's an opening — call and we'll tell you honestly what's available.",
+    },
+  ],
+};
+
+export const GUIDES: GuideData[] = [
+  ORLANDO_MOVE_PREP,
+  APARTMENT_CHECKLIST,
+  BEST_TIME_TO_MOVE,
+];
