@@ -300,8 +300,97 @@ export const BEST_TIME_TO_MOVE: GuideData = {
   ],
 };
 
+export const MOVING_COST: GuideData = {
+  slug: "how-much-does-a-local-move-cost-orlando",
+  href: "/blog/how-much-does-a-local-move-cost-orlando",
+  metadata: {
+    title: "How Much Does a Local Move Cost in Orlando?",
+    description:
+      "How much does a local move cost in Orlando? How hourly moving pricing works, what raises or lowers the bill, and how to get an honest up-front estimate.",
+  },
+  h1: "How Much Does a Local Move Cost in Orlando?",
+  intro:
+    "It's the first question everyone asks — and the honest answer is \"it depends on your move.\" Here's exactly what drives the cost of a local move in Orlando, what you can do to keep it down, and how to get an estimate you can trust before the day.",
+  datePublished: "2026-06-09",
+  readMins: 5,
+  sections: [
+    {
+      h2: "How local moving pricing works",
+      body: [
+        "Local moves in Central Florida are billed by the hour: an hourly rate for the crew (and truck, if you need one), agreed up front, usually with a short minimum. You pay for the time your move actually takes — not a vague flat number pulled out of the air. That keeps it fair: a small, well-packed apartment costs less than a full house, because it takes less time.",
+      ],
+    },
+    {
+      h2: "What raises the cost",
+      body: ["A handful of factors decide how many hours your move takes:"],
+      bullets: [
+        "Size of the move — more rooms and more furniture means more time.",
+        "Stairs, walk-ups, and slow or shared elevators.",
+        "Access and parking — a long carry from where the truck can legally park adds time.",
+        "Distance between your two addresses (and Orlando traffic between them).",
+        "Packing — if the crew packs for you, that's added time; if you're not fully packed when they arrive, the clock runs while you finish.",
+        "Heavy or special items — pianos, safes, gym equipment, oversized furniture.",
+      ],
+    },
+    {
+      h2: "What lowers the cost",
+      body: ["Because it's hourly, the things you control genuinely cut the bill:"],
+      bullets: [
+        "Declutter first — don't pay a crew to carry what you'll toss anyway.",
+        "Be fully packed and labeled by room before the crew arrives.",
+        "Disassemble simple items ahead of time if you're comfortable doing it.",
+        "Pick a mid-month weekday and an early start to keep the day moving.",
+        "Reserve the elevator and sort the building's COI ahead of time so nothing stalls.",
+      ],
+    },
+    {
+      h2: "Flat-rate vs. hourly — why hourly is more honest",
+      body: [
+        "Some companies quote a flat rate. The catch is that a flat number is usually padded to protect the mover for the worst case — and it often hides per-mile fees or fuel surcharges. Honest hourly pricing has no per-mile charge, no fuel surcharge, and no padded hours: if your move goes faster than expected, you pay less.",
+      ],
+    },
+    {
+      h2: "What's included — and what's extra",
+      body: [
+        "The hourly rate covers the crew's labor (and the truck on a full-service move), basic furniture protection, and standard handling. Packing materials — boxes, paper, tape, wrap — are billed separately when you need them, and we tell you that cost up front. There are no surprise line items on the invoice.",
+      ],
+    },
+    {
+      h2: "How to get an accurate estimate",
+      body: [
+        "A good estimate takes two minutes if you have the details ready. The more accurate your info, the more accurate the quote — and we'd always rather quote honestly than win the job with a lowball number.",
+      ],
+      bullets: [
+        "Your two addresses (so we can factor distance and access).",
+        "Rough size — bedrooms, or a quick list of the big items.",
+        "Floors, stairs, and whether there's an elevator at each end.",
+        "Whether you need packing, or just loading and moving.",
+      ],
+    },
+  ],
+  faqs: [
+    {
+      q: "Do Orlando movers charge by the hour or a flat rate?",
+      a: "We charge by the hour, with the rate and crew size agreed up front — no per-mile fee, no fuel surcharge, no padded hours. You pay for the time the move actually takes, which is usually fairer than a flat quote that's padded for the worst case.",
+    },
+    {
+      q: "Is there a minimum charge?",
+      a: "Yes, there's a short minimum (typically a couple of hours), then it's billed by the hour after that. We tell you the rate, crew size, and minimum before you book.",
+    },
+    {
+      q: "What's not included in the hourly rate?",
+      a: "Labor, the truck on a full-service move, and standard furniture protection are included. Packing materials (boxes, paper, tape, wrap) are billed separately when you need them, and we quote that cost up front — no surprise line items.",
+    },
+    {
+      q: "How can I lower my moving cost?",
+      a: "Declutter before packing, be fully packed and labeled when the crew arrives, and book a mid-month weekday with an early start. Since it's hourly, anything that saves time directly lowers the bill.",
+    },
+  ],
+};
+
 export const GUIDES: GuideData[] = [
   ORLANDO_MOVE_PREP,
   APARTMENT_CHECKLIST,
   BEST_TIME_TO_MOVE,
+  MOVING_COST,
 ];
