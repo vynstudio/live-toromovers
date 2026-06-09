@@ -20,5 +20,10 @@ export const GOOGLE_RATING = "4.9";
 export const GOOGLE_RATING_LABEL = "on Google";
 export const MOVES_DONE = "100+";
 
+// Real Google review total — used in the homepage AggregateRating schema (not
+// shown visibly on the site). Owner-confirmed from Google Business Profile.
+// Update if the real count changes.
+export const REVIEW_COUNT = "36";
+
 export const SERVICE_BASE_CITY = "Orlando, FL";
 export const SERVICE_REGION = "Central Florida";

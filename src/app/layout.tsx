@@ -11,6 +11,8 @@ import {
   LEGAL_NAME,
   BUSINESS_NAME,
   SLOGAN,
+  GOOGLE_RATING,
+  REVIEW_COUNT,
 } from "@/lib/contact";
 
 // Minimalist display face — clean modern grotesque replacing the old serif.
@@ -144,9 +146,18 @@ const movingCompanyJsonLd = {
       closes: "19:00",
     },
   ],
-  // Real, named customer reviews (each with its own rating), kept in sync with
-  // the testimonials rendered on the page. We intentionally do NOT publish an
-  // aggregateRating or a review count — only the genuine individual reviews.
+  // Real Google rating + total review count. Required by Google when multiple
+  // `review` items are present (otherwise Search Console flags "multiple reviews
+  // without aggregateRating"). The count is the true Google total, not shown
+  // visibly on the site.
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: GOOGLE_RATING,
+    bestRating: "5",
+    reviewCount: REVIEW_COUNT,
+  },
+  // Real, named customer reviews shown as a sample on the page; the
+  // aggregateRating above reflects the full Google review total.
   review: REVIEWS.map((r) => ({
     "@type": "Review",
     reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
