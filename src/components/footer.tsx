@@ -50,6 +50,7 @@ export function Footer() {
             {SERVICES.map((s) => (
               <Link key={s.slug} href={s.href}>{s.name}</Link>
             ))}
+            <Link href="/blog">{lang === "es" ? "Guías de mudanza" : "Moving guides"}</Link>
           </div>
 
           <div className="footer-col">
