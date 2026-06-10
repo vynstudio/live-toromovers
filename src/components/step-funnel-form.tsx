@@ -16,7 +16,7 @@ import {
   trackFunnelSubmit,
   trackFormSubmit,
 } from "@/lib/track";
-import { getAttributionSummary } from "@/lib/utm";
+import { getAttributionSummary, getAttribution } from "@/lib/utm";
 
 const emailValid = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 const CITY_CHIPS = CITIES.slice(0, 8).map((c) => c.name);
@@ -115,6 +115,7 @@ export function StepFunnelForm({ funnel }: { funnel: FunnelType }) {
           packingHelp: !isLabor && packingHelp === "yes",
           smsConsent,
           source: getAttributionSummary() || undefined,
+          utm: getAttribution(),
           landingPage: typeof window !== "undefined" ? window.location.pathname : undefined,
           lang: "en",
           eventId,

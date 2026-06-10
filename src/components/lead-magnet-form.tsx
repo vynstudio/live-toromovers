@@ -13,7 +13,7 @@ import {
   trackLeadMagnetSubmit,
   trackFormSubmit,
 } from "@/lib/track";
-import { getAttributionSummary } from "@/lib/utm";
+import { getAttributionSummary, getAttribution } from "@/lib/utm";
 
 const MOVE_TYPES = Object.keys(MOVE_TYPE_LABEL) as MoveType[];
 const emailValid = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -89,6 +89,8 @@ export function LeadMagnetForm() {
           moveDate: moveDate || "",
           smsOptIn: smsOptIn && phoneDigits.length === 10,
           source: getAttributionSummary() || undefined,
+          utm: getAttribution(),
+          landingPage: typeof window !== "undefined" ? window.location.pathname : undefined,
           lang: "en",
           eventId,
           hp,

@@ -43,6 +43,9 @@ export const FunnelLeadSchema = z.object({
   // Attribution + page context for HubSpot.
   source: z.string().max(500).optional(),
   landingPage: z.string().max(120).optional(),
+  // Structured first-touch UTMs (utm_source/medium/campaign/content/…), so n8n
+  // can map them to HubSpot properties. Mirrors `source` in structured form.
+  utm: z.record(z.string(), z.string()).optional(),
   lang: z.enum(["en", "es"]).optional(),
   // Shared id so the browser Pixel Lead and the server CAPI Lead deduplicate.
   eventId: z.string().max(100).optional(),
