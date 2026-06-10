@@ -74,6 +74,71 @@ export function trackLeadMagnetSubmit(eventId?: string): void {
   } catch {}
 }
 
+/** Generic form_submit event — fires alongside lead_magnet_submit so the
+ *  checklist form rolls up with any other site form conversions in GA4/Pixel. */
+export function trackFormSubmit(formName: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "FormSubmit", { form_name: formName });
+  } catch {}
+  try {
+    window.gtag?.("event", "form_submit", { form_name: formName });
+  } catch {}
+}
+
+/* ---- High-intent lead funnels (labor-only / full-service) ---- */
+
+/** Funnel landing page viewed. `funnel` = "labor" | "full-service". */
+export function trackFunnelView(funnel: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "FunnelView", { funnel });
+  } catch {}
+  try {
+    window.gtag?.("event", "funnel_view", { funnel });
+  } catch {}
+}
+
+/** First interaction with the step form (fires once). */
+export function trackFormStart(funnel: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "FormStart", { funnel });
+  } catch {}
+  try {
+    window.gtag?.("event", "form_start", { funnel });
+  } catch {}
+}
+
+/** A step of the wizard was completed (1-indexed). */
+export function trackFormStepComplete(funnel: string, step: number): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "FormStepComplete", { funnel, step });
+  } catch {}
+  try {
+    window.gtag?.("event", "form_step_complete", { funnel, step });
+  } catch {}
+}
+
+/** Funnel submitted — fires the standard Lead (deduped with CAPI via eventId)
+ *  plus a granular funnel_submit. Pair with trackFormSubmit for the generic
+ *  form_submit rollup. */
+export function trackFunnelSubmit(funnel: string, eventId?: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.(
+      "track",
+      "Lead",
+      { content_name: `${funnel}_funnel` },
+      eventId ? { eventID: eventId } : undefined,
+    );
+  } catch {}
+  try {
+    window.gtag?.("event", "funnel_submit", { funnel });
+  } catch {}
+}
+
 /** Visitor downloaded the PDF checklist (from the LP or the thank-you page). */
 export function trackPdfDownload(): void {
   if (typeof window === "undefined") return;

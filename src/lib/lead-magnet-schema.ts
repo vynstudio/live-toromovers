@@ -42,6 +42,9 @@ export const LeadMagnetSchema = z.object({
   phone: z.string().min(7).max(25).optional().or(z.literal("")),
   city: z.string().min(2).max(80),
   moveType: MoveType,
+  // Optional target move date (ISO yyyy-mm-dd from a native date input) — helps
+  // us prioritize and time the follow-up. Empty string allowed.
+  moveDate: z.string().max(40).optional().or(z.literal("")),
   // Customer asked to also receive the checklist by SMS (only honored if a
   // phone was given).
   smsOptIn: z.boolean().optional().default(false),

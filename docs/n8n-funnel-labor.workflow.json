@@ -1,0 +1,119 @@
+{
+  "name": "Toro Movers — Labor-Only Funnel Drip (3 emails + 2 SMS)",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "toro-funnel-lead", "responseMode": "lastNode", "options": {} },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-700, 320],
+      "webhookId": "toro-funnel-lead",
+      "notes": "Set N8N_FUNNEL_WEBHOOK_URL on Netlify to this node's Production URL. Both funnels post here; the IF routes them. (Full-service branch added when that page ships.)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "version": 2 },
+          "combinator": "and",
+          "conditions": [
+            { "leftValue": "={{ $json.body.funnel }}", "rightValue": "labor", "operator": { "type": "string", "operation": "equals" } }
+          ]
+        },
+        "options": {}
+      },
+      "id": "is-labor",
+      "name": "Funnel = labor?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [-460, 320]
+    },
+
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.resend.com/emails", "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Your labor-only request — Toro Movers\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }}, got your labor-only request. We'll call to check availability and confirm your up-front hourly rate. Review: <a href='{{ $('Webhook').item.json.body.links.quote }}'>here</a>. Or call (689) 600-2720.</p>\"\n}",
+        "options": {}
+      },
+      "id": "l-email1", "name": "Labor Email 1 — Confirmation (immediate)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [-200, 160]
+    },
+    { "parameters": { "amount": 2, "unit": "days" }, "id": "l-wait2", "name": "Wait 2 days (labor)", "type": "n8n-nodes-base.wait", "typeVersion": 1.1, "position": [20, 160], "webhookId": "l-wait2" },
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.resend.com/emails", "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Still need a crew? We're quick on labor-only\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — you keep the truck, we bring the muscle. Loading, unloading, and stairs by the hour, priced up front. Want a time? <a href='https://toromovers.net/quote'>Check availability</a>.</p>\"\n}",
+        "options": {}
+      },
+      "id": "l-email2", "name": "Labor Email 2 — Availability (day 2)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [240, 160]
+    },
+    { "parameters": { "amount": 3, "unit": "days" }, "id": "l-wait3", "name": "Wait 3 days (labor)", "type": "n8n-nodes-base.wait", "typeVersion": 1.1, "position": [460, 160], "webhookId": "l-wait3" },
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.resend.com/emails", "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Ready to book your labor help?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — family-owned, insured, 4.9 on Google. When you're ready we'll lock in a crew with up-front hourly pricing. <a href='https://toromovers.net/quote'>Get my hourly quote</a> or call (689) 600-2720.</p>\"\n}",
+        "options": {}
+      },
+      "id": "l-email3", "name": "Labor Email 3 — Final CTA (day 5)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [680, 160]
+    },
+
+    {
+      "parameters": {
+        "conditions": { "options": { "caseSensitive": true, "version": 2 }, "combinator": "and",
+          "conditions": [ { "leftValue": "={{ $('Webhook').item.json.body.smsConsent }}", "rightValue": true, "operator": { "type": "boolean", "operation": "true", "singleValue": true } } ] },
+        "options": {}
+      },
+      "id": "l-sms-gate", "name": "SMS consent? (labor)", "type": "n8n-nodes-base.if", "typeVersion": 2, "position": [-200, 480]
+    },
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.openphone.com/v1/messages", "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "={{$env.OPENPHONE_API_KEY}}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Toro Movers: got your labor-only request, we'll call to check availability. Quote: {{ $('Webhook').item.json.body.links.quote }}. Reply STOP to opt out.\"\n}",
+        "options": {}
+      },
+      "id": "l-sms1", "name": "Labor SMS 1 — Confirmation (immediate)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [40, 480]
+    },
+    { "parameters": { "amount": 3, "unit": "days" }, "id": "l-wait-s2", "name": "Wait 3 days (labor sms)", "type": "n8n-nodes-base.wait", "typeVersion": 1.1, "position": [260, 480], "webhookId": "l-wait-s2" },
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.openphone.com/v1/messages", "sendHeaders": true,
+        "headerParameters": { "parameters": [ { "name": "Authorization", "value": "={{$env.OPENPHONE_API_KEY}}" } ] },
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Still need movers for the day? We can check availability fast and price by the hour: https://toromovers.net/quote — Toro Movers. STOP to opt out.\"\n}",
+        "options": {}
+      },
+      "id": "l-sms2", "name": "Labor SMS 2 — Availability (day 3)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [480, 480]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[ { "node": "Funnel = labor?", "type": "main", "index": 0 } ]] },
+    "Funnel = labor?": { "main": [
+      [ { "node": "Labor Email 1 — Confirmation (immediate)", "type": "main", "index": 0 }, { "node": "SMS consent? (labor)", "type": "main", "index": 0 } ],
+      []
+    ]},
+    "Labor Email 1 — Confirmation (immediate)": { "main": [[ { "node": "Wait 2 days (labor)", "type": "main", "index": 0 } ]] },
+    "Wait 2 days (labor)": { "main": [[ { "node": "Labor Email 2 — Availability (day 2)", "type": "main", "index": 0 } ]] },
+    "Labor Email 2 — Availability (day 2)": { "main": [[ { "node": "Wait 3 days (labor)", "type": "main", "index": 0 } ]] },
+    "Wait 3 days (labor)": { "main": [[ { "node": "Labor Email 3 — Final CTA (day 5)", "type": "main", "index": 0 } ]] },
+    "SMS consent? (labor)": { "main": [
+      [ { "node": "Labor SMS 1 — Confirmation (immediate)", "type": "main", "index": 0 } ],
+      []
+    ]},
+    "Labor SMS 1 — Confirmation (immediate)": { "main": [[ { "node": "Wait 3 days (labor sms)", "type": "main", "index": 0 } ]] },
+    "Wait 3 days (labor sms)": { "main": [[ { "node": "Labor SMS 2 — Availability (day 3)", "type": "main", "index": 0 } ]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}
