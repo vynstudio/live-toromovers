@@ -2173,7 +2173,7 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
 .fn-thanks-h1 { font-family: var(--font-serif), serif; font-weight: 600; font-size: clamp(26px, 6vw, 34px); line-height: 1.12; letter-spacing: -.02em; margin: 0 0 14px; }
 .fn-thanks-lede { font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,.74); margin: 0 0 26px; }
 .fn-thanks-cta { display: flex; flex-direction: column; gap: 12px; }
-.fn-thanks-cta .fn-btn { width: 100%; }
+.fn-thanks-cta .fn-btn { width: 100%; white-space: normal; text-align: center; }
 .fn-thanks-fine { font-size: 12.5px; color: rgba(255,255,255,.45); margin: 26px 0 0; }
 
 /* ---- desktop ---- */
@@ -2188,7 +2188,9 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
   .fn-reviews { grid-template-columns: repeat(3, 1fr); }
   .fn-cta-band-row { flex-direction: row; justify-content: center; }
   .fn-cta-band-row .fn-btn { width: auto; }
-  .fn-thanks-cta { flex-direction: row; justify-content: center; }
-  .fn-thanks-cta .fn-btn { width: auto; min-width: 200px; }
+  /* Thank-you CTAs stay stacked + centered (both labels carry the phone number,
+     so side-by-side overflows the 480px card). */
+  .fn-thanks-cta { align-items: center; }
+  .fn-thanks-cta .fn-btn { width: 100%; max-width: 360px; }
   .fn-sticky { display: none; }
 }
