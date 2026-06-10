@@ -23,6 +23,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/central-florida-moving-checklist`, priority: 0.85 as const, changeFrequency: "monthly" as const },
     // Labor-only funnel LP — indexable, high-intent "labor only movers" terms.
     { url: `${BASE}/labor-only-moving`, priority: 0.9 as const, changeFrequency: "monthly" as const },
+    // Full-service funnel LP — indexable, high-intent "full service movers" terms.
+    { url: `${BASE}/full-service-moving`, priority: 0.9 as const, changeFrequency: "monthly" as const },
   ];
 
   // Blog / guide articles.

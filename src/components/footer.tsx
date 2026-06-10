@@ -53,6 +53,9 @@ export function Footer() {
             <Link href="/labor-only-moving">
               {lang === "es" ? "Mudanza solo carga" : "Labor-only moving"}
             </Link>
+            <Link href="/full-service-moving">
+              {lang === "es" ? "Mudanza completa" : "Full-service moving"}
+            </Link>
             <Link href="/blog">{lang === "es" ? "Guías de mudanza" : "Moving guides"}</Link>
             <Link href="/central-florida-moving-checklist">
               {lang === "es" ? "Checklist de mudanza gratis" : "Free moving checklist"}
