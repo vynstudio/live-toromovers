@@ -19,6 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/central-florida-movers`, priority: 0.9 as const, changeFrequency: "monthly" as const },
     { url: `${BASE}/blog`, priority: 0.6 as const, changeFrequency: "weekly" as const },
     { url: `${BASE}/checklist`, priority: 0.6 as const, changeFrequency: "monthly" as const },
+    // Lead-magnet LP — indexable, targets local "moving checklist" intent.
+    { url: `${BASE}/central-florida-moving-checklist`, priority: 0.85 as const, changeFrequency: "monthly" as const },
   ];
 
   // Blog / guide articles.

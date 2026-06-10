@@ -44,6 +44,49 @@ export function trackInitiateCheckout(): void {
   } catch {}
 }
 
+/** Lead-magnet LP viewed — top of the checklist funnel. Custom event so we can
+ *  build a retargeting audience of people who saw the magnet but didn't grab it. */
+export function trackLeadMagnetView(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "LeadMagnetView");
+  } catch {}
+  try {
+    window.gtag?.("event", "lead_magnet_view");
+  } catch {}
+}
+
+/** Checklist form submitted — fires the standard Lead (deduped with CAPI via
+ *  eventId) plus a granular lead_magnet_submit so this funnel is separable from
+ *  the quote funnel in GA4. */
+export function trackLeadMagnetSubmit(eventId?: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.(
+      "track",
+      "Lead",
+      { content_name: "moving_checklist" },
+      eventId ? { eventID: eventId } : undefined,
+    );
+  } catch {}
+  try {
+    window.gtag?.("event", "lead_magnet_submit");
+  } catch {}
+}
+
+/** Visitor downloaded the PDF checklist (from the LP or the thank-you page). */
+export function trackPdfDownload(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "PdfDownload");
+  } catch {}
+  try {
+    window.gtag?.("event", "pdf_download", {
+      file_name: "central-florida-moving-checklist.pdf",
+    });
+  } catch {}
+}
+
 /** Final funnel step — fires on /thank-you so Meta sees a clean conversion
  *  landing event (in addition to the Lead event fired at submit). */
 export function trackCompleteRegistration(): void {

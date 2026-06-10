@@ -51,6 +51,9 @@ export function Footer() {
               <Link key={s.slug} href={s.href}>{s.name}</Link>
             ))}
             <Link href="/blog">{lang === "es" ? "Guías de mudanza" : "Moving guides"}</Link>
+            <Link href="/central-florida-moving-checklist">
+              {lang === "es" ? "Checklist de mudanza gratis" : "Free moving checklist"}
+            </Link>
           </div>
 
           <div className="footer-col">
