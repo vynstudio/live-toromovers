@@ -370,7 +370,13 @@ async function postToN8n(
 ): Promise<boolean> {
   const url = process.env.N8N_FUNNEL_WEBHOOK_URL;
   if (!url) return false; // drip not wired yet — instant delivery still worked
+  const serviceType = lead.funnel === "labor"
+    ? (lead.helpNeeded?.length ? lead.helpNeeded.join(", ") : "Labor-only")
+    : [lead.propertyType, lead.packingHelp ? "with packing" : "no packing"].filter(Boolean).join(" · ");
   try {
+    // Hard 2.5s cap: the drip is fire-and-forget, so a slow/unreachable n8n must
+    // never delay the customer reaching the thank-you page. On timeout the fetch
+    // aborts → caught below → returns false (fail-soft).
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -379,14 +385,18 @@ async function postToN8n(
           ? { "x-toro-secret": process.env.N8N_WEBHOOK_SECRET }
           : {}),
       },
+      signal: AbortSignal.timeout(2500),
       body: JSON.stringify({
         event: "funnel_submit",
         funnel: lead.funnel,
         funnelLabel,
+        serviceType,
         firstName: lead.firstName,
         email: lead.email,
         phone,
-        smsConsent: Boolean(lead.smsConsent && phone),
+        consentSms: Boolean(lead.smsConsent && phone),
+        smsConsent: Boolean(lead.smsConsent && phone), // kept for the imported workflow's field name
+        consentEmail: true, // form submit implies email opt-in for transactional + nurture
         city: lead.city,
         moveDate: lead.moveDate,
         helpNeeded: lead.helpNeeded || [],
@@ -395,12 +405,13 @@ async function postToN8n(
         lang: lead.lang || "en",
         source: lead.source || "",
         landingPage: lead.landingPage || "",
+        utm: lead.utm || {},
         links: { quote: QUOTE_URL },
       }),
     });
     return res.ok;
   } catch (err) {
-    console.error("[funnel-lead] n8n webhook threw:", err);
+    console.error("[funnel-lead] n8n webhook failed (non-blocking):", err instanceof Error ? err.name : err);
     return false;
   }
 }

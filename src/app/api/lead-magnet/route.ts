@@ -379,6 +379,7 @@ async function postToN8n(
   const url = process.env.N8N_LEAD_WEBHOOK_URL;
   if (!url) return false; // drip not wired yet — instant delivery still worked
   try {
+    // Hard 2.5s cap so a slow/unreachable n8n never delays the thank-you page.
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -387,25 +388,32 @@ async function postToN8n(
           ? { "x-toro-secret": process.env.N8N_WEBHOOK_SECRET }
           : {}),
       },
+      signal: AbortSignal.timeout(2500),
       body: JSON.stringify({
         event: "lead_magnet_submit",
+        funnel: "checklist",
         magnet: "central-florida-moving-checklist",
+        serviceType: moveLabel,
         firstName: lead.firstName,
         email: lead.email,
         phone,
-        smsOptIn: Boolean(lead.smsOptIn && phone),
+        consentSms: Boolean(lead.smsOptIn && phone),
+        smsOptIn: Boolean(lead.smsOptIn && phone), // kept for the imported workflow's field name
+        consentEmail: true,
         city: lead.city,
         moveType: lead.moveType,
         moveLabel,
         moveDate: lead.moveDate?.trim() || "",
         lang: lead.lang || "en",
         source: lead.source || "",
+        landingPage: lead.landingPage || "/central-florida-moving-checklist",
+        utm: lead.utm || {},
         links: { pdf: PDF_URL, webChecklist: WEB_CHECKLIST_URL, quote: QUOTE_URL },
       }),
     });
     return res.ok;
   } catch (err) {
-    console.error("[lead-magnet] n8n webhook threw:", err);
+    console.error("[lead-magnet] n8n webhook failed (non-blocking):", err instanceof Error ? err.name : err);
     return false;
   }
 }

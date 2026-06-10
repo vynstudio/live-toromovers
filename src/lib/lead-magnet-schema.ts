@@ -50,6 +50,10 @@ export const LeadMagnetSchema = z.object({
   smsOptIn: z.boolean().optional().default(false),
   // Marketing attribution (UTMs / click ids) — informational only.
   source: z.string().max(500).optional(),
+  // Structured first-touch UTMs, so n8n can map them to HubSpot properties.
+  utm: z.record(z.string(), z.string()).optional(),
+  // Landing page the lead came in on (for HubSpot landing_page field).
+  landingPage: z.string().max(120).optional(),
   // Page language at submit — drives follow-up message language.
   lang: z.enum(["en", "es"]).optional(),
   // Shared id so the browser Pixel Lead and the server CAPI Lead deduplicate.

@@ -34,6 +34,19 @@ export function captureAttribution(): void {
   }
 }
 
+/** Structured first-touch attribution — the raw captured params. Used to send
+ *  utm_source/medium/campaign/content to n8n → HubSpot (the summary string is
+ *  for human-readable notes; this is for field mapping). Empty object if none. */
+export function getAttribution(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = sessionStorage.getItem(KEY);
+    return raw ? (JSON.parse(raw) as Record<string, string>) : {};
+  } catch {
+    return {};
+  }
+}
+
 export function getAttributionSummary(): string {
   if (typeof window === "undefined") return "";
   try {
