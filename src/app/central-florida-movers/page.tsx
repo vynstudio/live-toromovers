@@ -184,6 +184,19 @@ export default function Page() {
 
         <FaqSection items={FAQS} heading="Central Florida moving — common questions." />
 
+        <section className="block">
+          <div className="block-inner">
+            <p className="city-lead">
+              Planning ahead? Grab our free{" "}
+              <Link href="/central-florida-moving-checklist">
+                Central Florida Moving Checklist
+              </Link>{" "}
+              — a practical, printable plan for packing faster and getting an
+              accurate quote.
+            </p>
+          </div>
+        </section>
+
         <ClosingCta />
         <Footer />
       </main>
