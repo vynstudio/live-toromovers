@@ -1,29 +1,26 @@
 import { NextResponse } from "next/server";
 import { createHash } from "crypto";
 import {
-  LeadMagnetSchema,
-  MOVE_TYPE_LABEL,
-  type LeadMagnetInput,
-} from "@/lib/lead-magnet-schema";
+  FunnelLeadSchema,
+  FUNNEL_LABEL,
+  type FunnelLeadInput,
+} from "@/lib/funnel-schema";
 import { normalizePhone } from "@/lib/verify";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
-const PDF_URL = `${SITE_URL}/central-florida-moving-checklist.pdf`;
-const WEB_CHECKLIST_URL = `${SITE_URL}/checklist`;
 const QUOTE_URL = `${SITE_URL}/quote`;
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
 
-  // Spam filter: honeypot filled, or submitted implausibly fast (bots) →
-  // pretend success without notifying anyone. Mirrors /api/booking.
+  // Spam filter: honeypot filled, or submitted implausibly fast (bots).
   const hp = typeof body?.hp === "string" ? body.hp.trim() : "";
   const elapsedMs = typeof body?.elapsedMs === "number" ? body.elapsedMs : Infinity;
   if (hp !== "" || elapsedMs < 1500) {
     return NextResponse.json({ ok: true });
   }
 
-  const parsed = LeadMagnetSchema.safeParse(body);
+  const parsed = FunnelLeadSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { ok: false, errors: parsed.error.flatten() },
@@ -31,35 +28,41 @@ export async function POST(req: Request) {
     );
   }
   const lead = parsed.data;
-  const eventId = lead.eventId;
-  const phone = lead.phone?.trim() || "";
-  const moveLabel = MOVE_TYPE_LABEL[lead.moveType];
-  const wantsSms = Boolean(lead.smsOptIn && phone);
+  const isLabor = lead.funnel === "labor";
+  const funnelLabel = FUNNEL_LABEL[lead.funnel];
+  const phone = lead.phone.trim();
 
-  // Plain-text summary reused by the team alert + Telegram + HubSpot note.
+  const details = isLabor
+    ? `Help needed: ${lead.helpNeeded?.length ? lead.helpNeeded.join(", ") : "—"}`
+    : `Property: ${lead.propertyType || "—"} · Packing: ${lead.packingHelp ? "yes" : "no"}`;
+
   const text = [
-    `📥 New checklist lead — Toro Movers`,
+    `${isLabor ? "💪" : "⭐"} New ${funnelLabel.toUpperCase()} lead — Toro Movers`,
     ``,
     `Name: ${lead.firstName}`,
+    `Phone: ${phone}`,
     `Email: ${lead.email}`,
-    `Phone: ${phone || "—"}${wantsSms ? " (asked for SMS copy)" : ""}`,
     `City: ${lead.city}`,
-    `Move type: ${moveLabel}`,
-    `Move date: ${lead.moveDate?.trim() || "—"}`,
+    `Move date: ${lead.moveDate}`,
+    details,
+    `SMS consent: ${lead.smsConsent ? "yes" : "no"}`,
     `Language: ${lead.lang || "en"}`,
+    `Landing: ${lead.landingPage || "—"}`,
     `Source: ${lead.source || "—"}`,
     ``,
-    `Magnet: Central Florida Moving Checklist`,
+    `Funnel: ${funnelLabel}`,
   ].join("\n");
 
+  const wantsSms = Boolean(lead.smsConsent && phone);
+
   const results = await Promise.allSettled([
-    sendCustomerChecklistEmail(lead, moveLabel),
-    sendTeamAlertEmail(lead, moveLabel, text),
+    sendCustomerEmail(lead, isLabor),
+    sendTeamAlertEmail(lead, funnelLabel, details, text),
     sendTelegram(text),
-    wantsSms ? sendChecklistSms(normalizePhone(phone), lead.firstName) : Promise.resolve(false),
-    sendMetaCapi(lead, phone, eventId, req),
-    upsertHubspotContact(lead, phone, moveLabel, text),
-    postToN8n(lead, phone, moveLabel),
+    wantsSms ? sendConfirmationSms(normalizePhone(phone), lead.firstName, isLabor) : Promise.resolve(false),
+    sendMetaCapi(lead, phone, req),
+    upsertHubspotContact(lead, phone, funnelLabel, details, text),
+    postToN8n(lead, phone, funnelLabel),
   ]);
 
   const ok = (i: number) =>
@@ -68,7 +71,7 @@ export async function POST(req: Request) {
   const customerEmailed = ok(0);
   const teamAlerted = ok(1) || ok(2);
   if (!customerEmailed && !teamAlerted) {
-    console.error("[lead-magnet] NO channel delivered the lead:", lead.email, phone);
+    console.error("[funnel-lead] NO channel delivered the lead:", lead.funnel, lead.email, phone);
   }
 
   return NextResponse.json({
@@ -82,58 +85,33 @@ export async function POST(req: Request) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Customer delivery — the actual lead magnet                          */
+/* Customer confirmation email — funnel-specific tone                  */
 /* ------------------------------------------------------------------ */
 
-async function sendCustomerChecklistEmail(
-  lead: LeadMagnetInput,
-  moveLabel: string,
-): Promise<boolean> {
+async function sendCustomerEmail(lead: FunnelLeadInput, isLabor: boolean): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
   if (!apiKey || !lead.email) {
-    if (!apiKey) console.error("[lead-magnet] RESEND_API_KEY missing — customer email skipped");
+    if (!apiKey) console.error("[funnel-lead] RESEND_API_KEY missing — customer email skipped");
     return false;
   }
 
-  const tip =
-    lead.moveType === "apartment"
-      ? "Reserve the elevator and a loading spot with your building today — it's the #1 thing that slows an Orlando apartment move."
-      : lead.moveType === "commercial"
-        ? "Label every workstation and map where it lands at the new office — it turns a chaotic move into a fast one."
-        : "Start with the rooms you use least (garage, closets, guest room). Packing those first makes the final week calm.";
+  const headline = isLabor
+    ? `Thanks, ${escapeHtml(lead.firstName)} — your labor-only request is in.`
+    : `Thanks, ${escapeHtml(lead.firstName)} — your full-service request is in.`;
+  const line = isLabor
+    ? "A Toro Movers team member will call you shortly to check availability and confirm your up-front hourly rate. You'll get a text too."
+    : "A Toro Movers team member will call you shortly to check availability and put together your full-service pricing. You'll get a text too.";
 
   const html = `
   <div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#ffffff;font:15px/1.6 system-ui,sans-serif;color:#0A0A0A">
-    <h2 style="font:600 22px/1.3 system-ui,sans-serif;margin:0 0 8px">Your Central Florida Moving Checklist, ${escapeHtml(lead.firstName)}.</h2>
-    <p style="margin:0 0 20px;color:#3A3A3A">Plan your move, pack faster, and have everything ready for an accurate quote. Two ways to use it:</p>
-    <table style="border-collapse:collapse;margin:0 0 22px">
-      <tr><td style="padding:0 0 10px">
-        <a href="${PDF_URL}" style="display:inline-block;background:#C81E3A;color:#fff;text-decoration:none;font:600 15px system-ui,sans-serif;padding:13px 22px;border-radius:8px">⬇ Download the PDF checklist</a>
-      </td></tr>
-      <tr><td>
-        <a href="${WEB_CHECKLIST_URL}" style="color:#C81E3A;font:500 14px system-ui,sans-serif">Or use the interactive version online →</a>
-      </td></tr>
-    </table>
-    <p style="margin:0 0 6px;font:600 14px system-ui,sans-serif">One tip for your ${escapeHtml(moveLabel.toLowerCase())}:</p>
-    <p style="margin:0 0 22px;color:#3A3A3A">${tip}</p>
-    <p style="margin:0 0 4px">When you're ready, we'll give you an up-front hourly price — no surprises:</p>
-    <p style="margin:0 0 22px"><a href="${QUOTE_URL}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui,sans-serif;padding:12px 22px;border-radius:8px">Request a Quote →</a></p>
-    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Fully insured · Local Central Florida movers · Hablamos español<br>Toro Movers · <a href="tel:+16896002720" style="color:#6B6B72">(689) 600-2720</a></p>
+    <h2 style="font:600 22px/1.3 system-ui,sans-serif;margin:0 0 10px">${headline}</h2>
+    <p style="margin:0 0 18px;color:#3A3A3A">${line}</p>
+    <p style="margin:0 0 4px">Want to speed it up? Call us now:</p>
+    <p style="font:600 18px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">(689) 600-2720</a></p>
+    <p style="margin:0 0 22px"><a href="${QUOTE_URL}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui,sans-serif;padding:12px 22px;border-radius:8px">Review your quote details →</a></p>
+    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Fully insured · Up-front hourly pricing · Hablamos español<br>Toro Movers · (689) 600-2720</p>
   </div>`;
-
-  const textBody = [
-    `Your Central Florida Moving Checklist, ${lead.firstName}.`,
-    ``,
-    `Download the PDF: ${PDF_URL}`,
-    `Interactive version: ${WEB_CHECKLIST_URL}`,
-    ``,
-    `One tip for your ${moveLabel.toLowerCase()}: ${tip}`,
-    ``,
-    `Ready for an up-front price? Request a quote: ${QUOTE_URL}`,
-    ``,
-    `Family-owned · Fully insured · Hablamos español · Toro Movers · (689) 600-2720`,
-  ].join("\n");
 
   try {
     const res = await fetch("https://api.resend.com/emails", {
@@ -143,18 +121,16 @@ async function sendCustomerChecklistEmail(
         from: `Toro Movers <${from}>`,
         to: [lead.email],
         reply_to: from,
-        subject: "Your Central Florida Moving Checklist",
+        subject: isLabor
+          ? "Your labor-only moving request — Toro Movers"
+          : "Your full-service moving request — Toro Movers",
         html,
-        text: textBody,
+        text: `Hi ${lead.firstName}, ${line} Speed it up: (689) 600-2720. Review details: ${QUOTE_URL} — Toro Movers`,
       }),
     });
-    if (!res.ok) {
-      console.error("[lead-magnet] customer Resend failed:", res.status, await res.text().catch(() => ""));
-      return false;
-    }
-    return true;
+    return res.ok;
   } catch (err) {
-    console.error("[lead-magnet] customer Resend threw:", err);
+    console.error("[funnel-lead] customer Resend threw:", err);
     return false;
   }
 }
@@ -164,8 +140,9 @@ async function sendCustomerChecklistEmail(
 /* ------------------------------------------------------------------ */
 
 async function sendTeamAlertEmail(
-  lead: LeadMagnetInput,
-  moveLabel: string,
+  lead: FunnelLeadInput,
+  funnelLabel: string,
+  details: string,
   text: string,
 ): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
@@ -178,8 +155,8 @@ async function sendTeamAlertEmail(
 
   const html = `
   <div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#ffffff">
-    <h2 style="font:600 18px/1.3 system-ui,sans-serif;color:#141414;margin:0 0 4px">New checklist lead — ${escapeHtml(lead.firstName)}</h2>
-    <p style="font:14px/1.5 system-ui,sans-serif;color:#6a6a6a;margin:0 0 18px">${escapeHtml(lead.city)} · ${escapeHtml(moveLabel)}</p>
+    <h2 style="font:600 18px/1.3 system-ui,sans-serif;color:#141414;margin:0 0 4px">${escapeHtml(funnelLabel)} lead — ${escapeHtml(lead.firstName)}</h2>
+    <p style="font:14px/1.5 system-ui,sans-serif;color:#6a6a6a;margin:0 0 18px">${escapeHtml(lead.city)} · ${escapeHtml(lead.moveDate)} · ${escapeHtml(details)}</p>
     <pre style="white-space:pre-wrap;font:13px/1.5 ui-monospace,Menlo,monospace;color:#2A2A2A;background:#F7F7F8;padding:16px 18px;border-radius:8px;border:1px solid #E6E6EA">${escapeHtml(text)}</pre>
   </div>`;
 
@@ -191,14 +168,14 @@ async function sendTeamAlertEmail(
         from: `Toro Movers <${from}>`,
         to: [to],
         reply_to: lead.email,
-        subject: `New checklist lead: ${lead.firstName} · ${lead.city}`,
+        subject: `${funnelLabel} lead: ${lead.firstName} · ${lead.city}`,
         html,
         text,
       }),
     });
     return res.ok;
   } catch (err) {
-    console.error("[lead-magnet] team Resend threw:", err);
+    console.error("[funnel-lead] team Resend threw:", err);
     return false;
   }
 }
@@ -219,12 +196,15 @@ async function sendTelegram(text: string): Promise<boolean> {
   }
 }
 
-/** Deliver the checklist by SMS too (only when the customer opted in and gave a
- *  phone). Uses OpenPhone / Quo, same creds as lib/verify. */
-async function sendChecklistSms(phone: string, firstName: string): Promise<boolean> {
+async function sendConfirmationSms(
+  phone: string,
+  firstName: string,
+  isLabor: boolean,
+): Promise<boolean> {
   const apiKey = process.env.OPENPHONE_API_KEY;
   const fromNumber = process.env.OPENPHONE_FROM_NUMBER;
   if (!apiKey || !fromNumber) return false;
+  const what = isLabor ? "labor-only" : "full-service";
   try {
     const res = await fetch("https://api.openphone.com/v1/messages", {
       method: "POST",
@@ -232,7 +212,7 @@ async function sendChecklistSms(phone: string, firstName: string): Promise<boole
       body: JSON.stringify({
         from: fromNumber,
         to: [phone],
-        content: `Hi ${firstName}, your Central Florida Moving Checklist is ready: ${PDF_URL} — Toro Movers. Reply STOP to opt out.`,
+        content: `Hi ${firstName}, this is Toro Movers — got your ${what} request and we'll call shortly to check availability. Reply STOP to opt out.`,
       }),
     });
     return res.ok;
@@ -242,7 +222,7 @@ async function sendChecklistSms(phone: string, firstName: string): Promise<boole
 }
 
 /* ------------------------------------------------------------------ */
-/* Meta CAPI — server-side Lead, deduped with the browser Pixel        */
+/* Meta CAPI — server-side Lead                                        */
 /* ------------------------------------------------------------------ */
 
 const sha256 = (v: string) =>
@@ -254,24 +234,21 @@ function cookie(req: Request, name: string): string | undefined {
 }
 
 async function sendMetaCapi(
-  lead: LeadMagnetInput,
+  lead: FunnelLeadInput,
   phone: string,
-  eventId: string | undefined,
   req: Request,
 ): Promise<boolean> {
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
   const token = process.env.META_ACCESS_TOKEN;
   if (!pixelId || !token) return false;
 
+  const digits = phone.replace(/\D/g, "");
+  const e164 = digits.length === 10 ? `1${digits}` : digits;
   const userData: Record<string, unknown> = {
     em: [sha256(lead.email)],
+    ph: [sha256(e164)],
     fn: [sha256(lead.firstName)],
   };
-  if (phone) {
-    const digits = phone.replace(/\D/g, "");
-    const e164 = digits.length === 10 ? `1${digits}` : digits;
-    userData.ph = [sha256(e164)];
-  }
   const fbp = cookie(req, "_fbp");
   const fbc = cookie(req, "_fbc");
   if (fbp) userData.fbp = fbp;
@@ -288,11 +265,12 @@ async function sendMetaCapi(
       {
         event_name: "Lead",
         event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId,
+        event_id: lead.eventId,
         action_source: "website",
         event_source_url:
-          req.headers.get("referer") || `${SITE_URL}/central-florida-moving-checklist`,
-        custom_data: { content_name: "moving_checklist" },
+          req.headers.get("referer") ||
+          `${SITE_URL}/${lead.funnel === "labor" ? "labor-only-moving" : "full-service-moving"}`,
+        custom_data: { content_name: `${lead.funnel}_funnel` },
         user_data: userData,
       },
     ],
@@ -308,40 +286,56 @@ async function sendMetaCapi(
       },
     );
     if (!res.ok) {
-      console.error("[lead-magnet] Meta CAPI failed:", res.status, await res.text().catch(() => ""));
+      console.error("[funnel-lead] Meta CAPI failed:", res.status, await res.text().catch(() => ""));
       return false;
     }
     return true;
   } catch (err) {
-    console.error("[lead-magnet] Meta CAPI threw:", err);
+    console.error("[funnel-lead] Meta CAPI threw:", err);
     return false;
   }
 }
 
 /* ------------------------------------------------------------------ */
-/* HubSpot — upsert by email, tagged as a checklist lead               */
+/* HubSpot — upsert by email, routed by funnel                         */
 /* ------------------------------------------------------------------ */
 
 async function upsertHubspotContact(
-  lead: LeadMagnetInput,
+  lead: FunnelLeadInput,
   phone: string,
-  moveLabel: string,
+  funnelLabel: string,
+  details: string,
   text: string,
 ): Promise<boolean> {
   const token = process.env.HUBSPOT_TOKEN;
   if (!token || !lead.email) return false;
 
+  // Only standard properties go on the contact so a missing custom field can't
+  // 400 the upsert; the funnel tag, move date, service type, landing page, UTMs
+  // and completion timestamp all land in the note below. If a custom
+  // `funnel_type` property exists in the portal, set HUBSPOT_HAS_FUNNEL_TYPE=1
+  // to write it directly too.
+  const completedAt = new Date().toISOString();
+  const note = [
+    text,
+    ``,
+    `— routing —`,
+    `funnel_type: ${lead.funnel}`,
+    `service: ${details}`,
+    `completed_at: ${completedAt}`,
+  ].join("\n");
+
   const properties: Record<string, string> = {
     email: lead.email,
     firstname: lead.firstName,
+    phone,
+    city: lead.city,
     lifecyclestage: "lead",
     hs_lead_status: "NEW",
-    city: lead.city,
-    hs_analytics_source: "OFFLINE", // funnel source recorded in the note below
-    message: `${text}\n\nMove type: ${moveLabel}`,
+    message: note,
   };
-  if (phone) properties.phone = phone;
   if (lead.lang) properties.hs_language = lead.lang;
+  if (process.env.HUBSPOT_HAS_FUNNEL_TYPE === "1") properties.funnel_type = lead.funnel;
 
   try {
     const res = await fetch(
@@ -355,28 +349,26 @@ async function upsertHubspotContact(
       },
     );
     if (!res.ok) {
-      console.error("[lead-magnet] HubSpot failed:", res.status, await res.text().catch(() => ""), "lead:", lead.email);
+      console.error("[funnel-lead] HubSpot failed:", res.status, await res.text().catch(() => ""), "lead:", lead.email);
       return false;
     }
     return true;
   } catch (err) {
-    console.error("[lead-magnet] HubSpot threw:", err, "lead:", lead.email);
+    console.error("[funnel-lead] HubSpot threw:", err, "lead:", lead.email);
     return false;
   }
 }
 
 /* ------------------------------------------------------------------ */
-/* n8n (on Railway) — fire-and-forget webhook that owns the drip       */
-/* (5-email + 3-SMS nurture sequence). Instant delivery already        */
-/* happened above; n8n is purely the follow-up scheduler.              */
+/* n8n — fire-and-forget webhook (per-funnel drip)                     */
 /* ------------------------------------------------------------------ */
 
 async function postToN8n(
-  lead: LeadMagnetInput,
+  lead: FunnelLeadInput,
   phone: string,
-  moveLabel: string,
+  funnelLabel: string,
 ): Promise<boolean> {
-  const url = process.env.N8N_LEAD_WEBHOOK_URL;
+  const url = process.env.N8N_FUNNEL_WEBHOOK_URL;
   if (!url) return false; // drip not wired yet — instant delivery still worked
   try {
     const res = await fetch(url, {
@@ -388,24 +380,27 @@ async function postToN8n(
           : {}),
       },
       body: JSON.stringify({
-        event: "lead_magnet_submit",
-        magnet: "central-florida-moving-checklist",
+        event: "funnel_submit",
+        funnel: lead.funnel,
+        funnelLabel,
         firstName: lead.firstName,
         email: lead.email,
         phone,
-        smsOptIn: Boolean(lead.smsOptIn && phone),
+        smsConsent: Boolean(lead.smsConsent && phone),
         city: lead.city,
-        moveType: lead.moveType,
-        moveLabel,
-        moveDate: lead.moveDate?.trim() || "",
+        moveDate: lead.moveDate,
+        helpNeeded: lead.helpNeeded || [],
+        propertyType: lead.propertyType || "",
+        packingHelp: Boolean(lead.packingHelp),
         lang: lead.lang || "en",
         source: lead.source || "",
-        links: { pdf: PDF_URL, webChecklist: WEB_CHECKLIST_URL, quote: QUOTE_URL },
+        landingPage: lead.landingPage || "",
+        links: { quote: QUOTE_URL },
       }),
     });
     return res.ok;
   } catch (err) {
-    console.error("[lead-magnet] n8n webhook threw:", err);
+    console.error("[funnel-lead] n8n webhook threw:", err);
     return false;
   }
 }

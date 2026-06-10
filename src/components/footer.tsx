@@ -50,6 +50,9 @@ export function Footer() {
             {SERVICES.map((s) => (
               <Link key={s.slug} href={s.href}>{s.name}</Link>
             ))}
+            <Link href="/labor-only-moving">
+              {lang === "es" ? "Mudanza solo carga" : "Labor-only moving"}
+            </Link>
             <Link href="/blog">{lang === "es" ? "Guías de mudanza" : "Moving guides"}</Link>
             <Link href="/central-florida-moving-checklist">
               {lang === "es" ? "Checklist de mudanza gratis" : "Free moving checklist"}

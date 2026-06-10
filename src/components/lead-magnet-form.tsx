@@ -11,6 +11,7 @@ import {
   newEventId,
   trackLeadMagnetView,
   trackLeadMagnetSubmit,
+  trackFormSubmit,
 } from "@/lib/track";
 import { getAttributionSummary } from "@/lib/utm";
 
@@ -25,6 +26,7 @@ export function LeadMagnetForm() {
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
   const [moveType, setMoveType] = useState<MoveType>("apartment");
+  const [moveDate, setMoveDate] = useState("");
   const [smsOptIn, setSmsOptIn] = useState(false);
 
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -84,6 +86,7 @@ export function LeadMagnetForm() {
           phone: phoneDigits.length === 10 ? phone : "",
           city,
           moveType,
+          moveDate: moveDate || "",
           smsOptIn: smsOptIn && phoneDigits.length === 10,
           source: getAttributionSummary() || undefined,
           lang: "en",
@@ -93,6 +96,7 @@ export function LeadMagnetForm() {
         }),
       });
       if (!res.ok) throw new Error("bad_status");
+      trackFormSubmit("moving_checklist");
       trackLeadMagnetSubmit(eventId);
       router.push("/thank-you-checklist");
     } catch {
@@ -193,6 +197,16 @@ export function LeadMagnetForm() {
           </select>
         </label>
       </div>
+
+      <label className="magnet-field">
+        <span>Move date <i>(optional)</i></span>
+        <input
+          type="date"
+          value={moveDate}
+          onChange={(e) => setMoveDate(e.target.value)}
+          autoComplete="off"
+        />
+      </label>
 
       {phoneDigits.length === 10 && (
         <label className="magnet-check">
