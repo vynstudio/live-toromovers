@@ -6,6 +6,7 @@ import {
   type FunnelLeadInput,
 } from "@/lib/funnel-schema";
 import { normalizePhone } from "@/lib/verify";
+import { upsertLeadToHubspot } from "@/lib/hubspot";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const QUOTE_URL = `${SITE_URL}/quote`;
@@ -307,56 +308,20 @@ async function upsertHubspotContact(
   details: string,
   text: string,
 ): Promise<boolean> {
-  const token = process.env.HUBSPOT_TOKEN;
-  if (!token || !lead.email) return false;
-
-  // Only standard properties go on the contact so a missing custom field can't
-  // 400 the upsert; the funnel tag, move date, service type, landing page, UTMs
-  // and completion timestamp all land in the note below. If a custom
-  // `funnel_type` property exists in the portal, set HUBSPOT_HAS_FUNNEL_TYPE=1
-  // to write it directly too.
   const completedAt = new Date().toISOString();
-  const note = [
-    text,
-    ``,
-    `— routing —`,
-    `funnel_type: ${lead.funnel}`,
-    `service: ${details}`,
-    `completed_at: ${completedAt}`,
-  ].join("\n");
-
-  const properties: Record<string, string> = {
+  const note = [text, ``, `— routing —`, `funnel_type: ${lead.funnel}`, `service: ${details}`, `completed_at: ${completedAt}`].join("\n");
+  return upsertLeadToHubspot({
     email: lead.email,
-    firstname: lead.firstName,
+    firstName: lead.firstName,
     phone,
     city: lead.city,
-    lifecyclestage: "lead",
-    hs_lead_status: "NEW",
-    message: note,
-  };
-  if (lead.lang) properties.hs_language = lead.lang;
-  if (process.env.HUBSPOT_HAS_FUNNEL_TYPE === "1") properties.funnel_type = lead.funnel;
-
-  try {
-    const res = await fetch(
-      "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert",
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          inputs: [{ idProperty: "email", id: lead.email, properties }],
-        }),
-      },
-    );
-    if (!res.ok) {
-      console.error("[funnel-lead] HubSpot failed:", res.status, await res.text().catch(() => ""), "lead:", lead.email);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("[funnel-lead] HubSpot threw:", err, "lead:", lead.email);
-    return false;
-  }
+    lang: lead.lang,
+    funnel: lead.funnel,
+    serviceType: details,
+    moveDate: lead.moveDate,
+    utm: lead.utm,
+    note,
+  });
 }
 
 /* ------------------------------------------------------------------ */

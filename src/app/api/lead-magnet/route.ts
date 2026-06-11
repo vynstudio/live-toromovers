@@ -6,6 +6,7 @@ import {
   type LeadMagnetInput,
 } from "@/lib/lead-magnet-schema";
 import { normalizePhone } from "@/lib/verify";
+import { upsertLeadToHubspot } from "@/lib/hubspot";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const PDF_URL = `${SITE_URL}/central-florida-moving-checklist.pdf`;
@@ -328,41 +329,18 @@ async function upsertHubspotContact(
   moveLabel: string,
   text: string,
 ): Promise<boolean> {
-  const token = process.env.HUBSPOT_TOKEN;
-  if (!token || !lead.email) return false;
-
-  const properties: Record<string, string> = {
+  return upsertLeadToHubspot({
     email: lead.email,
-    firstname: lead.firstName,
-    lifecyclestage: "lead",
-    hs_lead_status: "NEW",
+    firstName: lead.firstName,
+    phone,
     city: lead.city,
-    hs_analytics_source: "OFFLINE", // funnel source recorded in the note below
-    message: `${text}\n\nMove type: ${moveLabel}`,
-  };
-  if (phone) properties.phone = phone;
-  if (lead.lang) properties.hs_language = lead.lang;
-
-  try {
-    const res = await fetch(
-      "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert",
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          inputs: [{ idProperty: "email", id: lead.email, properties }],
-        }),
-      },
-    );
-    if (!res.ok) {
-      console.error("[lead-magnet] HubSpot failed:", res.status, await res.text().catch(() => ""), "lead:", lead.email);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("[lead-magnet] HubSpot threw:", err, "lead:", lead.email);
-    return false;
-  }
+    lang: lead.lang,
+    funnel: "checklist",
+    serviceType: moveLabel,
+    moveDate: lead.moveDate?.trim() || undefined,
+    utm: lead.utm,
+    note: `${text}\n\nMove type: ${moveLabel}`,
+  });
 }
 
 /* ------------------------------------------------------------------ */
