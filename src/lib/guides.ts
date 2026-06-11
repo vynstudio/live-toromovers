@@ -119,7 +119,7 @@ export const APARTMENT_CHECKLIST: GuideData = {
   metadata: {
     title: "Orlando Apartment Moving Checklist",
     description:
-      "A step-by-step apartment moving checklist for Orlando renters — notice, elevator & COI rules, utilities, packing, and protecting your deposit. From Toro Movers.",
+      "Apartment moving checklist for Orlando renters — notice, elevator & COI rules, utilities, packing, and protecting your deposit. From Toro Movers.",
   },
   h1: "Apartment Moving Checklist for Orlando Renters",
   intro:
@@ -221,7 +221,7 @@ export const BEST_TIME_TO_MOVE: GuideData = {
   metadata: {
     title: "Best Time to Move in Central Florida",
     description:
-      "When's the best time to move in Central Florida? A local breakdown of the cheapest days, summer heat and hurricane season, snowbird timing, and booking smart.",
+      "The best time to move in Central Florida — cheapest days, summer heat, hurricane season, snowbird timing, and how to book smart. From Toro Movers.",
   },
   h1: "When Is the Best Time to Move in Central Florida?",
   intro:

@@ -18,7 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Regional hub — main Central Florida landing page.
     { url: `${BASE}/central-florida-movers`, priority: 0.9 as const, changeFrequency: "monthly" as const },
     { url: `${BASE}/blog`, priority: 0.6 as const, changeFrequency: "weekly" as const },
-    { url: `${BASE}/checklist`, priority: 0.6 as const, changeFrequency: "monthly" as const },
+    // /checklist is intentionally noindex (conversion content) — keep it OUT of
+    // the sitemap so GSC doesn't report "Submitted URL marked noindex".
     // Lead-magnet LP — indexable, targets local "moving checklist" intent.
     { url: `${BASE}/central-florida-moving-checklist`, priority: 0.85 as const, changeFrequency: "monthly" as const },
     // Labor-only funnel LP — indexable, high-intent "labor only movers" terms.

@@ -18,7 +18,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/labor-only-moving";
 
 const DESCRIPTION =
-  "Fast labor-only moving help in Central Florida. Family-owned, insured, bilingual, and ready to quote your move today. Loading, unloading & stair help by the hour.";
+  "Labor-only moving help in Central Florida — loading, unloading & stair help by the hour. Family-owned, insured, bilingual. Get a quote today.";
 
 export const metadata: Metadata = {
   title: { absolute: "Labor-Only Moving Help | Toro Movers" },

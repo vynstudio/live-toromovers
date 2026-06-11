@@ -288,7 +288,7 @@ export const CLERMONT: CityData = {
   metadata: {
     title: "Clermont Movers",
     description:
-      "Family-owned Clermont movers — Kings Ridge, Legends, Summit Greens & Lake County. Insured, bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
+      "Family-owned Clermont movers — Kings Ridge, Legends, Summit Greens & Lake County. Insured, bilingual, up-front hourly pricing. Free estimate.",
   },
   h1: "Clermont Movers — Toro Movers",
   subline:

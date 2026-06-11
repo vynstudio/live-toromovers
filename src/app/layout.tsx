@@ -30,7 +30,9 @@ const serif = Schibsted_Grotesk({
 const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  // 300 dropped — not referenced anywhere in globals.css or components,
+  // so it was a dead font file on every page load.
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
