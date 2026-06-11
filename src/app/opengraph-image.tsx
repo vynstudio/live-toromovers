@@ -71,7 +71,22 @@ export default function OpenGraph() {
             marginBottom: 36,
           }}
         >
-          <span>★★★★★</span>
+          {/* Inline SVG stars — Satori has no ★ glyph in its default font and
+              its dynamic-font fetch for it 400s, leaving blank stars on the
+              shared card. Drawing them as SVG renders crisp and needs no font. */}
+          <div style={{ display: "flex", gap: 4 }}>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <svg
+                key={i}
+                width={28}
+                height={28}
+                viewBox="0 0 24 24"
+                fill="#C8442A"
+              >
+                <path d="M12 .587l3.668 7.431 8.2 1.192-5.934 5.787 1.401 8.169L12 18.896l-7.335 3.857 1.401-8.169L.132 9.21l8.2-1.192z" />
+              </svg>
+            ))}
+          </div>
           <span>4.9 ON GOOGLE</span>
         </div>
 
