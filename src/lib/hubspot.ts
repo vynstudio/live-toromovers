@@ -43,7 +43,9 @@ export async function upsertLeadToHubspot(lead: LeadForHubspot): Promise<boolean
     email: lead.email,
     firstname: lead.firstName,
     lifecyclestage: "lead",
-    hs_lead_status: "NEW",
+    // The site fires an instant email + SMS the moment the lead submits, so the
+    // automated outreach has already attempted contact — reflect that on entry.
+    hs_lead_status: "ATTEMPTED_TO_CONTACT",
     funnel_type: lead.funnel,
     message: lead.note,
   };
