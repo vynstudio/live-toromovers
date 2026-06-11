@@ -1,3 +1,5 @@
+import { normalizePhone } from "@/lib/verify";
+
 // Shared HubSpot helper used by the funnel + checklist lead routes.
 // Upserts the contact (standard + custom props), then creates a Deal in the
 // "Mudanzas" pipeline's New Lead stage — but only if the contact has no deal
@@ -46,7 +48,9 @@ export async function upsertLeadToHubspot(lead: LeadForHubspot): Promise<boolean
     message: lead.note,
   };
   if (lead.lastName) properties.lastname = lead.lastName;
-  if (lead.phone) properties.phone = lead.phone;
+  // Store phone in E.164 so an inbound SMS (Quo sends E.164) can match this
+  // contact exactly for the reply → stage-advance automation.
+  if (lead.phone) properties.phone = normalizePhone(lead.phone);
   if (lead.city) properties.city = lead.city;
   if (lead.lang) properties.hs_language = lead.lang;
   if (lead.serviceType) properties.service_type = lead.serviceType;

@@ -1,0 +1,82 @@
+{
+  "name": "Toro Movers — SMS reply → HubSpot stage (Contacted)",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "POST", "path": "toro-sms-stage", "responseMode": "lastNode", "options": {} },
+      "id": "wh", "name": "Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2,
+      "position": [-820, 300], "webhookId": "toro-sms-stage",
+      "notes": "Point your Quo/OpenPhone INBOUND webhook here (or have the Toro Inbound workflow forward to it). Fires on a customer SMS reply → moves their deal to Contacted + sets the contact to CONNECTED."
+    },
+    {
+      "parameters": { "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst obj = body.data?.object || body.data || body;\nconst isInbound = /message\\.received/i.test(body.type || body.event || '') || obj.direction === 'incoming';\nconst from = String(obj.from || '').trim();\nreturn [{ json: { is_inbound: isInbound, from_phone: from } }];" },
+      "id": "parse", "name": "Parse Quo Payload", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [-620, 300]
+    },
+    {
+      "parameters": { "conditions": { "options": { "caseSensitive": false, "version": 2 }, "combinator": "and",
+        "conditions": [ { "leftValue": "={{ $json.is_inbound }}", "rightValue": true, "operator": { "type": "boolean", "operation": "equals" } } ] }, "options": {} },
+      "id": "isin", "name": "Is Inbound?", "type": "n8n-nodes-base.if", "typeVersion": 2, "position": [-420, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"filterGroups\": [{ \"filters\": [{ \"propertyName\": \"phone\", \"operator\": \"EQ\", \"value\": \"{{ $('Parse Quo Payload').first().json.from_phone }}\" }] }],\n  \"properties\": [\"hs_lead_status\"],\n  \"limit\": 1\n}",
+        "options": {}
+      },
+      "id": "find", "name": "HS find contact", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [-200, 220], "continueOnFail": true
+    },
+    {
+      "parameters": { "conditions": { "options": { "caseSensitive": true, "version": 2 }, "combinator": "and",
+        "conditions": [ { "leftValue": "={{ $json.total }}", "rightValue": 0, "operator": { "type": "number", "operation": "gt" } } ] }, "options": {} },
+      "id": "found", "name": "Contact found?", "type": "n8n-nodes-base.if", "typeVersion": 2, "position": [0, 220]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('HS find contact').first().json.results[0].id }}/associations/deals",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth", "options": {}
+      },
+      "id": "deals", "name": "HS get deals", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [200, 140], "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/deals/{{ $json.results[0].id || $json.results[0].toObjectId }}",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={ \"properties\": { \"dealstage\": \"3821600461\", \"pipeline\": \"2345196253\" } }",
+        "options": {}
+      },
+      "id": "adv", "name": "Advance deal → Contacted", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [400, 140], "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('HS find contact').first().json.results[0].id }}",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={ \"properties\": { \"hs_lead_status\": \"CONNECTED\" } }",
+        "options": {}
+      },
+      "id": "conn", "name": "Set contact CONNECTED", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [400, 320], "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Parse Quo Payload", "type": "main", "index": 0 }]] },
+    "Parse Quo Payload": { "main": [[{ "node": "Is Inbound?", "type": "main", "index": 0 }]] },
+    "Is Inbound?": { "main": [[{ "node": "HS find contact", "type": "main", "index": 0 }], []] },
+    "HS find contact": { "main": [[{ "node": "Contact found?", "type": "main", "index": 0 }]] },
+    "Contact found?": { "main": [[
+      { "node": "HS get deals", "type": "main", "index": 0 },
+      { "node": "Set contact CONNECTED", "type": "main", "index": 0 }
+    ], []] },
+    "HS get deals": { "main": [[{ "node": "Advance deal → Contacted", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}
