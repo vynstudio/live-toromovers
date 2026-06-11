@@ -1029,6 +1029,7 @@ section.block { padding: 64px 20px; position: relative; }
 @media (min-width: 720px) { section.block { padding: 96px 32px; } }
 @media (min-width: 980px) { section.block { padding: 120px 48px; } }
 .block-inner { max-width: 1200px; margin: 0 auto; }
+.block-lead { max-width: 60ch; margin: 0 0 40px; font-size: 17px; line-height: 1.65; color: var(--ink-soft); }
 .block-eyebrow {
   display: inline-flex; align-items: center; gap: 12px;
   font-size: 12px; font-weight: 700;

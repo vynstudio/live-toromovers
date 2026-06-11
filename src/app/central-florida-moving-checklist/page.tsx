@@ -17,7 +17,7 @@ const HREF = "/central-florida-moving-checklist";
 
 const TITLE = "Free Central Florida Moving Checklist";
 const DESCRIPTION =
-  "Free, practical moving checklist for Orlando & Central Florida — plan your move, pack faster, beat the heat, and have everything ready for an accurate quote.";
+  "Free moving checklist for Orlando & Central Florida — plan your move, pack faster, beat the heat, and be ready for an accurate quote. From Toro Movers.";
 
 export const metadata: Metadata = {
   title: TITLE,

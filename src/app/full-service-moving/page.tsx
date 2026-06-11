@@ -18,7 +18,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/full-service-moving";
 
 const DESCRIPTION =
-  "Need full-service movers in Central Florida? Toro Movers handles packing, loading, transport, and local moves with up-front pricing. Family-owned, insured, bilingual.";
+  "Full-service movers in Central Florida — Toro Movers handles packing, loading, transport, and local moves with up-front pricing. Insured, bilingual.";
 
 export const metadata: Metadata = {
   title: { absolute: "Full-Service Movers in Central Florida | Toro Movers" },

@@ -87,7 +87,7 @@ export const RESIDENTIAL_MOVERS: ServiceData = {
   metadata: {
     title: "Residential Movers Orlando",
     description:
-      "Family-owned residential movers across Orlando & Central Florida. Houses, condos & HOA communities. Insured, bilingual, up-front hourly pricing — no hidden fees.",
+      "Family-owned residential movers across Orlando & Central Florida — houses, condos & HOA communities. Insured, bilingual, up-front hourly pricing.",
   },
   h1: "Residential Movers in Orlando & Central Florida",
   subline:
@@ -135,7 +135,7 @@ export const COMMERCIAL_MOVERS: ServiceData = {
   metadata: {
     title: "Commercial Movers Orlando",
     description:
-      "Office & commercial movers in Orlando & Central Florida. After-hours moves, desks, IT & equipment. Insured, bilingual, up-front hourly pricing — minimal downtime.",
+      "Office & commercial movers in Orlando & Central Florida — after-hours moves, desks, IT & equipment. Insured, bilingual, up-front pricing.",
   },
   h1: "Commercial & Office Movers in Orlando",
   subline:
@@ -183,7 +183,7 @@ export const PACKING_SERVICES: ServiceData = {
   metadata: {
     title: "Packing Services Orlando",
     description:
-      "Professional packing services in Orlando & Central Florida. Full or partial packing, supplies, fragile items. Insured, bilingual crew, up-front hourly pricing.",
+      "Professional packing services in Orlando & Central Florida — full or partial packing, supplies, fragile items. Insured, bilingual, up-front pricing.",
   },
   h1: "Packing Services in Orlando & Central Florida",
   subline:
@@ -231,7 +231,7 @@ export const LOADING_UNLOADING: ServiceData = {
   metadata: {
     title: "Loading & Unloading Help Orlando",
     description:
-      "Labor-only loading & unloading help in Orlando & Central Florida. U-Haul, PODS, rental trucks loaded tight. Insured, bilingual crew, up-front hourly pricing.",
+      "Loading & unloading help in Orlando & Central Florida — U-Haul, PODS & rental trucks loaded tight. Insured, bilingual, up-front hourly pricing.",
   },
   h1: "Loading & Unloading Help in Orlando",
   subline:

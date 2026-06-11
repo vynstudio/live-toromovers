@@ -34,6 +34,18 @@ export default function Page() {
 
         <section className="block">
           <div className="block-inner">
+            <p className="block-lead">
+              Moving in Central Florida comes with its own rules — summer heat,
+              hurricane season, HOA and elevator reservations, and apartment
+              complexes with tight move-in windows. These guides come straight
+              from the Toro Movers crew, who load and unload across Orlando,
+              Kissimmee, Clermont, Sanford, and the surrounding counties every
+              week. Each one is written to help you plan ahead, pack smarter,
+              avoid the common surprises that blow up a moving-day budget, and
+              walk into your quote already knowing what to expect — no upsells,
+              just the same honest, up-front advice we give our own customers on
+              the phone.
+            </p>
             <div className="city-others">
               {GUIDES.map((g) => (
                 <Link key={g.slug} href={g.href} className="city-other">
