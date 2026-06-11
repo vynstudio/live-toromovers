@@ -12,37 +12,26 @@
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-640, 320],
+      "position": [
+        -640,
+        320
+      ],
       "webhookId": "toro-checklist-lead",
       "notes": "Set the site env var N8N_LEAD_WEBHOOK_URL to this node's Production URL. Optional: verify header x-toro-secret against N8N_WEBHOOK_SECRET in an IF node."
     },
-
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.resend.com/emails",
-        "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" }
-        ]},
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Your Central Florida Moving Checklist\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }}, here's your checklist again: <a href='{{ $('Webhook').item.json.body.links.pdf }}'>download the PDF</a>. Tip: reserve your elevator and a loading spot today — it's the #1 thing that slows an Orlando move.</p><p><a href='https://toromovers.net/quote'>Request a Quote</a> · Family-owned · Insured · Hablamos espanol</p>\"\n}",
-        "options": {}
+        "amount": 2,
+        "unit": "days"
       },
-      "id": "email1",
-      "name": "Email 1 — Checklist (immediate)",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [-380, 140]
-    },
-    {
-      "parameters": { "amount": 2, "unit": "days" },
       "id": "wait-e2",
       "name": "Wait 2 days",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [-160, 140],
+      "position": [
+        -160,
+        140
+      ],
       "webhookId": "wait-e2"
     },
     {
@@ -50,9 +39,14 @@
         "method": "POST",
         "url": "https://api.resend.com/emails",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" }
-        ]},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.RESEND_API_KEY}}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"What affects local moving cost in Central Florida?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — local moving cost comes down to crew size and hours, stairs vs. elevator, access/parking, and any special items. We quote up front by the hour, no surprises.</p><p><a href='https://toromovers.net/quote'>Get My Price</a></p>\"\n}",
@@ -62,15 +56,24 @@
       "name": "Email 2 — Cost factors (day 2)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [60, 140]
+      "position": [
+        60,
+        140
+      ]
     },
     {
-      "parameters": { "amount": 2, "unit": "days" },
+      "parameters": {
+        "amount": 2,
+        "unit": "days"
+      },
       "id": "wait-e3",
       "name": "Wait 2 days (2)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [280, 140],
+      "position": [
+        280,
+        140
+      ],
       "webhookId": "wait-e3"
     },
     {
@@ -78,9 +81,14 @@
         "method": "POST",
         "url": "https://api.resend.com/emails",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" }
-        ]},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.RESEND_API_KEY}}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Planning your move in Orlando, FL?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — moving from an apartment? Reserve the elevator, ask the office if a COI is required, and confirm the loading-zone window. We handle the heavy part.</p><p><a href='https://toromovers.net/quote'>Request a Quote</a></p>\"\n}",
@@ -90,15 +98,24 @@
       "name": "Email 3 — Apartment tips (day 4)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [500, 140]
+      "position": [
+        500,
+        140
+      ]
     },
     {
-      "parameters": { "amount": 2, "unit": "days" },
+      "parameters": {
+        "amount": 2,
+        "unit": "days"
+      },
       "id": "wait-e4",
       "name": "Wait 2 days (3)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [720, 140],
+      "position": [
+        720,
+        140
+      ],
       "webhookId": "wait-e4"
     },
     {
@@ -106,9 +123,14 @@
         "method": "POST",
         "url": "https://api.resend.com/emails",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" }
-        ]},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.RESEND_API_KEY}}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"How to pack faster for your move\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — pack room by room, label every box (room + 2 words), and keep a 'first night' bag aside. Want us to pack for you? We offer full and partial packing.</p><p><a href='https://toromovers.net/quote'>Get My Price</a></p>\"\n}",
@@ -118,15 +140,24 @@
       "name": "Email 4 — Packing tips (day 6)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [940, 140]
+      "position": [
+        940,
+        140
+      ]
     },
     {
-      "parameters": { "amount": 2, "unit": "days" },
+      "parameters": {
+        "amount": 2,
+        "unit": "days"
+      },
       "id": "wait-e5",
       "name": "Wait 2 days (4)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [1160, 140],
+      "position": [
+        1160,
+        140
+      ],
       "webhookId": "wait-e5"
     },
     {
@@ -134,9 +165,14 @@
         "method": "POST",
         "url": "https://api.resend.com/emails",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "=Bearer {{$env.RESEND_API_KEY}}" }
-        ]},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.RESEND_API_KEY}}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Need help with your Central Florida move?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — Toro Movers is family-owned, fully insured, and rated 4.9 on Google by Central Florida families. When you're ready, we'll lock in your slot.</p><p><a href='https://toromovers.net/quote'>Request a Quote</a> · (689) 600-2720</p>\"\n}",
@@ -146,19 +182,28 @@
       "name": "Email 5 — Trust + reviews (day 8)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1380, 140]
+      "position": [
+        1380,
+        140
+      ]
     },
-
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": true, "version": 2 },
+          "options": {
+            "caseSensitive": true,
+            "version": 2
+          },
           "combinator": "and",
           "conditions": [
             {
               "leftValue": "={{ $('Webhook').item.json.body.smsOptIn }}",
               "rightValue": true,
-              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
             }
           ]
         },
@@ -168,34 +213,24 @@
       "name": "SMS opt-in?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [-380, 520]
+      "position": [
+        -380,
+        520
+      ]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.openphone.com/v1/messages",
-        "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "={{$env.OPENPHONE_API_KEY}}" }
-        ]},
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Your Central Florida Moving Checklist is ready: {{ $('Webhook').item.json.body.links.pdf }} — Toro Movers. Reply STOP to opt out.\"\n}",
-        "options": {}
+        "amount": 2,
+        "unit": "days"
       },
-      "id": "sms1",
-      "name": "SMS 1 — Checklist (immediate)",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [-160, 520]
-    },
-    {
-      "parameters": { "amount": 2, "unit": "days" },
       "id": "wait-s2",
       "name": "Wait 2 days (sms)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [60, 520],
+      "position": [
+        60,
+        520
+      ],
       "webhookId": "wait-s2"
     },
     {
@@ -203,9 +238,14 @@
         "method": "POST",
         "url": "https://api.openphone.com/v1/messages",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "={{$env.OPENPHONE_API_KEY}}" }
-        ]},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{$env.OPENPHONE_API_KEY}}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Need a fast quote for your move in Orlando? We can price it in under 60 seconds: https://toromovers.net/quote — Toro Movers. STOP to opt out.\"\n}",
@@ -215,15 +255,24 @@
       "name": "SMS 2 — Fast quote (day 2)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [280, 520]
+      "position": [
+        280,
+        520
+      ]
     },
     {
-      "parameters": { "amount": 3, "unit": "days" },
+      "parameters": {
+        "amount": 3,
+        "unit": "days"
+      },
       "id": "wait-s3",
       "name": "Wait 3 days (sms)",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [500, 520],
+      "position": [
+        500,
+        520
+      ],
       "webhookId": "wait-s3"
     },
     {
@@ -231,9 +280,14 @@
         "method": "POST",
         "url": "https://api.openphone.com/v1/messages",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [
-          { "name": "Authorization", "value": "={{$env.OPENPHONE_API_KEY}}" }
-        ]},
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{$env.OPENPHONE_API_KEY}}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"We're family-owned, insured, and bilingual — ready to help with your Central Florida move. Get your quote: https://toromovers.net/quote — Toro Movers. STOP to opt out.\"\n}",
@@ -243,28 +297,154 @@
       "name": "SMS 3 — Trust (day 5)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [720, 520]
+      "position": [
+        720,
+        520
+      ]
     }
   ],
   "connections": {
-    "Webhook": { "main": [[
-      { "node": "Email 1 — Checklist (immediate)", "type": "main", "index": 0 },
-      { "node": "SMS opt-in?", "type": "main", "index": 0 }
-    ]]},
-    "Email 1 — Checklist (immediate)": { "main": [[{ "node": "Wait 2 days", "type": "main", "index": 0 }]] },
-    "Wait 2 days": { "main": [[{ "node": "Email 2 — Cost factors (day 2)", "type": "main", "index": 0 }]] },
-    "Email 2 — Cost factors (day 2)": { "main": [[{ "node": "Wait 2 days (2)", "type": "main", "index": 0 }]] },
-    "Wait 2 days (2)": { "main": [[{ "node": "Email 3 — Apartment tips (day 4)", "type": "main", "index": 0 }]] },
-    "Email 3 — Apartment tips (day 4)": { "main": [[{ "node": "Wait 2 days (3)", "type": "main", "index": 0 }]] },
-    "Wait 2 days (3)": { "main": [[{ "node": "Email 4 — Packing tips (day 6)", "type": "main", "index": 0 }]] },
-    "Email 4 — Packing tips (day 6)": { "main": [[{ "node": "Wait 2 days (4)", "type": "main", "index": 0 }]] },
-    "Wait 2 days (4)": { "main": [[{ "node": "Email 5 — Trust + reviews (day 8)", "type": "main", "index": 0 }]] },
-    "SMS opt-in?": { "main": [[{ "node": "SMS 1 — Checklist (immediate)", "type": "main", "index": 0 }], []] },
-    "SMS 1 — Checklist (immediate)": { "main": [[{ "node": "Wait 2 days (sms)", "type": "main", "index": 0 }]] },
-    "Wait 2 days (sms)": { "main": [[{ "node": "SMS 2 — Fast quote (day 2)", "type": "main", "index": 0 }]] },
-    "SMS 2 — Fast quote (day 2)": { "main": [[{ "node": "Wait 3 days (sms)", "type": "main", "index": 0 }]] },
-    "Wait 3 days (sms)": { "main": [[{ "node": "SMS 3 — Trust (day 5)", "type": "main", "index": 0 }]] }
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 days",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SMS opt-in?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 days": {
+      "main": [
+        [
+          {
+            "node": "Email 2 — Cost factors (day 2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 2 — Cost factors (day 2)": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 days (2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 days (2)": {
+      "main": [
+        [
+          {
+            "node": "Email 3 — Apartment tips (day 4)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 3 — Apartment tips (day 4)": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 days (3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 days (3)": {
+      "main": [
+        [
+          {
+            "node": "Email 4 — Packing tips (day 6)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email 4 — Packing tips (day 6)": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 days (4)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 days (4)": {
+      "main": [
+        [
+          {
+            "node": "Email 5 — Trust + reviews (day 8)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SMS opt-in?": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 days (sms)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Wait 2 days (sms)": {
+      "main": [
+        [
+          {
+            "node": "SMS 2 — Fast quote (day 2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SMS 2 — Fast quote (day 2)": {
+      "main": [
+        [
+          {
+            "node": "Wait 3 days (sms)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 3 days (sms)": {
+      "main": [
+        [
+          {
+            "node": "SMS 3 — Trust (day 5)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  "settings": { "executionOrder": "v1" },
+  "settings": {
+    "executionOrder": "v1"
+  },
   "active": false
 }
