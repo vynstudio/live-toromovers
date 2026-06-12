@@ -10,12 +10,13 @@ import { normalizePhone } from "@/lib/verify";
 export const HS_PIPELINE_ID = "2345196253";
 export const HS_STAGE = {
   newLead: "3821600460",
+  contactAttempt: "3825414850",
   contacted: "3821600461",
   quoteSent: "3821600462",
   booked: "3821600463",
   completed: "3821600464",
-  won: "3821600465",
-  lost: "3821600466",
+  reviewRequested: "3825414851",
+  reviewObtained: "3825293016",
 } as const;
 
 // n8n webhook that the Telegram stage buttons open (not secret). Tapping a
@@ -32,13 +33,17 @@ export function telegramStageKeyboard(email?: string) {
   return {
     inline_keyboard: [
       [
-        { text: "📞 Contacted", url: u("c") },
-        { text: "💲 Quote Sent", url: u("q") },
+        { text: "📞 No Answer", url: u("a") },
+        { text: "✅ Contacted", url: u("c") },
       ],
       [
+        { text: "💲 Quote Sent", url: u("q") },
         { text: "📅 Booked", url: u("b") },
-        { text: "🏆 Won", url: u("w") },
-        { text: "❌ Lost", url: u("l") },
+        { text: "🚚 Move Done", url: u("m") },
+      ],
+      [
+        { text: "⭐ Review Sent", url: u("r") },
+        { text: "🌟 Review Got", url: u("o") },
       ],
     ],
   };
