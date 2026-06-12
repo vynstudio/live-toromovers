@@ -18,6 +18,32 @@ export const HS_STAGE = {
   lost: "3821600466",
 } as const;
 
+// n8n webhook that the Telegram stage buttons open (not secret). Tapping a
+// button moves that lead's deal to the chosen stage. See
+// docs/n8n-telegram-stage.workflow.json.
+const STAGE_HOOK = "https://n8n-production-d3d0.up.railway.app/webhook/toro-stage";
+
+/** Inline-keyboard (URL buttons) for the internal Telegram lead alert so the
+ *  team can move the deal's stage with one tap. Returns undefined without an
+ *  email (no way to target the deal). */
+export function telegramStageKeyboard(email?: string) {
+  if (!email) return undefined;
+  const u = (s: string) => `${STAGE_HOOK}?e=${encodeURIComponent(email)}&s=${s}`;
+  return {
+    inline_keyboard: [
+      [
+        { text: "📞 Contacted", url: u("c") },
+        { text: "💲 Quote Sent", url: u("q") },
+      ],
+      [
+        { text: "📅 Booked", url: u("b") },
+        { text: "🏆 Won", url: u("w") },
+        { text: "❌ Lost", url: u("l") },
+      ],
+    ],
+  };
+}
+
 type LeadForHubspot = {
   email: string;
   firstName: string;
