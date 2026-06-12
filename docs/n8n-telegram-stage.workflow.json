@@ -1,0 +1,77 @@
+{
+  "name": "Toro Movers — Telegram stage buttons",
+  "nodes": [
+    {
+      "parameters": { "httpMethod": "GET", "path": "toro-stage", "responseMode": "responseNode", "options": {} },
+      "id": "wh", "name": "Webhook", "type": "n8n-nodes-base.webhook", "typeVersion": 2,
+      "position": [-820, 300], "webhookId": "toro-stage",
+      "notes": "Opened by the URL buttons in the Toro Telegram lead alert. ?e=<email>&s=<code> → moves that lead's deal to the chosen stage."
+    },
+    {
+      "parameters": { "jsCode": "const q = $input.first().json.query || {};\nconst email = (q.e || '').trim();\nconst code = (q.s || '').trim();\nconst MAP = {\n  c: { id: '3821600461', label: 'Contacted', contact: { hs_lead_status: 'IN_PROGRESS' } },\n  q: { id: '3821600462', label: 'Quote Sent', contact: { hs_lead_status: 'IN_PROGRESS' } },\n  b: { id: '3821600463', label: 'Booked / Scheduled', contact: { hs_lead_status: 'IN_PROGRESS' } },\n  w: { id: '3821600465', label: 'Won', contact: { lifecyclestage: 'customer' } },\n  l: { id: '3821600466', label: 'Lost', contact: { hs_lead_status: 'UNQUALIFIED' } },\n};\nconst m = MAP[code] || {};\nreturn [{ json: { email, code, stageId: m.id || '', label: m.label || code, contactProps: m.contact || { hs_lead_status: 'IN_PROGRESS' } } }];" },
+      "id": "parse", "name": "Parse", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [-620, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST", "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={\n  \"filterGroups\": [{ \"filters\": [{ \"propertyName\": \"email\", \"operator\": \"EQ\", \"value\": \"{{ $('Parse').first().json.email }}\" }] }],\n  \"properties\": [\"email\"],\n  \"limit\": 1\n}",
+        "options": {}
+      },
+      "id": "find", "name": "Find contact", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [-420, 300], "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('Find contact').first().json.results[0].id }}/associations/deals",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth", "options": {}
+      },
+      "id": "deals", "name": "Get deals", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [-220, 300], "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/deals/{{ $('Get deals').first().json.results[0].id || $('Get deals').first().json.results[0].toObjectId }}",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={ \"properties\": { \"dealstage\": \"{{ $('Parse').first().json.stageId }}\", \"pipeline\": \"2345196253\" } }",
+        "options": {}
+      },
+      "id": "upd", "name": "Update deal stage", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [-20, 300], "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('Find contact').first().json.results[0].id }}",
+        "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={ \"properties\": {{ JSON.stringify($('Parse').first().json.contactProps) }} }",
+        "options": {}
+      },
+      "id": "updc", "name": "Update contact", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [180, 300], "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!doctype html><meta name=viewport content=\"width=device-width,initial-scale=1\"><body style=\"font-family:system-ui;background:#0B0B0D;color:#fff;display:grid;place-items:center;height:100vh;margin:0;text-align:center\"><div><div style=\"width:64px;height:64px;border-radius:50%;background:#C8102E;display:grid;place-items:center;margin:0 auto 16px;font-size:32px\">✓</div><h2 style=\"margin:0 0 6px\">Movido a {{ $('Parse').first().json.label }}</h2><p style=\"color:#9a9aa2;font-size:14px;margin:0\">{{ $('Parse').first().json.email }}</p><p style=\"color:#6b6b72;font-size:12px;margin-top:18px\">Ya puedes cerrar esta pestaña.</p></div></body>",
+        "options": { "responseCode": 200, "responseHeaders": { "entries": [{ "name": "content-type", "value": "text/html; charset=utf-8" }] } }
+      },
+      "id": "resp", "name": "Respond", "type": "n8n-nodes-base.respondToWebhook", "typeVersion": 1.1, "position": [380, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Parse", "type": "main", "index": 0 }]] },
+    "Parse": { "main": [[{ "node": "Find contact", "type": "main", "index": 0 }]] },
+    "Find contact": { "main": [[{ "node": "Get deals", "type": "main", "index": 0 }]] },
+    "Get deals": { "main": [[{ "node": "Update deal stage", "type": "main", "index": 0 }]] },
+    "Update deal stage": { "main": [[{ "node": "Update contact", "type": "main", "index": 0 }]] },
+    "Update contact": { "main": [[{ "node": "Respond", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}

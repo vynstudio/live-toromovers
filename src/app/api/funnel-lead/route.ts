@@ -6,7 +6,7 @@ import {
   type FunnelLeadInput,
 } from "@/lib/funnel-schema";
 import { normalizePhone } from "@/lib/verify";
-import { upsertLeadToHubspot } from "@/lib/hubspot";
+import { upsertLeadToHubspot, telegramStageKeyboard } from "@/lib/hubspot";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const QUOTE_URL = `${SITE_URL}/quote`;
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
   const results = await Promise.allSettled([
     sendCustomerEmail(lead, isLabor),
     sendTeamAlertEmail(lead, funnelLabel, details, text),
-    sendTelegram(text),
+    sendTelegram(text, lead.email),
     wantsSms ? sendConfirmationSms(normalizePhone(phone), lead.firstName, isLabor) : Promise.resolve(false),
     sendMetaCapi(lead, phone, req),
     upsertHubspotContact(lead, phone, funnelLabel, details, text),
@@ -181,7 +181,7 @@ async function sendTeamAlertEmail(
   }
 }
 
-async function sendTelegram(text: string): Promise<boolean> {
+async function sendTelegram(text: string, email?: string): Promise<boolean> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return false;
@@ -189,7 +189,12 @@ async function sendTelegram(text: string): Promise<boolean> {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        disable_web_page_preview: true,
+        reply_markup: telegramStageKeyboard(email),
+      }),
     });
     return res.ok;
   } catch {
