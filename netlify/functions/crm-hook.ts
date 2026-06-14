@@ -1,19 +1,21 @@
 // Toro Movers — HubSpot CRM webhook handler (Netlify Function, v2 / Web API).
 //
 // A HubSpot workflow ("Send a webhook" action) POSTs here whenever a deal
-// changes stage in the "Toro Movers" pipeline. We validate the payload with
+// changes stage in the "Mudanzas" deal pipeline. We validate the payload with
 // Zod, pick the template for the new stage, and fan out to the customer over
 // email (Resend) and SMS (Quo). All config comes from env vars — no secrets
 // are hardcoded.
 //
 // Deployed URL:  https://<site>/.netlify/functions/crm-hook
 //
-// Stage → template map:
-//   quoted     → quote follow-up
-//   booked     → booking + deposit link
-//   en_route   → en-route ETA
-//   completed  → review request
-//   new_lead / lost → no message (handled, returns { skipped: true })
+// Stage → template map (mirrors the real 8-stage "Mudanzas" pipeline):
+//   contact_attempt     → contact attempt ("we tried to reach you")
+//   quote_sent          → quote follow-up
+//   booked_scheduled    → booking + deposit link
+//   move_completed      → review request
+//   new_lead / contacted / review_request_sent / review_obtained
+//                       → no message (handled, returns { skipped: true })
+//   (en_route_eta template is kept available but no stage maps to it yet)
 //
 // Env vars (see .env.example):
 //   HUBSPOT_TOKEN    — optional shared secret. When set, the incoming request
@@ -37,11 +39,13 @@ import { z } from "zod";
 // pipeline stage onto one of these values.
 export const Stage = z.enum([
   "new_lead",
-  "quoted",
-  "booked",
-  "en_route",
-  "completed",
-  "lost",
+  "contact_attempt",
+  "contacted",
+  "quote_sent",
+  "booked_scheduled",
+  "move_completed",
+  "review_request_sent",
+  "review_obtained",
 ]);
 export type Stage = z.infer<typeof Stage>;
 
@@ -75,20 +79,26 @@ export const CrmHookSchema = z.object({
 });
 export type CrmHookInput = z.infer<typeof CrmHookSchema>;
 
-// Which template (if any) each stage triggers.
-export const STAGE_TEMPLATE: Record<
-  Stage,
-  "quote_follow_up" | "booking_deposit" | "en_route_eta" | "review_request" | null
-> = {
-  new_lead: null,
-  quoted: "quote_follow_up",
-  booked: "booking_deposit",
-  en_route: "en_route_eta",
-  completed: "review_request",
-  lost: null,
-};
+// All available message templates. `en_route_eta` has no stage mapped to it in
+// the current pipeline but is kept for future use.
+export type TemplateKey =
+  | "contact_attempt"
+  | "quote_follow_up"
+  | "booking_deposit"
+  | "en_route_eta"
+  | "review_request";
 
-export type TemplateKey = NonNullable<(typeof STAGE_TEMPLATE)[Stage]>;
+// Which template (if any) each real pipeline stage triggers.
+export const STAGE_TEMPLATE: Record<Stage, TemplateKey | null> = {
+  new_lead: null,
+  contact_attempt: "contact_attempt",
+  contacted: null,
+  quote_sent: "quote_follow_up",
+  booked_scheduled: "booking_deposit",
+  move_completed: "review_request",
+  review_request_sent: null,
+  review_obtained: null,
+};
 
 // ---------------------------------------------------------------------------
 // Templates — bilingual (EN / ES). Each returns the rendered email + SMS copy.
@@ -119,6 +129,35 @@ const STOP_EN = " Reply STOP to opt out.";
 const STOP_ES = " Responde STOP para no recibir más mensajes.";
 
 const TEMPLATES: Record<TemplateKey, Record<Lang, (c: Ctx) => RenderedMessage>> = {
+  contact_attempt: {
+    en: (c) => {
+      const first = c.contact.firstName;
+      return {
+        subject: "Toro Movers — we tried to reach you",
+        html: shell(
+          `<h2 style="font:600 20px/1.3 system-ui,sans-serif;margin:0 0 12px">Hi ${first}, we just tried to reach you</h2>
+           <p>We got your moving request and tried to call about the details. We'd love to get you a quote — just reply here or give us a quick call.</p>
+           <p style="margin-top:14px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none;font:600 16px system-ui,sans-serif">${PHONE}</a></p>`,
+        ),
+        text: `Hi ${first}, Toro Movers here — we just tried to reach you about your move. Reply here or call ${PHONE} and we'll get you a quote.`,
+        sms: `Hi ${first}, it's Toro Movers — we just tried to reach you about your move. Call us back at ${PHONE} or reply here and we'll get you a quote.${STOP_EN}`,
+      };
+    },
+    es: (c) => {
+      const first = c.contact.firstName;
+      return {
+        subject: "Toro Movers — intentamos contactarte",
+        html: shell(
+          `<h2 style="font:600 20px/1.3 system-ui,sans-serif;margin:0 0 12px">Hola ${first}, te acabamos de llamar</h2>
+           <p>Recibimos tu solicitud de mudanza e intentamos comunicarnos contigo para ver los detalles. Nos encantaría darte una cotización — responde aquí o llámanos.</p>
+           <p style="margin-top:14px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none;font:600 16px system-ui,sans-serif">${PHONE}</a></p>`,
+        ),
+        text: `Hola ${first}, somos Toro Movers — intentamos contactarte sobre tu mudanza. Responde aquí o llama al ${PHONE} y te damos una cotización.`,
+        sms: `Hola ${first}, somos Toro Movers — intentamos contactarte sobre tu mudanza. Llámanos al ${PHONE} o responde aquí y te cotizamos.${STOP_ES}`,
+      };
+    },
+  },
+
   quote_follow_up: {
     en: (c) => {
       const amt = money(c.deal.quote_amount);

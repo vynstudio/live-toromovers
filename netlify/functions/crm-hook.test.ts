@@ -38,7 +38,7 @@ function stubFetch(): { calls: Captured[]; restore: () => void } {
 
 function completedPayload() {
   return {
-    stage: "completed",
+    stage: "move_completed",
     contact: {
       firstName: "Maria",
       lastName: "Gomez",
@@ -82,7 +82,7 @@ test("Completed payload fires BOTH email and SMS", async () => {
     };
 
     assert.equal(json.ok, true);
-    assert.equal(json.stage, "completed");
+    assert.equal(json.stage, "move_completed");
     assert.equal(json.template, "review_request");
     assert.equal(json.sent.email, true, "email send should report success");
     assert.equal(json.sent.sms, true, "sms send should report success");
@@ -97,6 +97,25 @@ test("Completed payload fires BOTH email and SMS", async () => {
     const smsBody = JSON.parse(String(quo[0].init?.body));
     assert.match(smsBody.content, /review/i);
     assert.deepEqual(smsBody.to, ["+14075551234"]);
+  } finally {
+    restore();
+  }
+});
+
+test("Contact Attempt stage fires the contact_attempt template", async () => {
+  const { calls, restore } = stubFetch();
+  try {
+    const body = completedPayload();
+    body.stage = "contact_attempt";
+    const res = await handler(request(body));
+    const json = (await res.json()) as { template: string; sent: { email: boolean; sms: boolean } };
+    assert.equal(res.status, 200);
+    assert.equal(json.template, "contact_attempt");
+    assert.equal(json.sent.email, true);
+    assert.equal(json.sent.sms, true);
+    const quo = calls.find((c) => c.url.includes("openphone.com"));
+    const smsBody = JSON.parse(String(quo?.init?.body));
+    assert.match(smsBody.content, /tried to reach you/i);
   } finally {
     restore();
   }

@@ -20,16 +20,21 @@ if (!TOKEN) {
 
 const BASE = "https://api.hubapi.com";
 
-const PIPELINE_LABEL = "Toro Movers";
+// NOTE: This pipeline already exists in HubSpot ("Mudanzas"). The script finds
+// it by label and reuses it (idempotent) — verify PIPELINE_LABEL matches the
+// real name so it doesn't create a duplicate. Stages below mirror the real
+// 8-stage pipeline and the slugs netlify/functions/crm-hook.ts branches on.
+const PIPELINE_LABEL = "Mudanzas";
 
-// Stage slugs mirror what netlify/functions/crm-hook.ts branches on.
 const STAGES = [
-  { label: "New lead", slug: "new_lead", probability: "0.1", isClosed: "false" },
-  { label: "Quoted", slug: "quoted", probability: "0.3", isClosed: "false" },
-  { label: "Booked", slug: "booked", probability: "0.6", isClosed: "false" },
-  { label: "En route", slug: "en_route", probability: "0.8", isClosed: "false" },
-  { label: "Completed", slug: "completed", probability: "1.0", isClosed: "true" },
-  { label: "Lost", slug: "lost", probability: "0.0", isClosed: "true" },
+  { label: "New Lead", slug: "new_lead", probability: "0.05", isClosed: "false" },
+  { label: "Contact Attempt", slug: "contact_attempt", probability: "0.1", isClosed: "false" },
+  { label: "Contacted", slug: "contacted", probability: "0.2", isClosed: "false" },
+  { label: "Quote Sent", slug: "quote_sent", probability: "0.4", isClosed: "false" },
+  { label: "Booked / Scheduled", slug: "booked_scheduled", probability: "0.7", isClosed: "false" },
+  { label: "Move Completed", slug: "move_completed", probability: "1.0", isClosed: "true" },
+  { label: "Review Request Sent", slug: "review_request_sent", probability: "1.0", isClosed: "true" },
+  { label: "Review Obtained", slug: "review_obtained", probability: "1.0", isClosed: "true" },
 ];
 
 // Custom deal properties (internal names match the webhook payload).
