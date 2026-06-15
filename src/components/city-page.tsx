@@ -11,6 +11,7 @@ import {
   PHONE_TEL,
   BUSINESS_NAME,
   GOOGLE_RATING,
+  SERVICE_BASE_LOCALITY,
 } from "@/lib/contact";
 
 const SITE_URL =
@@ -45,6 +46,14 @@ export function CityPage({ city }: { city: CityData }) {
       url: `${SITE_URL}${city.href}`,
       telephone: PHONE_DISPLAY,
       areaServed: { "@type": "City", name: `${city.name}, FL` },
+      // Conservative address: the real Orlando base (no fabricated per-city
+      // office, no per-city postalCode). areaServed above carries the city.
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: SERVICE_BASE_LOCALITY,
+        addressRegion: "FL",
+        addressCountry: "US",
+      },
       parentOrganization: {
         "@type": "MovingCompany",
         name: BUSINESS_NAME,

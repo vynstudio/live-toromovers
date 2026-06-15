@@ -12,6 +12,7 @@ import {
   LEGAL_NAME,
   BUSINESS_NAME,
   SLOGAN,
+  POSTAL_CODE,
 } from "@/lib/contact";
 
 // Minimalist display face — clean modern grotesque replacing the old serif.
@@ -121,6 +122,7 @@ const movingCompanyJsonLd = {
     "@type": "PostalAddress",
     addressLocality: "Orlando",
     addressRegion: "FL",
+    postalCode: POSTAL_CODE,
     addressCountry: "US",
   },
   geo: {

@@ -26,4 +26,8 @@ export const MOVES_DONE = "100+";
 export const REVIEW_COUNT = "36";
 
 export const SERVICE_BASE_CITY = "Orlando, FL";
+// Schema address — real business base. Owner-confirmed public ZIP; no public
+// street address exists, so streetAddress is intentionally omitted.
+export const SERVICE_BASE_LOCALITY = "Orlando";
+export const POSTAL_CODE = "32789";
 export const SERVICE_REGION = "Central Florida";

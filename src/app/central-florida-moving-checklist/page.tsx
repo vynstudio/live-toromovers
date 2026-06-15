@@ -97,7 +97,7 @@ const jsonLd = {
       serviceType: "Local moving",
       name: "Central Florida & Orlando local moving",
       description: DESCRIPTION,
-      areaServed: { "@type": "AdministrativeArea", name: `${SERVICE_REGION}, FL` },
+      areaServed: { "@type": "AdministrativeArea", name: SERVICE_REGION },
       provider: {
         "@type": "MovingCompany",
         name: BUSINESS_NAME,
