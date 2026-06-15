@@ -364,6 +364,10 @@ export const content: { en: ContentShape; es: ContentShape } = {
           q: "¿Hablan español?",
           a: "Sí — our entire crew is bilingual (English / Spanish). We can quote, schedule, and run your full move in Spanish if that is what you prefer.",
         },
+        {
+          q: "Do you offer same-day or same-week moves?",
+          a: "Often, yes — it depends on that day's schedule. We can usually fit same-week moves across Orlando and Central Florida, and sometimes same-day when a crew is open. The sooner you call or request an estimate, the better the odds of locking in your slot.",
+        },
       ],
     },
     closing: {
@@ -562,6 +566,10 @@ export const content: { en: ContentShape; es: ContentShape } = {
         {
           q: "¿Hablan español?",
           a: "Sí — toda nuestra cuadrilla es bilingüe (inglés / español). Podemos cotizar, agendar y manejar tu mudanza completa en español si así lo prefieres.",
+        },
+        {
+          q: "¿Hacen mudanzas el mismo día o en la misma semana?",
+          a: "Muchas veces sí — depende de la agenda del día. Por lo general podemos acomodar mudanzas dentro de la misma semana en Orlando y Florida Central, y a veces el mismo día si hay una cuadrilla libre. Mientras antes llames o pidas tu estimado, más fácil apartamos tu lugar.",
         },
       ],
     },
