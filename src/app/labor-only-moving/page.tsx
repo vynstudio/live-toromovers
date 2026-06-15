@@ -77,7 +77,7 @@ const jsonLd = {
       serviceType: "Labor-only moving help",
       name: "Labor-only moving help in Central Florida",
       description: DESCRIPTION,
-      areaServed: { "@type": "AdministrativeArea", name: `${SERVICE_REGION}, FL` },
+      areaServed: { "@type": "AdministrativeArea", name: SERVICE_REGION },
       provider: {
         "@type": "MovingCompany",
         name: BUSINESS_NAME,
