@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLang } from "./lang-provider";
+import { TextCta } from "./funnel-tracking";
 import { PHONE_TEL, PHONE_DISPLAY } from "@/lib/contact";
 
 export function StickyCta() {
@@ -14,6 +15,7 @@ export function StickyCta() {
       <Link href="/quote" className="quote-cta">
         {t.nav.quote} →
       </Link>
+      <TextCta className="text-cta">💬 {t.nav.textUs}</TextCta>
     </div>
   );
 }

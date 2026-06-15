@@ -147,7 +147,7 @@ nav.top.scrolled { border-bottom-color: var(--line); padding: 12px 24px; }
 .sticky-cta {
   position: fixed; bottom: 0; left: 0; right: 0;
   z-index: 40;
-  display: grid; grid-template-columns: 1fr 1fr;
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
   gap: 1px;
   background: var(--line);
   border-top: 1px solid var(--line);
@@ -163,6 +163,7 @@ nav.top.scrolled { border-bottom-color: var(--line); padding: 12px 24px; }
   text-decoration: none; color: var(--ink); min-height: 56px;
 }
 .sticky-cta .call-cta { color: var(--red); }
+.sticky-cta .text-cta { color: var(--navy); }
 .sticky-cta .quote-cta { background: var(--navy); color: #fff; }
 .sticky-cta .quote-cta:active { background: var(--red); }
 
@@ -1808,7 +1809,10 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
 
   /* Sticky CTA */
   .sticky-cta { box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.08); }
-  .sticky-cta a, .sticky-cta button { font-size: 13.5px; min-height: 60px; padding: 14px 16px; }
+  /* 3-up layout: tighter horizontal padding + smaller gap so the longest
+     label (ES "Cotización gratis") stays legible and wraps gracefully if
+     needed; min-height keeps tap targets >=44px (60px here). */
+  .sticky-cta a, .sticky-cta button { font-size: 13px; min-height: 60px; padding: 12px 8px; gap: 5px; line-height: 1.15; text-align: center; }
 
   /* Modal — bottom sheet polish with drag handle */
   .modal { border-radius: 18px 18px 0 0; }
