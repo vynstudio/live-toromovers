@@ -25,6 +25,23 @@ const CITY_LEGACY_REDIRECTS = [
   { source: "/movers-winter-park", destination: "/winter-park-movers" },
 ];
 
+// Oldest URL pattern from the original static site: /pages/cities/{slug} and
+// /pages/cities/{slug}.html (e.g. /pages/cities/orlando-movers.html). They 404
+// today and Google reports them as "Crawled - currently not indexed". Each
+// {slug} maps 1:1 to the canonical /{slug} city page (200), so 301 to
+// consolidate link equity and clear the GSC issue. Literal sources (no
+// path-to-regexp regex params) for forward-compat with this Next version.
+const CITY_SLUGS = [
+  "orlando-movers", "lake-mary-movers", "winter-park-movers", "kissimmee-movers",
+  "sanford-movers", "clermont-movers", "oviedo-movers", "winter-garden-movers",
+  "altamonte-springs-movers", "apopka-movers", "st-cloud-movers", "windermere-movers",
+  "maitland-movers", "davenport-movers",
+];
+const PAGES_CITIES_REDIRECTS = CITY_SLUGS.flatMap((slug) => [
+  { source: `/pages/cities/${slug}`, destination: `/${slug}`, permanent: true },
+  { source: `/pages/cities/${slug}.html`, destination: `/${slug}`, permanent: true },
+]);
+
 // Legacy content pages from the prior site, now consolidated into homepage
 // sections. Redirect (temporary) so old indexed URLs don't 404 — can be
 // rebuilt as full pages later (like the /movers-{city} pages) if needed.
@@ -60,6 +77,7 @@ const nextConfig: NextConfig = {
       { source: "/mudanza", destination: "/es/ads/meta-orlando-movers", permanent: false },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
+      ...PAGES_CITIES_REDIRECTS,
     ];
   },
 };
