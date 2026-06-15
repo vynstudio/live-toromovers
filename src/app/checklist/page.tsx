@@ -122,6 +122,30 @@ export default function ChecklistPage() {
           </section>
         ))}
 
+        {/* Quote CTA — additive. /checklist is noindex (no SEO impact); links to
+            the existing /quote wizard and reuses the existing quote_click event. */}
+        <section
+          className="checklist-quote-cta"
+          style={{
+            textAlign: "center",
+            marginTop: 8,
+            padding: "30px 16px",
+            borderTop: "1px solid rgba(0,0,0,0.08)",
+          }}
+        >
+          <h2 className="checklist-when" style={{ marginBottom: 6 }}>
+            Ready for a price?
+          </h2>
+          <p style={{ maxWidth: "46ch", margin: "0 auto 18px", opacity: 0.8 }}>
+            Worked through the list? Get an up-front hourly quote in about 60
+            seconds — no obligation.
+          </p>
+          <Link href="/quote" className="btn btn-primary">
+            Get my free estimate
+            <span className="arrow" aria-hidden />
+          </Link>
+        </section>
+
         <div className="checklist-footer">
           <p>
             Anything you'd add, or something on this list that doesn't apply? Text or

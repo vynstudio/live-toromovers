@@ -18,8 +18,47 @@ function fmtDate(iso: string): string {
   return `${MONTHS[m - 1]} ${d}, ${y}`;
 }
 
+// Topic-relevant internal links per guide (additive; falls back to
+// DEFAULT_RELATED when a guide has no specific map). All targets are existing
+// 200 pages — no new URLs introduced.
+type RelatedLink = { href: string; name: string; desc: string };
+
+const DEFAULT_RELATED: RelatedLink[] = [
+  { href: "/orlando-movers", name: "Orlando movers", desc: "Local moves across Orlando and Orange County." },
+  { href: "/apartment-movers", name: "Apartment movers", desc: "Stairs, elevators, and tight complex windows, by the hour." },
+  { href: "/packing-services", name: "Packing services", desc: "Full or partial packing, done fast and carefully." },
+  { href: "/central-florida-movers", name: "Central Florida movers", desc: "Our full service area across the Orlando metro." },
+];
+
+const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
+  "how-to-prepare-for-a-local-move-in-orlando": [
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "Loading, unloading & stair help by the hour." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Packing, loading, transport — you don't lift a box." },
+    { href: "/orlando-movers", name: "Orlando movers", desc: "Local moves across Orlando and Orange County." },
+    { href: "/central-florida-moving-checklist", name: "Free moving checklist", desc: "Plan your move and get quote-ready fast." },
+  ],
+  "apartment-moving-checklist-orlando-renters": [
+    { href: "/apartment-movers", name: "Apartment movers", desc: "Stairs, elevators, and tight complex windows, by the hour." },
+    { href: "/loading-unloading", name: "Loading & unloading", desc: "U-Haul, PODS & rental trucks loaded tight." },
+    { href: "/altamonte-springs-movers", name: "Altamonte Springs movers", desc: "Apartment & condo moves across Seminole County." },
+    { href: "/central-florida-moving-checklist", name: "Free moving checklist", desc: "Apartment section: elevators, COI, parking." },
+  ],
+  "best-time-to-move-central-florida": [
+    { href: "/central-florida-movers", name: "Central Florida movers", desc: "Our full service area across the metro." },
+    { href: "/orlando-movers", name: "Orlando movers", desc: "Local moves across Orlando and Orange County." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Packing, loading, transport — handled start to finish." },
+  ],
+  "how-much-does-a-local-move-cost-orlando": [
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "Lowest-cost option — hourly loading/unloading help." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Door-to-door move with up-front hourly pricing." },
+    { href: "/loading-unloading", name: "Loading & unloading", desc: "You rented the truck; we load it right." },
+    { href: "/central-florida-movers", name: "Central Florida movers", desc: "Up-front pricing across the Orlando metro." },
+  ],
+};
+
 export function GuidePage({ guide }: { guide: GuideData }) {
   const url = `${SITE_URL}${guide.href}`;
+  const related = RELATED_BY_SLUG[guide.slug] ?? DEFAULT_RELATED;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -123,26 +162,13 @@ export function GuidePage({ guide }: { guide: GuideData }) {
                 Local Orlando movers, up-front pricing.
               </h2>
               <div className="city-others">
-                <Link href="/orlando-movers" className="city-other">
-                  <span className="city-other-url">/orlando-movers</span>
-                  <h3 className="city-other-name">Orlando movers</h3>
-                  <p className="city-other-desc">Local moves across Orlando and Orange County.</p>
-                </Link>
-                <Link href="/apartment-movers" className="city-other">
-                  <span className="city-other-url">/apartment-movers</span>
-                  <h3 className="city-other-name">Apartment movers</h3>
-                  <p className="city-other-desc">Stairs, elevators, and tight complex windows, by the hour.</p>
-                </Link>
-                <Link href="/packing-services" className="city-other">
-                  <span className="city-other-url">/packing-services</span>
-                  <h3 className="city-other-name">Packing services</h3>
-                  <p className="city-other-desc">Full or partial packing, done fast and carefully.</p>
-                </Link>
-                <Link href="/central-florida-movers" className="city-other">
-                  <span className="city-other-url">/central-florida-movers</span>
-                  <h3 className="city-other-name">Central Florida movers</h3>
-                  <p className="city-other-desc">Our full service area across the Orlando metro.</p>
-                </Link>
+                {related.map((r) => (
+                  <Link key={r.href} href={r.href} className="city-other">
+                    <span className="city-other-url">{r.href}</span>
+                    <h3 className="city-other-name">{r.name}</h3>
+                    <p className="city-other-desc">{r.desc}</p>
+                  </Link>
+                ))}
               </div>
             </div>
           </section>
