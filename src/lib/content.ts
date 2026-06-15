@@ -109,6 +109,7 @@ type ContentShape = {
     faq: string;
     callNow: string;
     quote: string;
+    textUs: string;
   };
   hero: {
     badge: string;
@@ -223,6 +224,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       faq: "FAQ",
       callNow: "Call now",
       quote: "Free quote",
+      textUs: "Text us",
     },
     hero: {
       badge: "4.9★ on Google · Insured, family-owned · Central Florida",
@@ -422,6 +424,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       faq: "Preguntas",
       callNow: "Llamar",
       quote: "Cotización gratis",
+      textUs: "Escríbenos",
     },
     hero: {
       badge: "4.9★ en Google · Asegurados y familiares · Florida Central",
