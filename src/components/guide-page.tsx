@@ -82,6 +82,10 @@ export function GuidePage({ guide }: { guide: GuideData }) {
           "@type": "Organization",
           name: BUSINESS_NAME,
           "@id": `${SITE_URL}/#movingcompany`,
+          logo: {
+            "@type": "ImageObject",
+            url: `${SITE_URL}/bull.svg`,
+          },
         },
       },
       {

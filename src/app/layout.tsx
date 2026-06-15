@@ -148,12 +148,12 @@ const movingCompanyJsonLd = {
     },
   ],
   makesOffer: [
-    { "@type": "Offer", name: "Loading help · labor only" },
-    { "@type": "Offer", name: "In-town move · labor + truck" },
-    { "@type": "Offer", name: "Big-day move · 3 movers + truck" },
-    { "@type": "Offer", name: "Packing & unpacking" },
-    { "@type": "Offer", name: "Storage moves" },
-    { "@type": "Offer", name: "Furniture wrapping & protection" },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Loading help · labor only" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "In-town move · labor + truck" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Big-day move · 3 movers + truck" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Packing & unpacking" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Storage moves" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Furniture wrapping & protection" } },
   ],
 };
 

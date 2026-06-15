@@ -10,7 +10,6 @@ import {
   PHONE_TEL,
   BUSINESS_NAME,
   GOOGLE_RATING,
-  REVIEW_COUNT,
   SERVICE_REGION,
 } from "@/lib/contact";
 
@@ -84,12 +83,6 @@ const jsonLd = {
         name: BUSINESS_NAME,
         "@id": `${SITE_URL}/#movingcompany`,
         telephone: "+16896002720",
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: GOOGLE_RATING,
-          reviewCount: REVIEW_COUNT,
-          bestRating: "5",
-        },
       },
     },
     {
