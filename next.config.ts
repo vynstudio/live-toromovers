@@ -42,6 +42,22 @@ const PAGES_CITIES_REDIRECTS = CITY_SLUGS.flatMap((slug) => [
   { source: `/pages/cities/${slug}.html`, destination: `/${slug}`, permanent: true },
 ]);
 
+// Service-area cities listed in the LocalBusiness schema / county area lists
+// (see SERVICE_CITIES / AREAS_BY_COUNTY in src/lib/content.ts) that do NOT have
+// a dedicated /{city}-movers page. Google builds /{city}-movers from the URL
+// pattern and they 404 — GSC "Not found (404)" (confirmed: /casselberry-movers).
+// 301 to the regional hub (the closest relevant live page). permanent:true
+// clears the 404; deleting an entry later lets a real city page take over.
+// None of these slugs collide with the 14 real city pages, so no page is shadowed.
+const NO_PAGE_CITY_SLUGS = [
+  "casselberry-movers", "longwood-movers", "celebration-movers", "poinciana-movers",
+  "ocoee-movers", "mount-dora-movers", "leesburg-movers", "tavares-movers",
+  "minneola-movers",
+];
+const NO_PAGE_CITY_REDIRECTS = NO_PAGE_CITY_SLUGS.map((slug) => ({
+  source: `/${slug}`, destination: "/central-florida-movers", permanent: true,
+}));
+
 // Legacy content pages from the prior site, now consolidated into homepage
 // sections. Redirect (temporary) so old indexed URLs don't 404 — can be
 // rebuilt as full pages later (like the /movers-{city} pages) if needed.
@@ -78,6 +94,7 @@ const nextConfig: NextConfig = {
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...PAGES_CITIES_REDIRECTS,
+      ...NO_PAGE_CITY_REDIRECTS,
     ];
   },
 };
