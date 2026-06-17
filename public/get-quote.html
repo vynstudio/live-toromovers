@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<title>Get Your Moving Quote in Minutes · Toro Movers — Central Florida</title>
+<meta name="description" content="Fast, honest moving help across Central Florida. Loading, unloading, apartment moves, packing, furniture assembly and same-day labor. Get your quote in minutes." />
+<link rel="preconnect" href="https://connect.facebook.net" />
+<link rel="preconnect" href="https://www.googletagmanager.com" />
+<link rel="preload" href="/fonts/gc-commune.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+  :root{
+    --bg:#ffffff; --panel:#ffffff; --panel-2:#f5f5f7; --line:#e3e3e7;
+    --ink:#0a0a0a; --muted:#6b6b72; --red:#e0111f; --red-2:#bd0f1a; --ok:#1aa06b;
+    --radius:14px; --tap:54px;
+  }
+  @font-face{font-family:"GC Commune";src:url("/fonts/gc-commune.woff2") format("woff2"),url("/fonts/gc-commune.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;overflow-x:hidden;width:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.45;
+    padding-bottom:env(safe-area-inset-bottom,0);
+  }
+  a{color:inherit}
+  .wrap{max-width:560px;margin:0 auto;padding:13px 16px 40px}
+  /* ---- Top bar ---- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 2px 14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;font-size:15px}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px rgba(226,29,43,.18)}
+  .contacts{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .cbtn{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:9px 14px;font-weight:800;font-size:13px;text-decoration:none;white-space:nowrap;border:1px solid var(--line);transition:transform .12s,background .12s,border-color .12s}
+  .cbtn:active{transform:scale(.97)}
+  .cbtn.call{background:var(--red);color:#fff;border-color:var(--red)}
+  .cbtn.call:hover{background:var(--red-2)}
+  .cbtn.text{background:#fff;color:var(--ink)}
+  .cbtn.text:hover{border-color:#c9c9cf}
+  /* ---- Hero ---- */
+  .eyebrow{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin:2px 0 7px}
+  h1{font-family:"GC Commune",Georgia,"Times New Roman",serif;font-size:33px;line-height:1.06;margin:0 0 8px;font-weight:400;letter-spacing:-.01em;text-transform:uppercase}
+  h1 .hl{color:var(--red)}
+  .lede{color:var(--muted);font-size:14.5px;margin:0 0 12px;max-width:32em}
+  .trust{display:flex;flex-wrap:wrap;align-items:center;gap:5px 8px;margin:0 0 14px;font-size:12.5px;color:#b6b6b6;font-weight:600}
+  .trust .r{color:var(--red);font-weight:800}
+  .trust i{color:#cfcfd4;font-style:normal}
+  /* ---- Card / form ---- */
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px 16px 22px;box-shadow:0 12px 40px rgba(0,0,0,.08);animation:rise .28s ease both}
+  .card::before{content:"";position:absolute;top:-1px;left:-1px;right:-1px;height:3px;background:var(--red);border-radius:var(--radius) var(--radius) 0 0}
+  .formhdr{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#555;margin:0 0 14px}
+  .formhdr b{color:var(--red)}
+  .q{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#1a1a1a;margin:0 0 9px}
+  .q.mt{margin-top:22px}
+  .opts{display:grid;grid-template-columns:1fr;gap:9px}
+  .opt{position:relative;display:flex;align-items:center;justify-content:center;text-align:center;min-height:var(--tap);
+    border:1px solid var(--line);background:var(--panel-2);border-radius:12px;padding:10px;font-weight:700;font-size:14px;cursor:pointer;user-select:none;transition:border-color .12s,background .12s,transform .15s,box-shadow .15s}
+  .opt:hover{border-color:#c9c9cf}
+  .opt[data-checked="true"]{border-color:var(--red);background:rgba(226,29,43,.12);box-shadow:inset 0 0 0 1px var(--red)}
+  .opt input{position:absolute;opacity:0;pointer-events:none}
+  /* ---- Fields ---- */
+  label.fl{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#333;margin:14px 0 6px}
+  input[type=text],input[type=tel],input[type=email],input[type=date],select,textarea{
+    width:100%;min-height:var(--tap);background:#fff;border:1px solid var(--line);border-radius:11px;
+    color:var(--ink);font-size:16px;padding:12px 14px;font-family:inherit;outline:none;transition:border-color .12s}
+  textarea{min-height:74px;resize:vertical}
+  input:focus,select:focus,textarea:focus{border-color:var(--red)}
+  input[aria-invalid="true"]{border-color:var(--red);background:rgba(226,29,43,.08)}
+  .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+  .toggles{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;margin-top:6px}
+  .tg{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--panel-2);border-radius:11px;padding:11px 12px;font-size:14px;font-weight:600;cursor:pointer;min-height:48px}
+  .tg input{width:20px;height:20px;accent-color:var(--red);min-height:auto}
+  .consent{display:flex;align-items:flex-start;gap:10px;margin-top:16px;font-size:12.5px;color:var(--muted)}
+  .consent input{width:20px;height:20px;accent-color:var(--red);min-height:auto;margin-top:1px}
+  /* ---- CTA ---- */
+  .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:58px;margin-top:18px;
+    background:var(--red);color:#fff;border:0;border-radius:12px;font-size:16px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;cursor:pointer;transition:background .15s,transform .12s}
+  .cta:hover{background:var(--red-2);transform:translateY(-1px)}
+  .cta:active{transform:translateY(0) scale(.99)}
+  .cta:disabled{opacity:.7;cursor:default;transform:none}
+  .err{display:none;color:var(--red);font-size:13px;font-weight:600;margin-top:8px}
+  .err.show{display:block}
+  .fine{color:#6f6f6f;font-size:11.5px;text-align:center;margin-top:14px}
+  /* ---- Thank you ---- */
+  .done{display:none;text-align:center;padding:14px 6px}
+  .done.show{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .done .tick{width:62px;height:62px;border-radius:50%;background:rgba(39,192,138,.14);border:1px solid var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+  .done .tick svg{width:30px;height:30px;stroke:var(--ok)}
+  .done h2{font-family:"GC Commune",Georgia,serif;font-size:24px;margin:0 0 8px;text-transform:uppercase;letter-spacing:0}
+  .done p{color:var(--muted);font-size:15px;margin:0 auto 18px;max-width:380px}
+  .done .callcta{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:56px;padding:0 22px;background:var(--red);color:#fff;border-radius:12px;font-weight:800;text-decoration:none;text-transform:uppercase;font-size:15px}
+  /* ---- Sticky mobile call ---- */
+  .sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0));background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+  .sticky .sc{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;border-radius:12px;font-weight:800;text-decoration:none;text-transform:uppercase;font-size:14px}
+  .sticky .sc.call{background:var(--red);color:#fff}
+  .sticky .sc.text{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .reviews{text-align:center;font-size:12.5px;font-weight:700;color:#3a3a3a;margin:16px 0 0}
+  .reviews .stars{color:#f5a623;letter-spacing:1px}
+  .reviews b{color:var(--red)}
+  .foot{color:#5e5e5e;font-size:11.5px;text-align:center;margin-top:12px;line-height:1.7}
+  /* ---- reviews slider (native scroll-snap, no library, no images = fast) ---- */
+  .rev{margin:20px 0 2px}
+  .rev h3{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#555;margin:0 0 10px;text-align:center}
+  .rev-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .rev-track::-webkit-scrollbar{display:none}
+  .rev-card{flex:0 0 100%;scroll-snap-align:center;box-sizing:border-box;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .rev-stars{color:#f5a623;font-size:14px;letter-spacing:1px;margin-bottom:7px}
+  .rev-card blockquote{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:#2a2a2a}
+  .rev-card figcaption{font-size:12px;color:var(--muted);font-weight:600}
+  .rev-card figcaption b{color:var(--ink)}
+  .rev-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+  .rev-dot{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:#d4d4d8;cursor:pointer;transition:background .15s,transform .15s}
+  .rev-dot[data-on="true"]{background:var(--red);transform:scale(1.3)}
+  /* ---- subtle motion (fast, non-distracting; respects reduced-motion) ---- */
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.018)}100%{transform:scale(1)}}
+  @keyframes glow{0%{box-shadow:0 0 0 0 rgba(224,17,31,.28)}100%{box-shadow:0 0 0 7px rgba(224,17,31,0)}}
+  .opt.pulse{animation:pop .18s ease}
+  .glow{animation:glow .6s ease}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+  @media (max-width:430px){
+    h1{font-size:26px}
+    .sticky{display:block}
+    .wrap{padding-bottom:84px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Meta Pixel noscript fallback -->
+<noscript><img height="1" width="1" style="display:none" alt=""
+  src="https://www.facebook.com/tr?id=985575491098437&ev=PageView&noscript=1"/></noscript>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span> Toro Movers</div>
+    <div class="contacts">
+      <a class="cbtn call" href="tel:+16896002720">📞 Call now</a>
+      <a class="cbtn text" href="sms:+16896002720">💬 Text us</a>
+    </div>
+  </div>
+
+  <div class="eyebrow">Free Quote · Orlando &amp; Central Florida</div>
+  <h1>Moving Help, <span class="hl">Fast.</span><br>Quote in Minutes.</h1>
+  <p class="lede">Loading, unloading, apartment moves, packing &amp; same-day labor — real local crews, upfront rates.</p>
+  <div class="trust">
+    <span class="r">★ 4.9 Google</span> <i>/</i> Family-owned <i>/</i> Insured <i>/</i> Same-day labor <i>/</i> No hidden fees
+  </div>
+
+  <div class="card" id="quote">
+    <div class="formhdr"><b>Get my free quote</b> — one quick form</div>
+
+    <form id="quoteForm" novalidate>
+      <!-- hidden attribution + helper fields -->
+      <input type="hidden" name="utm_source" /><input type="hidden" name="utm_medium" />
+      <input type="hidden" name="utm_campaign" /><input type="hidden" name="utm_content" />
+      <input type="hidden" name="utm_term" /><input type="hidden" name="campaign_id" />
+      <input type="hidden" name="adset_id" /><input type="hidden" name="ad_id" />
+      <input type="hidden" name="fbclid" /><input type="hidden" name="page_path" />
+      <input type="hidden" name="city" />
+
+      <!-- type of move -->
+      <p class="q">What type of move do you need?</p>
+      <div class="opts" id="svcOpts">
+        <div class="opt" data-name="servicetype" data-value="labor-truck">Home / Apartment — Labor moving + truck<input type="radio" name="servicetype" value="labor-truck"></div>
+        <div class="opt" data-name="servicetype" data-value="labor-only">Home / Apartment — Labor moving only<input type="radio" name="servicetype" value="labor-only"></div>
+        <div class="opt" data-name="servicetype" data-value="full-service">Full-service move — we pack, load &amp; move<input type="radio" name="servicetype" value="full-service"></div>
+        <div class="opt" data-name="servicetype" data-value="storage">Storage<input type="radio" name="servicetype" value="storage"></div>
+        <div class="opt" data-name="servicetype" data-value="uhaul">Load / Unload U-Haul<input type="radio" name="servicetype" value="uhaul"></div>
+        <div class="opt" data-name="servicetype" data-value="rearrangement">In-home rearrangement<input type="radio" name="servicetype" value="rearrangement"></div>
+      </div>
+      <div class="err" id="err-1">Please pick your type of move.</div>
+
+      <!-- from / to -->
+      <p class="q mt">Where are you moving?</p>
+      <div class="two">
+        <div><label class="fl" for="pickup">From (ZIP / city)</label>
+          <input id="pickup" name="pickup" type="text" inputmode="text" autocomplete="postal-code" placeholder="e.g. Orlando 32801" /></div>
+        <div><label class="fl" for="dropoff">To (ZIP / city)</label>
+          <input id="dropoff" name="dropoff" type="text" inputmode="text" autocomplete="postal-code" placeholder="e.g. Winter Park" /></div>
+      </div>
+      <div class="err" id="err-2">Add at least your starting ZIP or city.</div>
+      <label class="fl">Access (optional)</label>
+      <div class="toggles">
+        <label class="tg"><input type="checkbox" name="opt_stairs" value="yes"> Stairs</label>
+        <label class="tg"><input type="checkbox" name="opt_elevator" value="yes"> Elevator</label>
+      </div>
+
+      <!-- contact -->
+      <p class="q mt">Where should we send your quote?</p>
+      <label class="fl" for="name">Full name</label>
+      <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" />
+      <div class="err" id="err-name">Please enter your name.</div>
+      <label class="fl" for="phone">Phone</label>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(689) 600-2720" />
+      <div class="err" id="err-phone">Enter a valid phone number.</div>
+      <label class="fl" for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" />
+      <div class="err" id="err-email">Enter a valid email so we can send your quote.</div>
+      <label class="fl" for="notes">Notes (optional)</label>
+      <textarea id="notes" name="notes" placeholder="Big/heavy items, access details, anything we should know…"></textarea>
+
+      <label class="consent"><input type="checkbox" id="consent" />
+        I agree to be contacted by Toro Movers by phone, text or email about my move. Message rates may apply.</label>
+      <div class="err" id="err-consent">Please check the box so we can contact you.</div>
+
+      <button type="submit" class="cta" id="submitBtn">Get My Quote →</button>
+      <p class="fine">No spam. A real Toro Movers crew member follows up — usually within the hour.</p>
+    </form>
+
+    <!-- THANK YOU -->
+    <div class="done" id="done">
+      <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h2>You're all set</h2>
+      <p id="doneMsg">Thanks! A Toro Movers team member will text or call you shortly with your quote.</p>
+      <a class="callcta" href="tel:+16896002720">📞 Call us now · (689) 600-2720</a>
+    </div>
+  </div>
+
+  <!-- Reviews slider — 3 real Google reviews from toromovers.net; native scroll-snap (no library, no images) -->
+  <section class="rev" aria-label="Customer reviews">
+    <h3><span style="color:#f5a623">★</span> 4.9 on Google · what Central Florida movers say</h3>
+    <div class="rev-track" id="revTrack">
+      <figure class="rev-card"><div class="rev-stars">★★★★★</div><blockquote>“Used their labor-only option since I already had a U-Haul. Two guys loaded everything in under 2 hours and unloaded in 45 minutes at the new place. They Tetris'd that truck like it was their job (because it is, lol).”</blockquote><figcaption><b>Giuseppe F. V.</b> · Labor only</figcaption></figure>
+      <figure class="rev-card"><div class="rev-stars">★★★★★</div><blockquote>“Very communicative about timing and friendly throughout. They even hauled some large furniture to the dumpster for me — huge help, didn't have to hire a different service. Everything made it to the new place without damage. Highly recommend!”</blockquote><figcaption><b>Olivia H.</b> · Full-service move</figcaption></figure>
+      <figure class="rev-card"><div class="rev-stars">★★★★★</div><blockquote>“Great experience! The team was on time, professional, and handled everything with care. Very easy to work with and made my move stress-free, I highly recommend!”</blockquote><figcaption><b>Stael G.</b> · Apartment move</figcaption></figure>
+    </div>
+    <div class="rev-dots" id="revDots"></div>
+  </section>
+
+  <p class="foot">Toro Movers · Central Florida · Background-checked crew · Bilingual · Insured · No hidden fees</p>
+</div>
+
+<div class="sticky">
+  <a class="sc call" href="tel:+16896002720">📞 Call now</a>
+  <a class="sc text" href="sms:+16896002720">💬 Text us</a>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // ===== CONFIG — reuses the live Toro tracking IDs (empty value => that tag is skipped) =====
+  var CONFIG = {
+    META_PIXEL_ID: "985575491098437",  // toromovers.net pixel -> PageView + Lead
+    GA4_ID:        "G-1L9NR2HTRT"       // toromovers.net GA4
+  };
+  var LEAD_ENDPOINT = "/api/ad-funnel";           // server-side -> HubSpot/Telegram/SMS/email/CAPI
+  var NETLIFY_FORM  = "";                          // Netlify Forms not used on toromovers.net (Next site)
+  var STORE = "tm_ad_funnel_v1";
+
+  function loadScript(src){var s=document.createElement("script");s.async=true;s.src=src;document.head.appendChild(s);}
+  function initMetaPixel(id){
+    if(!id) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+      (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init',id); window.fbq('track','PageView');
+  }
+  function initGA4(id){
+    if(!id) return;
+    loadScript('https://www.googletagmanager.com/gtag/js?id='+id);
+    window.dataLayer=window.dataLayer||[];
+    window.gtag=window.gtag||function(){window.dataLayer.push(arguments);};
+    window.gtag('js',new Date()); window.gtag('config',id);
+  }
+  initMetaPixel(CONFIG.META_PIXEL_ID);
+  initGA4(CONFIG.GA4_ID);
+
+  // contact-button micro-events — consistent with toromovers.net (no-op if tags absent / CONFIG empty)
+  document.addEventListener("click",function(e){
+    var a=e.target && e.target.closest ? e.target.closest("a") : null; if(!a) return;
+    var href=a.getAttribute("href")||"";
+    if(href.indexOf("tel:")===0){ if(window.fbq)window.fbq("trackCustom","PhoneClick"); if(window.gtag)window.gtag("event","phone_click"); }
+    else if(href.indexOf("sms:")===0){ if(window.fbq)window.fbq("trackCustom","TextClick"); if(window.gtag)window.gtag("event","text_click"); }
+  },true);
+
+  var form=document.getElementById("quoteForm"),
+      done=document.getElementById("done");
+
+  // ===== Attribution capture: URL -> hidden fields -> localStorage =====
+  var ATTR=["utm_source","utm_medium","utm_campaign","utm_content","utm_term","campaign_id","adset_id","ad_id","fbclid"];
+  var qs=new URLSearchParams(location.search);
+  var savedAttr={}; try{savedAttr=JSON.parse(localStorage.getItem(STORE+"_attr")||"{}");}catch(e){}
+  ATTR.forEach(function(k){
+    var v=qs.get(k)||savedAttr[k]||"";
+    if(form.elements[k]) form.elements[k].value=v;
+    savedAttr[k]=v;
+  });
+  try{localStorage.setItem(STORE+"_attr",JSON.stringify(savedAttr));}catch(e){}
+  form.elements["page_path"].value=location.pathname;
+  // service preset from URL (?servicetype=...) — alias common ad values to live options
+  var svcHint=(qs.get("servicetype")||"").toLowerCase();
+  var SVC_ALIAS={"fullservice":"full-service","full":"full-service","same-day":"labor-truck","labor":"labor-only"};
+  if(SVC_ALIAS[svcHint]) svcHint=SVC_ALIAS[svcHint];
+
+  // restore field values
+  var saved={}; try{saved=JSON.parse(localStorage.getItem(STORE)||"{}");}catch(e){}
+  ["pickup","dropoff","name","phone","email","notes"].forEach(function(n){
+    if(saved[n]&&form.elements[n]) form.elements[n].value=saved[n];
+  });
+
+  // ===== option cards (servicetype) =====
+  function getVal(name){var r=form.querySelector('input[name="'+name+'"]:checked');return r?r.value:"";}
+  function selectOpt(name,val){
+    form.querySelectorAll('.opt[data-name="'+name+'"]').forEach(function(o){
+      var on=o.getAttribute("data-value")===val;
+      o.setAttribute("data-checked",on?"true":"false");
+      var i=o.querySelector("input"); if(i) i.checked=on;
+    });
+  }
+  var advanced=false;
+  document.querySelectorAll(".opt").forEach(function(o){
+    o.addEventListener("click",function(){
+      selectOpt(o.getAttribute("data-name"),o.getAttribute("data-value"));
+      o.classList.remove("pulse"); void o.offsetWidth; o.classList.add("pulse"); // restart micro-pop on the chosen option
+      if(o.getAttribute("data-name")==="servicetype"){
+        hideErr(1);
+        if(!advanced){ advanced=true; var pk=form.elements.pickup; // auto-advance to the next field after the first pick
+          try{ pk.scrollIntoView({behavior:"smooth",block:"center"});
+            setTimeout(function(){ try{pk.focus({preventScroll:true});}catch(_){} pk.classList.add("glow");
+              setTimeout(function(){pk.classList.remove("glow");},650); },170);
+          }catch(e){}
+        }
+      }
+      persist();
+    });
+  });
+  if(svcHint) selectOpt("servicetype",svcHint);
+  if(saved.servicetype) selectOpt("servicetype",saved.servicetype);
+
+  function persist(){
+    var d={servicetype:getVal("servicetype"),timing:getVal("timing")};
+    ["pickup","dropoff","name","phone","email","notes"].forEach(function(n){d[n]=form.elements[n].value;});
+    try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}
+  }
+
+  // ===== validation (one page) =====
+  function showErr(s){var e=document.getElementById("err-"+s);if(e)e.classList.add("show");}
+  function hideErr(s){var e=document.getElementById("err-"+s);if(e)e.classList.remove("show");}
+  function validEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);}
+  function digits(v){return (v.match(/\d/g)||[]).length;}
+  function flag(f,e){if(form.elements[f])form.elements[f].setAttribute("aria-invalid","true");showErr(e);}
+  function okf(f,e){if(form.elements[f])form.elements[f].removeAttribute("aria-invalid");hideErr(e);}
+
+  function validateAll(scroll){
+    var firstBad=null;
+    if(!getVal("servicetype")){ showErr(1); firstBad=firstBad||document.getElementById("svcOpts"); } else hideErr(1);
+    if(form.elements.pickup.value.trim().length<3){ flag("pickup",2); firstBad=firstBad||form.elements.pickup; } else okf("pickup",2);
+    if(form.elements.name.value.trim().length<2){ flag("name","name"); firstBad=firstBad||form.elements.name; } else okf("name","name");
+    if(digits(form.elements.phone.value)<10){ flag("phone","phone"); firstBad=firstBad||form.elements.phone; } else okf("phone","phone");
+    if(!validEmail(form.elements.email.value.trim())){ flag("email","email"); firstBad=firstBad||form.elements.email; } else okf("email","email");
+    if(!document.getElementById("consent").checked){ showErr("consent"); firstBad=firstBad||document.getElementById("consent"); } else hideErr("consent");
+    if(firstBad && scroll){ try{firstBad.scrollIntoView({behavior:"smooth",block:"center"}); if(firstBad.focus) firstBad.focus({preventScroll:true});}catch(e){} }
+    return !firstBad;
+  }
+
+  // live: persist + clear a field's error once it becomes valid (never flags prematurely)
+  ["pickup","dropoff","name","phone","email","notes"].forEach(function(n){
+    form.elements[n].addEventListener("input",function(){
+      persist();
+      if(n==="pickup" && form.elements.pickup.value.trim().length>=3) okf("pickup",2);
+      else if(n==="name" && form.elements.name.value.trim().length>=2) okf("name","name");
+      else if(n==="phone" && digits(form.elements.phone.value)>=10) okf("phone","phone");
+      else if(n==="email" && validEmail(form.elements.email.value.trim())) okf("email","email");
+    });
+  });
+  document.getElementById("consent").addEventListener("change",function(){
+    if(document.getElementById("consent").checked) hideErr("consent");
+  });
+
+  function cityFrom(addr){
+    if(!addr) return "";
+    var p=addr.split(",").map(function(s){return s.trim();}).filter(Boolean);
+    if(p.length>=2) return p[p.length-2];
+    return addr.replace(/\b\d{5}\b/,"").trim()||addr;
+  }
+
+  // ===== submit -> all destinations, then thank-you (UNCHANGED payload + posts) =====
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!validateAll(true)){ return; }
+    persist();
+    var btn=document.getElementById("submitBtn"); btn.disabled=true; btn.textContent="Sending…";
+    if(!form.elements.city.value) form.elements.city.value=cityFrom(form.elements.pickup.value);
+
+    var payload={}; new FormData(form).forEach(function(v,k){payload[k]=v;});
+    payload.servicetype=getVal("servicetype"); payload.timing=getVal("timing");
+    ["opt_stairs","opt_elevator"].forEach(function(k){
+      var el=form.querySelector('input[name="'+k+'"]'); payload[k]=el&&el.checked?"yes":"";
+    });
+    payload.consent=document.getElementById("consent").checked?"yes":"";
+    payload.submitted_at=new Date().toISOString();
+
+    // ---- GA4 / GTM datalayer + gtag lead event ----
+    window.dataLayer=window.dataLayer||[];
+    window.dataLayer.push({event:"lead_submit",servicetype:payload.servicetype,timing:payload.timing,city:payload.city,
+      utm_source:payload.utm_source,utm_medium:payload.utm_medium,utm_campaign:payload.utm_campaign,
+      utm_content:payload.utm_content,campaign_id:payload.campaign_id,adset_id:payload.adset_id,ad_id:payload.ad_id});
+    if(window.gtag) window.gtag('event','generate_lead',{service:payload.servicetype,campaign:payload.utm_campaign||""});
+
+    // ---- Meta Pixel Lead (eventID for CAPI dedup) ----
+    function fireLead(d){
+      if(CONFIG.META_PIXEL_ID && window.fbq){
+        window.fbq('track','Lead',
+          {content_category:d.servicetype,content_name:d.city||"",funneltype:"ad-funnel"},
+          {eventID:'lead_'+(d.submitted_at||"")});
+      }
+    }
+    function postNetlify(p){
+      var enc=new URLSearchParams(); enc.append("form-name",NETLIFY_FORM); enc.append("bot-field","");
+      Object.keys(p).forEach(function(k){enc.append(k,p[k]==null?"":p[k]);});
+      return fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:enc.toString()});
+    }
+    function finish(){
+      fireLead(payload);
+      try{localStorage.removeItem(STORE);}catch(e){}
+      var msg={"same-day":"We’ll text or call you right away to lock in same-day crew and your quote.",
+        "full-service":"We’ll follow up shortly with your full-service moving estimate.",
+        "loading-unloading":"We’ll follow up shortly with your labor-only crew and a fast quote."};
+      if(msg[payload.servicetype]) document.getElementById("doneMsg").textContent=msg[payload.servicetype];
+      form.style.display="none"; done.classList.add("show");
+      document.getElementById("quote").scrollIntoView({behavior:"smooth",block:"start"});
+      // success only (runs after the lead POST + Netlify post settled and the Pixel Lead fired):
+      // brief confirmation, then redirect to the main site.
+      setTimeout(function(){ window.location.href="https://toromovers.net"; }, 3000);
+    }
+    // server-side (HubSpot + Telegram + SMS + email via the function) + Netlify Forms backup
+    var posts=[];
+    posts.push(fetch(LEAD_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).catch(function(){}));
+    if(NETLIFY_FORM) posts.push(postNetlify(payload).catch(function(){}));
+    Promise.all(posts).then(finish).catch(finish);
+  });
+})();
+</script>
+<script>
+/* reviews slider — tiny, native scroll-snap; no library, no animation loop */
+(function(){
+  var track=document.getElementById("revTrack"); if(!track) return;
+  var cards=track.children, dots=document.getElementById("revDots"), n=cards.length, idx=0, timer, st;
+  for(var i=0;i<n;i++){ var b=document.createElement("button"); b.type="button"; b.className="rev-dot"; b.setAttribute("aria-label","Review "+(i+1));
+    (function(j){b.addEventListener("click",function(){go(j,true);});})(i); dots.appendChild(b); }
+  function setDots(){ for(var i=0;i<n;i++) dots.children[i].setAttribute("data-on", i===idx?"true":"false"); }
+  function go(j,user){ idx=(j%n+n)%n; try{track.scrollTo({left:idx*track.clientWidth,behavior:"smooth"});}catch(e){track.scrollLeft=idx*track.clientWidth;} setDots(); if(user) restart(); }
+  track.addEventListener("scroll",function(){ clearTimeout(st); st=setTimeout(function(){ var i=Math.round(track.scrollLeft/track.clientWidth); if(i!==idx){idx=i;setDots();} },90); },{passive:true});
+  function start(){ try{ if(!matchMedia("(prefers-reduced-motion:reduce)").matches) timer=setInterval(function(){go(idx+1,false);},5000); }catch(e){} }
+  function restart(){ clearInterval(timer); start(); }
+  ["pointerdown","mouseenter","touchstart"].forEach(function(ev){track.addEventListener(ev,function(){clearInterval(timer);},{passive:true});});
+  ["pointerup","mouseleave","touchend"].forEach(function(ev){track.addEventListener(ev,restart,{passive:true});});
+  setDots(); start();
+})();
+</script>
+</body>
+</html>
