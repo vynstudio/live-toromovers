@@ -83,6 +83,7 @@ export async function POST(req: Request) {
     `Name: ${firstName}${lastName ? " " + lastName : ""}`,
     `Phone: ${phone || p.phone || "—"}`,
     `Email: ${p.email}`,
+    `Lang: ${p.language || "—"}`,
     `Service: ${service || "—"}`,
     `When: ${when || "—"}`,
     `From: ${p.pickup || "—"}`,
@@ -150,6 +151,7 @@ async function hubspot(
   if (city) properties.city = city;
   if (p.pickup) properties.pickup_address = p.pickup;
   if (p.dropoff) properties.dropoff_address = p.dropoff;
+  if (p.language) properties.hs_language = p.language;
 
   let contactId: string | undefined;
   try {
@@ -396,7 +398,7 @@ async function metaCapi(
       {
         event_name: "Lead",
         event_time: Math.floor(Date.now() / 1000),
-        event_id: "lead_" + (p.submitted_at || ""),
+        event_id: p.eventId || "lead_" + (p.submitted_at || ""),
         action_source: "website",
         event_source_url:
           req.headers.get("referer") || "https://toromovers.net/get-quote",
