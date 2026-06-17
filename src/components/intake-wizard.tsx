@@ -301,9 +301,10 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
         </div>
 
         <div className={styles.body} aria-live="polite">
-          {/* Question + chips remount per step (animate). The input below is a
-              SIBLING with a stable key and never remounts. */}
-          <div className={styles.step} key={step}>
+          {/* Question + chips update in place (no key → no remount churn that
+              could steal focus). The persistent input below is a SIBLING with a
+              stable key and never remounts. */}
+          <div className={styles.step}>
             <h2 className={styles.q}>{QMAP[step]}</h2>
 
             {step === "language" && (
@@ -372,9 +373,14 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
               type="button"
               className={styles.cta}
               disabled={submitting}
-              // pointerdown + preventDefault: advance in-gesture WITHOUT blurring
-              // the input, so the keyboard never closes between steps.
-              onPointerDown={(e) => { e.preventDefault(); next(); }}
+              // pointerdown + preventDefault: advance IN-GESTURE without blurring
+              // the input (the button never takes focus), then re-assert focus on
+              // the SAME persistent node so the keyboard never closes/flickers.
+              onPointerDown={(e) => {
+                e.preventDefault();
+                next();
+                if (step !== "email") inputRef.current?.focus();
+              }}
             >
               {step === "email"
                 ? submitting ? COPY.sending[L] : COPY.submit[L]
