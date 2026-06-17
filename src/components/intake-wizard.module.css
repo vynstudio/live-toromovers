@@ -82,15 +82,16 @@
 .inputHidden {
   position: absolute;
   left: 0;
-  bottom: 0;
+  top: 0;
   width: 100%;
-  height: 1px;
+  height: 56px; /* REAL size — iOS won't summon the keyboard for a ~1px input */
   opacity: 0;
   margin: 0;
-  padding: 0;
+  padding: 14px 16px;
   border: 0;
   background: transparent;
-  pointer-events: none;
+  pointer-events: none; /* don't intercept chip taps; we focus it via JS */
+  z-index: -1; /* sits behind the visible chip content, invisible */
   font-size: 16px;
 }
 .step {
