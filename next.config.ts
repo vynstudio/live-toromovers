@@ -76,12 +76,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
-  async rewrites() {
-    // Serve the static paid-traffic funnel (public/get-quote.html) at the clean
-    // /get-quote URL. Meta ads point here; query strings (UTMs/fbclid) pass
-    // through automatically. The page posts to /api/ad-funnel.
-    return [{ source: "/get-quote", destination: "/get-quote.html" }];
-  },
   async redirects() {
     return [
       ...AD_LANDING_PATHS.map((source) => ({

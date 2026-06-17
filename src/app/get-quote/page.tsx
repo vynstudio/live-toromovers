@@ -3,15 +3,17 @@ import type { Metadata } from "next";
 import { IntakeWizard } from "@/components/intake-wizard";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 
+// Paid-traffic ad funnel. Same engine as /quote, same submit path
+// (/api/ad-funnel). noindex — this is an ad landing page, not an SEO page.
 export const metadata: Metadata = {
   title: "Get your moving quote · Toro Movers",
   description:
-    "Tell us where you're moving from and to — get an up-front quote from Toro Movers, family-owned Central Florida movers.",
+    "Fast moving quote across Central Florida — labor only or labor + truck. Apartment, house, storage, U-Haul / POD load & unload.",
   robots: { index: false, follow: false },
-  alternates: { canonical: "/quote" },
+  alternates: { canonical: "/get-quote" },
 };
 
-export default function QuotePage() {
+export default function GetQuotePage() {
   return (
     <main className="quote-page">
       <header className="quote-header">
@@ -30,7 +32,7 @@ export default function QuotePage() {
       </header>
       <div className="quote-wrap">
         <Suspense fallback={null}>
-          <IntakeWizard entry="home" />
+          <IntakeWizard entry="ad" />
         </Suspense>
       </div>
     </main>
