@@ -1,13 +1,18 @@
 "use client";
 
-// Shared, mobile-first intake engine. Rendered identically by the homepage
-// (/quote) and the ad funnel (/get-quote). A substantial 2-column shell:
-// LEFT = the active form step (focal point), RIGHT = a softer trust /
-// reassurance panel. Stacks to a single column (form first) on mobile. One
-// container, one question at a time, chips with auto-advance, masks + browser
-// autocomplete, branching, and a single submit path (/api/ad-funnel) via the
-// CRM mapping layer. Tracking preserved: ViewContent (load), FormStart (first
-// interaction), Lead (submit) with shared eventId for CAPI dedup.
+// Shared, mobile-first intake engine (homepage /quote + ad funnel /get-quote).
+// 2-column shell: LEFT = form step (focal), RIGHT = softer trust panel.
+//
+// MOBILE KEYBOARD PERSISTENCE (iOS Safari + Instagram in-app browser):
+// The five typed steps (from/to/name/phone/email) share ONE persistent <input>
+// node that is ALWAYS mounted and never unmounts/remounts between steps — only
+// its inputMode/value/autocomplete change. The node keeps a stable key, so a
+// rerender never tears it down and focus (and the keyboard) survive step
+// changes. The chip→first-text boundary focuses that input IN THE SAME pointer
+// gesture (onPointerDown) so iOS opens the keyboard; the Continue button uses
+// onPointerDown + preventDefault so it never steals focus / blurs the input.
+// A requestAnimationFrame refocus after each rerender keeps it locked in.
+// Steps never advance on blur.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -39,6 +44,7 @@ type StepId =
   | "phone"
   | "email";
 
+const CHIP_STEPS: StepId[] = ["language", "service", "job"];
 const STORE = "toro_intake_v1";
 
 declare global {
@@ -59,6 +65,8 @@ function fmtPhone(v: string): string {
 }
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
 
+type InputMode = "text" | "tel" | "email" | "numeric";
+
 export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
   const router = useRouter();
   const [data, setData] = useState<IntakeData>({ ...EMPTY_INTAKE, entry });
@@ -78,7 +86,42 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
   }, [data.job_type]);
 
   const step = steps[Math.min(idx, steps.length - 1)];
+  const isTyped = !CHIP_STEPS.includes(step);
 
+  // The persistent input is pre-armed as the first typed field while we're on a
+  // chip step, so focusing it in-gesture (at job→from) opens the right keyboard.
+  const fieldKey: Exclude<StepId, "language" | "service" | "job"> = isTyped
+    ? (step as Exclude<StepId, "language" | "service" | "job">)
+    : "from";
+
+  const FIELD: Record<
+    string,
+    { im: InputMode; ac: string; max?: number; ph: string; value: string; set: (v: string) => void }
+  > = {
+    from: {
+      im: "numeric", ac: "postal-code", max: 5, ph: COPY.fromPh[L],
+      value: data.from_zip, set: (v) => set("from_zip", v.replace(/\D/g, "").slice(0, 5)),
+    },
+    to: {
+      im: "text", ac: "postal-code", ph: COPY.toPh[L],
+      value: data.to_location, set: (v) => set("to_location", v),
+    },
+    name: {
+      im: "text", ac: "name", ph: COPY.namePh[L],
+      value: data.full_name, set: (v) => set("full_name", v),
+    },
+    phone: {
+      im: "tel", ac: "tel", ph: COPY.phonePh[L],
+      value: data.phone, set: (v) => set("phone", fmtPhone(v)),
+    },
+    email: {
+      im: "email", ac: "email", ph: COPY.emailPh[L],
+      value: data.email, set: (v) => set("email", v),
+    },
+  };
+  const field = FIELD[fieldKey];
+
+  // On mount: restore + attribution + service preset + ViewContent.
   useEffect(() => {
     let restored: Partial<IntakeData> = {};
     try {
@@ -88,25 +131,20 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     }
     const attr = captureAttribution();
     const svc = serviceFromUrl();
-    setData((d) => ({
-      ...d,
-      ...restored,
-      ...attr,
-      ...(svc ? { service_type: svc } : {}),
-      entry,
-    }));
+    setData((d) => ({ ...d, ...restored, ...attr, ...(svc ? { service_type: svc } : {}), entry }));
     window.fbq?.("track", "ViewContent", { content_name: "intake" });
     window.gtag?.("event", "view_content", { content_name: "intake" });
     (window.dataLayer = window.dataLayer || []).push({ event: "view_content", funnel: entry });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // After any rerender into a typed step, re-assert focus on the SAME persistent
+  // node via rAF — keeps the keyboard open without flicker (never remounts it).
   useEffect(() => {
-    if (["from", "to", "name", "phone", "email"].includes(step)) {
-      const t = setTimeout(() => inputRef.current?.focus(), 60);
-      return () => clearTimeout(t);
-    }
-  }, [step]);
+    if (!isTyped) return;
+    const id = requestAnimationFrame(() => inputRef.current?.focus());
+    return () => cancelAnimationFrame(id);
+  }, [step, isTyped]);
 
   function persist(next: IntakeData) {
     try {
@@ -129,15 +167,13 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
       return next;
     });
   }
-  function advance() {
-    setErr("");
-    setIdx((i) => Math.min(i + 1, steps.length - 1));
-  }
   function back() {
     setErr("");
     setIdx((i) => Math.max(i - 1, 0));
   }
-  function pick<K extends keyof IntakeData>(key: K, val: IntakeData[K]) {
+
+  // Chip → chip (language, service): no keyboard involved; brief feedback delay.
+  function pickChip<K extends keyof IntakeData>(key: K, val: IntakeData[K]) {
     markStart();
     setData((d) => {
       const next = { ...d, [key]: val } as IntakeData;
@@ -146,8 +182,23 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
       return next;
     });
     setErr("");
-    setTimeout(() => setIdx((i) => Math.min(i + 1, steps.length - 1)), 160);
+    setTimeout(() => setIdx((i) => Math.min(i + 1, steps.length - 1)), 140);
   }
+
+  // Chip → first text (job): focus the persistent input IN-GESTURE so the iOS /
+  // in-app keyboard opens, then advance. No unmount, no blur, no delay.
+  function pickJob(val: JobType) {
+    markStart();
+    setData((d) => {
+      const next = { ...d, job_type: val };
+      persist(next);
+      return next;
+    });
+    setErr("");
+    inputRef.current?.focus(); // synchronous, inside the pointer gesture
+    setIdx((i) => Math.min(i + 1, steps.length - 1));
+  }
+
   function fail(m: string) {
     setErr(m);
     return false;
@@ -166,15 +217,22 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     }
     return true;
   }
-  async function next() {
+
+  // Advance the typed steps. Triggered from the Continue button's pointerdown
+  // (which preventDefaults so it never blurs the input) and from Enter.
+  function next() {
     markStart();
     if (!validateTyped()) return;
     if (step !== "email") {
-      advance();
+      setErr("");
+      setIdx((i) => Math.min(i + 1, steps.length - 1));
+      // keep the same node focused across the step change
+      requestAnimationFrame(() => inputRef.current?.focus());
       return;
     }
-    await submit();
+    void submit();
   }
+
   async function submit() {
     if (submitting) return;
     setSubmitting(true);
@@ -213,7 +271,12 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
 
   const pct = Math.round(((idx + 1) / steps.length) * 100);
   const jobOpts = data.service_type ? JOB_OPTIONS[data.service_type as ServiceType] : [];
-  const isTyped = ["from", "to", "name", "phone", "email"].includes(step);
+  const QMAP: Record<StepId, string> = {
+    language: COPY.langQ[L], service: COPY.serviceQ[L], job: COPY.jobQ[L],
+    from: COPY.fromQ[L], to: COPY.toQ[L], name: COPY.nameQ[L],
+    phone: COPY.phoneQ[L], email: COPY.emailQ[L],
+  };
+  const hint = step === "phone" ? COPY.phoneHint[L] : step === "email" ? COPY.emailHint[L] : "";
 
   return (
     <div className={styles.shell}>
@@ -238,92 +301,81 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
         </div>
 
         <div className={styles.body} aria-live="polite">
-          {step === "language" && (
-            <Step q={COPY.langQ[L]}>
+          {/* Question + chips remount per step (animate). The input below is a
+              SIBLING with a stable key and never remounts. */}
+          <div className={styles.step} key={step}>
+            <h2 className={styles.q}>{QMAP[step]}</h2>
+
+            {step === "language" && (
               <div className={styles.chips}>
                 {LANG_OPTIONS.map((o) => (
                   <button key={o.value} type="button"
                     className={`${styles.chip} ${data.language === o.value ? styles.on : ""}`}
-                    onClick={() => pick("language", o.value as Lang)}>
+                    onPointerDown={(e) => { e.preventDefault(); pickChip("language", o.value as Lang); }}>
                     {o.label[L]}
                   </button>
                 ))}
               </div>
-            </Step>
-          )}
-
-          {step === "service" && (
-            <Step q={COPY.serviceQ[L]}>
+            )}
+            {step === "service" && (
               <div className={styles.chips}>
                 {SERVICE_OPTIONS.map((o) => (
                   <button key={o.value} type="button"
                     className={`${styles.chip} ${data.service_type === o.value ? styles.on : ""}`}
-                    onClick={() => pick("service_type", o.value)}>
+                    onPointerDown={(e) => { e.preventDefault(); pickChip("service_type", o.value); }}>
                     {o.label[L]}
                   </button>
                 ))}
               </div>
-            </Step>
-          )}
-
-          {step === "job" && (
-            <Step q={COPY.jobQ[L]}>
+            )}
+            {step === "job" && (
               <div className={styles.chipsGrid}>
                 {jobOpts.map((o) => (
                   <button key={o.value} type="button"
                     className={`${styles.chip} ${data.job_type === o.value ? styles.on : ""}`}
-                    onClick={() => pick("job_type", o.value as JobType)}>
+                    onPointerDown={(e) => { e.preventDefault(); pickJob(o.value as JobType); }}>
                     {o.label[L]}
                   </button>
                 ))}
               </div>
-            </Step>
-          )}
+            )}
+          </div>
 
-          {step === "from" && (
-            <Step q={COPY.fromQ[L]} err={err}>
-              <input ref={inputRef} className={styles.input} inputMode="numeric"
-                autoComplete="postal-code" maxLength={5} placeholder={COPY.fromPh[L]}
-                value={data.from_zip}
-                onChange={(e) => set("from_zip", e.target.value.replace(/\D/g, "").slice(0, 5))}
-                onKeyDown={(e) => e.key === "Enter" && next()} />
-            </Step>
-          )}
-          {step === "to" && (
-            <Step q={COPY.toQ[L]} err={err}>
-              <input ref={inputRef} className={styles.input} autoComplete="postal-code"
-                placeholder={COPY.toPh[L]} value={data.to_location}
-                onChange={(e) => set("to_location", e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && next()} />
-            </Step>
-          )}
-          {step === "name" && (
-            <Step q={COPY.nameQ[L]} err={err}>
-              <input ref={inputRef} className={styles.input} autoComplete="name"
-                placeholder={COPY.namePh[L]} value={data.full_name}
-                onChange={(e) => set("full_name", e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && next()} />
-            </Step>
-          )}
-          {step === "phone" && (
-            <Step q={COPY.phoneQ[L]} err={err} hint={COPY.phoneHint[L]}>
-              <input ref={inputRef} className={styles.input} type="tel" inputMode="tel"
-                autoComplete="tel" placeholder={COPY.phonePh[L]} value={data.phone}
-                onChange={(e) => set("phone", fmtPhone(e.target.value))}
-                onKeyDown={(e) => e.key === "Enter" && next()} />
-            </Step>
-          )}
-          {step === "email" && (
-            <Step q={COPY.emailQ[L]} err={err} hint={COPY.emailHint[L]}>
-              <input ref={inputRef} className={styles.input} type="email" inputMode="email"
-                autoComplete="email" placeholder={COPY.emailPh[L]} value={data.email}
-                onChange={(e) => set("email", e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && next()} />
-            </Step>
-          )}
+          {/* PERSISTENT INPUT — always mounted, stable key, never remounts.
+              Hidden (focusable) on chip steps; visible on typed steps. */}
+          <input
+            key="intake-typed-input"
+            ref={inputRef}
+            className={isTyped ? styles.input : styles.inputHidden}
+            type="text"
+            inputMode={field.im}
+            autoComplete={field.ac}
+            maxLength={field.max}
+            placeholder={isTyped ? field.ph : ""}
+            value={field.value}
+            tabIndex={isTyped ? 0 : -1}
+            aria-hidden={!isTyped}
+            onChange={(e) => field.set(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                next();
+              }
+            }}
+          />
+
+          {isTyped && hint ? <p className={styles.hint}>{hint}</p> : null}
+          {err ? <p className={styles.err}>{err}</p> : null}
 
           {isTyped && (
-            <button type="button" className={styles.cta} disabled={submitting} onClick={next}>
+            <button
+              type="button"
+              className={styles.cta}
+              disabled={submitting}
+              // pointerdown + preventDefault: advance in-gesture WITHOUT blurring
+              // the input, so the keyboard never closes between steps.
+              onPointerDown={(e) => { e.preventDefault(); next(); }}
+            >
               {step === "email"
                 ? submitting ? COPY.sending[L] : COPY.submit[L]
                 : COPY.continue[L]}
@@ -368,27 +420,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
 
         <p className={styles.rating}>{COPY.ratingLine[L]}</p>
       </aside>
-    </div>
-  );
-}
-
-function Step({
-  q,
-  err,
-  hint,
-  children,
-}: {
-  q: string;
-  err?: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className={styles.step}>
-      <h2 className={styles.q}>{q}</h2>
-      {children}
-      {hint ? <p className={styles.hint}>{hint}</p> : null}
-      {err ? <p className={styles.err}>{err}</p> : null}
     </div>
   );
 }

@@ -70,9 +70,28 @@
 }
 
 .body {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
+}
+
+/* Persistent input while on a chip step: kept in the DOM and focusable (so the
+   chip→text tap can open the keyboard in-gesture) but visually collapsed. NOT
+   display:none — iOS won't open the keyboard for a display:none element. */
+.inputHidden {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+  font-size: 16px;
 }
 .step {
   animation: rise 0.22s ease both;
