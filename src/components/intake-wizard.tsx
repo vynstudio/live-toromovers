@@ -350,6 +350,7 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
             className={isTyped ? styles.input : styles.inputHidden}
             type="text"
             inputMode={field.im}
+            enterKeyHint={step === "email" ? "send" : "next"}
             autoComplete={field.ac}
             maxLength={field.max}
             placeholder={isTyped ? field.ph : ""}
@@ -358,6 +359,7 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
             aria-hidden={!isTyped}
             onChange={(e) => field.set(e.target.value)}
             onKeyDown={(e) => {
+              // Return/"next" key advances WITHOUT blurring → keyboard stays open.
               if (e.key === "Enter") {
                 e.preventDefault();
                 next();
@@ -373,9 +375,11 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
               type="button"
               className={styles.cta}
               disabled={submitting}
-              // pointerdown + preventDefault: advance IN-GESTURE without blurring
-              // the input (the button never takes focus), then re-assert focus on
-              // the SAME persistent node so the keyboard never closes/flickers.
+              tabIndex={-1}
+              // Never let the button take focus / blur the input (that closes the
+              // keyboard). preventDefault on BOTH mousedown + pointerdown, advance
+              // in-gesture, then re-assert focus on the same persistent node.
+              onMouseDown={(e) => e.preventDefault()}
               onPointerDown={(e) => {
                 e.preventDefault();
                 next();
