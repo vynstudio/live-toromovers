@@ -91,7 +91,6 @@
   border: 0;
   background: transparent;
   pointer-events: none; /* don't intercept chip taps; we focus it via JS */
-  z-index: -1; /* sits behind the visible chip content, invisible */
   font-size: 16px;
 }
 .step {
