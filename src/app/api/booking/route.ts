@@ -60,17 +60,11 @@ export async function POST(req: Request) {
     `${q.email}`,
     `${q.phone}`,
     `Source: ${q.source || "—"}`,
-    ``,
-    `— — — copy to notifi.co — — —`,
-    fullName,
-    q.phone,
-    q.email,
   ].join("\n");
 
   // Instant customer confirmation (Resend email + OpenPhone SMS) + internal lead
-  // alerts (team email + Telegram) + Meta CAPI + HubSpot upsert. The longer
-  // follow-up sequence runs in notifi.co after the lead is added there manually
-  // (notifi has no API). All in parallel; none can block the others.
+  // alerts (team email + Telegram) + Meta CAPI + HubSpot upsert. All in
+  // parallel; none can block the others.
   const results = await Promise.allSettled([
     sendEmail(q, help, fromRes, toRes, fromFloor, toFloor, size, distance, fullName, text),
     sendTelegram(text, q),
@@ -316,7 +310,7 @@ async function sendMetaCapi(
 
 /** Confirmation email to the CUSTOMER (separate from the lead-notification
  *  email that goes to hello@toromovers.net). Friendly, short, no quote yet —
- *  Diler closes the price on the phone. notifi.co handles the longer follow-up. */
+ *  Diler closes the price on the phone. */
 async function sendClientConfirmationEmail(
   q: QuoteInput,
   fullName: string,
