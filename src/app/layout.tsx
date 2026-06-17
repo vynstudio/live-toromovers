@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Schibsted_Grotesk, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
 import { Analytics } from "@/components/analytics";
@@ -15,19 +16,16 @@ import {
   POSTAL_CODE,
 } from "@/lib/contact";
 
-// Minimalist display face — clean modern grotesque replacing the old serif.
-// Variable kept as --font-serif to avoid churning ~25 heading rules; it now
-// resolves to Schibsted Grotesk everywhere the display face is used.
-const serif = Schibsted_Grotesk({
+// Display face for headings — GC Commune (inktrap serif), self-hosted.
+// Variable kept as --font-serif so all ~25 heading rules pick it up unchanged.
+const serif = localFont({
+  src: [{ path: "./fonts/gc-commune.woff2", weight: "400", style: "normal" }],
   variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
 // Body/UI stays on Inter (optimized for small sizes / readability); the
-// Schibsted grotesque is reserved for display headings via --font-serif.
+// GC Commune serif is reserved for display headings via --font-serif.
 const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
