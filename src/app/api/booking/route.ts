@@ -375,6 +375,10 @@ async function createHubspotContact(
 
   // Upsert by email when we have one (avoids dupes on repeat requests);
   // otherwise plain create.
+  const h = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
   const useUpsert = Boolean(q.email);
   const url = useUpsert
     ? "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert"
@@ -383,13 +387,11 @@ async function createHubspotContact(
     ? { inputs: [{ idProperty: "email", id: q.email, properties }] }
     : { properties };
 
+  let contactId: string | undefined;
   try {
     const res = await fetch(url, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: h,
       body: JSON.stringify(payload),
     });
     if (!res.ok) {
@@ -397,9 +399,48 @@ async function createHubspotContact(
       console.error("[booking] HubSpot failed:", res.status, detail, "lead:", q.email || q.phone);
       return false;
     }
-    return true;
+    const d = await res.json().catch(() => null);
+    contactId = useUpsert ? d?.results?.[0]?.id : d?.id;
   } catch (err) {
     console.error("[booking] HubSpot threw:", err, "lead:", q.email || q.phone);
     return false;
   }
+
+  // Create a deal in the "Mudanzas" pipeline (New Lead stage) when the contact
+  // has none yet — so quote-wizard leads land in the same pipeline as the
+  // ad-funnel leads instead of sitting as a contact with no deal.
+  if (contactId) {
+    try {
+      const a = await fetch(
+        `https://api.hubapi.com/crm/v3/objects/contacts/${contactId}/associations/deals`,
+        { headers: h },
+      );
+      const has =
+        a.ok && (((await a.json().catch(() => ({}))).results) || []).length > 0;
+      if (!has) {
+        await fetch("https://api.hubapi.com/crm/v3/objects/deals", {
+          method: "POST",
+          headers: h,
+          body: JSON.stringify({
+            properties: {
+              dealname: `${fullName} — ${help}`,
+              pipeline: "2345196253",
+              dealstage: "3821600460",
+            },
+            associations: [
+              {
+                to: { id: contactId },
+                types: [
+                  { associationCategory: "HUBSPOT_DEFINED", associationTypeId: 3 },
+                ],
+              },
+            ],
+          }),
+        });
+      }
+    } catch {
+      /* contact upserted — still a success even if the deal step fails */
+    }
+  }
+  return true;
 }
