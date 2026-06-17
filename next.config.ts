@@ -76,6 +76,12 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
+  async rewrites() {
+    // Serve the static paid-traffic funnel (public/get-quote.html) at the clean
+    // /get-quote URL. Meta ads point here; query strings (UTMs/fbclid) pass
+    // through automatically. The page posts to /api/ad-funnel.
+    return [{ source: "/get-quote", destination: "/get-quote.html" }];
+  },
   async redirects() {
     return [
       ...AD_LANDING_PATHS.map((source) => ({
@@ -84,8 +90,6 @@ const nextConfig: NextConfig = {
         permanent: false,
       })),
       { source: "/quote-lp/:path*", destination: AD_LP, permanent: false },
-      // Quote-intent slug → full wizard (not the ad LP) since intent is explicit.
-      { source: "/get-quote", destination: "/quote", permanent: false },
       // Old destinations still live in paused Meta ads (winner "Quote LP"
       // campaign). Without these they 404 on reactivation. Query strings
       // (UTMs/fbclid) are preserved automatically. "/mudanza" is a Spanish ad.
