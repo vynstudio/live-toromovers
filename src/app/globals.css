@@ -894,7 +894,7 @@ nav.top.scrolled { border-bottom-color: var(--line); padding: 12px 24px; }
    Right column = photo as a contained, framed object (no longer a full-bleed
    background fighting the text). Mobile-first: text stacks above the image. */
 .hero--split {
-  align-items: flex-end; /* anchor the whole hero block toward the bottom */
+  align-items: center; /* center the whole hero block between nav and trust bar */
   text-align: left;
   background: #fff; /* white base */
   color: var(--ink);
