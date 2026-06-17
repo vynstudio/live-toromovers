@@ -228,11 +228,11 @@ export const content: { en: ContentShape; es: ContentShape } = {
     },
     hero: {
       badge: "4.9★ on Google · Insured, family-owned · Central Florida",
-      h1Line1: "Central Florida",
-      h1Line2: "movers.",
+      h1Line1: "Central Florida movers.",
+      h1Line2: "",
       h1Line3: "No hidden fees.",
       lede:
-        "Family-owned moving company serving Orlando, Kissimmee, Lake Nona, Winter Garden, Clermont and 30+ Central Florida cities. Loading, unloading, packing, and full-service moves with our truck. Quote in 60 seconds — no hidden fees.",
+        "Our bilingual, family-owned crew serves Orlando and Central Florida with honest hourly pricing for apartment, home, and office moves.",
       ctaPrimary: "Get free quote",
       ctaSecondary: "Call now · (689) 600-2720",
       note: "Up-front hourly pricing · 2-hour minimum · Bilingual crew · Same-week dates",

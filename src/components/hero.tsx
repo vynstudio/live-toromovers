@@ -21,8 +21,12 @@ export function Hero() {
           </div>
           <h1>
             {t.hero.h1Line1}
-            <br />
-            {t.hero.h1Line2}
+            {t.hero.h1Line2 ? (
+              <>
+                <br />
+                {t.hero.h1Line2}
+              </>
+            ) : null}
             <span className="accent">{t.hero.h1Line3}</span>
           </h1>
           <p className="hero-lede">{t.hero.lede}</p>
