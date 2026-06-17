@@ -172,6 +172,57 @@ export const COPY = {
     en: "★ 4.9 Google · Family-owned · Insured · No hidden fees",
     es: "★ 4.9 Google · Familiar · Asegurados · Sin costos ocultos",
   },
+  stepOf: { en: "Step", es: "Paso" },
+  stepOfMid: { en: "of", es: "de" },
+  phoneHint: {
+    en: "We'll only use this to confirm your quote and scheduling — no spam.",
+    es: "Solo lo usamos para confirmar tu cotización y agenda — sin spam.",
+  },
+  emailHint: {
+    en: "Your quote and next steps land here. No spam, ever.",
+    es: "Tu cotización y los próximos pasos llegan aquí. Sin spam.",
+  },
+  panelKicker: { en: "Why Toro Movers", es: "Por qué Toro Movers" },
+  panelHeadline: {
+    en: "Fast, accurate moving quotes from a local team you can trust.",
+    es: "Cotizaciones rápidas y precisas de un equipo local de confianza.",
+  },
+  panelBullets: {
+    en: [
+      "Licensed & insured movers",
+      "Upfront pricing — no hidden fees",
+      "4.9★ rated, family-owned",
+      "We call you fast to confirm details",
+    ],
+    es: [
+      "Mudanceros con licencia y seguro",
+      "Precios claros — sin costos ocultos",
+      "Calificación 4.9★, empresa familiar",
+      "Te llamamos rápido para confirmar detalles",
+    ],
+  },
+  nextTitle: { en: "What happens next", es: "Qué sigue" },
+  nextSteps: {
+    en: [
+      "Enter your contact details",
+      "Confirm your move info",
+      "Get your quote & next steps",
+    ],
+    es: [
+      "Ingresa tus datos de contacto",
+      "Confirma los datos de tu mudanza",
+      "Recibe tu precio y los siguientes pasos",
+    ],
+  },
+  reviewQuote: {
+    en: "“On time, professional, and careful with everything. Made my move completely stress-free.”",
+    es: "“Puntuales, profesionales y cuidadosos con todo. Hicieron mi mudanza sin estrés.”",
+  },
+  reviewAuthor: { en: "Stael G. · Google review", es: "Stael G. · reseña de Google" },
+  ratingLine: {
+    en: "4.9 ★ on Google · 100+ Central Florida moves",
+    es: "4.9 ★ en Google · 100+ mudanzas en Florida Central",
+  },
 } as const;
 
 // ---------------------------------------------------------------------------

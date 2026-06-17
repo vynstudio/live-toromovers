@@ -1,11 +1,13 @@
 "use client";
 
 // Shared, mobile-first intake engine. Rendered identically by the homepage
-// (/quote) and the ad funnel (/get-quote). One container, one question at a
-// time, chips with auto-advance, masks + browser autocomplete, branching, and
-// a single submit path (/api/ad-funnel) via the CRM mapping layer. Tracking
-// (Pixel/GA4/CAPI dedup) is preserved: ViewContent on load, FormStart on first
-// interaction, Lead on submit (shared eventId).
+// (/quote) and the ad funnel (/get-quote). A substantial 2-column shell:
+// LEFT = the active form step (focal point), RIGHT = a softer trust /
+// reassurance panel. Stacks to a single column (form first) on mobile. One
+// container, one question at a time, chips with auto-advance, masks + browser
+// autocomplete, branching, and a single submit path (/api/ad-funnel) via the
+// CRM mapping layer. Tracking preserved: ViewContent (load), FormStart (first
+// interaction), Lead (submit) with shared eventId for CAPI dedup.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -67,7 +69,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const L: Lang = data.language;
 
-  // Branching: skip the destination step for single-location container jobs.
   const steps = useMemo<StepId[]>(() => {
     const base: StepId[] = ["language", "service", "job", "from", "to", "name", "phone", "email"];
     if (data.job_type && SINGLE_LOCATION_JOBS.includes(data.job_type)) {
@@ -78,7 +79,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
 
   const step = steps[Math.min(idx, steps.length - 1)];
 
-  // On mount: restore + capture attribution + service preset + ViewContent.
   useEffect(() => {
     let restored: Partial<IntakeData> = {};
     try {
@@ -101,7 +101,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Focus the text input when a typed step shows.
   useEffect(() => {
     if (["from", "to", "name", "phone", "email"].includes(step)) {
       const t = setTimeout(() => inputRef.current?.focus(), 60);
@@ -138,13 +137,10 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     setErr("");
     setIdx((i) => Math.max(i - 1, 0));
   }
-
-  // Chip pick → set, mark start, auto-advance.
   function pick<K extends keyof IntakeData>(key: K, val: IntakeData[K]) {
     markStart();
     setData((d) => {
       const next = { ...d, [key]: val } as IntakeData;
-      // Reset job if service changes so options stay valid.
       if (key === "service_type") next.job_type = "";
       persist(next);
       return next;
@@ -152,7 +148,10 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     setErr("");
     setTimeout(() => setIdx((i) => Math.min(i + 1, steps.length - 1)), 160);
   }
-
+  function fail(m: string) {
+    setErr(m);
+    return false;
+  }
   function validateTyped(): boolean {
     if (step === "from") {
       if (!/^\d{5}$/.test(data.from_zip.trim())) return fail(COPY.badZip[L]);
@@ -167,11 +166,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     }
     return true;
   }
-  function fail(m: string) {
-    setErr(m);
-    return false;
-  }
-
   async function next() {
     markStart();
     if (!validateTyped()) return;
@@ -181,17 +175,11 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     }
     await submit();
   }
-
   async function submit() {
     if (submitting) return;
     setSubmitting(true);
     const event_id = newEventId();
-    const payload: IntakeData = {
-      ...data,
-      submitted_at: new Date().toISOString(),
-      event_id,
-    };
-    // GA4 + dataLayer lead, then Pixel Lead (deduped server-side via eventId).
+    const payload: IntakeData = { ...data, submitted_at: new Date().toISOString(), event_id };
     window.gtag?.("event", "generate_lead", {
       service: payload.service_type,
       job: payload.job_type,
@@ -225,163 +213,161 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
 
   const pct = Math.round(((idx + 1) / steps.length) * 100);
   const jobOpts = data.service_type ? JOB_OPTIONS[data.service_type as ServiceType] : [];
+  const isTyped = ["from", "to", "name", "phone", "email"].includes(step);
 
   return (
-    <div className={styles.wiz} aria-live="polite">
-      <div className={styles.bar}>
-        <span style={{ width: `${pct}%` }} />
+    <div className={styles.shell}>
+      {/* ============ LEFT: FORM (focal) ============ */}
+      <div className={styles.formCol}>
+        <div className={styles.head}>
+          <div className={styles.headTop}>
+            {idx > 0 ? (
+              <button type="button" className={styles.back} onClick={back}>
+                ← {COPY.back[L]}
+              </button>
+            ) : (
+              <span className={styles.brandTag}>TORO·MOVERS</span>
+            )}
+            <span className={styles.stepNum}>
+              {COPY.stepOf[L]} {idx + 1} {COPY.stepOfMid[L]} {steps.length}
+            </span>
+          </div>
+          <div className={styles.bar}>
+            <span style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+
+        <div className={styles.body} aria-live="polite">
+          {step === "language" && (
+            <Step q={COPY.langQ[L]}>
+              <div className={styles.chips}>
+                {LANG_OPTIONS.map((o) => (
+                  <button key={o.value} type="button"
+                    className={`${styles.chip} ${data.language === o.value ? styles.on : ""}`}
+                    onClick={() => pick("language", o.value as Lang)}>
+                    {o.label[L]}
+                  </button>
+                ))}
+              </div>
+            </Step>
+          )}
+
+          {step === "service" && (
+            <Step q={COPY.serviceQ[L]}>
+              <div className={styles.chips}>
+                {SERVICE_OPTIONS.map((o) => (
+                  <button key={o.value} type="button"
+                    className={`${styles.chip} ${data.service_type === o.value ? styles.on : ""}`}
+                    onClick={() => pick("service_type", o.value)}>
+                    {o.label[L]}
+                  </button>
+                ))}
+              </div>
+            </Step>
+          )}
+
+          {step === "job" && (
+            <Step q={COPY.jobQ[L]}>
+              <div className={styles.chipsGrid}>
+                {jobOpts.map((o) => (
+                  <button key={o.value} type="button"
+                    className={`${styles.chip} ${data.job_type === o.value ? styles.on : ""}`}
+                    onClick={() => pick("job_type", o.value as JobType)}>
+                    {o.label[L]}
+                  </button>
+                ))}
+              </div>
+            </Step>
+          )}
+
+          {step === "from" && (
+            <Step q={COPY.fromQ[L]} err={err}>
+              <input ref={inputRef} className={styles.input} inputMode="numeric"
+                autoComplete="postal-code" maxLength={5} placeholder={COPY.fromPh[L]}
+                value={data.from_zip}
+                onChange={(e) => set("from_zip", e.target.value.replace(/\D/g, "").slice(0, 5))}
+                onKeyDown={(e) => e.key === "Enter" && next()} />
+            </Step>
+          )}
+          {step === "to" && (
+            <Step q={COPY.toQ[L]} err={err}>
+              <input ref={inputRef} className={styles.input} autoComplete="postal-code"
+                placeholder={COPY.toPh[L]} value={data.to_location}
+                onChange={(e) => set("to_location", e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && next()} />
+            </Step>
+          )}
+          {step === "name" && (
+            <Step q={COPY.nameQ[L]} err={err}>
+              <input ref={inputRef} className={styles.input} autoComplete="name"
+                placeholder={COPY.namePh[L]} value={data.full_name}
+                onChange={(e) => set("full_name", e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && next()} />
+            </Step>
+          )}
+          {step === "phone" && (
+            <Step q={COPY.phoneQ[L]} err={err} hint={COPY.phoneHint[L]}>
+              <input ref={inputRef} className={styles.input} type="tel" inputMode="tel"
+                autoComplete="tel" placeholder={COPY.phonePh[L]} value={data.phone}
+                onChange={(e) => set("phone", fmtPhone(e.target.value))}
+                onKeyDown={(e) => e.key === "Enter" && next()} />
+            </Step>
+          )}
+          {step === "email" && (
+            <Step q={COPY.emailQ[L]} err={err} hint={COPY.emailHint[L]}>
+              <input ref={inputRef} className={styles.input} type="email" inputMode="email"
+                autoComplete="email" placeholder={COPY.emailPh[L]} value={data.email}
+                onChange={(e) => set("email", e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && next()} />
+            </Step>
+          )}
+
+          {isTyped && (
+            <button type="button" className={styles.cta} disabled={submitting} onClick={next}>
+              {step === "email"
+                ? submitting ? COPY.sending[L] : COPY.submit[L]
+                : COPY.continue[L]}
+            </button>
+          )}
+
+          <p className={styles.note}>{COPY.trust[L]}</p>
+        </div>
       </div>
 
-      <div className={styles.card}>
-        {idx > 0 && (
-          <button type="button" className={styles.back} onClick={back}>
-            ← {COPY.back[L]}
-          </button>
-        )}
+      {/* ============ RIGHT: TRUST PANEL (softer, secondary) ============ */}
+      <aside className={styles.trustCol}>
+        <span className={styles.kicker}>{COPY.panelKicker[L]}</span>
+        <h3 className={styles.trustH}>{COPY.panelHeadline[L]}</h3>
 
-        {/* ----- CHIP STEPS ----- */}
-        {step === "language" && (
-          <Step q={COPY.langQ[L]}>
-            <div className={styles.chips}>
-              {LANG_OPTIONS.map((o) => (
-                <button
-                  key={o.value}
-                  type="button"
-                  className={`${styles.chip} ${data.language === o.value ? styles.on : ""}`}
-                  onClick={() => pick("language", o.value as Lang)}
-                >
-                  {o.label[L]}
-                </button>
-              ))}
-            </div>
-          </Step>
-        )}
+        <ul className={styles.checks}>
+          {COPY.panelBullets[L].map((b) => (
+            <li key={b}>
+              <span className={styles.tick} aria-hidden>✓</span>
+              {b}
+            </li>
+          ))}
+        </ul>
 
-        {step === "service" && (
-          <Step q={COPY.serviceQ[L]}>
-            <div className={styles.chips}>
-              {SERVICE_OPTIONS.map((o) => (
-                <button
-                  key={o.value}
-                  type="button"
-                  className={`${styles.chip} ${data.service_type === o.value ? styles.on : ""}`}
-                  onClick={() => pick("service_type", o.value)}
-                >
-                  {o.label[L]}
-                </button>
-              ))}
-            </div>
-          </Step>
-        )}
+        <div className={styles.nextBox}>
+          <p className={styles.nextT}>{COPY.nextTitle[L]}</p>
+          <ol className={styles.nextSteps}>
+            {COPY.nextSteps[L].map((s, i) => (
+              <li key={s}>
+                <span className={styles.nextNum}>{i + 1}</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
 
-        {step === "job" && (
-          <Step q={COPY.jobQ[L]}>
-            <div className={styles.chipsGrid}>
-              {jobOpts.map((o) => (
-                <button
-                  key={o.value}
-                  type="button"
-                  className={`${styles.chip} ${data.job_type === o.value ? styles.on : ""}`}
-                  onClick={() => pick("job_type", o.value as JobType)}
-                >
-                  {o.label[L]}
-                </button>
-              ))}
-            </div>
-          </Step>
-        )}
+        <figure className={styles.review}>
+          <div className={styles.stars} aria-hidden>★★★★★</div>
+          <blockquote>{COPY.reviewQuote[L]}</blockquote>
+          <figcaption>{COPY.reviewAuthor[L]}</figcaption>
+        </figure>
 
-        {/* ----- TYPED STEPS ----- */}
-        {step === "from" && (
-          <Step q={COPY.fromQ[L]} err={err}>
-            <input
-              ref={inputRef}
-              className={styles.input}
-              inputMode="numeric"
-              autoComplete="postal-code"
-              maxLength={5}
-              placeholder={COPY.fromPh[L]}
-              value={data.from_zip}
-              onChange={(e) => set("from_zip", e.target.value.replace(/\D/g, "").slice(0, 5))}
-              onKeyDown={(e) => e.key === "Enter" && next()}
-            />
-          </Step>
-        )}
-        {step === "to" && (
-          <Step q={COPY.toQ[L]} err={err}>
-            <input
-              ref={inputRef}
-              className={styles.input}
-              autoComplete="postal-code"
-              placeholder={COPY.toPh[L]}
-              value={data.to_location}
-              onChange={(e) => set("to_location", e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && next()}
-            />
-          </Step>
-        )}
-        {step === "name" && (
-          <Step q={COPY.nameQ[L]} err={err}>
-            <input
-              ref={inputRef}
-              className={styles.input}
-              autoComplete="name"
-              placeholder={COPY.namePh[L]}
-              value={data.full_name}
-              onChange={(e) => set("full_name", e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && next()}
-            />
-          </Step>
-        )}
-        {step === "phone" && (
-          <Step q={COPY.phoneQ[L]} err={err}>
-            <input
-              ref={inputRef}
-              className={styles.input}
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder={COPY.phonePh[L]}
-              value={data.phone}
-              onChange={(e) => set("phone", fmtPhone(e.target.value))}
-              onKeyDown={(e) => e.key === "Enter" && next()}
-            />
-          </Step>
-        )}
-        {step === "email" && (
-          <Step q={COPY.emailQ[L]} err={err}>
-            <input
-              ref={inputRef}
-              className={styles.input}
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              placeholder={COPY.emailPh[L]}
-              value={data.email}
-              onChange={(e) => set("email", e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && next()}
-            />
-          </Step>
-        )}
-
-        {/* Continue / Submit only on typed steps (chips auto-advance) */}
-        {["from", "to", "name", "phone", "email"].includes(step) && (
-          <button
-            type="button"
-            className={styles.cta}
-            disabled={submitting}
-            onClick={next}
-          >
-            {step === "email"
-              ? submitting
-                ? COPY.sending[L]
-                : COPY.submit[L]
-              : COPY.continue[L]}
-          </button>
-        )}
-
-        <p className={styles.trust}>{COPY.trust[L]}</p>
-      </div>
+        <p className={styles.rating}>{COPY.ratingLine[L]}</p>
+      </aside>
     </div>
   );
 }
@@ -389,16 +375,19 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
 function Step({
   q,
   err,
+  hint,
   children,
 }: {
   q: string;
   err?: string;
+  hint?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className={styles.step}>
       <h2 className={styles.q}>{q}</h2>
       {children}
+      {hint ? <p className={styles.hint}>{hint}</p> : null}
       {err ? <p className={styles.err}>{err}</p> : null}
     </div>
   );
