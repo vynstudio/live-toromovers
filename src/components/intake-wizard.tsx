@@ -138,14 +138,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // After any rerender into a typed step, re-assert focus on the SAME persistent
-  // node via rAF — keeps the keyboard open without flicker (never remounts it).
-  useEffect(() => {
-    if (!isTyped) return;
-    const id = requestAnimationFrame(() => inputRef.current?.focus());
-    return () => cancelAnimationFrame(id);
-  }, [step, isTyped]);
-
   function persist(next: IntakeData) {
     try {
       localStorage.setItem(STORE, JSON.stringify(next));
@@ -183,20 +175,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     });
     setErr("");
     setTimeout(() => setIdx((i) => Math.min(i + 1, steps.length - 1)), 140);
-  }
-
-  // Chip → first text (job): focus the persistent input IN-GESTURE so the iOS /
-  // in-app keyboard opens, then advance. No unmount, no blur, no delay.
-  function pickJob(val: JobType) {
-    markStart();
-    setData((d) => {
-      const next = { ...d, job_type: val };
-      persist(next);
-      return next;
-    });
-    setErr("");
-    inputRef.current?.focus(); // synchronous, inside the pointer gesture
-    setIdx((i) => Math.min(i + 1, steps.length - 1));
   }
 
   function fail(m: string) {
@@ -334,7 +312,7 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
                 {jobOpts.map((o) => (
                   <button key={o.value} type="button"
                     className={`${styles.chip} ${data.job_type === o.value ? styles.on : ""}`}
-                    onPointerDown={(e) => { e.preventDefault(); pickJob(o.value as JobType); }}>
+                    onPointerDown={(e) => { e.preventDefault(); pickChip("job_type", o.value as JobType); }}>
                     {o.label[L]}
                   </button>
                 ))}
@@ -342,30 +320,31 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
             )}
           </div>
 
-          {/* PERSISTENT INPUT — always mounted, stable key, never remounts.
-              Hidden (focusable) on chip steps; visible on typed steps. */}
-          <input
-            key="intake-typed-input"
-            ref={inputRef}
-            className={isTyped ? styles.input : styles.inputHidden}
-            type="text"
-            inputMode={field.im}
-            enterKeyHint={step === "email" ? "send" : "next"}
-            autoComplete={field.ac}
-            maxLength={field.max}
-            placeholder={isTyped ? field.ph : ""}
-            value={field.value}
-            tabIndex={isTyped ? 0 : -1}
-            aria-hidden={!isTyped}
-            onChange={(e) => field.set(e.target.value)}
-            onKeyDown={(e) => {
-              // Return/"next" key advances WITHOUT blurring → keyboard stays open.
-              if (e.key === "Enter") {
-                e.preventDefault();
-                next();
-              }
-            }}
-          />
+          {/* Text input is rendered across ALL typed steps with a stable key, so
+              it never remounts — focus + keyboard survive step changes. The
+              keyboard opens on the native tap (100% reliable on iOS/IG) and the
+              "next"/return key advances WITHOUT blurring, so it stays open. */}
+          {isTyped && (
+            <input
+              key="intake-typed-input"
+              ref={inputRef}
+              className={styles.input}
+              type="text"
+              inputMode={field.im}
+              enterKeyHint={step === "email" ? "send" : "next"}
+              autoComplete={field.ac}
+              maxLength={field.max}
+              placeholder={field.ph}
+              value={field.value}
+              onChange={(e) => field.set(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  next();
+                }
+              }}
+            />
+          )}
 
           {isTyped && hint ? <p className={styles.hint}>{hint}</p> : null}
           {err ? <p className={styles.err}>{err}</p> : null}
