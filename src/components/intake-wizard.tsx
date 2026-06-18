@@ -75,6 +75,7 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
   const [submitting, setSubmitting] = useState(false);
   const startedRef = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
   const L: Lang = data.language;
 
   const steps = useMemo<StepId[]>(() => {
@@ -136,6 +137,24 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     window.gtag?.("event", "view_content", { content_name: "intake" });
     (window.dataLayer = window.dataLayer || []).push({ event: "view_content", funnel: entry });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Blur-proof the Continue button. React attaches touch listeners as PASSIVE,
+  // so onTouchStart preventDefault is ignored — and on iOS the default touch
+  // action moves focus to the button, blurring the input and dismissing the
+  // keyboard. A manual NON-passive touchstart listener preventDefaults that, so
+  // the input keeps focus and the keyboard stays open between steps. The button
+  // is always mounted (display:none on chip steps) so this attaches once.
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const block = (e: Event) => e.preventDefault();
+    el.addEventListener("touchstart", block, { passive: false });
+    el.addEventListener("mousedown", block);
+    return () => {
+      el.removeEventListener("touchstart", block);
+      el.removeEventListener("mousedown", block);
+    };
   }, []);
 
   function persist(next: IntakeData) {
@@ -320,56 +339,53 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
             )}
           </div>
 
-          {/* Text input is rendered across ALL typed steps with a stable key, so
-              it never remounts — focus + keyboard survive step changes. The
-              keyboard opens on the native tap (100% reliable on iOS/IG) and the
-              "next"/return key advances WITHOUT blurring, so it stays open. */}
-          {isTyped && (
-            <input
-              key="intake-typed-input"
-              ref={inputRef}
-              className={styles.input}
-              type="text"
-              inputMode={field.im}
-              enterKeyHint={step === "email" ? "send" : "next"}
-              autoComplete={field.ac}
-              maxLength={field.max}
-              placeholder={field.ph}
-              value={field.value}
-              onChange={(e) => field.set(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  next();
-                }
-              }}
-            />
-          )}
+          {/* Input is ALWAYS mounted with a stable key (display:none on chip
+              steps) so it NEVER remounts — focus + keyboard survive every step
+              change. Native tap opens the keyboard; the return/"next" key
+              advances without blurring; the CTA is blur-proofed via a
+              non-passive touchstart listener (see effect above). */}
+          <input
+            key="intake-typed-input"
+            ref={inputRef}
+            className={isTyped ? styles.input : styles.off}
+            type="text"
+            inputMode={field.im}
+            enterKeyHint={step === "email" ? "send" : "next"}
+            autoComplete={field.ac}
+            maxLength={field.max}
+            placeholder={isTyped ? field.ph : ""}
+            value={field.value}
+            onChange={(e) => field.set(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                next();
+              }
+            }}
+          />
 
           {isTyped && hint ? <p className={styles.hint}>{hint}</p> : null}
           {err ? <p className={styles.err}>{err}</p> : null}
 
-          {isTyped && (
-            <button
-              type="button"
-              className={styles.cta}
-              disabled={submitting}
-              tabIndex={-1}
-              // Never let the button take focus / blur the input (that closes the
-              // keyboard). preventDefault on BOTH mousedown + pointerdown, advance
-              // in-gesture, then re-assert focus on the same persistent node.
-              onMouseDown={(e) => e.preventDefault()}
-              onPointerDown={(e) => {
-                e.preventDefault();
-                next();
-                if (step !== "email") inputRef.current?.focus();
-              }}
-            >
-              {step === "email"
-                ? submitting ? COPY.sending[L] : COPY.submit[L]
-                : COPY.continue[L]}
-            </button>
-          )}
+          {/* Always mounted (display:none on chip steps) so the blur-proof
+              touchstart listener attaches once. Advances in-gesture; the manual
+              non-passive touchstart (effect above) stops it blurring the input. */}
+          <button
+            ref={ctaRef}
+            type="button"
+            className={isTyped ? styles.cta : styles.off}
+            disabled={submitting}
+            tabIndex={-1}
+            onPointerDown={(e) => {
+              e.preventDefault();
+              next();
+              if (step !== "email") inputRef.current?.focus();
+            }}
+          >
+            {step === "email"
+              ? submitting ? COPY.sending[L] : COPY.submit[L]
+              : COPY.continue[L]}
+          </button>
 
           <p className={styles.note}>{COPY.trust[L]}</p>
         </div>
