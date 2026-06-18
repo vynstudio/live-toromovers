@@ -73,13 +73,16 @@ export const LANG_OPTIONS: Opt<Lang>[] = [
 export const SERVICE_OPTIONS: Opt<ServiceType>[] = [
   {
     value: "labor_with_truck",
-    label: { en: "Labor + Truck", es: "Mano de obra + Camión" },
+    label: {
+      en: "Full-service moving — with truck",
+      es: "Mudanza completa — con camión",
+    },
   },
   {
     value: "labor_only",
     label: {
-      en: "Labor only (I have transport)",
-      es: "Solo mano de obra (tengo transporte)",
+      en: "Labor-only moving — no truck",
+      es: "Mudanza solo mano de obra — sin camión",
     },
   },
 ];
@@ -142,7 +145,10 @@ export const SERVICE_LABEL: Record<ServiceType, T> = {
 // Bilingual UI copy.
 export const COPY = {
   langQ: { en: "Choose your language", es: "Elige tu idioma" },
-  serviceQ: { en: "What do you need?", es: "¿Qué necesitas?" },
+  serviceQ: {
+    en: "What kind of moving service?",
+    es: "¿Qué tipo de servicio de mudanza?",
+  },
   jobQ: { en: "What are we moving?", es: "¿Qué vamos a mover?" },
   fromQ: { en: "Moving from — ZIP code", es: "Mudanza desde — código ZIP" },
   toQ: { en: "Moving to — ZIP or city", es: "Mudanza hacia — ZIP o ciudad" },
