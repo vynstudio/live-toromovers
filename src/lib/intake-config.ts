@@ -75,14 +75,14 @@ export const SERVICE_OPTIONS: Opt<ServiceType>[] = [
     value: "labor_with_truck",
     label: {
       en: "Full-service moving — with truck",
-      es: "Mudanza completa — con camión",
+      es: "Mudanza completa — con Truck",
     },
   },
   {
     value: "labor_only",
     label: {
       en: "Labor-only moving — no truck",
-      es: "Mudanza solo mano de obra — sin camión",
+      es: "Mudanza solo mano de obra — sin Truck",
     },
   },
 ];

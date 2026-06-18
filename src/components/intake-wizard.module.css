@@ -76,6 +76,12 @@
   flex: 1;
 }
 
+/* Hidden on chip steps; the input + CTA stay MOUNTED so they never remount and
+   the blur-proof touchstart listener stays attached. */
+.off {
+  display: none !important;
+}
+
 /* Persistent input while on a chip step: kept in the DOM and focusable (so the
    chip→text tap can open the keyboard in-gesture) but visually collapsed. NOT
    display:none — iOS won't open the keyboard for a display:none element. */
