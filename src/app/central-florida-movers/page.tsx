@@ -50,6 +50,10 @@ const FAQS = [
     q: "Can you move on short notice or the same week?",
     a: "Often, yes. We keep same-week availability across the metro and can frequently fit in next-day or weekend moves. Call us with your date and we'll tell you honestly what's open.",
   },
+  {
+    q: "Are my belongings covered, and are you insured?",
+    a: "Yes — Toro Movers is a licensed, insured Central Florida moving company carrying general liability and cargo coverage, and we'll send a Certificate of Insurance to any building or HOA across the metro on request. Every local move includes standard released-value protection, and on the rare chance something goes wrong we handle it directly and honestly — no runaround, no fine print.",
+  },
 ];
 
 export default function Page() {
