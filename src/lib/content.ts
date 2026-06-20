@@ -39,8 +39,12 @@ export const SERVICE_CITIES = [
   "The Villages",
   "Windermere",
   "Winter Garden",
+  "Winter Haven",
   "Winter Park",
   "Winter Springs",
+  "Auburndale",
+  "Bartow",
+  "Lake Wales",
 ] as const;
 
 export const AREAS_BY_COUNTY = [
@@ -63,6 +67,11 @@ export const AREAS_BY_COUNTY = [
     county: "Lake County",
     countyEs: "Condado de Lake",
     cities: ["Clermont", "Mount Dora", "Leesburg", "Tavares", "Minneola"],
+  },
+  {
+    county: "Polk County",
+    countyEs: "Condado de Polk",
+    cities: ["Lakeland", "Winter Haven", "Haines City", "Davenport", "Auburndale", "Bartow", "Lake Wales"],
   },
 ] as const;
 
