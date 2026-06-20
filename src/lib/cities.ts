@@ -721,6 +721,104 @@ export const DAVENPORT: CityData = {
   schema: { lat: 28.1614, lng: -81.6015 },
 };
 
+export const LAKELAND: CityData = {
+  slug: "lakeland-movers",
+  href: "/lakeland-movers",
+  name: "Lakeland",
+  navLabel: "Lakeland movers",
+  metadata: {
+    title: "Lakeland Movers",
+    description:
+      "Family-owned Lakeland movers serving Polk County — apartment, home, and labor-only moves. Fully insured, bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
+  },
+  h1: "Lakeland Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Lakeland and Polk County — Dixieland, Lake Hollingsworth, South Lakeland, Grasslands, and the surrounding area. Fully insured, honest hourly pricing.",
+  about: {
+    h2: "Lakeland movers, the same honest rate.",
+    lead: "Toro Movers handles apartment, home, and labor-only moves across Lakeland and Polk County. Loading a U-Haul or POD, a full move with our truck, or a quick in-town move — the process stays the same: phone estimate, scheduled crew, no surprises.",
+  },
+  neighborhoods: [
+    "Dixieland",
+    "Lake Hollingsworth",
+    "South Lakeland",
+    "Grasslands",
+    "Cleveland Heights",
+    "Christina",
+    "Beacon Hill",
+    "Lakeland Highlands",
+  ],
+  uniqueAngle: {
+    eyebrow: "I-4 corridor",
+    h2: "Between Tampa and Orlando.",
+    body: "Lakeland sits on the I-4 corridor between Tampa and Orlando, so many Polk County moves cross county lines. Toro Movers runs Central Florida daily — we quote the drive time honestly up front and bill by the hour, so a Lakeland-to-Orlando or local Polk move has no mystery flat-rate padding.",
+  },
+  faqs: [
+    {
+      q: "Do you serve all of Polk County?",
+      a: "Yes — Lakeland, Winter Haven, Bartow, Auburndale, Haines City, Lake Wales, and the surrounding Polk County area, plus moves between Polk and the Orlando metro.",
+    },
+    {
+      q: "How is a Lakeland move priced?",
+      a: "By the hour, with the crew size and rate agreed before the day — no per-mile charge, no fuel surcharge, no hidden fees. You only pay for the time the move actually takes.",
+    },
+    {
+      q: "Can you do labor-only — load or unload my U-Haul or POD?",
+      a: "Yes. If you already have a truck, U-Haul, or POD, we provide the crew to load and/or unload — or we bring the truck for a full-service move. Your choice.",
+    },
+  ],
+  schema: { lat: 28.0395, lng: -81.9498 },
+};
+
+export const WINTER_HAVEN: CityData = {
+  slug: "winter-haven-movers",
+  href: "/winter-haven-movers",
+  name: "Winter Haven",
+  navLabel: "Winter Haven movers",
+  metadata: {
+    title: "Winter Haven Movers",
+    description:
+      "Family-owned Winter Haven movers serving Polk County — apartment, home, and labor-only moves. Fully insured, bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
+  },
+  h1: "Winter Haven Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Winter Haven and Polk County — the Chain of Lakes, Florence Villa, Eloise, Inwood, and the Cypress Gardens area. Fully insured, honest hourly pricing.",
+  about: {
+    h2: "Winter Haven movers for the Chain of Lakes.",
+    lead: "Toro Movers handles apartment, home, and labor-only moves across Winter Haven and Polk County — from lakefront homes near the Chain of Lakes to apartments near the Cypress Gardens area. Phone estimate, scheduled crew, hourly pricing, no surprises.",
+  },
+  neighborhoods: [
+    "Chain of Lakes",
+    "Florence Villa",
+    "Eloise",
+    "Inwood",
+    "Lake Region",
+    "Cypress Gardens area",
+    "Garden Grove",
+    "Lucerne Park",
+  ],
+  uniqueAngle: {
+    eyebrow: "lakefront access",
+    h2: "Built for lakefront moves.",
+    body: "Winter Haven's Chain of Lakes means narrow lakefront drives, docks, and tight access at many homes. Toro Movers crews pad-wrap furniture and plan the carry so lakefront and Cypress Gardens-area moves go smoothly — billed by the hour, quoted honestly up front.",
+  },
+  faqs: [
+    {
+      q: "Do you serve all of Polk County?",
+      a: "Yes — Winter Haven, Lakeland, Bartow, Auburndale, Haines City, Lake Wales, and the surrounding Polk County area, plus moves between Polk and the Orlando metro.",
+    },
+    {
+      q: "How is a Winter Haven move priced?",
+      a: "By the hour, with the crew size and rate agreed before the day — no per-mile charge, no fuel surcharge, no hidden fees. You only pay for the time the move actually takes.",
+    },
+    {
+      q: "Can you do labor-only — load or unload my U-Haul or POD?",
+      a: "Yes. If you already have a truck, U-Haul, or POD, we provide the crew to load and/or unload — or we bring the truck for a full-service move. Your choice.",
+    },
+  ],
+  schema: { lat: 28.0222, lng: -81.7329 },
+};
+
 export const CITIES: CityData[] = [
   ORLANDO,
   LAKE_MARY,
@@ -730,6 +828,8 @@ export const CITIES: CityData[] = [
   SANFORD,
   CLERMONT,
   DAVENPORT,
+  LAKELAND,
+  WINTER_HAVEN,
   OVIEDO,
   WINTER_GARDEN,
   ALTAMONTE_SPRINGS,
