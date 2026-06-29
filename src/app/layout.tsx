@@ -13,6 +13,7 @@ import {
   BUSINESS_NAME,
   SLOGAN,
   POSTAL_CODE,
+  SOCIAL_PROFILES,
 } from "@/lib/contact";
 
 // Minimalist display face — clean modern grotesque replacing the old serif.
@@ -157,6 +158,7 @@ const movingCompanyJsonLd = {
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Storage moves" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Furniture wrapping & protection" } },
   ],
+  sameAs: SOCIAL_PROFILES,
 };
 
 export default function RootLayout({
