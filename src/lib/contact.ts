@@ -25,6 +25,17 @@ export const MOVES_DONE = "100+";
 // Update if the real count changes.
 export const REVIEW_COUNT = "36";
 
+// schema.org `sameAs` — profile URLs that unambiguously identify Toro Movers,
+// so Google reconciles this site with the same business entity across the web
+// (strengthens the local/citation signal). Only add REAL, resolvable profile
+// URLs here — a wrong URL hurts. Facebook page is the live ad-account page.
+// TODO (owner): add the Google Business Profile (Maps "share" URL), the
+// Instagram profile (https://www.instagram.com/<handle>), and Yelp/BBB URLs
+// once the listings exist.
+export const SOCIAL_PROFILES = [
+  "https://www.facebook.com/722514634274519",
+];
+
 export const SERVICE_BASE_CITY = "Orlando, FL";
 // Schema address — real business base. Owner-confirmed public ZIP; no public
 // street address exists, so streetAddress is intentionally omitted.
