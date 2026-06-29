@@ -531,9 +531,9 @@ export const ST_CLOUD: CityData = {
   name: "St. Cloud",
   navLabel: "St. Cloud movers",
   metadata: {
-    title: "St. Cloud Movers",
+    title: "St. Cloud, FL Movers — Moving Company",
     description:
-      "Family-owned St. Cloud movers — Narcoossee, Anthem Park, Lakeshore & Osceola County. Bilingual, insured, up-front hourly pricing, no hidden fees.",
+      "Looking for a moving company in St. Cloud, FL? Toro Movers — family-owned & insured, serving Narcoossee, Anthem Park, Lakeshore & Osceola County. Bilingual crews, up-front hourly pricing, no hidden fees.",
   },
   h1: "St. Cloud Movers — Toro Movers",
   subline:
@@ -629,9 +629,9 @@ export const MAITLAND: CityData = {
   name: "Maitland",
   navLabel: "Maitland movers",
   metadata: {
-    title: "Maitland Movers",
+    title: "Maitland, FL Movers — Moving Company",
     description:
-      "Family-owned Maitland movers — Dommerich, Lake Maitland, Maitland Center & the Orange/Seminole line. Insured, bilingual, up-front hourly pricing.",
+      "Moving company in Maitland, FL — Toro Movers. Family-owned & insured, serving Dommerich, Lake Maitland, Maitland Center & the Orange/Seminole line. Bilingual, up-front hourly pricing, no hidden fees.",
   },
   h1: "Maitland Movers — Toro Movers",
   subline:
@@ -819,11 +819,59 @@ export const WINTER_HAVEN: CityData = {
   schema: { lat: 28.0222, lng: -81.7329 },
 };
 
+export const FERN_PARK: CityData = {
+  slug: "fern-park-movers",
+  href: "/fern-park-movers",
+  name: "Fern Park",
+  navLabel: "Fern Park movers",
+  metadata: {
+    title: "Fern Park, FL Movers — Moving Company",
+    description:
+      "Moving company in Fern Park, FL — Toro Movers. Family-owned & insured, serving Fern Park, English Estates & the US-17-92 corridor in Seminole County. Bilingual, up-front hourly pricing, no hidden fees.",
+  },
+  h1: "Fern Park Movers — Toro Movers",
+  subline:
+    "Family-owned movers serving Fern Park and the US Highway 17-92 corridor in Seminole County — between Casselberry and Winter Park. Fully insured, honest hourly pricing.",
+  about: {
+    h2: "Fern Park movers, no hidden fees.",
+    lead: "Toro Movers handles apartment, home, and labor-only moves in Fern Park and along the 17-92 corridor in Seminole County. Loading a U-Haul or POD, a full move with our truck, or a quick local move — the process stays the same: phone estimate, scheduled crew, no surprises.",
+  },
+  neighborhoods: [
+    "English Estates",
+    "US Highway 17-92 corridor",
+    "Fern Park CDP",
+    "near Casselberry",
+    "near Maitland",
+    "near Winter Park",
+  ],
+  uniqueAngle: {
+    eyebrow: "17-92 corridor",
+    h2: "Right on the 17-92 corridor.",
+    body: "Fern Park sits on the US Highway 17-92 corridor in Seminole County, between Casselberry and Winter Park — so most moves here are short, local hops. Toro Movers works this stretch daily, bills by the hour, and quotes the timing honestly up front, with no per-mile padding on a quick local move.",
+  },
+  faqs: [
+    {
+      q: "Do you serve Fern Park and the 17-92 corridor?",
+      a: "Yes — Fern Park, English Estates, and the Highway 17-92 stretch through Seminole County, plus neighboring Casselberry, Maitland, and Winter Park.",
+    },
+    {
+      q: "How is a Fern Park move priced?",
+      a: "By the hour, with crew size and rate agreed up front — no per-mile charge, no fuel surcharge, no hidden fees. You only pay for the time the move actually takes.",
+    },
+    {
+      q: "Can you do labor-only — load or unload my U-Haul or POD?",
+      a: "Yes. If you already have a truck, U-Haul, or POD, we provide the crew to load and/or unload — or we bring the truck for a full move.",
+    },
+  ],
+  schema: { lat: 28.6492, lng: -81.3409 },
+};
+
 export const CITIES: CityData[] = [
   ORLANDO,
   LAKE_MARY,
   WINTER_PARK,
   MAITLAND,
+  FERN_PARK,
   KISSIMMEE,
   SANFORD,
   CLERMONT,
