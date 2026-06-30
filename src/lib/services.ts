@@ -85,7 +85,7 @@ export const RESIDENTIAL_MOVERS: ServiceData = {
   name: "Residential movers",
   navLabel: "Residential movers",
   metadata: {
-    title: "Residential Movers Orlando",
+    title: "Residential Movers Orlando & Central Florida",
     description:
       "Family-owned residential movers across Orlando & Central Florida — houses, condos & HOA communities. Insured, bilingual, up-front hourly pricing.",
   },

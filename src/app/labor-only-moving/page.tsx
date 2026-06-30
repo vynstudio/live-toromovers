@@ -20,11 +20,11 @@ const DESCRIPTION =
   "Labor-only moving help in Central Florida — loading, unloading & stair help by the hour. Family-owned, insured, bilingual. Get a quote today.";
 
 export const metadata: Metadata = {
-  title: { absolute: "Labor-Only Moving Help | Toro Movers" },
+  title: { absolute: "Labor-Only Moving Help in Central Florida | Toro Movers" },
   description: DESCRIPTION,
   alternates: { canonical: HREF },
   openGraph: {
-    title: "Labor-Only Moving Help | Toro Movers",
+    title: "Labor-Only Moving Help in Central Florida | Toro Movers",
     description: DESCRIPTION,
     url: `${SITE_URL}${HREF}`,
     type: "website",
