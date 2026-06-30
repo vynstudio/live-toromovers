@@ -167,6 +167,23 @@ export function CityPage({ city }: { city: CityData }) {
           </div>
         </section>
 
+        {/* Helpful local resources — outbound citations to official sources */}
+        {city.references?.length ? (
+          <section className="block">
+            <div className="block-inner">
+              <p className="svc-disclaimer">
+                Moving to {city.name}? Helpful local resources:{" "}
+                {city.references.map((r, i) => (
+                  <span key={r.href}>
+                    {i > 0 ? " · " : ""}
+                    <a href={r.href}>{r.label}</a>
+                  </span>
+                ))}
+              </p>
+            </div>
+          </section>
+        ) : null}
+
         {/* Moving services — internal links */}
         <section className="block">
           <div className="block-inner">

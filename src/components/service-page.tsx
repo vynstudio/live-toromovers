@@ -109,6 +109,23 @@ export function ServicePage({ service }: { service: ServiceData }) {
           </div>
         </section>
 
+        {/* Helpful resources — outbound citations to authoritative sources */}
+        {service.references?.length ? (
+          <section className="block">
+            <div className="block-inner">
+              <p className="svc-disclaimer">
+                Helpful resources:{" "}
+                {service.references.map((r, i) => (
+                  <span key={r.href}>
+                    {i > 0 ? " · " : ""}
+                    <a href={r.href}>{r.label}</a>
+                  </span>
+                ))}
+              </p>
+            </div>
+          </section>
+        ) : null}
+
         {/* Service areas — internal links to city pages */}
         <section className="block city-hoods-section">
           <div className="block-inner">

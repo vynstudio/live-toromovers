@@ -24,6 +24,9 @@ export interface CityData {
     body: string;
   };
   faqs?: { q: string; a: string }[];
+  // Optional outbound citations to authoritative local-government / official
+  // sources (rendered as a contextual "Helpful local resources" line).
+  references?: readonly { label: string; href: string }[];
   schema: {
     lat: number;
     lng: number;
@@ -570,6 +573,10 @@ export const ST_CLOUD: CityData = {
       q: "St. Cloud is south of the metro — is there a travel charge?",
       a: "We bill by the hour and quote the drive honestly up front. There's no per-mile fee or fuel surcharge across Osceola County.",
     },
+  ],
+  references: [
+    { label: "City of St. Cloud", href: "https://www.stcloudfl.gov/" },
+    { label: "Osceola County", href: "https://www.osceola.org/" },
   ],
   schema: { lat: 28.2489, lng: -81.2812 },
 };

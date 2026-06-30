@@ -46,6 +46,13 @@ export default function Page() {
               just the same honest, up-front advice we give our own customers on
               the phone.
             </p>
+            <p className="block-lead">
+              Before move day, two official steps are worth knowing: the FMCSA&rsquo;s{" "}
+              <a href="https://www.fmcsa.dot.gov/protect-your-move">Protect Your Move</a>{" "}
+              guide lays out your rights when hiring a mover, and you can file your{" "}
+              <a href="https://www.usps.com/manage/forward.htm">USPS change of address</a>{" "}
+              before the truck arrives.
+            </p>
             <div className="city-others">
               {GUIDES.map((g) => (
                 <Link key={g.slug} href={g.href} className="city-other">
