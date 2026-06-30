@@ -11,7 +11,7 @@ import { ClosingCta } from "@/components/closing-cta";
 import { Footer } from "@/components/footer";
 import { StickyCta } from "@/components/sticky-cta";
 import { content, REVIEWS } from "@/lib/content";
-import { GOOGLE_RATING, REVIEW_COUNT } from "@/lib/contact";
+import { GOOGLE_RATING, REVIEW_COUNT, BUSINESS_NAME } from "@/lib/contact";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 
@@ -22,6 +22,12 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const homeJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: BUSINESS_NAME,
+      url: SITE_URL,
+    },
     {
       "@type": "MovingCompany",
       "@id": `${SITE_URL}/#movingcompany`,

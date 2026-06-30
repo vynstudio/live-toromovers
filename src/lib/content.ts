@@ -143,6 +143,7 @@ type ContentShape = {
       bullets: readonly string[];
       cta: string;
     }[];
+    apartmentNote: { text: string; link: string };
   };
   about: {
     eyebrow: string;
@@ -295,6 +296,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
           cta: "Get my quote",
         },
       ],
+      apartmentNote: { text: "Moving from an apartment?", link: "See our Orlando apartment movers" },
     },
     about: {
       eyebrow: "About Toro Movers",
@@ -495,6 +497,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
           cta: "Mi cotización",
         },
       ],
+      apartmentNote: { text: "¿Te mudas de un apartamento?", link: "Mira nuestros mudanceros de apartamentos en Orlando" },
     },
     about: {
       eyebrow: "Sobre Toro Movers",

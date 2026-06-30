@@ -50,6 +50,7 @@ export function Hero() {
             width={1440}
             height={960}
             alt="Couple relaxing among moving boxes after their Central Florida move with Toro Movers"
+            title="Toro Movers — Orlando apartment and home moving services"
             className="hero-media-img"
             fetchPriority="high"
             decoding="async"
