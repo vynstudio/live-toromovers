@@ -178,6 +178,15 @@ export function CityPage({ city }: { city: CityData }) {
               <p className="city-lead">
                 Whatever your {city.name} move needs — one local crew, billed by
                 the hour, fully insured.
+                {city.slug === "kissimmee-movers" && (
+                  <>
+                    {" "}Looking for{" "}
+                    <Link href="/apartment-movers-orlando-fl">
+                      apartment movers near Kissimmee
+                    </Link>
+                    ? We cover Osceola County on the same hourly pricing.
+                  </>
+                )}
               </p>
             </div>
             <div className="city-others">
