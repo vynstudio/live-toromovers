@@ -236,7 +236,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       textUs: "Text us",
     },
     hero: {
-      badge: "4.9★ on Google · Insured, family-owned · Central Florida",
+      badge: "4.9★ on Google · Family-owned · Central Florida",
       h1Line1: "Central Florida movers.",
       h1Line2: "",
       h1Line3: "No hidden fees.",
@@ -252,7 +252,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       "Background-checked crew",
       "Bilingual · Hablamos español",
       "Same-week scheduling",
-      "Insured · Cargo + liability",
+      "No hidden fees · up-front pricing",
     ],
     services: {
       eyebrow: "What we do",
@@ -364,8 +364,8 @@ export const content: { en: ContentShape; es: ContentShape } = {
           a: "A small refundable deposit holds your slot, applied to the final invoice. Balance is paid at the end of the move on the day, by card or transfer.",
         },
         {
-          q: "Are you insured?",
-          a: "Yes — Toro Movers carries general liability and cargo insurance. We can email a Certificate of Insurance to your building or HOA on request.",
+          q: "How do you handle apartment & HOA move-in rules?",
+          a: "Many Orlando complexes require a reserved elevator and a set arrival window. We coordinate those with your property manager or HOA and show up inside the window so move-in day isn't held up.",
         },
         {
           q: "What cities in Central Florida do you serve?",
@@ -389,7 +389,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       tagline: "Family-owned movers across Central Florida.",
       serviceArea: "Service area",
       callNow: "Call now",
-      legal: "Toro Movers LLC · Insured · Bilingual",
+      legal: "Toro Movers LLC · Family-owned · Bilingual",
     },
     quote: {
       title: "Free quote",
@@ -436,7 +436,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       textUs: "Escríbenos",
     },
     hero: {
-      badge: "4.9★ en Google · Asegurados y familiares · Florida Central",
+      badge: "4.9★ en Google · Familiares · Florida Central",
       h1Line1: "Mudanceros de",
       h1Line2: "Florida Central.",
       h1Line3: "Sin tarifas ocultas.",
@@ -452,7 +452,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       "Cuadrilla verificada",
       "Bilingüe · Hablamos español",
       "Agenda en la misma semana",
-      "Asegurados · Carga + responsabilidad",
+      "Sin costos ocultos · precios claros",
     ],
     services: {
       eyebrow: "Lo que hacemos",
@@ -564,8 +564,8 @@ export const content: { en: ContentShape; es: ContentShape } = {
           a: "Un pequeño depósito reembolsable reserva tu día y se aplica al pago final. El resto se paga el día de la mudanza por tarjeta o transferencia.",
         },
         {
-          q: "¿Están asegurados?",
-          a: "Sí — Toro Movers tiene seguro general de responsabilidad y de carga. Podemos enviar el Certificado de Seguro a tu edificio u HOA bajo solicitud.",
+          q: "¿Cómo manejan las reglas de mudanza de apartamentos y HOA?",
+          a: "Muchos complejos de Orlando requieren reservar el ascensor y una ventana de llegada. Coordinamos eso con tu administrador o HOA y llegamos dentro de la ventana para que la mudanza no se retrase.",
         },
         {
           q: "¿Qué ciudades de Florida Central cubren?",
@@ -589,7 +589,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       tagline: "Mudanceros familiares en toda Florida Central.",
       serviceArea: "Área de servicio",
       callNow: "Llamar ahora",
-      legal: "Toro Movers LLC · Asegurados · Bilingües",
+      legal: "Toro Movers LLC · Familiares · Bilingües",
     },
     quote: {
       title: "Cotización gratis",

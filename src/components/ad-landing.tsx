@@ -44,7 +44,7 @@ export function AdLanding() {
           <div className="ad-hero-left">
             <div className="ad-hero-badge">
               <span className="stars" aria-hidden>★★★★★</span>
-              {GOOGLE_RATING} {es ? "en Google · 30+ reseñas · Asegurados" : "on Google · 30+ reviews · Fully insured"}
+              {GOOGLE_RATING} {es ? "en Google · 30+ reseñas" : "on Google · 30+ reviews"}
             </div>
             <h1 className="ad-hero-h1">
               {es ? "Mudanzas en Florida Central" : "Central Florida movers"}

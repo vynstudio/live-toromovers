@@ -68,7 +68,7 @@ const WHATS_INSIDE = [
 
 const TRUST = [
   ["Family-owned", "Local Central Florida crew — not a national chain."],
-  ["Fully insured", "Licensed and insured for every move."],
+  ["No hidden fees", "No fuel surcharges, stair fees, or weekend premiums — ever."],
   ["Bilingual", "Hablamos español — English & Spanish crews."],
   ["Up-front pricing", "Honest hourly rate. No surprise add-ons."],
 ];
@@ -166,7 +166,7 @@ export default function ChecklistLandingPage() {
           <div className="magnet-hero-meta">
             <span className="magnet-stars" aria-hidden>★★★★★</span>
             <span>
-              {GOOGLE_RATING} on Google · Family-owned · Insured · Bilingual
+              {GOOGLE_RATING} on Google · Family-owned · Bilingual
             </span>
           </div>
         </div>

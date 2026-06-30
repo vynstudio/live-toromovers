@@ -175,8 +175,8 @@ export const COPY = {
     es: "Un miembro de Toro Movers te llamará o escribirá en breve con tu precio.",
   },
   trust: {
-    en: "★ 4.9 Google · Family-owned · Insured · No hidden fees",
-    es: "★ 4.9 Google · Familiar · Asegurados · Sin costos ocultos",
+    en: "★ 4.9 Google · Family-owned · No hidden fees",
+    es: "★ 4.9 Google · Familiar · Sin costos ocultos",
   },
   stepOf: { en: "Step", es: "Paso" },
   stepOfMid: { en: "of", es: "de" },
@@ -195,13 +195,13 @@ export const COPY = {
   },
   panelBullets: {
     en: [
-      "Licensed & insured movers",
+      "Local Central Florida movers",
       "Upfront pricing — no hidden fees",
       "4.9★ rated, family-owned",
       "We call you fast to confirm details",
     ],
     es: [
-      "Mudanceros con licencia y seguro",
+      "Mudanceros locales en Florida Central",
       "Precios claros — sin costos ocultos",
       "Calificación 4.9★, empresa familiar",
       "Te llamamos rápido para confirmar detalles",

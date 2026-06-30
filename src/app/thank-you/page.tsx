@@ -38,7 +38,7 @@ export default function ThankYouPage() {
         </div>
 
         <p className="thanks-fine">
-          Hablamos español. Family-owned. Fully insured. $75 per mover / hour.
+          Hablamos español. Family-owned. $75 per mover / hour.
         </p>
       </div>
     </main>

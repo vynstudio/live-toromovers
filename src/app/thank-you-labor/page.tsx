@@ -28,7 +28,7 @@ export default function ThankYouLaborPage() {
           <CallCta className="fn-btn fn-btn-ghost-light">Need help ASAP? Call now — {PHONE_DISPLAY}</CallCta>
         </div>
         <p className="fn-thanks-fine">
-          Hablamos español · Family-owned · Fully insured · Up-front hourly pricing
+          Hablamos español · Family-owned · Up-front hourly pricing
         </p>
       </div>
     </main>

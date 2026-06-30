@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     template: "%s | Toro Movers",
   },
   description:
-    "Insured Orlando movers — local, apartment, loading help & full-service moves across Central Florida. Up-front hourly pricing, bilingual crew. Quote in 60s.",
+    "Local Orlando movers — apartment, loading help & full-service moves across Central Florida. Up-front hourly pricing, bilingual crew. Quote in 60s.",
   keywords: [
     "Orlando movers",
     "Central Florida movers",
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     title:
       "Toro Movers — Family-owned Movers Orlando & Central Florida · 4.9★ Google",
     description:
-      "Insured Orlando moving company. Local moves, loading help, full-service moves with truck. Bilingual crew. Up-front hourly pricing — quote in 60 seconds.",
+      "Family-owned Orlando moving company. Local moves, loading help, full-service moves with truck. Bilingual crew. Up-front hourly pricing — quote in 60 seconds.",
   },
   twitter: {
     card: "summary_large_image",

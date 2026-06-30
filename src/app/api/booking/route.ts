@@ -325,7 +325,7 @@ async function sendClientConfirmationEmail(
     <p>A Toro Movers team member will call you shortly to confirm details and lock in your slot. You'll also get a text from us.</p>
     <p style="margin-top:18px">If you'd like to speed things up, give us a call:</p>
     <p style="font:600 17px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">(689) 600-2720</a></p>
-    <p style="color:#6B6B72;font-size:13px;margin-top:24px">Family-owned · Fully insured · $75 per mover / hour · Hablamos español</p>
+    <p style="color:#6B6B72;font-size:13px;margin-top:24px">Family-owned · $75 per mover / hour · Hablamos español</p>
   </div>`;
 
   try {

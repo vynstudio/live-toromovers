@@ -120,7 +120,7 @@ async function sendCustomerChecklistEmail(
     <p style="margin:0 0 22px;color:#3A3A3A">${tip}</p>
     <p style="margin:0 0 4px">When you're ready, we'll give you an up-front hourly price — no surprises:</p>
     <p style="margin:0 0 22px"><a href="${QUOTE_URL}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui,sans-serif;padding:12px 22px;border-radius:8px">Request a Quote →</a></p>
-    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Fully insured · Local Central Florida movers · Hablamos español<br>Toro Movers · <a href="tel:+16896002720" style="color:#6B6B72">(689) 600-2720</a></p>
+    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Local Central Florida movers · Hablamos español<br>Toro Movers · <a href="tel:+16896002720" style="color:#6B6B72">(689) 600-2720</a></p>
   </div>`;
 
   const textBody = [
@@ -133,7 +133,7 @@ async function sendCustomerChecklistEmail(
     ``,
     `Ready for an up-front price? Request a quote: ${QUOTE_URL}`,
     ``,
-    `Family-owned · Fully insured · Hablamos español · Toro Movers · (689) 600-2720`,
+    `Family-owned · Hablamos español · Toro Movers · (689) 600-2720`,
   ].join("\n");
 
   try {

@@ -51,7 +51,7 @@ export default function ThankYouChecklistPage() {
         </div>
 
         <p className="thanks-fine">
-          Hablamos español. Family-owned. Fully insured. Up-front hourly pricing.
+          Hablamos español. Family-owned. Up-front hourly pricing.
         </p>
       </div>
     </main>
