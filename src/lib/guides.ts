@@ -2,10 +2,44 @@
 // pages. Data-driven (one shared <GuidePage> template). Buyer-first, genuinely
 // useful, local. No price figures, no long-distance claims.
 
+// Rich-section primitives — all optional and additive. Plain text-only guides
+// ignore them; the data-heavier posts (e.g. hidden fees) opt in.
+export interface GuideFee {
+  name: string; // rendered as an <h3> subheading
+  body: string;
+}
+export interface GuideQuestion {
+  lead: string; // bolded lead line of an ordered-list item
+  body: string;
+}
+export interface GuideNote {
+  before?: string;
+  linkText?: string;
+  href?: string;
+  after?: string;
+}
+export interface GuideImage {
+  src: string;
+  alt: string;
+}
+
 export interface GuideSection {
   h2: string;
   body?: string[];
   bullets?: string[];
+  fees?: GuideFee[]; // h3 subsections (e.g. the 7 hidden fees)
+  questions?: GuideQuestion[]; // ordered list with bold leads
+  note?: GuideNote; // pull-quote callout, optionally with a link
+  image?: GuideImage; // inline figure
+  trailing?: string[]; // paragraphs after the structured content
+}
+
+export interface GuideCta {
+  heading: string;
+  body?: string[];
+  linkText: string;
+  href: string; // internal target (e.g. the homepage)
+  after?: string; // trailing copy after the link, same paragraph
 }
 
 export interface GuideData {
@@ -14,10 +48,13 @@ export interface GuideData {
   metadata: { title: string; description: string };
   h1: string;
   intro: string;
+  lead?: string[]; // extra opening paragraphs shown above the first section
+  image?: GuideImage; // featured image (used for schema/OG when present)
   datePublished: string; // ISO date
   readMins: number;
   sections: GuideSection[];
   faqs: { q: string; a: string }[];
+  cta?: GuideCta; // in-article CTA (e.g. link to the homepage)
 }
 
 export const ORLANDO_MOVE_PREP: GuideData = {
@@ -388,9 +425,147 @@ export const MOVING_COST: GuideData = {
   ],
 };
 
+export const HIDDEN_FEES: GuideData = {
+  slug: "hidden-moving-fees-orlando",
+  href: "/blog/hidden-moving-fees-orlando",
+  metadata: {
+    title: "Hidden Moving Fees in Orlando: 7 Costs to Avoid",
+    description:
+      "Learn the most common hidden moving fees in Orlando and how to avoid them before move day. Ask the right questions and get a transparent quote.",
+  },
+  h1: "Hidden Moving Fees in Orlando (And How to Avoid Paying Them)",
+  intro:
+    "We see it more often than we'd like. A family books a moving company based on a quote that sounds reasonable. Moving day comes, the truck gets loaded, and then the bill arrives with line items nobody mentioned: a fuel surcharge, a stair fee, an extra charge for the couch that's \"oversized.\" What started as a $600 quote turns into a $950 bill.",
+  lead: [
+    "That's not a one-off. It's a pattern in this industry, and it's one of the reasons we built Toro Movers around a different model.",
+    "Hidden fees can add 15 to 30% on top of the original quote — that's an extra $120 to $750 on a typical Orlando local move, sometimes more. For families already stretched by security deposits, utility setups, and first/last month's rent, that surprise bill hits hard.",
+    "Here's what those fees actually look like, how to spot them before you sign anything, and what questions to ask any mover before you hand over your keys.",
+  ],
+  datePublished: "2026-06-30",
+  readMins: 6,
+  sections: [
+    {
+      h2: "The 7 Hidden Fees That Show Up Most Often",
+      body: [
+        "We've heard every version of these from customers who called us after a bad experience with another company. These are the charges that rarely appear in the original quote but show up on the final bill.",
+      ],
+      fees: [
+        {
+          name: "1. Fuel Surcharge",
+          body: "Sometimes framed as a \"travel fee\" or \"truck fee.\" It covers the cost of driving to your location and back to the company's base. Legitimate movers build this into their hourly rate. Others add it separately, often $50 to $150, without mentioning it upfront.",
+        },
+        {
+          name: "2. Stair Fees",
+          body: "Moving into a second-floor apartment? Some companies charge per flight of stairs, typically $50 to $75 per flight per trip. If you have a lot of furniture and it takes multiple trips up those stairs, this adds up fast.",
+        },
+        {
+          name: "3. Long-Carry Fees",
+          body: "If the truck can't park close to your front door, some movers charge for the extra distance the crew has to carry items. Parking situations in downtown Orlando and older apartment complexes make this one common.",
+        },
+        {
+          name: "4. Bulky Item Charges",
+          body: "Pianos, safes, pool tables, and oversized furniture often trigger a separate fee. Fair enough for genuinely heavy items. But we've heard of companies charging \"bulky item\" fees for a standard sectional couch.",
+        },
+        {
+          name: "5. Packing Material Markup",
+          body: "If the crew brings boxes, tape, or blankets, some companies charge 2-3x retail price for those materials. Always ask upfront: \"Do you charge separately for packing materials?\"",
+        },
+        {
+          name: "6. Minimum Hour Requirements",
+          body: "Many movers have a 2 or 3-hour minimum, which is standard. The issue is when that minimum isn't disclosed. A one-hour job becomes a $240 bill because of a minimum you didn't know existed.",
+        },
+        {
+          name: "7. Last-Minute Cancellation or Rescheduling Fees",
+          body: "Life happens. But some companies bury a $100 to $200 cancellation fee in the fine print. If your closing date shifts (very common in Orlando's housing market), you could pay twice.",
+        },
+      ],
+      trailing: [
+        "The pattern: Each of these fees sounds reasonable in isolation. Together, they're how a $900 quote becomes a $1,300 bill.",
+      ],
+    },
+    {
+      h2: "5 Questions to Ask Before You Book Any Mover",
+      body: [
+        "You don't need to be an expert to protect yourself. You just need to ask the right questions before you sign anything. Here's what we recommend asking every company you get a quote from.",
+      ],
+      questions: [
+        {
+          lead: "Is your quote all-inclusive, or are there fees not listed here?",
+          body: "A reputable mover will tell you exactly what's covered. If they hesitate or give a vague answer, that's your signal.",
+        },
+        {
+          lead: "Do you charge a fuel surcharge or travel fee on top of the hourly rate?",
+          body: "Make them answer this directly. \"It depends\" is not an answer.",
+        },
+        {
+          lead: "Is there a minimum number of hours?",
+          body: "Know this upfront. A 2-hour minimum on a small job is fine as long as you know about it.",
+        },
+        {
+          lead: "What's your policy for stairs, long carries, or oversized items?",
+          body: "If your new place has stairs or a tricky parking situation, ask specifically. Get the answer in writing.",
+        },
+        {
+          lead: "What is your cancellation or rescheduling policy?",
+          body: "Orlando closings get delayed. Apartment availability shifts. Know what it costs to change the date before you're in that situation.",
+        },
+      ],
+      note: {
+        before: "The ",
+        linkText: "FMCSA (Federal Motor Carrier Safety Administration)",
+        href: "https://www.fmcsa.dot.gov/protect-your-move",
+        after:
+          " recommends always getting a written estimate and reviewing it line by line before the move. If a company won't provide a written quote, walk away.",
+      },
+      image: {
+        src: "/blog/hidden-moving-fees-orlando/fmcsa-protect-your-move.jpg",
+        alt: "FMCSA Protect Your Move consumer guide page with tips for avoiding hidden moving fees in Orlando",
+      },
+    },
+    {
+      h2: "How We Do It Differently",
+      body: [
+        "At Toro Movers, we charge by the hour. That's it. No fuel surcharges added on top. No stair fees. No surprise line items when the job is done.",
+        "When you get a quote from us, we walk through your specific situation: how many rooms, what floor you're on, whether there's elevator access, what large items you have. We account for all of it upfront so the number we give you reflects the actual job, not a best-case scenario designed to win your business.",
+        "We're a family-owned company based right here in Orlando. We're not a franchise with a call center. When you call us, you're talking to the people who will show up on moving day. That accountability matters to us, and it should matter to you when you're choosing who to trust with everything you own.",
+        "If a quote sounds too good to be true, it usually is. The cheapest option on paper is rarely the cheapest option on moving day.",
+      ],
+    },
+  ],
+  cta: {
+    heading: "Ready to Get a Quote With No Surprises?",
+    body: [
+      "Moving in Orlando doesn't have to come with a side of anxiety about what the final bill will say. You deserve to know the number before the truck shows up, not after it leaves.",
+    ],
+    linkText: "Get a transparent quote from Toro Movers",
+    href: "/",
+    after:
+      " and see exactly what your move will cost. Same-week scheduling available, bilingual team, and a pricing model built around honesty.",
+  },
+  faqs: [
+    {
+      q: "What are the most common hidden moving fees in Orlando?",
+      a: "The ones we hear about most are fuel or travel surcharges, per-flight stair fees, long-carry fees when the truck can't park close, bulky-item charges, marked-up packing materials, undisclosed hour minimums, and last-minute cancellation or rescheduling fees. Each sounds small on its own, but together they can add 15 to 30% to your original quote.",
+    },
+    {
+      q: "How can I avoid hidden fees when hiring a mover?",
+      a: "Ask for an all-inclusive written estimate and review it line by line before you book. Confirm directly whether there's a fuel surcharge, an hour minimum, or extra charges for stairs, long carries, or oversized items, and ask about the cancellation policy. If a company won't put the quote in writing or gives vague answers, walk away.",
+    },
+    {
+      q: "Does Toro Movers charge fuel surcharges or stair fees?",
+      a: "No. We charge by the hour with the rate agreed up front — no fuel surcharges, no stair fees, and no surprise line items on the final bill. We walk through your floor, access, and large items when we quote so the number reflects the actual job.",
+    },
+    {
+      q: "Why is hourly pricing more transparent than a flat rate?",
+      a: "An honest hourly rate means you pay for the time your move actually takes, with the rate and any short minimum disclosed before you book. Flat quotes are often padded for the worst case and can hide per-mile fees or fuel surcharges — so if the job goes faster, you don't see the savings.",
+    },
+  ],
+};
+
 export const GUIDES: GuideData[] = [
   ORLANDO_MOVE_PREP,
   APARTMENT_CHECKLIST,
   BEST_TIME_TO_MOVE,
   MOVING_COST,
+  HIDDEN_FEES,
 ];
