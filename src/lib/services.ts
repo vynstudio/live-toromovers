@@ -33,7 +33,12 @@ export interface ServiceData {
 
 export const APARTMENT_MOVERS: ServiceData = {
   slug: "apartment-movers",
-  href: "/apartment-movers",
+  // Repointed to the dedicated LP — /apartment-movers now 301s here, so every
+  // SERVICES-driven internal link (footer, city grids, service-page grids)
+  // targets the canonical apartment page with no redirect hop. slug stays
+  // "apartment-movers" so the sitemap filter still excludes this entry (the LP
+  // is listed directly in sitemap.ts `pages`).
+  href: "/apartment-movers-orlando-fl",
   name: "Apartment movers",
   navLabel: "Apartment movers",
   metadata: {

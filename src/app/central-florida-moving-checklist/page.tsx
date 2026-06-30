@@ -238,7 +238,7 @@ export default function ChecklistLandingPage() {
         <p className="magnet-cta-links">
           New to moving in the area? Read our{" "}
           <Link href="/central-florida-movers">Central Florida movers guide</Link> or{" "}
-          <Link href="/apartment-movers">apartment moving services</Link>.
+          <Link href="/apartment-movers-orlando-fl">apartment moving services</Link>.
         </p>
       </section>
 
