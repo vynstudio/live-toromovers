@@ -24,8 +24,12 @@ export function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <a href="#" className="brand">
-              <span className="brand-mark" aria-hidden>
-                <img src="/bull.svg" alt="" />
+              <span className="brand-mark">
+                <img
+                  src="/bull.svg"
+                  alt="Toro Movers logo"
+                  title="Toro Movers — Family-owned Orlando Moving Company"
+                />
               </span>
               <span className="brand-name">TORO<span className="accent">·</span>MOVERS</span>
             </a>
@@ -46,6 +50,9 @@ export function Footer() {
             <h4>{lang === "es" ? "Servicios" : "Services"}</h4>
             <Link href="/central-florida-movers">
               {lang === "es" ? "Florida Central" : "Central Florida movers"}
+            </Link>
+            <Link href="/apartment-movers-orlando-fl">
+              {lang === "es" ? "Mudanza de apartamentos" : "Apartment movers Orlando"}
             </Link>
             {SERVICES.map((s) => (
               <Link key={s.slug} href={s.href}>{s.name}</Link>

@@ -115,6 +115,14 @@ const movingCompanyJsonLd = {
   telephone: "+16896002720",
   email: EMAIL,
   image: `${SITE_URL}/opengraph-image`,
+  // Real brand mark. A raster logo.webp would be ideal for Google's logo
+  // guidelines (min 112×112) — swap the URL once one exists.
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/bull.svg`,
+    width: 512,
+    height: 512,
+  },
   priceRange: "$$",
   knowsLanguage: ["en", "es"],
   currenciesAccepted: "USD",

@@ -29,7 +29,18 @@ export function Hero() {
             ) : null}
             <span className="accent">{t.hero.h1Line3}</span>
           </h1>
-          <p className="hero-lede">{t.hero.lede}</p>
+          <p className="hero-lede">
+            {lang === "es" ? (
+              t.hero.lede
+            ) : (
+              <>
+                Our bilingual, family-owned crew serves Orlando and Central
+                Florida with honest hourly pricing for{" "}
+                <Link href="/apartment-movers-orlando-fl">apartment</Link>, home,
+                and office moves.
+              </>
+            )}
+          </p>
           <div className="hero-cta-row">
             <Link href="/quote" className="btn btn-primary">
               {lang === "es" ? "Ver mi precio" : "Get my price"}
@@ -50,6 +61,7 @@ export function Hero() {
             width={1440}
             height={960}
             alt="Couple relaxing among moving boxes after their Central Florida move with Toro Movers"
+            title="Toro Movers — Orlando & Central Florida Apartment and Home Movers"
             className="hero-media-img"
             fetchPriority="high"
             decoding="async"
