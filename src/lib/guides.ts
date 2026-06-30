@@ -525,7 +525,7 @@ export const HIDDEN_FEES: GuideData = {
     {
       h2: "How We Do It Differently",
       body: [
-        "At Toro Movers, we charge by the hour. That's it. No fuel surcharges added on top. No stair fees. No surprise line items when the job is done.",
+        "At Toro Movers, we charge a flat $75 per mover, per hour, with a two-hour minimum — and that's it. No fuel surcharges added on top. No stair fees. No weekend premiums. No surprise line items when the job is done. The clock stops when the job ends.",
         "When you get a quote from us, we walk through your specific situation: how many rooms, what floor you're on, whether there's elevator access, what large items you have. We account for all of it upfront so the number we give you reflects the actual job, not a best-case scenario designed to win your business.",
         "We're a family-owned company based right here in Orlando. We're not a franchise with a call center. When you call us, you're talking to the people who will show up on moving day. That accountability matters to us, and it should matter to you when you're choosing who to trust with everything you own.",
         "If a quote sounds too good to be true, it usually is. The cheapest option on paper is rarely the cheapest option on moving day.",
@@ -553,7 +553,7 @@ export const HIDDEN_FEES: GuideData = {
     },
     {
       q: "Does Toro Movers charge fuel surcharges or stair fees?",
-      a: "No. We charge by the hour with the rate agreed up front — no fuel surcharges, no stair fees, and no surprise line items on the final bill. We walk through your floor, access, and large items when we quote so the number reflects the actual job.",
+      a: "No. We charge $75 per mover, per hour, with a two-hour minimum and the rate agreed up front — no fuel surcharges, no stair fees, no weekend premiums, and no surprise line items on the final bill. We walk through your floor, access, and large items when we quote so the number reflects the actual job.",
     },
     {
       q: "Why is hourly pricing more transparent than a flat rate?",
