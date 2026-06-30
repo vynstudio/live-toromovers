@@ -2199,3 +2199,21 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
   .fn-thanks-cta .fn-btn { width: 100%; max-width: 360px; }
   .fn-sticky { display: none; }
 }
+
+/* Secondary "Learn more" link under each homepage service card CTA — muted and
+   centered so it catches researchers without competing with the primary quote
+   button. */
+.tier-learn-more {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+.tier-learn-more:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
