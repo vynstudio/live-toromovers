@@ -183,8 +183,8 @@ export const COMMERCIAL_MOVERS: ServiceData = {
   ],
   serviceType: "Commercial moving service",
   references: [
-    { label: "Florida Division of Corporations (Sunbiz)", href: "https://dos.fl.gov/sunbiz/" },
-    { label: "USPS business change of address", href: "https://www.usps.com/manage/forward.htm" },
+    { label: "the FMCSA's rules for licensed carriers", href: "https://www.fmcsa.dot.gov/protect-your-move" },
+    { label: "Florida's Sunbiz business registry", href: "https://dos.fl.gov/sunbiz/" },
   ],
 };
 
@@ -235,8 +235,8 @@ export const PACKING_SERVICES: ServiceData = {
   ],
   serviceType: "Packing service",
   references: [
-    { label: "USPS: how to pack a box", href: "https://www.usps.com/ship/packages.htm" },
-    { label: "FMCSA: Protect Your Move", href: "https://www.fmcsa.dot.gov/protect-your-move" },
+    { label: "USPS packing tips", href: "https://www.usps.com/ship/packages.htm" },
+    { label: "the FMCSA's guide to your rights as a mover", href: "https://www.fmcsa.dot.gov/protect-your-move" },
   ],
 };
 

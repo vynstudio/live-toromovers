@@ -12,6 +12,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 
 export function ServicePage({ service }: { service: ServiceData }) {
   const others = otherServices(service.slug);
+  // Outbound authoritative citation(s), woven inline below. Falls back to the
+  // FMCSA mover-rights guide so every service page carries an external link.
+  const refs = service.references?.length
+    ? service.references
+    : [{ label: "the FMCSA's guide to your rights as a mover", href: "https://www.fmcsa.dot.gov/protect-your-move" }];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -86,12 +91,29 @@ export function ServicePage({ service }: { service: ServiceData }) {
 
         {/* Intro */}
         <section className="block">
-          <div className="block-inner city-two-col">
-            <div>
-              <div className="block-eyebrow">{service.name.toLowerCase()}</div>
-              <h2 className="block-h2">{service.intro.h2}</h2>
+          <div className="block-inner">
+            <div className="city-two-col">
+              <div>
+                <div className="block-eyebrow">{service.name.toLowerCase()}</div>
+                <h2 className="block-h2">{service.intro.h2}</h2>
+              </div>
+              <p className="city-lead">{service.intro.lead}</p>
             </div>
-            <p className="city-lead">{service.intro.lead}</p>
+            <p className="city-lead" style={{ marginTop: 16 }}>
+              Planning ahead?{" "}
+              <Link href="/central-florida-moving-checklist">
+                Download the free Central Florida moving checklist
+              </Link>{" "}
+              — a week-by-week guide that covers packing, utility transfers, and
+              move-day prep. Before move day it also helps to skim{" "}
+              {refs.map((r, i) => (
+                <span key={r.href}>
+                  {i === 0 ? "" : i === refs.length - 1 ? " and " : ", "}
+                  <a href={r.href}>{r.label}</a>
+                </span>
+              ))}
+              .
+            </p>
           </div>
         </section>
 
@@ -108,23 +130,6 @@ export function ServicePage({ service }: { service: ServiceData }) {
             </div>
           </div>
         </section>
-
-        {/* Helpful resources — outbound citations to authoritative sources */}
-        {service.references?.length ? (
-          <section className="block">
-            <div className="block-inner">
-              <p className="svc-disclaimer">
-                Helpful resources:{" "}
-                {service.references.map((r, i) => (
-                  <span key={r.href}>
-                    {i > 0 ? " · " : ""}
-                    <a href={r.href}>{r.label}</a>
-                  </span>
-                ))}
-              </p>
-            </div>
-          </section>
-        ) : null}
 
         {/* Service areas — internal links to city pages */}
         <section className="block city-hoods-section">
@@ -185,7 +190,8 @@ export function ServicePage({ service }: { service: ServiceData }) {
             <p className="svc-disclaimer">
               Toro Movers is a local Central Florida moving company. We focus on
               local moves across the Orlando metro and do not offer long-distance
-              or interstate moving.
+              or interstate moving.{" "}
+              <Link href="/blog">Moving tips and local guides</Link>.
             </p>
           </div>
         </section>
