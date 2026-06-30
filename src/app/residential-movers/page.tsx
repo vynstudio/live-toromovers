@@ -3,7 +3,9 @@ import { ServicePage } from "@/components/service-page";
 import { RESIDENTIAL_MOVERS as S } from "@/lib/services";
 
 export const metadata: Metadata = {
-  title: S.metadata.title,
+  // Absolute so the layout's "%s · Toro Movers" template doesn't double the
+  // brand suffix (the base title already carries "| Toro Movers").
+  title: { absolute: `${S.metadata.title} | Toro Movers` },
   description: S.metadata.description,
   alternates: { canonical: S.href },
   openGraph: {
