@@ -23,12 +23,6 @@ const homeJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "WebSite",
-      "@id": `${SITE_URL}/#website`,
-      name: BUSINESS_NAME,
-      url: SITE_URL,
-    },
-    {
       "@type": "MovingCompany",
       "@id": `${SITE_URL}/#movingcompany`,
       aggregateRating: {
@@ -51,6 +45,12 @@ const homeJsonLd = {
         name: item.q,
         acceptedAnswer: { "@type": "Answer", text: item.a },
       })),
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      name: BUSINESS_NAME,
+      url: SITE_URL,
     },
   ],
 };

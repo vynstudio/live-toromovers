@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useLang } from "./lang-provider";
 import { RequestButton } from "./request-button";
 
@@ -30,13 +29,6 @@ export function Services() {
             </article>
           ))}
         </div>
-
-        <p className="block-sub reveal" style={{ marginTop: 28 }}>
-          {t.services.apartmentNote.text}{" "}
-          <Link href="/apartment-movers-orlando-fl">
-            {t.services.apartmentNote.link}
-          </Link>
-        </p>
       </div>
     </section>
   );

@@ -112,15 +112,17 @@ const movingCompanyJsonLd = {
     "Family-owned Orlando moving company offering local moves, apartment moves, loading help, and full-service moves with truck across Central Florida. Bilingual crew. Up-front hourly pricing — quote in 60 seconds.",
   "@id": `${SITE_URL}/#movingcompany`,
   url: SITE_URL,
+  telephone: "+16896002720",
+  email: EMAIL,
+  image: `${SITE_URL}/opengraph-image`,
   // Real brand mark. A raster logo.webp would be ideal for Google's logo
   // guidelines (min 112×112) — swap the URL once one exists.
   logo: {
     "@type": "ImageObject",
     url: `${SITE_URL}/bull.svg`,
+    width: 512,
+    height: 512,
   },
-  telephone: "+16896002720",
-  email: EMAIL,
-  image: `${SITE_URL}/opengraph-image`,
   priceRange: "$$",
   knowsLanguage: ["en", "es"],
   currenciesAccepted: "USD",
