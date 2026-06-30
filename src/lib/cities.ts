@@ -40,7 +40,7 @@ export const ORLANDO: CityData = {
   navLabel: "Orlando movers",
   metadata: {
     // Base only — the root layout template appends " · Toro Movers".
-    title: "Orlando Movers",
+    title: "Orlando, FL Movers — Moving Company",
     description:
       "Family-owned Orlando movers — downtown, Lake Nona, Dr. Phillips & nearby. Bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
   },
@@ -89,7 +89,7 @@ export const LAKE_MARY: CityData = {
   name: "Lake Mary",
   navLabel: "Lake Mary movers",
   metadata: {
-    title: "Lake Mary Movers",
+    title: "Lake Mary, FL Movers — Moving Company",
     description:
       "Family-owned Lake Mary movers — Heathrow, Markham Woods, Timacuan & Seminole County. Bilingual, up-front hourly pricing, no hidden fees.",
   },
@@ -138,7 +138,7 @@ export const WINTER_PARK: CityData = {
   name: "Winter Park",
   navLabel: "Winter Park movers",
   metadata: {
-    title: "Winter Park Movers",
+    title: "Winter Park, FL Movers — Moving Company",
     description:
       "Family-owned Winter Park movers — Park Ave, Aloma & historic neighborhoods. Careful with high-value homes, up-front hourly pricing. Free estimate.",
   },
@@ -289,7 +289,7 @@ export const CLERMONT: CityData = {
   name: "Clermont",
   navLabel: "Clermont movers",
   metadata: {
-    title: "Clermont Movers",
+    title: "Clermont, FL Movers — Moving Company",
     description:
       "Family-owned Clermont movers — Kings Ridge, Legends, Summit Greens & Lake County. Bilingual, up-front hourly pricing. Free estimate.",
   },
@@ -338,7 +338,7 @@ export const OVIEDO: CityData = {
   name: "Oviedo",
   navLabel: "Oviedo movers",
   metadata: {
-    title: "Oviedo Movers",
+    title: "Oviedo, FL Movers — Moving Company",
     description:
       "Family-owned Oviedo movers — Alafaya Woods, Twin Rivers, Live Oak Reserve & Seminole County. Bilingual, up-front hourly pricing. Free estimate.",
   },
@@ -387,7 +387,7 @@ export const WINTER_GARDEN: CityData = {
   name: "Winter Garden",
   navLabel: "Winter Garden movers",
   metadata: {
-    title: "Winter Garden Movers",
+    title: "Winter Garden, FL Movers — Moving Company",
     description:
       "Family-owned Winter Garden movers — Historic Downtown, Independence, Horizon West & west Orange County. Bilingual, up-front hourly pricing.",
   },
@@ -485,7 +485,7 @@ export const APOPKA: CityData = {
   name: "Apopka",
   navLabel: "Apopka movers",
   metadata: {
-    title: "Apopka Movers",
+    title: "Apopka, FL Movers — Moving Company",
     description:
       "Family-owned Apopka movers — Errol Estates, Rock Springs Ridge, Wekiva & north Orange County. Bilingual, up-front hourly pricing, no hidden fees.",
   },
@@ -587,7 +587,7 @@ export const WINDERMERE: CityData = {
   name: "Windermere",
   navLabel: "Windermere movers",
   metadata: {
-    title: "Windermere Movers",
+    title: "Windermere, FL Movers — Moving Company",
     description:
       "Family-owned Windermere movers — Isleworth, Keene's Pointe, Butler Bay & the Butler Chain. Careful with high-value homes. Free estimate.",
   },
@@ -685,7 +685,7 @@ export const DAVENPORT: CityData = {
   name: "Davenport",
   navLabel: "Davenport movers",
   metadata: {
-    title: "Davenport Movers",
+    title: "Davenport, FL Movers — Moving Company",
     description:
       "Family-owned Davenport movers — ChampionsGate, Providence, Ridgewood Lakes & the Four Corners area. Bilingual, up-front hourly pricing.",
   },
@@ -734,7 +734,7 @@ export const LAKELAND: CityData = {
   name: "Lakeland",
   navLabel: "Lakeland movers",
   metadata: {
-    title: "Lakeland Movers",
+    title: "Lakeland, FL Movers — Moving Company",
     description:
       "Family-owned Lakeland movers serving Polk County — apartment, home, and labor-only moves. Bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
   },
@@ -783,7 +783,7 @@ export const WINTER_HAVEN: CityData = {
   name: "Winter Haven",
   navLabel: "Winter Haven movers",
   metadata: {
-    title: "Winter Haven Movers",
+    title: "Winter Haven, FL Movers — Moving Company",
     description:
       "Family-owned Winter Haven movers serving Polk County — apartment, home, and labor-only moves. Bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
   },
