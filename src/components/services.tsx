@@ -1,10 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useLang } from "./lang-provider";
 import { RequestButton } from "./request-button";
 
+// Homepage service cards → their dedicated service pages. Index-aligned with
+// t.services.tiers: 0 Loading help, 1 In-town move, 2 Big-day move.
+const TIER_LINKS = [
+  "/labor-only-moving",
+  "/residential-movers",
+  "/full-service-moving",
+];
+
 export function Services() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   return (
     <section className="block" id="services">
       <div className="block-inner">
@@ -26,6 +35,9 @@ export function Services() {
                 ))}
               </ul>
               <RequestButton label={tier.cta} variant={i === 1 ? "primary" : "secondary"} />
+              <Link href={TIER_LINKS[i]} className="tier-learn-more">
+                {lang === "es" ? "Ver más →" : "Learn more →"}
+              </Link>
             </article>
           ))}
         </div>
