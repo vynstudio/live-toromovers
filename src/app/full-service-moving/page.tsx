@@ -17,7 +17,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/full-service-moving";
 
 const DESCRIPTION =
-  "Full-service movers in Central Florida — Toro Movers handles packing, loading, transport, and local moves with up-front pricing. Insured, bilingual.";
+  "Full-service movers in Central Florida — Toro Movers handles packing, loading, transport, and local moves with up-front pricing. Bilingual.";
 
 export const metadata: Metadata = {
   title: { absolute: "Full-Service Movers in Central Florida | Toro Movers" },
@@ -35,13 +35,13 @@ export const metadata: Metadata = {
 
 const BULLETS = [
   "We pack, move, and set up your whole home",
-  "Insured local crew · up-front hourly pricing",
+  "Local crew · up-front hourly pricing",
   "Family-owned · bilingual · Central Florida only",
 ];
 
 const VALUE = [
   { h: "Packing & supplies", p: "We bring boxes and wrap and pack your home room by room — or just the fragile things." },
-  { h: "Door to door", p: "An insured local crew loads, drives, protects, and unloads — you don't lift a box." },
+  { h: "Door to door", p: "An experienced local crew loads, drives, protects, and unloads — you don't lift a box." },
   { h: "Set up & reassembled", p: "Furniture placed where you want it, beds and tables put back together." },
 ];
 
@@ -134,7 +134,7 @@ export default function FullServiceMovingPage() {
             </ul>
             <div className="fn-trust">
               <span className="fn-stars" aria-hidden>★★★★★</span>
-              <span>{GOOGLE_RATING} on Google · Family-owned · Insured · Bilingual</span>
+              <span>{GOOGLE_RATING} on Google · Family-owned · Bilingual</span>
             </div>
             <div className="fn-hero-cta">
               <a href="#lead-form" className="fn-btn fn-btn-primary fn-btn-lg">Get My Quote</a>
@@ -200,7 +200,7 @@ export default function FullServiceMovingPage() {
           ))}
         </nav>
         <div className="fn-footer-bottom">
-          <span>{BUSINESS_NAME} · Family-owned · Insured · Bilingual</span>
+          <span>{BUSINESS_NAME} · Family-owned · Bilingual</span>
           <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
         </div>
       </footer>

@@ -29,7 +29,7 @@ export default function ThankYouFullServicePage() {
           <Link href="/quote" className="fn-btn fn-btn-ghost-light">Get My Quote</Link>
         </div>
         <p className="fn-thanks-fine">
-          Hablamos español · Family-owned · Fully insured · Up-front hourly pricing
+          Hablamos español · Family-owned · Up-front hourly pricing
         </p>
       </div>
     </main>

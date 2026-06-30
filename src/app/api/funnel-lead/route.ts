@@ -111,7 +111,7 @@ async function sendCustomerEmail(lead: FunnelLeadInput, isLabor: boolean): Promi
     <p style="margin:0 0 4px">Want to speed it up? Call us now:</p>
     <p style="font:600 18px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">(689) 600-2720</a></p>
     <p style="margin:0 0 22px"><a href="${QUOTE_URL}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui,sans-serif;padding:12px 22px;border-radius:8px">Review your quote details →</a></p>
-    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Fully insured · Up-front hourly pricing · Hablamos español<br>Toro Movers · (689) 600-2720</p>
+    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Up-front hourly pricing · Hablamos español<br>Toro Movers · (689) 600-2720</p>
   </div>`;
 
   try {

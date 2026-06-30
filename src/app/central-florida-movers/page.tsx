@@ -15,7 +15,7 @@ const HREF = "/central-florida-movers";
 
 const TITLE = "Central Florida Movers";
 const DESCRIPTION =
-  "Local movers serving Orlando & Central Florida. Family-owned, insured, bilingual, up-front hourly pricing — apartments, homes, packing & loading help.";
+  "Local movers serving Orlando & Central Florida. Family-owned, bilingual, up-front hourly pricing — apartments, homes, packing & loading help.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -106,7 +106,7 @@ export default function Page() {
             <p className="city-kicker">central florida</p>
             <h1 className="city-h1">Central Florida Movers</h1>
             <p className="city-subline">
-              Family-owned, insured, bilingual movers serving Orlando and the
+              Family-owned, bilingual movers serving Orlando and the
               surrounding Central Florida cities. Local moves only — apartments,
               homes, offices, packing, and loading help, all at up-front hourly
               pricing with no hidden fees.
@@ -137,8 +137,8 @@ export default function Page() {
                 <h2 className="block-h2">Local moving services.</h2>
               </div>
               <p className="city-lead">
-                One local crew for the whole job — billed by the hour, fully
-                insured, with no surprise charges.
+                One local crew for the whole job — billed by the hour, with
+                no surprise charges.
               </p>
             </div>
             <div className="city-others">

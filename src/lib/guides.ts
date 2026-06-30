@@ -53,7 +53,7 @@ export const ORLANDO_MOVE_PREP: GuideData = {
       ],
       bullets: [
         "A reserved elevator or loading-dock window for the building.",
-        "A certificate of insurance (COI) naming the property — a good mover provides this; just send the requirements when you book.",
+        "A certificate of insurance (COI) naming the property — confirm with your moving company whether they can provide one, since not every mover can.",
         "An HOA or guard-gate arrival window, and notice that a moving truck is coming.",
         "Where the truck can legally park, and how far the carry is from there to your door.",
       ],
@@ -100,7 +100,7 @@ export const ORLANDO_MOVE_PREP: GuideData = {
     },
     {
       q: "What does my apartment complex or HOA need before move day?",
-      a: "Most commonly a reserved elevator or loading window, a certificate of insurance (COI) naming the property, and an arrival window for the truck. We're fully insured and provide the COI ahead of time — just send us your building's requirements when you book.",
+      a: "Most commonly a reserved elevator or loading window, a certificate of insurance (COI) naming the property, and an arrival window for the truck. Ask your building for their exact COI requirements early, and confirm your mover can meet them — not every company can.",
     },
     {
       q: "When is the best time to schedule a local move?",
@@ -152,7 +152,7 @@ export const APARTMENT_CHECKLIST: GuideData = {
     {
       h2: "Sort the certificate of insurance (COI) early",
       body: [
-        "Many Orlando complexes won't let a moving crew start without a certificate of insurance naming the property. This trips up more apartment moves than anything else. Ask the office for their exact COI requirements as soon as you book, and send them to your mover — a fully insured company provides the COI ahead of time at no drama.",
+        "Many Orlando complexes won't let a moving crew start without a certificate of insurance naming the property. This trips up more apartment moves than anything else. Ask the office for their exact COI requirements as soon as you book, and confirm with your moving company whether they can provide one — not every company can.",
       ],
     },
     {
@@ -198,7 +198,7 @@ export const APARTMENT_CHECKLIST: GuideData = {
   faqs: [
     {
       q: "Does my Orlando apartment complex require a certificate of insurance?",
-      a: "Many do — especially larger communities and downtown high-rises. They'll want a COI naming the property before the crew can start. We're fully insured and provide the certificate ahead of time; just send us your complex's requirements when you book.",
+      a: "Many do — especially larger communities and downtown high-rises. They'll want a COI naming the property before the crew can start. Confirm with your moving company early whether they can provide one — it trips up more apartment moves than anything else.",
     },
     {
       q: "Do you charge extra for stairs or a no-elevator building?",

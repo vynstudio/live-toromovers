@@ -48,7 +48,7 @@ export const APARTMENT_MOVERS: ServiceData = {
   metadata: {
     title: "Apartment Movers Orlando",
     description:
-      "Family-owned apartment movers in Orlando & Central Florida. Stairs, elevators, tight complex windows — up-front hourly pricing, insured, bilingual crew.",
+      "Family-owned apartment movers in Orlando & Central Florida. Stairs, elevators, tight complex windows — up-front hourly pricing, bilingual crew.",
   },
   h1: "Apartment Movers in Orlando & Central Florida",
   subline:
@@ -64,7 +64,7 @@ export const APARTMENT_MOVERS: ServiceData = {
     },
     {
       h3: "We work with your complex",
-      body: "Most Orlando-area communities require a reserved elevator, a certificate of insurance, or a set arrival window. We carry the documentation property managers ask for and show up inside the window so move-in day isn't held up at the office.",
+      body: "Most Orlando-area communities require a reserved elevator or a set arrival window. We coordinate with property managers and show up inside the window so move-in day isn't held up at the office.",
     },
     {
       h3: "Furniture protected on tight turns",
@@ -81,8 +81,8 @@ export const APARTMENT_MOVERS: ServiceData = {
       a: "Yes. Small apartment moves are one of the most common jobs we run. A two-mover crew handles most one- and two-bedroom apartments quickly, and you only pay for the hours used.",
     },
     {
-      q: "My building needs a certificate of insurance. Can you provide one?",
-      a: "Yes. We're fully insured and can send a certificate of insurance (COI) naming your building or HOA ahead of move day — just send us the requirements when you book.",
+      q: "Can you work with my building's move-in requirements?",
+      a: "Yes. Most Orlando-area buildings ask for a reserved elevator and a set arrival window — we coordinate those with your property manager and show up inside the window so move-in day isn't held up.",
     },
   ],
   serviceType: "Apartment moving service",
@@ -96,11 +96,11 @@ export const RESIDENTIAL_MOVERS: ServiceData = {
   metadata: {
     title: "Residential Movers Orlando & Central Florida",
     description:
-      "Family-owned residential movers across Orlando & Central Florida — houses, condos & HOA communities. Insured, bilingual, up-front hourly pricing.",
+      "Family-owned residential movers across Orlando & Central Florida — houses, condos & HOA communities. Bilingual, up-front hourly pricing.",
   },
   h1: "Residential Movers in Orlando & Central Florida",
   subline:
-    "Single-family homes, townhomes, and HOA communities moved by a crew that treats your house like their own — up-front hourly pricing, fully insured.",
+    "Single-family homes, townhomes, and HOA communities moved by a crew that treats your house like their own — up-front hourly pricing.",
   intro: {
     h2: "Your home move, handled start to finish.",
     lead: "A house move has more moving parts than an apartment — more rooms, bigger furniture, garages and patios, and often an HOA or gated community on at least one end. Toro Movers handles the whole thing: disassembly and reassembly, careful loading, and floor and doorway protection throughout. Up-front hourly pricing, the same crew that quoted you on the day, and no surprises.",
@@ -112,7 +112,7 @@ export const RESIDENTIAL_MOVERS: ServiceData = {
     },
     {
       h3: "Built for HOA & gated communities",
-      body: "Across Central Florida, most newer homes sit in HOA or gated neighborhoods with arrival windows, guard-gate check-ins, and COI requirements. We carry the documentation and coordinate timing so you're not stuck at the gate.",
+      body: "Across Central Florida, most newer homes sit in HOA or gated neighborhoods with arrival windows and guard-gate check-ins. We coordinate the timing and gate access so you're not stuck at the gate.",
     },
     {
       h3: "Floors and walls protected",
@@ -144,14 +144,14 @@ export const COMMERCIAL_MOVERS: ServiceData = {
   metadata: {
     title: "Commercial & Office Movers Orlando",
     description:
-      "Office & commercial movers in Orlando & Central Florida — after-hours moves, desks, IT & equipment. Insured, bilingual, up-front pricing.",
+      "Office & commercial movers in Orlando & Central Florida — after-hours moves, desks, IT & equipment. Bilingual, up-front pricing.",
   },
   h1: "Commercial & Office Movers in Orlando",
   subline:
-    "Offices, retail, and small commercial spaces moved around your schedule — after-hours or weekend, fully insured, with up-front hourly pricing.",
+    "Offices, retail, and small commercial spaces moved around your schedule — after-hours or weekend, with up-front hourly pricing.",
   intro: {
     h2: "Move the business without losing a day.",
-    lead: "A commercial move lives or dies on timing — every hour the office is in boxes is an hour nobody's working. Toro Movers schedules around your operation, including evenings and weekends, and moves desks, workstations, conference furniture, and equipment carefully so you're back up and running fast. Fully insured, COI provided for your building, and quoted by the hour up front.",
+    lead: "A commercial move lives or dies on timing — every hour the office is in boxes is an hour nobody's working. Toro Movers schedules around your operation, including evenings and weekends, and moves desks, workstations, conference furniture, and equipment carefully so you're back up and running fast. Quoted by the hour up front, and we coordinate building access ahead of time.",
   },
   points: [
     {
@@ -163,8 +163,8 @@ export const COMMERCIAL_MOVERS: ServiceData = {
       body: "Workstations, filing, conference tables, and sensitive equipment are wrapped, labeled, and placed where they go at the new space — not just dropped in a pile by the door.",
     },
     {
-      h3: "Building & COI coordination",
-      body: "Office buildings almost always require a certificate of insurance and a reserved freight elevator or dock window. We handle the paperwork and book the access ahead of time.",
+      h3: "Building access coordination",
+      body: "Office buildings almost always require a reserved freight elevator or dock window and advance scheduling. We book the access and arrival window ahead of time.",
     },
   ],
   faqs: [
@@ -173,8 +173,8 @@ export const COMMERCIAL_MOVERS: ServiceData = {
       a: "Yes. Most commercial moves we run are scheduled in the evening or over a weekend so your team loses as little working time as possible.",
     },
     {
-      q: "Do you provide a certificate of insurance for our building?",
-      a: "Yes. We're fully insured and provide a COI naming your building management ahead of the move — send us the requirements when you book.",
+      q: "Can you schedule around our building's access rules?",
+      a: "Yes. Office buildings usually require a reserved freight elevator or dock window and advance notice — we coordinate the access and timing with building management ahead of the move.",
     },
     {
       q: "How do you price a commercial move?",
@@ -196,7 +196,7 @@ export const PACKING_SERVICES: ServiceData = {
   metadata: {
     title: "Packing Services Orlando & Central Florida",
     description:
-      "Professional packing services in Orlando & Central Florida — full or partial packing, supplies, fragile items. Insured, bilingual, up-front pricing.",
+      "Professional packing services in Orlando & Central Florida — full or partial packing, supplies, fragile items. Bilingual, up-front pricing.",
   },
   h1: "Packing Services in Orlando & Central Florida",
   subline:
@@ -248,14 +248,14 @@ export const LOADING_UNLOADING: ServiceData = {
   metadata: {
     title: "Loading & Unloading Help Orlando",
     description:
-      "Loading & unloading help in Orlando & Central Florida — U-Haul, PODS & rental trucks loaded tight. Insured, bilingual, up-front hourly pricing.",
+      "Loading & unloading help in Orlando & Central Florida — U-Haul, PODS & rental trucks loaded tight. Bilingual, up-front hourly pricing.",
   },
   h1: "Loading & Unloading Help in Orlando",
   subline:
-    "Got the truck, POD, or container? We bring the muscle — labor-only loading and unloading by the hour, fully insured, no truck rental required.",
+    "Got the truck, POD, or container? We bring the muscle — labor-only loading and unloading by the hour, no truck rental required.",
   intro: {
     h2: "You rented the truck. We'll load it right.",
-    lead: "Plenty of moves don't need a moving truck — you've already got a U-Haul, a POD, a rental, or a container in the driveway. What you need is a strong, careful crew to load it tight or unload it fast. Toro Movers does labor-only by the hour: we load so nothing shifts on the road, or unload and place everything where it goes. Fully insured, up-front pricing, two-hour minimum.",
+    lead: "Plenty of moves don't need a moving truck — you've already got a U-Haul, a POD, a rental, or a container in the driveway. What you need is a strong, careful crew to load it tight or unload it fast. Toro Movers does labor-only by the hour: we load so nothing shifts on the road, or unload and place everything where it goes. Up-front pricing, two-hour minimum.",
   },
   points: [
     {
@@ -267,8 +267,8 @@ export const LOADING_UNLOADING: ServiceData = {
       body: "Book us for one end or both. Loading-only, unloading-only, or a full reload between addresses — all billed by the hour with a two-hour minimum.",
     },
     {
-      h3: "Insured muscle, not a moving truck bill",
-      body: "You skip the cost of our truck and just pay for the crew's time. Same insured, careful handling — wrapped furniture, protected floors, no scratched walls.",
+      h3: "Just the muscle, not a moving truck bill",
+      body: "You skip the cost of our truck and just pay for the crew's time. Same careful handling — wrapped furniture, protected floors, no scratched walls.",
     },
   ],
   faqs: [

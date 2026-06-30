@@ -197,7 +197,7 @@ export function CityPage({ city }: { city: CityData }) {
               </div>
               <p className="city-lead">
                 Whatever your {city.name} move needs — one local crew, billed by
-                the hour, fully insured.
+                the hour, with no surprise charges.
                 {city.slug === "kissimmee-movers" && (
                   <>
                     {" "}Looking for{" "}

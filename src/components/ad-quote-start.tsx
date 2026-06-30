@@ -60,7 +60,7 @@ export function AdQuoteStart() {
         <span className="arrow" aria-hidden />
       </button>
       <div className="ad-start-trust">
-        <span><b>Insured</b></span>
+        <span><b>No hidden fees</b></span>
         <span className="sep">·</span>
         <span><b>No hidden fees</b></span>
         <span className="sep">·</span>

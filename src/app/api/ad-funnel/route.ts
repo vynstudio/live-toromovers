@@ -302,7 +302,7 @@ async function customerEmail(
     <p style="margin:0 0 18px;color:#3A3A3A">A Toro Movers team member will text or call you shortly to check availability and confirm your up-front rate.</p>
     <p style="margin:0 0 4px">Want to speed it up? Call us now:</p>
     <p style="font:600 18px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">(689) 600-2720</a></p>
-    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Fully insured · Up-front pricing · Hablamos español<br>Toro Movers · (689) 600-2720</p>
+    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Up-front pricing · Hablamos español<br>Toro Movers · (689) 600-2720</p>
   </div>`;
   try {
     const res = await fetch("https://api.resend.com/emails", {

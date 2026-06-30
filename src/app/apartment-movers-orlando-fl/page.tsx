@@ -62,8 +62,8 @@ const INCLUDED = [
   "Furniture wrapping and blanket protection",
   "Dollies and moving straps",
   "Shrink wrap for upholstered pieces",
-  "Bilingual crew",
-  "Certificate of Insurance available on request",
+  "Background-checked, bilingual crew",
+  "Disassembly & reassembly of furniture",
   "No fuel surcharges, no stair fees, no elevator fees, no weekend premiums",
 ];
 
@@ -88,8 +88,8 @@ const FAQS = [
     a: "No. Our hourly rate covers everything — stairs, elevators, long carries, heavy furniture. There are no add-on fees for building logistics.",
   },
   {
-    q: "Can you provide a Certificate of Insurance (COI) for my building?",
-    a: "Yes. Toro Movers is fully insured and can send a certificate of insurance naming your property manager or HOA before your move date — just send us your building's requirements when you book.",
+    q: "Can you work with my building's move-in requirements?",
+    a: "Yes. Most Orlando apartment complexes require a reserved elevator and a set move-in window — we coordinate those with your property manager and show up inside the window so move-in day isn't held up.",
   },
   {
     q: "How far in advance do I need to book?",
@@ -226,9 +226,9 @@ export default function ApartmentMoversOrlandoPage() {
               <p className="guide-p">
                 As local <Link href="/">Orlando movers</Link>, we&rsquo;ve handled
                 apartments across Orlando&rsquo;s biggest complexes and smallest
-                walk-ups. We coordinate elevator access, work within your
-                building&rsquo;s move-in window, and carry a Certificate of Insurance
-                your property manager can have on file before moving day.
+                walk-ups. We coordinate elevator access and work within your
+                building&rsquo;s move-in window so move-in day isn&rsquo;t held up
+                at the leasing office.
               </p>
               <p className="guide-p">
                 Our crew wraps every piece of furniture before it leaves your
@@ -361,7 +361,7 @@ export default function ApartmentMoversOrlandoPage() {
               <p className="city-angle-text">
                 Get a quote in about 60 seconds. Up-front hourly pricing, no hidden
                 fees, same-week dates available. {GOOGLE_RATING} stars on Google ·
-                Family-owned · Bilingual crew · Insured.
+                Family-owned · Bilingual crew.
               </p>
               <div className="city-hero-cta" style={{ marginTop: 24 }}>
                 <Link href="/quote" className="btn btn-primary">

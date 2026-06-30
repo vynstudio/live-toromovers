@@ -29,7 +29,7 @@ const PRICE_FACTORS = [
 
 const APARTMENT = [
   "Reserve the elevator and a loading zone with your building.",
-  "Ask the office if a Certificate of Insurance (COI) is required — we'll provide it.",
+  "Ask your building office whether a Certificate of Insurance (COI) is required, and sort it out before move day.",
   "Confirm move-in/move-out time windows the complex allows.",
   "Empty and clear hallways and stairwells on moving day.",
 ];

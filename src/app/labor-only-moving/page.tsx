@@ -18,7 +18,7 @@ const HREF = "/labor-only-moving";
 
 // CHANGE 1 (meta description updated to match new H1 keyword focus)
 const DESCRIPTION =
-  "Labor-only movers in Orlando & Central Florida — loading, unloading & stair help by the hour. Family-owned, insured, bilingual. Get a quote today.";
+  "Labor-only movers in Orlando & Central Florida — loading, unloading & stair help by the hour. Family-owned, bilingual. Get a quote today.";
 
 export const metadata: Metadata = {
   // CHANGE 1 cont. (title updated to match H1)
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 const BULLETS = [
-  "Loading & unloading by an insured local crew",
+  "Loading & unloading by a careful local crew",
   "Truck, POD, U-Haul & storage loading help",
   "Up-front hourly rate — you keep your own truck",
 ];
@@ -184,7 +184,7 @@ export default function LaborOnlyMovingPage() {
             </ul>
             <div className="fn-trust">
               <span className="fn-stars" aria-hidden>★★★★★</span>
-              <span>{GOOGLE_RATING} on Google · Family-owned · Insured · Bilingual</span>
+              <span>{GOOGLE_RATING} on Google · Family-owned · Bilingual</span>
             </div>
             <div className="fn-hero-cta">
               <a href="#lead-form" className="fn-btn fn-btn-primary fn-btn-lg">Get My Hourly Quote</a>
@@ -274,7 +274,7 @@ export default function LaborOnlyMovingPage() {
           ))}
         </nav>
         <div className="fn-footer-bottom">
-          <span>{BUSINESS_NAME} · Family-owned · Insured · Bilingual</span>
+          <span>{BUSINESS_NAME} · Family-owned · Bilingual</span>
           <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
         </div>
       </footer>
