@@ -32,6 +32,11 @@ function PinIcon() {
 
 export function CityPage({ city }: { city: CityData }) {
   const others = otherCities(city.slug);
+  // Outbound authoritative citation(s), woven inline below. Falls back to the
+  // USPS change-of-address service so every city page carries an external link.
+  const refs = city.references?.length
+    ? city.references
+    : [{ label: "the USPS change-of-address service", href: "https://www.usps.com/manage/forward.htm" }];
 
   // One business, many service areas. The rating lives ONLY on the canonical
   // homepage MovingCompany entity (#movingcompany) — we do NOT repeat an
@@ -163,26 +168,24 @@ export function CityPage({ city }: { city: CityData }) {
               <div className="block-eyebrow city-eyebrow--light">{city.uniqueAngle.eyebrow}</div>
               <h2 className="city-angle-h2">{city.uniqueAngle.h2}</h2>
               <p className="city-angle-text">{city.uniqueAngle.body}</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Helpful local resources — outbound citations to official sources */}
-        {city.references?.length ? (
-          <section className="block">
-            <div className="block-inner">
-              <p className="svc-disclaimer">
-                Moving to {city.name}? Helpful local resources:{" "}
-                {city.references.map((r, i) => (
+              <p className="city-angle-text" style={{ marginTop: 16 }}>
+                Planning a {city.name} move?{" "}
+                <Link href="/central-florida-moving-checklist">
+                  Download the free Central Florida moving checklist
+                </Link>{" "}
+                — a week-by-week guide built for Orlando-area moves. Settling in?
+                It&rsquo;s worth bookmarking{" "}
+                {refs.map((r, i) => (
                   <span key={r.href}>
-                    {i > 0 ? " · " : ""}
+                    {i === 0 ? "" : i === refs.length - 1 ? " and " : ", "}
                     <a href={r.href}>{r.label}</a>
                   </span>
                 ))}
+                .
               </p>
             </div>
-          </section>
-        ) : null}
+          </div>
+        </section>
 
         {/* Moving services — internal links */}
         <section className="block">
