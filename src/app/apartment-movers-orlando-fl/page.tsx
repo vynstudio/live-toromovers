@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { TrustBand } from "@/components/trust-band";
-import { ClosingCta } from "@/components/closing-cta";
 import { Footer } from "@/components/footer";
 import { FaqSection } from "@/components/faq-section";
 import { REVIEWS } from "@/lib/content";
@@ -12,6 +11,7 @@ import {
   PHONE_TEL,
   BUSINESS_NAME,
   GOOGLE_RATING,
+  REVIEW_COUNT,
   SERVICE_REGION,
 } from "@/lib/contact";
 
@@ -19,7 +19,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/apartment-movers-orlando-fl";
 
 const DESCRIPTION =
-  "Toro Movers handles apartment moves across Orlando with honest hourly pricing, a bilingual crew, and same-week availability. No fuel surcharges. No stair fees. Get a quote in 60 seconds.";
+  "Toro Movers handles apartment moves across Orlando with honest hourly pricing, a bilingual crew, and same-week availability. No stair fees. No fuel surcharges. Get a quote in 60 seconds.";
 
 export const metadata: Metadata = {
   title: { absolute: "Apartment Movers Orlando FL | Toro Movers — Hourly, No Hidden Fees" },
@@ -35,71 +35,73 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-// Why apartment moves are different — trust-building, snippet-friendly.
-const DIFFERENT = [
-  {
-    h3: "Stairs, breezeways & elevators",
-    body: "Walk-ups, narrow hallways, and a single slow elevator are where apartment moves get slow and furniture gets dinged. We pad and wrap on every tight turn and price by the hour — so a third-floor unit never turns into a surprise stair fee.",
-  },
-  {
-    h3: "We work with your building",
-    body: "Most Orlando complexes hold you to a move-in window and ask for a reserved elevator or a certificate of insurance. We're fully insured, send a COI naming your building or HOA on request, and show up inside the window so the leasing office doesn't hold up your day.",
-  },
-  {
-    h3: "The clock stops when the job ends",
-    body: "No padded time, no fuel surcharge, no weekend premium. You only pay for the hours your move actually takes, at a rate we agree on up front.",
-  },
-];
-
-// Apartment-specific service tiers (adapted from the homepage three tiers).
+// Apartment-specific service tiers.
 const TIERS = [
   {
     title: "Loading help",
     sub: "Already have a U-Haul, PODS, or rental",
-    bullets: ["2 movers, blankets, dollies & shrink wrap", "Load tight so nothing shifts on the road", "Two-hour minimum, billed by the hour"],
+    body: "You've got the truck — we bring the crew. Two movers load or unload your U-Haul, PODS, or rental truck. Blankets, dollies, and shrink wrap included. Minimum two hours.",
+    bestFor: "Renters who already have a truck rented and just need strong, careful hands.",
   },
   {
     title: "In-town apartment move",
     sub: "Studio to 3-bedroom apartment",
-    bullets: ["Truck + 2 movers", "Furniture wrapped & protected", "Disassembly and reassembly included"],
+    body: "Our truck, our crew, your timeline. Two movers and our truck for studio, one-, two-, and three-bedroom apartments anywhere in Central Florida.",
+    bestFor: "The standard apartment-to-apartment move within Orlando or to a nearby city.",
     featured: true,
   },
   {
     title: "Big-day move",
     sub: "Large apartment or same-day full move",
-    bullets: ["3 movers + truck", "Packing add-on available", "Same-week and same-day dates when open"],
+    body: "Three movers and our truck for larger apartments, upper-floor walk-ups, or moves that need to happen fast. Same up-front hourly rate — just more hands.",
+    bestFor: "Large apartments, tight move-out windows, or anyone who wants it done in one shot.",
   },
 ];
 
-// Three most apartment-relevant Google reviews.
+const INCLUDED = [
+  "Furniture wrapping and blanket protection",
+  "Dollies and moving straps",
+  "Shrink wrap for upholstered pieces",
+  "Bilingual crew",
+  "Certificate of Insurance available on request",
+  "No fuel surcharges, no stair fees, no elevator fees, no weekend premiums",
+];
+
+const ORLANDO_HOODS = [
+  "Downtown Orlando", "Lake Nona", "Dr. Phillips", "Hunters Creek", "College Park",
+  "Milk District", "Thornton Park", "Azalea Park", "Conway", "Pine Hills",
+];
+
+// Three most apartment-relevant Google reviews (Giuseppe = labor-only,
+// Kony = Kissimmee apartment, Stael = apartment) — pulled from real data.
 const PROOF = REVIEWS.filter((r) =>
-  ["Labor only", "Apartment move", "Kissimmee → Clermont"].includes(r.meta),
+  ["Labor only", "Kissimmee → Clermont", "Apartment move"].includes(r.meta),
 ).slice(0, 3);
 
 const FAQS = [
   {
     q: "How much do apartment movers cost in Orlando?",
-    a: "Apartment moves are billed by the hour, with the rate and crew size agreed up front. A two-mover crew handles most studio-to-2-bedroom apartments quickly, so you only pay for the hours used — no flat-rate padding and no surprise line items.",
+    a: "Toro Movers charges an up-front hourly rate with a two-hour minimum. You get your written quote in about 60 seconds before you book — no estimate that balloons on moving day. The exact rate depends on crew size and truck, which we confirm when you submit your move details.",
   },
   {
     q: "Do you charge stair fees or elevator fees for apartment moves?",
-    a: "No. There's no separate stair fee or elevator fee. A higher floor or a walk-up simply takes a little longer, and we tell you up front how that affects the estimate so nothing changes on the invoice.",
+    a: "No. Our hourly rate covers everything — stairs, elevators, long carries, heavy furniture. There are no add-on fees for building logistics.",
   },
   {
     q: "Can you provide a Certificate of Insurance (COI) for my building?",
-    a: "Yes. We're fully insured and can send a certificate of insurance naming your building management or HOA ahead of move day — just send us the requirements when you book.",
+    a: "Yes. Toro Movers is fully insured and can send a certificate of insurance naming your property manager or HOA before your move date — just send us your building's requirements when you book.",
   },
   {
     q: "How far in advance do I need to book?",
-    a: "Sooner is better for a specific date, but because we're a local Central Florida crew we can often fit apartment moves in the same week, and same-day when the schedule is open. Call us to check your date.",
+    a: "We offer same-week scheduling on most dates. For weekend moves, booking 5–7 days ahead is recommended. Call (689) 600-2720 for last-minute availability.",
   },
   {
-    q: "Do you move apartments to other cities in Florida?",
-    a: "Yes, anywhere across the Orlando metro and Central Florida — Kissimmee, Oviedo, Lake Nona, Winter Park, Sanford, Clermont, and beyond. We focus on local moves and don't do long-distance or interstate.",
+    q: "Do you move apartments to other cities in Central Florida?",
+    a: "Yes — we move apartments throughout the full Orlando metro including Kissimmee, Sanford, Altamonte Springs, Lake Mary, Oviedo, Clermont, Winter Park, and 30+ surrounding cities. We focus on local moves across Central Florida and don't take long-distance or interstate jobs.",
   },
   {
     q: "¿Hacen mudanzas de apartamentos en español?",
-    a: "Sí. Toro Movers tiene una cuadrilla bilingüe — atendemos mudanzas de apartamentos en todo Orlando y Florida Central en inglés y español, con precios por hora y sin cargos sorpresa.",
+    a: "Sí. Todo nuestro equipo es bilingüe — podemos cotizar, coordinar y completar tu mudanza de apartamento completamente en español, con precios por hora y sin cargos sorpresa.",
   },
 ];
 
@@ -119,6 +121,33 @@ const jsonLd = {
         name: BUSINESS_NAME,
         "@id": `${SITE_URL}/#movingcompany`,
         telephone: "+16896002720",
+        areaServed: { "@type": "AdministrativeArea", name: SERVICE_REGION },
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            opens: "07:00",
+            closes: "19:00",
+          },
+        ],
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: GOOGLE_RATING,
+          bestRating: "5",
+          reviewCount: REVIEW_COUNT,
+        },
+      },
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Apartment moving services",
+        itemListElement: TIERS.map((tier) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: tier.title,
+            description: tier.sub,
+          },
+        })),
       },
     },
     {
@@ -156,20 +185,24 @@ export default function ApartmentMoversOrlandoPage() {
             <h1 className="city-h1">Apartment Movers in Orlando, FL</h1>
             <p className="city-subline">
               Toro Movers handles apartment moves across Orlando and Central Florida
-              with upfront hourly pricing, a bilingual crew, and same-week
+              with up-front hourly pricing, a bilingual crew, and same-week
               availability. No fuel surcharges. No stair fees. No weekend premiums.
+              The clock stops when the job ends.
             </p>
             <div className="city-hero-cta">
               <Link href="/quote" className="btn btn-primary">
                 Get my quote
                 <span className="arrow" aria-hidden />
               </Link>
+              <a href={PHONE_TEL} className="btn btn-secondary">
+                Call {PHONE_DISPLAY}
+              </a>
             </div>
             <div className="city-hero-meta">
               <span className="city-stars" aria-hidden>★★★★★</span>
               <span>{GOOGLE_RATING} on Google</span>
               <span className="sep">·</span>
-              <a href={PHONE_TEL} className="city-phone">{PHONE_DISPLAY}</a>
+              <span>Up-front hourly · 2-hour minimum · Bilingual · Same-week dates</span>
             </div>
           </div>
         </section>
@@ -178,27 +211,36 @@ export default function ApartmentMoversOrlandoPage() {
 
         {/* Why apartment moves are different */}
         <section className="block">
-          <div className="block-inner city-two-col city-two-col--mb">
-            <div>
-              <div className="block-eyebrow">apartment moves</div>
-              <h2 className="block-h2">What makes apartment moving different (and how we handle it).</h2>
-            </div>
-            <p className="city-lead">
-              Orlando is packed with apartment and condo communities, and they all
-              come with the same friction: tight stairwells, reserved elevators,
-              strict move-in windows, and building paperwork. As local{" "}
-              <Link href="/">Orlando movers</Link>, apartment moves are what we run
-              every week — and we price them honestly by the hour.
-            </p>
-          </div>
           <div className="block-inner">
-            <div className="svc-points">
-              {DIFFERENT.map((p) => (
-                <div key={p.h3} className="svc-point">
-                  <h3 className="svc-point-h3">{p.h3}</h3>
-                  <p className="svc-point-body">{p.body}</p>
-                </div>
-              ))}
+            <div className="block-eyebrow">apartment moves</div>
+            <h2 className="block-h2" style={{ marginBottom: 24 }}>
+              What makes apartment moving different (and how we handle it).
+            </h2>
+            <div className="guide-body">
+              <p className="guide-p">
+                Apartment moves come with challenges that house moves don&rsquo;t.
+                Narrow hallways, tight stairwells, elevator reservation windows, and
+                building-management requirements can turn a simple move into a
+                logistical puzzle — if your movers aren&rsquo;t prepared.
+              </p>
+              <p className="guide-p">
+                As local <Link href="/">Orlando movers</Link>, we&rsquo;ve handled
+                apartments across Orlando&rsquo;s biggest complexes and smallest
+                walk-ups. We coordinate elevator access, work within your
+                building&rsquo;s move-in window, and carry a Certificate of Insurance
+                your property manager can have on file before moving day.
+              </p>
+              <p className="guide-p">
+                Our crew wraps every piece of furniture before it leaves your
+                apartment. Couches go vertical. Mattresses get bagged. Nothing scrapes
+                your walls or dings your doorframes — because your security deposit is
+                on the line, and we treat it like it&rsquo;s ours.
+              </p>
+              <p className="guide-p">
+                And because we charge by the hour with a two-hour minimum, you only
+                pay for the time we actually work. The clock stops when the last box is
+                placed.
+              </p>
             </div>
           </div>
         </section>
@@ -208,7 +250,7 @@ export default function ApartmentMoversOrlandoPage() {
           <div className="block-inner">
             <div className="block-eyebrow">apartment moving services in orlando</div>
             <h2 className="block-h2" style={{ marginBottom: 28 }}>
-              Three ways to move your apartment.
+              Three ways we can help — all at the same up-front hourly rate.
             </h2>
             <div className="tiers">
               {TIERS.map((tier) => (
@@ -216,9 +258,8 @@ export default function ApartmentMoversOrlandoPage() {
                   {tier.featured && <span className="tier-tag">Most popular</span>}
                   <h3 className="tier-title">{tier.title}</h3>
                   <p className="tier-sub">{tier.sub}</p>
-                  <ul className="tier-bullets">
-                    {tier.bullets.map((b) => <li key={b}>{b}</li>)}
-                  </ul>
+                  <p className="svc-point-body">{tier.body}</p>
+                  <p className="svc-point-body"><strong>Best for:</strong> {tier.bestFor}</p>
                   <Link
                     href="/quote"
                     className={`btn ${tier.featured ? "btn-primary" : "btn-secondary"}`}
@@ -231,24 +272,44 @@ export default function ApartmentMoversOrlandoPage() {
           </div>
         </section>
 
-        {/* Areas served — internal links to city pages */}
+        {/* What's always included */}
+        <section className="block">
+          <div className="block-inner city-two-col city-two-col--mb">
+            <div>
+              <div className="block-eyebrow">every apartment move</div>
+              <h2 className="block-h2">What&rsquo;s always included.</h2>
+            </div>
+            <div className="tier" style={{ margin: 0 }}>
+              <ul className="tier-bullets">
+                {INCLUDED.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Neighborhoods & cities */}
         <section className="block city-hoods-section">
           <div className="block-inner">
             <div className="city-two-col city-two-col--mb">
               <div>
                 <div className="block-eyebrow">where we work</div>
-                <h2 className="block-h2">Orlando neighborhoods & cities we serve.</h2>
+                <h2 className="block-h2">Orlando apartment neighborhoods we serve.</h2>
               </div>
               <p className="city-lead">
-                We move apartments across the full Orlando metro — Lake Nona,
-                Oviedo, Winter Park, Lake Mary, Sanford, Clermont, Apopka,
-                Altamonte Springs, and 30+ surrounding cities. Moving to a nearby
-                suburb? See{" "}
-                <Link href="/kissimmee-movers">apartment movers in Kissimmee</Link>{" "}
-                and pick your city below.
+                We move apartments throughout the full Orlando metro and surrounding
+                cities. If your apartment is in Central Florida, we serve it —{" "}
+                <a href={PHONE_TEL}>call {PHONE_DISPLAY}</a> or{" "}
+                <Link href="/quote">get a free quote</Link> to confirm your area.
               </p>
             </div>
-            <div className="city-others">
+            <div className="city-hoods">
+              {ORLANDO_HOODS.map((hood) => (
+                <div key={hood} className="city-hood">
+                  <span>{hood}</span>
+                </div>
+              ))}
+            </div>
+            <div className="city-others" style={{ marginTop: 28 }}>
               {CITIES.map((c) => (
                 <Link key={c.slug} href={c.href} className="city-other">
                   <span className="city-other-url">{c.href}</span>
@@ -291,7 +352,30 @@ export default function ApartmentMoversOrlandoPage() {
         {/* FAQ */}
         <FaqSection items={FAQS} heading="Apartment moving — common questions." />
 
-        <ClosingCta />
+        {/* Closing CTA */}
+        <section className="city-angle">
+          <div className="block-inner">
+            <div className="city-angle-body">
+              <div className="block-eyebrow city-eyebrow--light">ready to move?</div>
+              <h2 className="city-angle-h2">Ready to move your apartment?</h2>
+              <p className="city-angle-text">
+                Get a quote in about 60 seconds. Up-front hourly pricing, no hidden
+                fees, same-week dates available. {GOOGLE_RATING} stars on Google ·
+                Family-owned · Bilingual crew · Insured.
+              </p>
+              <div className="city-hero-cta" style={{ marginTop: 24 }}>
+                <Link href="/quote" className="btn btn-primary">
+                  Get my free quote
+                  <span className="arrow" aria-hidden />
+                </Link>
+                <a href={PHONE_TEL} className="btn btn-secondary">
+                  Call {PHONE_DISPLAY}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <Footer />
       </main>
     </>
