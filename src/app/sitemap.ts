@@ -39,12 +39,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
   }));
 
-  // Service SEO landing pages.
-  const services = SERVICES.map((s) => ({
-    url: `${BASE}${s.href}`,
-    priority: 0.85 as const,
-    changeFrequency: "monthly" as const,
-  }));
+  // Service SEO landing pages. /apartment-movers is excluded — it now 301s to
+  // /apartment-movers-orlando-fl (see next.config.ts APARTMENT_REDIRECT), and a
+  // redirecting URL must not sit in the sitemap. The dedicated apartment LP is
+  // already listed in the `pages` array above.
+  const services = SERVICES.filter((s) => s.slug !== "apartment-movers").map(
+    (s) => ({
+      url: `${BASE}${s.href}`,
+      priority: 0.85 as const,
+      changeFrequency: "monthly" as const,
+    }),
+  );
 
   // City SEO landing pages — kept indexed, carried over from the prior site.
   const cities = CITIES.map((c) => ({

@@ -70,6 +70,18 @@ const LEGACY_CONTENT = [
   { source: "/about", destination: "/#about" },
 ];
 
+// Consolidate the generic /apartment-movers service page into the dedicated LP
+// now that /apartment-movers-orlando-fl is live with full schema + approved
+// copy — they targeted the same term and were cannibalizing each other.
+// permanent:true passes link equity to the stronger page. (The old page file
+// still exists but the redirect fires at the network layer before Next renders;
+// it can be deleted once this is verified live.)
+const APARTMENT_REDIRECT = {
+  source: "/apartment-movers",
+  destination: "/apartment-movers-orlando-fl",
+  permanent: true,
+};
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -90,6 +102,7 @@ const nextConfig: NextConfig = {
       { source: "/moving", destination: AD_LP, permanent: false },
       { source: "/mudanza", destination: "/es/ads/meta-orlando-movers", permanent: false },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
+      APARTMENT_REDIRECT,
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
       ...PAGES_CITIES_REDIRECTS,
       ...NO_PAGE_CITY_REDIRECTS,
