@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     description: LAKE_MARY.metadata.description,
     type: "website",
     locale: "en_US",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
   },
 };
 
