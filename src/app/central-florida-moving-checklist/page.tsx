@@ -240,6 +240,13 @@ export default function ChecklistLandingPage() {
           <Link href="/central-florida-movers">Central Florida movers guide</Link> or{" "}
           <Link href="/apartment-movers-orlando-fl">apartment moving services</Link>.
         </p>
+        <p className="magnet-cta-links">
+          Two move-day must-dos beyond the boxes: file your{" "}
+          <a href="https://www.usps.com/manage/forward.htm">USPS change of address</a>{" "}
+          and, if you&rsquo;re new to the state, update your license and registration
+          with the{" "}
+          <a href="https://www.flhsmv.gov/new-resident/">Florida DHSMV</a>.
+        </p>
       </section>
 
       <StickyCta />

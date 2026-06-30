@@ -29,6 +29,10 @@ export interface ServiceData {
   faqs: ServiceFaq[];
   // schema.org Service type / serviceType string.
   serviceType: string;
+  // Optional outbound citations to authoritative .gov / official sources
+  // (rendered as a contextual "Helpful resources" line). Only set where a
+  // genuinely useful reference exists — never filler links.
+  references?: readonly { label: string; href: string }[];
 }
 
 export const APARTMENT_MOVERS: ServiceData = {
@@ -178,6 +182,10 @@ export const COMMERCIAL_MOVERS: ServiceData = {
     },
   ],
   serviceType: "Commercial moving service",
+  references: [
+    { label: "Florida Division of Corporations (Sunbiz)", href: "https://dos.fl.gov/sunbiz/" },
+    { label: "USPS business change of address", href: "https://www.usps.com/manage/forward.htm" },
+  ],
 };
 
 export const PACKING_SERVICES: ServiceData = {
@@ -226,6 +234,10 @@ export const PACKING_SERVICES: ServiceData = {
     },
   ],
   serviceType: "Packing service",
+  references: [
+    { label: "USPS: how to pack a box", href: "https://www.usps.com/ship/packages.htm" },
+    { label: "FMCSA: Protect Your Move", href: "https://www.fmcsa.dot.gov/protect-your-move" },
+  ],
 };
 
 export const LOADING_UNLOADING: ServiceData = {
