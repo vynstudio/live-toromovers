@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   title: {
     default:
       "Toro Movers — Orlando & Central Florida Movers · 4.9★ Google",
-    template: "%s · Toro Movers",
+    template: "%s | Toro Movers",
   },
   description:
     "Insured Orlando movers — local, apartment, loading help & full-service moves across Central Florida. Up-front hourly pricing, bilingual crew. Quote in 60s.",

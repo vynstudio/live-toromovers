@@ -133,7 +133,7 @@ export const COMMERCIAL_MOVERS: ServiceData = {
   name: "Commercial movers",
   navLabel: "Commercial movers",
   metadata: {
-    title: "Commercial Movers Orlando",
+    title: "Commercial & Office Movers Orlando",
     description:
       "Office & commercial movers in Orlando & Central Florida — after-hours moves, desks, IT & equipment. Insured, bilingual, up-front pricing.",
   },
@@ -181,7 +181,7 @@ export const PACKING_SERVICES: ServiceData = {
   name: "Packing services",
   navLabel: "Packing services",
   metadata: {
-    title: "Packing Services Orlando",
+    title: "Packing Services Orlando & Central Florida",
     description:
       "Professional packing services in Orlando & Central Florida — full or partial packing, supplies, fragile items. Insured, bilingual, up-front pricing.",
   },
