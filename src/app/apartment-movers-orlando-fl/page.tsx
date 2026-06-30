@@ -11,6 +11,7 @@ import {
   PHONE_TEL,
   BUSINESS_NAME,
   GOOGLE_RATING,
+  REVIEW_COUNT,
   SERVICE_REGION,
 } from "@/lib/contact";
 
@@ -120,6 +121,33 @@ const jsonLd = {
         name: BUSINESS_NAME,
         "@id": `${SITE_URL}/#movingcompany`,
         telephone: "+16896002720",
+        areaServed: { "@type": "AdministrativeArea", name: SERVICE_REGION },
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            opens: "07:00",
+            closes: "19:00",
+          },
+        ],
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: GOOGLE_RATING,
+          bestRating: "5",
+          reviewCount: REVIEW_COUNT,
+        },
+      },
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Apartment moving services",
+        itemListElement: TIERS.map((tier) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: tier.title,
+            description: tier.sub,
+          },
+        })),
       },
     },
     {
