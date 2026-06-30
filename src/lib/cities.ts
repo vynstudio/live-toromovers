@@ -188,9 +188,9 @@ export const KISSIMMEE: CityData = {
   name: "Kissimmee",
   navLabel: "Kissimmee movers",
   metadata: {
-    title: "Kissimmee Movers",
+    title: "Kissimmee, FL Movers — Moving Company",
     description:
-      "Family-owned Kissimmee movers — Celebration, Poinciana, Buenaventura Lakes & Osceola County. Bilingual, insured, up-front hourly pricing, no hidden fees.",
+      "Family-owned movers in Kissimmee, FL — Celebration, Poinciana, Buenaventura Lakes & Osceola County. Bilingual, insured, up-front hourly pricing, no hidden fees.",
   },
   h1: "Kissimmee Movers — Toro Movers",
   subline:
@@ -237,9 +237,9 @@ export const SANFORD: CityData = {
   name: "Sanford",
   navLabel: "Sanford movers",
   metadata: {
-    title: "Sanford Movers",
+    title: "Sanford, FL Movers — Moving Company",
     description:
-      "Family-owned Sanford movers — Historic Downtown, Lake Monroe, Mayfair & Seminole County. Insured, bilingual, up-front hourly pricing. Free estimate.",
+      "Family-owned movers in Sanford, FL — Historic Downtown, Lake Monroe, Mayfair & Seminole County. Insured, bilingual, up-front hourly pricing. Free estimate.",
   },
   h1: "Sanford Movers — Toro Movers",
   subline:
@@ -433,9 +433,9 @@ export const ALTAMONTE_SPRINGS: CityData = {
   name: "Altamonte Springs",
   navLabel: "Altamonte Springs movers",
   metadata: {
-    title: "Altamonte Springs Movers",
+    title: "Altamonte Springs, FL Movers — Moving Company",
     description:
-      "Family-owned Altamonte Springs movers — Cranes Roost, Uptown, Sanlando & Seminole County apartments & condos. Insured, up-front hourly pricing.",
+      "Family-owned movers in Altamonte Springs, FL — Cranes Roost, Uptown, Sanlando & Seminole County apartments & condos. Insured, up-front hourly pricing.",
   },
   h1: "Altamonte Springs Movers — Toro Movers",
   subline:
