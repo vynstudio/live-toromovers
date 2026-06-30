@@ -1330,6 +1330,36 @@ section.block { padding: 64px 20px; position: relative; }
   border-radius: 50%; background: var(--red);
 }
 
+/* Rich guide blocks — fees (h3), numbered questions, callout, figure, CTA */
+.guide-fee { margin: 18px 0; max-width: 68ch; }
+.guide-h3 {
+  font-size: 19px; line-height: 1.35; font-weight: 700; color: var(--ink);
+  margin: 0 0 6px;
+}
+.guide-questions {
+  max-width: 68ch; margin: 6px 0 10px; padding-left: 22px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.guide-questions li {
+  font-size: 15.5px; line-height: 1.65; color: var(--ink-soft); padding-left: 4px;
+}
+.guide-questions li strong { color: var(--ink); }
+.guide-note {
+  max-width: 68ch; margin: 18px 0; padding: 16px 20px;
+  border-left: 3px solid var(--red);
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 0 8px 8px 0;
+  font-size: 16px; line-height: 1.6; color: var(--ink);
+}
+.guide-note a { color: var(--red-deep); text-decoration: underline; }
+.guide-figure { margin: 22px 0; max-width: 760px; }
+.guide-figure img {
+  width: 100%; height: auto; display: block;
+  border-radius: 12px; border: 1px solid var(--line, rgba(0, 0, 0, 0.08));
+}
+.guide-cta { padding-top: 8px; padding-bottom: 8px; }
+.guide-cta-link { color: var(--red-deep); text-decoration: underline; font-weight: 600; }
+
 /* FOOTER */
 footer {
   background: var(--navy-deep); /* navy = secondary brand surface */

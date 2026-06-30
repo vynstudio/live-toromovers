@@ -54,11 +54,27 @@ const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
     { href: "/loading-unloading", name: "Loading & unloading", desc: "You rented the truck; we load it right." },
     { href: "/central-florida-movers", name: "Central Florida movers", desc: "Up-front pricing across the Orlando metro." },
   ],
+  "hidden-moving-fees-orlando": [
+    { href: "/blog/how-much-does-a-local-move-cost-orlando", name: "What a local move costs", desc: "How honest hourly pricing works in Orlando." },
+    { href: "/orlando-movers", name: "Orlando movers", desc: "Up-front pricing across Orlando and Orange County." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Packing, loading, transport — no surprise line items." },
+    { href: "/central-florida-movers", name: "Central Florida movers", desc: "Transparent, by-the-hour moves across the metro." },
+  ],
 };
 
 export function GuidePage({ guide }: { guide: GuideData }) {
   const url = `${SITE_URL}${guide.href}`;
   const related = RELATED_BY_SLUG[guide.slug] ?? DEFAULT_RELATED;
+
+  // Article image(s): the branded OG image plus the featured/inline figures.
+  const sectionImages = guide.sections
+    .map((s) => s.image?.src)
+    .filter((src): src is string => Boolean(src));
+  const articleImages = [
+    `${SITE_URL}/opengraph-image`,
+    ...(guide.image ? [`${SITE_URL}${guide.image.src}`] : []),
+    ...sectionImages.map((src) => `${SITE_URL}${src}`),
+  ];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -72,7 +88,7 @@ export function GuidePage({ guide }: { guide: GuideData }) {
         dateModified: guide.datePublished,
         mainEntityOfPage: url,
         url,
-        image: `${SITE_URL}/opengraph-image`,
+        image: articleImages,
         author: {
           "@type": "Organization",
           name: BUSINESS_NAME,
@@ -137,6 +153,13 @@ export function GuidePage({ guide }: { guide: GuideData }) {
           <TrustBand />
 
           <div className="guide-body">
+            {guide.lead?.map((p, i) => (
+              <section key={`lead-${i}`} className="block guide-section">
+                <div className="block-inner">
+                  <p className="guide-p">{p}</p>
+                </div>
+              </section>
+            ))}
             {guide.sections.map((s) => (
               <section key={s.h2} className="block guide-section">
                 <div className="block-inner">
@@ -151,10 +174,72 @@ export function GuidePage({ guide }: { guide: GuideData }) {
                       ))}
                     </ul>
                   )}
+                  {s.fees?.map((f) => (
+                    <div key={f.name} className="guide-fee">
+                      <h3 className="guide-h3">{f.name}</h3>
+                      <p className="guide-p">{f.body}</p>
+                    </div>
+                  ))}
+                  {s.questions && (
+                    <ol className="guide-questions">
+                      {s.questions.map((q, i) => (
+                        <li key={i}>
+                          <strong>{q.lead}</strong> {q.body}
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  {s.note && (
+                    <blockquote className="guide-note">
+                      <strong>
+                        {s.note.before}
+                        {s.note.href && s.note.linkText ? (
+                          <a href={s.note.href}>{s.note.linkText}</a>
+                        ) : (
+                          s.note.linkText
+                        )}
+                        {s.note.after}
+                      </strong>
+                    </blockquote>
+                  )}
+                  {s.image && (
+                    <figure className="guide-figure">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={s.image.src} alt={s.image.alt} loading="lazy" />
+                    </figure>
+                  )}
+                  {s.trailing?.map((p, i) => (
+                    <p key={`tr-${i}`} className="guide-p">{p}</p>
+                  ))}
                 </div>
               </section>
             ))}
           </div>
+
+          {guide.cta && (
+            <section className="block guide-cta">
+              <div className="block-inner">
+                <h2 className="block-h2" style={{ marginBottom: 20 }}>
+                  {guide.cta.heading}
+                </h2>
+                {guide.cta.body?.map((p, i) => (
+                  <p key={i} className="guide-p">{p}</p>
+                ))}
+                <p className="guide-p">
+                  <Link href={guide.cta.href} className="guide-cta-link">
+                    {guide.cta.linkText}
+                  </Link>
+                  {guide.cta.after}
+                </p>
+                <div className="city-hero-cta" style={{ marginTop: 8 }}>
+                  <Link href={guide.cta.href} className="btn btn-primary">
+                    {guide.cta.linkText}
+                    <span className="arrow" aria-hidden />
+                  </Link>
+                </div>
+              </div>
+            </section>
+          )}
 
           <FaqSection items={guide.faqs} heading="Moving in Orlando — common questions." />
 
