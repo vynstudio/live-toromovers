@@ -73,9 +73,9 @@ const LEGACY_CONTENT = [
 // Consolidate the generic /apartment-movers service page into the dedicated LP
 // now that /apartment-movers-orlando-fl is live with full schema + approved
 // copy — they targeted the same term and were cannibalizing each other.
-// permanent:true passes link equity to the stronger page. (The old page file
-// still exists but the redirect fires at the network layer before Next renders;
-// it can be deleted once this is verified live.)
+// permanent:true passes link equity to the stronger page. The old page file
+// (src/app/apartment-movers/) has been removed; all internal links now point
+// straight at the LP, so this redirect only catches old external/inbound links.
 const APARTMENT_REDIRECT = {
   source: "/apartment-movers",
   destination: "/apartment-movers-orlando-fl",

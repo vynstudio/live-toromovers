@@ -51,9 +51,6 @@ export function Footer() {
             <Link href="/central-florida-movers">
               {lang === "es" ? "Florida Central" : "Central Florida movers"}
             </Link>
-            <Link href="/apartment-movers-orlando-fl">
-              {lang === "es" ? "Mudanza de apartamentos" : "Apartment movers Orlando"}
-            </Link>
             {SERVICES.map((s) => (
               <Link key={s.slug} href={s.href}>{s.name}</Link>
             ))}

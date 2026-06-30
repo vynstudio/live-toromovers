@@ -25,7 +25,7 @@ type RelatedLink = { href: string; name: string; desc: string };
 
 const DEFAULT_RELATED: RelatedLink[] = [
   { href: "/orlando-movers", name: "Orlando movers", desc: "Local moves across Orlando and Orange County." },
-  { href: "/apartment-movers", name: "Apartment movers", desc: "Stairs, elevators, and tight complex windows, by the hour." },
+  { href: "/apartment-movers-orlando-fl", name: "Apartment movers", desc: "Stairs, elevators, and tight complex windows, by the hour." },
   { href: "/packing-services", name: "Packing services", desc: "Full or partial packing, done fast and carefully." },
   { href: "/central-florida-movers", name: "Central Florida movers", desc: "Our full service area across the Orlando metro." },
 ];
@@ -38,7 +38,7 @@ const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
     { href: "/central-florida-moving-checklist", name: "Free moving checklist", desc: "Plan your move and get quote-ready fast." },
   ],
   "apartment-moving-checklist-orlando-renters": [
-    { href: "/apartment-movers", name: "Apartment movers", desc: "Stairs, elevators, and tight complex windows, by the hour." },
+    { href: "/apartment-movers-orlando-fl", name: "Apartment movers", desc: "Stairs, elevators, and tight complex windows, by the hour." },
     { href: "/loading-unloading", name: "Loading & unloading", desc: "U-Haul, PODS & rental trucks loaded tight." },
     { href: "/altamonte-springs-movers", name: "Altamonte Springs movers", desc: "Apartment & condo moves across Seminole County." },
     { href: "/central-florida-moving-checklist", name: "Free moving checklist", desc: "Apartment section: elevators, COI, parking." },
