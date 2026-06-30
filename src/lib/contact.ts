@@ -29,11 +29,12 @@ export const REVIEW_COUNT = "36";
 // so Google reconciles this site with the same business entity across the web
 // (strengthens the local/citation signal). Only add REAL, resolvable profile
 // URLs here — a wrong URL hurts. Facebook page is the live ad-account page.
-// TODO (owner): add the Google Business Profile (Maps "share" URL), the
-// Instagram profile (https://www.instagram.com/<handle>), and Yelp/BBB URLs
-// once the listings exist.
+// Google Business Profile (Maps place URL) added — the stable CID is encoded as
+// ...!1s0x…:0xef948707b4ba0a80; tracking params (?entry/g_ep) trimmed off so the
+// URL doesn't rot. TODO (owner): add Instagram + Yelp/BBB once those listings exist.
 export const SOCIAL_PROFILES = [
   "https://www.facebook.com/722514634274519",
+  "https://www.google.com/maps/place/Toro+Movers/@27.5242113,-82.9347487,8z/data=!4m10!1m2!2m1!1storo+movers!3m6!1s0xaab4eea8998e0b43:0xef948707b4ba0a80!8m2!3d28.5187116!4d-81.5872639!15sCgt0b3JvIG1vdmVyc1oNIgt0b3JvIG1vdmVyc5IBDm1vdmluZ19jb21wYW554AEA!16s%2Fg%2F11xmqc_lk7",
 ];
 
 export const SERVICE_BASE_CITY = "Orlando, FL";
