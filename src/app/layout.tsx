@@ -81,12 +81,19 @@ export const metadata: Metadata = {
       "Toro Movers — Family-owned Movers Orlando & Central Florida · 4.9★ Google",
     description:
       "Family-owned Orlando moving company. Local moves, loading help, full-service moves with truck. Bilingual crew. Up-front hourly pricing — quote in 60 seconds.",
+    // Explicit OG image so it's INHERITED by child routes. The root
+    // opengraph-image.tsx only auto-applies to "/" — once a page sets its own
+    // openGraph (every city/service page does), it loses the file-based image.
+    images: [
+      { url: "/opengraph-image", width: 1200, height: 630, alt: "Toro Movers — Family-owned movers across Central Florida · 4.9★ on Google" },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Toro Movers — Family-owned Movers Orlando & Central Florida",
     description:
       "Up-front hourly pricing, bilingual crew, 4.9★ on Google. Quote in 60 seconds.",
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
