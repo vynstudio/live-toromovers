@@ -2134,6 +2134,16 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
 .fn-value-item { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px 20px; }
 .fn-value-item h3 { font-size: 17px; font-weight: 700; margin: 0 0 7px; color: var(--ink); }
 .fn-value-item p { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin: 0; }
+/* Labor-only service-area section — reuses the .fn-value card language. */
+.fn-section-intro { font-size: 15px; line-height: 1.6; color: var(--muted); margin: 0 0 22px; max-width: 640px; }
+.fn-area-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.fn-area-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px 20px; }
+.fn-area-card h3 { font-size: 17px; font-weight: 700; margin: 0 0 7px; }
+.fn-area-card h3 a { color: var(--ink); text-decoration: none; }
+.fn-area-card h3 a:hover { text-decoration: underline; }
+.fn-area-card p { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin: 0; }
+.fn-area-note { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 22px 0 0; }
+.fn-area-note a { color: var(--ink); font-weight: 600; text-decoration: underline; }
 .fn-reviews { display: grid; grid-template-columns: 1fr; gap: 14px; }
 .fn-review { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 11px; }
 .fn-review blockquote { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }

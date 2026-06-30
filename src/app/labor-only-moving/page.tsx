@@ -16,15 +16,17 @@ import {
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/labor-only-moving";
 
+// CHANGE 1 (meta description updated to match new H1 keyword focus)
 const DESCRIPTION =
-  "Labor-only moving help in Central Florida — loading, unloading & stair help by the hour. Family-owned, insured, bilingual. Get a quote today.";
+  "Labor-only movers in Orlando & Central Florida — loading, unloading & stair help by the hour. Family-owned, insured, bilingual. Get a quote today.";
 
 export const metadata: Metadata = {
-  title: { absolute: "Labor-Only Moving Help in Central Florida | Toro Movers" },
+  // CHANGE 1 cont. (title updated to match H1)
+  title: { absolute: "Labor-Only Movers in Orlando & Central Florida | Toro Movers" },
   description: DESCRIPTION,
   alternates: { canonical: HREF },
   openGraph: {
-    title: "Labor-Only Moving Help in Central Florida | Toro Movers",
+    title: "Labor-Only Movers in Orlando & Central Florida | Toro Movers",
     description: DESCRIPTION,
     url: `${SITE_URL}${HREF}`,
     type: "website",
@@ -49,10 +51,15 @@ const PROOF = REVIEWS.filter((r) =>
   ["Labor only", "Short notice · disassembly", "Same-week storage move", "Apartment move"].includes(r.meta),
 ).slice(0, 3);
 
+// CHANGE 3 (new FAQ entry targeting U-Haul / loading help queries)
 const FAQS = [
   {
     q: "What is labor-only moving?",
     a: "You provide the truck, POD, or storage unit — we provide the crew. Toro Movers loads, unloads, and carefully handles your belongings by the hour, including stairs and heavy items.",
+  },
+  {
+    q: "Can you help load or unload a U-Haul, PODS, or rental truck in Orlando?",
+    a: "Yes — loading and unloading a U-Haul, PODS, rental truck, or storage container is exactly what labor-only moving is. You keep the truck; we load it tight so nothing shifts on the road, or unload and carry everything in. Billed by the hour, two-hour minimum, across Orlando and Central Florida.",
   },
   {
     q: "How much does labor-only cost?",
@@ -68,6 +75,40 @@ const FAQS = [
   },
 ];
 
+// CHANGE 2 (service area data for the new section)
+const SERVICE_AREAS = [
+  {
+    city: "Orlando",
+    href: "/orlando-movers",
+    note: "Our home base — crews available most days including weekends.",
+  },
+  {
+    city: "Kissimmee",
+    href: "/kissimmee-movers",
+    note: "Frequent jobs near the 192 corridor and Osceola County.",
+  },
+  {
+    city: "Sanford",
+    href: "/sanford-movers",
+    note: "Seminole County loading and unloading help, same crew, same rates.",
+  },
+  {
+    city: "Altamonte Springs",
+    href: "/altamonte-springs-movers",
+    note: "Quick dispatch from I-4 — apartment and condo moves welcome.",
+  },
+  {
+    city: "Winter Park",
+    href: "/winter-park-movers",
+    note: "Local crew familiar with the area's older homes and tight driveways.",
+  },
+  {
+    city: "Apopka",
+    href: "/apopka-movers",
+    note: "Northwest Orange County covered at the same hourly rate.",
+  },
+];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -75,7 +116,8 @@ const jsonLd = {
       "@type": "Service",
       "@id": `${SITE_URL}${HREF}#service`,
       serviceType: "Labor-only moving help",
-      name: "Labor-only moving help in Central Florida",
+      // CHANGE 1 cont. (schema name aligned with new keyword focus)
+      name: "Labor-only movers in Orlando & Central Florida",
       description: DESCRIPTION,
       areaServed: { "@type": "AdministrativeArea", name: SERVICE_REGION },
       provider: {
@@ -98,7 +140,7 @@ const jsonLd = {
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-        { "@type": "ListItem", position: 2, name: "Labor-Only Moving Help", item: `${SITE_URL}${HREF}` },
+        { "@type": "ListItem", position: 2, name: "Labor-Only Movers Orlando", item: `${SITE_URL}${HREF}` },
       ],
     },
   ],
@@ -117,7 +159,14 @@ export default function LaborOnlyMovingPage() {
       <section className="fn-hero">
         <header className="fn-head">
           <Link href="/" className="fn-brand" aria-label={`${BUSINESS_NAME} — Home`}>
-            <span className="fn-brand-mark" aria-hidden><img src="/bull.svg" alt="" /></span>
+            {/* CHANGE 4 (logo alt + title added, matches footer.tsx fix in PR #62) */}
+            <span className="fn-brand-mark" aria-hidden>
+              <img
+                src="/bull.svg"
+                alt="Toro Movers logo"
+                title="Toro Movers — Orlando Labor-Only Movers"
+              />
+            </span>
             <span className="fn-brand-name">TORO<span className="fn-accent">·</span>MOVERS</span>
           </Link>
           <a href={PHONE_TEL} className="fn-head-phone">{PHONE_DISPLAY}</a>
@@ -125,8 +174,9 @@ export default function LaborOnlyMovingPage() {
 
         <div className="fn-hero-grid">
           <div className="fn-hero-copy">
-            <p className="fn-eyebrow">Labor-only · {SERVICE_REGION}</p>
-            <h1 className="fn-h1">Labor-Only Moving Help in Central Florida</h1>
+            {/* CHANGE 1 (eyebrow and H1 updated to target "movers" keyword) */}
+            <p className="fn-eyebrow">Labor-only movers · Orlando &amp; Central Florida</p>
+            <h1 className="fn-h1">Labor-Only Movers in Orlando &amp; Central Florida</h1>
             <div className="fn-rule" aria-hidden />
             <p className="fn-sub">Get loading, unloading, stair help, and hourly labor from Toro Movers.</p>
             <ul className="fn-bullets">
@@ -177,6 +227,30 @@ export default function LaborOnlyMovingPage() {
             </figure>
           ))}
         </div>
+      </section>
+
+      {/* CHANGE 2 — SERVICE AREA SECTION (geo-specific content, fills biggest content gap) */}
+      <section className="fn-section">
+        <h2 className="fn-h2">Labor-only movers across Central Florida</h2>
+        <p className="fn-section-intro">
+          We dispatch from the Orlando metro and cover the surrounding area at the same
+          up-front hourly rate. No travel surcharges within our service zone.
+        </p>
+        <div className="fn-area-grid">
+          {SERVICE_AREAS.map((area) => (
+            <div key={area.city} className="fn-area-card">
+              <h3>
+                <Link href={area.href}>{area.city}</Link>
+              </h3>
+              <p>{area.note}</p>
+            </div>
+          ))}
+        </div>
+        <p className="fn-area-note">
+          Need loading help without a full-service move?{" "}
+          <Link href="/apartment-movers-orlando-fl">Apartment movers</Link> and labor-only
+          service use the same crew — just let us know what you need when you book.
+        </p>
       </section>
 
       <FaqSection items={FAQS} heading="Labor-only moving — common questions." />
