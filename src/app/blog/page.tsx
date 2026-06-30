@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/blog" },
-  openGraph: { title: TITLE, description: DESCRIPTION, type: "website", locale: "en_US" },
+  openGraph: { title: TITLE, description: DESCRIPTION, type: "website", locale: "en_US", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
 };
 
 export default function Page() {
