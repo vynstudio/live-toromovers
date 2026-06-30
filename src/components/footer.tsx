@@ -14,6 +14,8 @@ import {
   HOURS_NOTE,
   HOURS_NOTE_ES,
   LEGAL_NAME,
+  SERVICE_BASE_CITY,
+  POSTAL_CODE,
 } from "@/lib/contact";
 
 export function Footer() {
@@ -40,7 +42,8 @@ export function Footer() {
             <h4>{lang === "es" ? "Contacto" : "Contact"}</h4>
             <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
             <a href={EMAIL_HREF}>{EMAIL}</a>
-            <p style={{ marginTop: 12 }}>{lang === "es" ? HOURS_LABEL_ES : HOURS_LABEL}</p>
+            <p style={{ marginTop: 12 }}>{SERVICE_BASE_CITY} {POSTAL_CODE}</p>
+            <p>{lang === "es" ? HOURS_LABEL_ES : HOURS_LABEL}</p>
             <p style={{ fontSize: 13, color: "var(--muted)" }}>
               {lang === "es" ? HOURS_NOTE_ES : HOURS_NOTE}
             </p>
