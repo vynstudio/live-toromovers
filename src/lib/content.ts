@@ -244,7 +244,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         "Our bilingual, family-owned crew serves Orlando and Central Florida with honest hourly pricing for apartment, home, and office moves.",
       ctaPrimary: "Get free quote",
       ctaSecondary: "Call now · (689) 600-2720",
-      note: "Up-front hourly pricing · 2-hour minimum · Bilingual crew · Same-week dates",
+      note: "Up-front hourly pricing · from a 2-hour minimum · Bilingual crew · Same-week dates",
     },
     trust: [
       "4.9★ on Google",
@@ -258,11 +258,11 @@ export const content: { en: ContentShape; es: ContentShape } = {
       eyebrow: "What we do",
       head: "Three ways we move you.",
       headItalic: "Up-front pricing on every one.",
-      sub: "Hourly rates · 2-hour minimum · clock stops when the job ends · no fuel surcharges, no stair fees, no weekend premiums.",
+      sub: "Hourly rates · from a 2-hour minimum · clock stops when the job ends · no fuel surcharges, no stair fees, no weekend premiums.",
       tiers: [
         {
           title: "Loading help",
-          sub: "Two movers, two-hour minimum. You bring the truck — we bring the muscle.",
+          sub: "$150/hr for two movers, two-hour minimum (+$75/hr per extra mover). You bring the truck — we bring the muscle.",
           bullets: [
             "Load or unload your U-Haul, PODS, rental truck",
             "Blankets, dollies, shrink wrap",
@@ -274,7 +274,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         {
           tag: "Most booked",
           title: "In-town move",
-          sub: "Truck included. Two movers and our 16′ or 26′ truck for apartments, condos, and family homes inside Central Florida.",
+          sub: "Truck included — $220/hr for two movers and our 16′ or 26′ truck, three-hour minimum. Apartments, condos, and family homes inside Central Florida.",
           bullets: [
             "16′ or 26′ truck included",
             "Blankets, dollies, shrink wrap",
@@ -285,7 +285,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           title: "Big-day move",
-          sub: "Three movers and our truck for larger homes or full-day moves. Same up-front hourly rate — just more hands and more hours.",
+          sub: "$330/hr for three movers and our truck — larger homes or full-day moves. Same up-front hourly pricing, just more hands and more hours.",
           bullets: [
             "Three-mover crew",
             "16′ or 26′ truck included",
@@ -302,7 +302,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       headItalic: "Central Florida born.",
       body: [
         "Toro Movers is a family-owned moving company based in Orlando. Every booking is handled directly by the owners — no call centers, no franchise hand-offs.",
-        "Transparent hourly pricing — quote in 60 seconds. Two-hour minimum. The clock stops when the job ends. No fuel surcharges, no stair fees, no weekend premiums.",
+        "Transparent hourly pricing — quote in 60 seconds. From a two-hour minimum. The clock stops when the job ends. No fuel surcharges, no stair fees, no weekend premiums.",
       ],
       bullets: [
         "Same crew that quotes shows up",
@@ -357,7 +357,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           q: "Do you charge fuel, stair, or travel fees?",
-          a: "No surprises. Hourly pricing with a two-hour minimum, quoted up-front in 60 seconds. No fuel surcharges, no stair fees, no travel fees inside Central Florida.",
+          a: "No surprises. Hourly pricing from a two-hour minimum (three hours when a truck is included), quoted up-front in 60 seconds. No fuel surcharges, no stair fees, no travel fees inside Central Florida.",
         },
         {
           q: "How big a deposit do you take to lock in the date?",
@@ -444,7 +444,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         "Compañía de mudanzas familiar sirviendo a Orlando, Kissimmee, Lake Nona, Winter Garden, Clermont y 30+ ciudades de Florida Central. Carga, descarga, empaque y mudanzas completas con nuestro camión. Cotización en 60 segundos — sin tarifas ocultas.",
       ctaPrimary: "Cotización gratis",
       ctaSecondary: "Llamar · (689) 600-2720",
-      note: "Precios claros por hora · Mínimo 2 horas · Cuadrilla bilingüe · Fechas esta semana",
+      note: "Precios claros por hora · desde un mínimo de 2 horas · Cuadrilla bilingüe · Fechas esta semana",
     },
     trust: [
       "4.9★ en Google",
@@ -458,11 +458,11 @@ export const content: { en: ContentShape; es: ContentShape } = {
       eyebrow: "Lo que hacemos",
       head: "Tres formas en que te movemos.",
       headItalic: "Precios claros en cada una.",
-      sub: "Tarifa por hora · Mínimo 2 horas · El reloj se detiene cuando termina el trabajo · Sin recargos por gasolina, sin tarifa por escaleras, sin recargos de fin de semana.",
+      sub: "Tarifa por hora · desde un mínimo de 2 horas · El reloj se detiene cuando termina el trabajo · Sin recargos por gasolina, sin tarifa por escaleras, sin recargos de fin de semana.",
       tiers: [
         {
           title: "Solo mano de obra",
-          sub: "Dos mudanceros, mínimo 2 horas. Tú pones el camión — nosotros ponemos la fuerza.",
+          sub: "$150/hr por dos mudanceros, mínimo 2 horas (+$75/hr por mudancero adicional). Tú pones el camión — nosotros ponemos la fuerza.",
           bullets: [
             "Cargamos o descargamos tu U-Haul, PODS, camión de alquiler",
             "Mantas, carretillas, envoltura plástica",
@@ -474,7 +474,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         {
           tag: "Más reservado",
           title: "Mudanza local",
-          sub: "Camión incluido. Dos mudanceros y nuestro camión de 16′ o 26′ para apartamentos, condos y casas familiares en Florida Central.",
+          sub: "Camión incluido — $220/hr por dos mudanceros y nuestro camión de 16′ o 26′, mínimo 3 horas. Apartamentos, condos y casas familiares en Florida Central.",
           bullets: [
             "Camión de 16′ o 26′ incluido",
             "Mantas, carretillas, envoltura plástica",
@@ -485,7 +485,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           title: "Mudanza grande",
-          sub: "Tres mudanceros y nuestro camión para casas grandes o mudanzas de día completo. Misma tarifa por hora — solo más manos y más horas.",
+          sub: "$330/hr por tres mudanceros y nuestro camión — casas grandes o mudanzas de día completo. Misma tarifa por hora, solo más manos y más horas.",
           bullets: [
             "Cuadrilla de tres mudanceros",
             "Camión de 16′ o 26′ incluido",
@@ -502,7 +502,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       headItalic: "Nacidos en Florida Central.",
       body: [
         "Toro Movers es una compañía de mudanzas familiar con base en Orlando. Cada reserva la atienden directamente los dueños — sin centros de llamadas, sin traspasos de franquicia.",
-        "Tarifa por hora transparente — cotización en 60 segundos. Mínimo 2 horas. El reloj se detiene cuando termina el trabajo. Sin recargos por gasolina, sin tarifa por escaleras, sin recargos de fin de semana.",
+        "Tarifa por hora transparente — cotización en 60 segundos. Desde un mínimo de 2 horas. El reloj se detiene cuando termina el trabajo. Sin recargos por gasolina, sin tarifa por escaleras, sin recargos de fin de semana.",
       ],
       bullets: [
         "La misma cuadrilla que cotiza llega a tu puerta",
