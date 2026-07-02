@@ -55,10 +55,28 @@ const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
     { href: "/central-florida-movers", name: "Central Florida movers", desc: "Up-front pricing across the Orlando metro." },
   ],
   "hidden-moving-fees-orlando": [
-    { href: "/blog/how-much-does-a-local-move-cost-orlando", name: "What a local move costs", desc: "How honest hourly pricing works in Orlando." },
+    { href: "/blog/what-youre-paying-for-orlando-movers", name: "What you're paying for", desc: "Orlando moving rates and what's in the hourly rate." },
     { href: "/orlando-movers", name: "Orlando movers", desc: "Up-front pricing across Orlando and Orange County." },
     { href: "/full-service-moving", name: "Full-service moving", desc: "Packing, loading, transport — no surprise line items." },
     { href: "/central-florida-movers", name: "Central Florida movers", desc: "Transparent, by-the-hour moves across the metro." },
+  ],
+  "what-youre-paying-for-orlando-movers": [
+    { href: "/blog/full-service-vs-labor-only-orlando", name: "Full-service vs. labor-only", desc: "Which option fits your move — with price examples." },
+    { href: "/blog/hidden-moving-fees-orlando", name: "Hidden moving fees", desc: "The charges shady movers add — and how to avoid them." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "$220/hr for 2 + truck. Everything included." },
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "$150/hr for 2. You keep the truck; we bring the muscle." },
+  ],
+  "full-service-vs-labor-only-orlando": [
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck + crew, door to door. $220/hr for 2." },
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "Crew only, you supply the truck. $150/hr for 2." },
+    { href: "/blog/labor-only-moving-orlando", name: "Labor-only guide", desc: "When you've got the truck but need the muscle." },
+    { href: "/blog/what-youre-paying-for-orlando-movers", name: "What you're paying for", desc: "How Orlando hourly rates actually work." },
+  ],
+  "labor-only-moving-orlando": [
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "Book loading/unloading help by the hour." },
+    { href: "/loading-unloading", name: "Loading & unloading", desc: "U-Haul, PODS & rental trucks loaded tight." },
+    { href: "/blog/full-service-vs-labor-only-orlando", name: "Full-service vs. labor-only", desc: "Compare the two options and costs." },
+    { href: "/blog/what-youre-paying-for-orlando-movers", name: "What you're paying for", desc: "Orlando moving rates, explained." },
   ],
 };
 
@@ -164,23 +182,90 @@ export function GuidePage({ guide }: { guide: GuideData }) {
               <section key={s.h2} className="block guide-section">
                 <div className="block-inner">
                   <h2 className="block-h2">{s.h2}</h2>
-                  {s.body?.map((p, i) => (
+
+                  {/* Ordered blocks (richer guides) */}
+                  {s.blocks?.map((b, bi) => {
+                    switch (b.kind) {
+                      case "p":
+                        return <p key={bi} className="guide-p">{b.text}</p>;
+                      case "h3":
+                        return <h3 key={bi} className="guide-h3">{b.text}</h3>;
+                      case "ul":
+                        return (
+                          <ul key={bi} className="guide-list">
+                            {b.items.map((it, i) => <li key={i}>{it}</li>)}
+                          </ul>
+                        );
+                      case "ol":
+                        return (
+                          <ol key={bi} className="guide-questions">
+                            {b.items.map((q, i) => (
+                              <li key={i}><strong>{q.lead}</strong>{q.body ? ` ${q.body}` : ""}</li>
+                            ))}
+                          </ol>
+                        );
+                      case "note":
+                        return (
+                          <blockquote key={bi} className="guide-note">
+                            <strong>
+                              {b.note.before}
+                              {b.note.href && b.note.linkText ? (
+                                <a href={b.note.href}>{b.note.linkText}</a>
+                              ) : (
+                                b.note.linkText
+                              )}
+                              {b.note.after}
+                            </strong>
+                          </blockquote>
+                        );
+                      case "image":
+                        return (
+                          <figure key={bi} className="guide-figure">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={b.image.src} alt={b.image.alt} loading="lazy" />
+                          </figure>
+                        );
+                      case "table":
+                        return (
+                          <div key={bi} className="guide-table-wrap">
+                            <table className="guide-table">
+                              {b.table.caption && <caption>{b.table.caption}</caption>}
+                              <thead>
+                                <tr>
+                                  {b.table.headers.map((h, i) => <th key={i}>{h}</th>)}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {b.table.rows.map((row, ri) => (
+                                  <tr key={ri}>
+                                    {row.map((cell, ci) => <td key={ci}>{cell}</td>)}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        );
+                    }
+                  })}
+
+                  {/* Legacy fixed-order fields (older guides) */}
+                  {!s.blocks && s.body?.map((p, i) => (
                     <p key={i} className="guide-p">{p}</p>
                   ))}
-                  {s.bullets && (
+                  {!s.blocks && s.bullets && (
                     <ul className="guide-list">
                       {s.bullets.map((b, i) => (
                         <li key={i}>{b}</li>
                       ))}
                     </ul>
                   )}
-                  {s.fees?.map((f) => (
+                  {!s.blocks && s.fees?.map((f) => (
                     <div key={f.name} className="guide-fee">
                       <h3 className="guide-h3">{f.name}</h3>
                       <p className="guide-p">{f.body}</p>
                     </div>
                   ))}
-                  {s.questions && (
+                  {!s.blocks && s.questions && (
                     <ol className="guide-questions">
                       {s.questions.map((q, i) => (
                         <li key={i}>
@@ -189,7 +274,7 @@ export function GuidePage({ guide }: { guide: GuideData }) {
                       ))}
                     </ol>
                   )}
-                  {s.note && (
+                  {!s.blocks && s.note && (
                     <blockquote className="guide-note">
                       <strong>
                         {s.note.before}
@@ -202,13 +287,13 @@ export function GuidePage({ guide }: { guide: GuideData }) {
                       </strong>
                     </blockquote>
                   )}
-                  {s.image && (
+                  {!s.blocks && s.image && (
                     <figure className="guide-figure">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={s.image.src} alt={s.image.alt} loading="lazy" />
                     </figure>
                   )}
-                  {s.trailing?.map((p, i) => (
+                  {!s.blocks && s.trailing?.map((p, i) => (
                     <p key={`tr-${i}`} className="guide-p">{p}</p>
                   ))}
                 </div>

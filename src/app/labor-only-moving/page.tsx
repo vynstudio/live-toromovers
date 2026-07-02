@@ -64,7 +64,7 @@ const FAQS = [
   },
   {
     q: "How much does labor-only cost?",
-    a: "It's billed up front by the hour. The rate depends on how many movers you need and roughly how long the job takes. We confirm the rate before we start — no surprise line items.",
+    a: "Labor-only is $150/hr for two movers with a two-hour minimum, plus $75/hr per additional mover — billed up front by the hour. Shrink wrap, furniture blankets, and assembly/disassembly are included; no fuel surcharge, no stair fee. We confirm the rate before we start, with no surprise line items.",
   },
   {
     q: "Do you only work in Central Florida?",

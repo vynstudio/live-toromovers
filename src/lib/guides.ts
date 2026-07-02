@@ -23,8 +23,28 @@ export interface GuideImage {
   alt: string;
 }
 
+export interface GuideTable {
+  caption?: string;
+  headers: string[];
+  rows: string[][];
+}
+
+// Ordered content block — used by the richer, table-heavy guides so
+// paragraphs, subheads, lists and tables render in the exact author order.
+export type GuideBlock =
+  | { kind: "p"; text: string }
+  | { kind: "h3"; text: string }
+  | { kind: "ul"; items: string[] }
+  | { kind: "ol"; items: GuideQuestion[] } // bold lead + body
+  | { kind: "table"; table: GuideTable }
+  | { kind: "note"; note: GuideNote }
+  | { kind: "image"; image: GuideImage };
+
 export interface GuideSection {
   h2: string;
+  // Ordered blocks take precedence when present; otherwise the legacy
+  // fixed-order fields below render (backward-compatible with older guides).
+  blocks?: GuideBlock[];
   body?: string[];
   bullets?: string[];
   fees?: GuideFee[]; // h3 subsections (e.g. the 7 hidden fees)
@@ -429,143 +449,669 @@ export const HIDDEN_FEES: GuideData = {
   slug: "hidden-moving-fees-orlando",
   href: "/blog/hidden-moving-fees-orlando",
   metadata: {
-    title: "Hidden Moving Fees in Orlando: 7 Costs to Avoid",
+    title: "Hidden Moving Fees in Orlando: 8 Costs to Avoid (2026)",
     description:
-      "Learn the most common hidden moving fees in Orlando and how to avoid them before move day. Ask the right questions and get a transparent quote.",
+      "The hidden fees shady Orlando movers use to inflate your bill — fuel, stairs, long carry, packing materials and more — plus exactly what to ask to avoid them.",
   },
-  h1: "Hidden Moving Fees in Orlando (And How to Avoid Paying Them)",
+  h1: "Hidden Moving Fees in Orlando: What Shady Movers Charge and How to Avoid Them",
   intro:
-    "We see it more often than we'd like. A family books a moving company based on a quote that sounds reasonable. Moving day comes, the truck gets loaded, and then the bill arrives with line items nobody mentioned: a fuel surcharge, a stair fee, an extra charge for the couch that's \"oversized.\" What started as a $600 quote turns into a $950 bill.",
+    "The moving industry has a well-documented problem with pricing transparency — and Florida is one of the states where it shows up most clearly. On Reddit's r/orlando forum, one thread from 2023 tells a story that repeats itself constantly: a customer got a $500 estimate, and by the time the movers had everything loaded on the truck, the bill had climbed to $2,100 — boxes and shrink wrap they were told were mandatory, fees that weren't disclosed until the furniture was already on the truck.",
   lead: [
-    "That's not a one-off. It's a pattern in this industry, and it's one of the reasons we built Toro Movers around a different model.",
-    "Hidden fees can add 15 to 30% on top of the original quote — that's an extra $120 to $750 on a typical Orlando local move, sometimes more. For families already stretched by security deposits, utility setups, and first/last month's rent, that surprise bill hits hard.",
-    "Here's what those fees actually look like, how to spot them before you sign anything, and what questions to ask any mover before you hand over your keys.",
+    "This isn't an isolated incident. It's a business model.",
+    "The good news: hidden moving fees follow predictable patterns. Once you know what to look for, they're easy to spot before you sign anything. This guide names every fee that shady Orlando movers use to inflate your bill, explains how each one works, and tells you exactly what to ask to avoid them.",
   ],
-  datePublished: "2026-06-30",
-  readMins: 6,
+  datePublished: "2026-07-02",
+  readMins: 8,
   sections: [
     {
-      h2: "The 7 Hidden Fees That Show Up Most Often",
-      body: [
-        "We've heard every version of these from customers who called us after a bad experience with another company. These are the charges that rarely appear in the original quote but show up on the final bill.",
-      ],
-      fees: [
+      h2: "Know Your Rights Before You Book",
+      blocks: [
         {
-          name: "1. Fuel Surcharge",
-          body: "Sometimes framed as a \"travel fee\" or \"truck fee.\" It covers the cost of driving to your location and back to the company's base. Legitimate movers build this into their hourly rate. Others add it separately, often $50 to $150, without mentioning it upfront.",
+          kind: "note",
+          note: {
+            before: "The ",
+            linkText: "Federal Motor Carrier Safety Administration (FMCSA)",
+            href: "https://www.fmcsa.dot.gov/protect-your-move",
+            after:
+              " regulates interstate movers and maintains a database of complaints. For local Florida moves, the Florida Attorney General's consumer protection division handles disputes at myfloridalegal.com. Get a written estimate, review it line by line, and never let anything onto the truck before the price is in writing.",
+          },
         },
         {
-          name: "2. Stair Fees",
-          body: "Moving into a second-floor apartment? Some companies charge per flight of stairs, typically $50 to $75 per flight per trip. If you have a lot of furniture and it takes multiple trips up those stairs, this adds up fast.",
+          kind: "image",
+          image: {
+            src: "/blog/hidden-moving-fees-orlando/fmcsa-protect-your-move.jpg",
+            alt: "FMCSA Protect Your Move consumer guide page with tips for avoiding hidden moving fees in Orlando",
+          },
         },
-        {
-          name: "3. Long-Carry Fees",
-          body: "If the truck can't park close to your front door, some movers charge for the extra distance the crew has to carry items. Parking situations in downtown Orlando and older apartment complexes make this one common.",
-        },
-        {
-          name: "4. Bulky Item Charges",
-          body: "Pianos, safes, pool tables, and oversized furniture often trigger a separate fee. Fair enough for genuinely heavy items. But we've heard of companies charging \"bulky item\" fees for a standard sectional couch.",
-        },
-        {
-          name: "5. Packing Material Markup",
-          body: "If the crew brings boxes, tape, or blankets, some companies charge 2-3x retail price for those materials. Always ask upfront: \"Do you charge separately for packing materials?\"",
-        },
-        {
-          name: "6. Minimum Hour Requirements",
-          body: "Many movers have a 2 or 3-hour minimum, which is standard. The issue is when that minimum isn't disclosed. A one-hour job becomes a $240 bill because of a minimum you didn't know existed.",
-        },
-        {
-          name: "7. Last-Minute Cancellation or Rescheduling Fees",
-          body: "Life happens. But some companies bury a $100 to $200 cancellation fee in the fine print. If your closing date shifts (very common in Orlando's housing market), you could pay twice.",
-        },
-      ],
-      trailing: [
-        "The pattern: Each of these fees sounds reasonable in isolation. Together, they're how a $900 quote becomes a $1,300 bill.",
       ],
     },
     {
-      h2: "5 Questions to Ask Before You Book Any Mover",
-      body: [
-        "You don't need to be an expert to protect yourself. You just need to ask the right questions before you sign anything. Here's what we recommend asking every company you get a quote from.",
+      h2: "The 8 Most Common Hidden Moving Fees",
+      blocks: [
+        { kind: "p", text: "These are the charges that most frequently appear on bills that customers didn't expect. Some are legitimate fees that legitimate movers disclose upfront. Others are invented on the spot. The difference is disclosure." },
+        { kind: "h3", text: "1. The Lowball Estimate That Isn't" },
+        { kind: "p", text: "This isn't a fee exactly — it's the setup for all the fees that follow. A mover quotes you a rate that's noticeably lower than competitors. It feels like a deal. What it actually is: an artificially low number designed to get you to commit. Once your belongings are loaded, the number changes." },
+        { kind: "p", text: "How to protect yourself: Get quotes from at least three companies. If one quote is dramatically lower than the others, ask specifically what it includes and what it doesn't. A legitimate mover can explain the difference. A lowballer can't." },
+        { kind: "h3", text: "2. Shrink Wrap and Packing Material Fees" },
+        { kind: "p", text: "Shrink wrap is a real service. Movers use it to protect furniture surfaces during transit. The problem is when it's applied to everything — whether it needs it or not — and billed at rates like $50 to $75 per item without your consent." },
+        { kind: "p", text: "One Orlando customer reported a $400 bill for boxes and shrink wrap on a move that was quoted at $500 total. The salesperson had told them shrink wrap was required. It wasn't." },
+        { kind: "p", text: "How to protect yourself: Ask upfront whether packing materials are included in the hourly rate or billed separately. If separately, ask for the per-item or per-roll cost before the crew starts wrapping anything." },
+        { kind: "h3", text: "3. Stair Fees" },
+        { kind: "p", text: "Stairs take more time and effort. A stair fee isn't inherently dishonest — it's a legitimate charge for legitimate extra work. The problem is when it appears on your bill without ever being mentioned during the quote." },
+        { kind: "p", text: "In Florida, stair fees typically run $30 to $75 per flight. Some movers charge per flight; others charge a flat additional fee for any stairs at all." },
+        { kind: "p", text: "How to protect yourself: Tell the mover about stairs during the quote process. Ask whether stairs trigger an additional fee or whether they're reflected in the hourly rate. Get the answer in writing." },
+        { kind: "h3", text: "4. Long Carry Fees" },
+        { kind: "p", text: "If the truck can't park close to your door — because of a gated community, a narrow driveway, a downtown building with no loading dock, or a long walkway — movers may charge a \"long carry\" fee for the extra distance." },
+        { kind: "p", text: "This is another legitimate charge that becomes illegitimate when it's never disclosed. Some movers don't mention it until they arrive and assess the property." },
+        { kind: "p", text: "How to protect yourself: Describe your parking situation during the quote. If you're in a gated community, a high-rise, or anywhere with restricted truck access, ask explicitly whether a long carry fee applies." },
+        { kind: "h3", text: "5. Fuel Surcharges That Appear Out of Nowhere" },
+        { kind: "p", text: "Most reputable Orlando movers include a flat truck or fuel fee in the quote — typically $75 to $150. This is disclosed upfront. What's not acceptable is a \"fuel surcharge\" that appears on the final bill at a different amount than what was quoted, or that wasn't mentioned at all." },
+        { kind: "p", text: "How to protect yourself: Ask for the fuel or truck fee as a specific line item when you get a quote. Confirm that number is what will appear on your final bill." },
+        { kind: "h3", text: "6. \"Hostage Belongings\" Situations" },
+        { kind: "p", text: "This is the most serious version of the hidden fee problem. A mover loads your belongings, arrives at the destination, and then presents a bill that's significantly higher than the quote. They won't unload until you pay." },
+        { kind: "p", text: "This scenario played out for an Orlando family in 2025: their initial $300 estimate grew to over $1,200 by the time the crew finished loading, with fees they'd never been told about. The movers refused to unload until payment was received." },
+        { kind: "p", text: "If this happens to you: Contact local law enforcement. You can also file a complaint with the Florida Attorney General's office at myfloridalegal.com and dispute the charge with your credit card company." },
+        { kind: "p", text: "How to protect yourself: Never pay in cash. Pay by credit card so you have dispute rights. Read the contract before signing. If a mover insists on cash only, walk away." },
+        { kind: "h3", text: "7. Bulky Item Fees" },
+        { kind: "p", text: "Pianos, safes, large appliances, and oversized furniture require extra equipment and manpower. A bulky item fee is legitimate — these items genuinely take more time and effort. The issue is when the threshold for \"bulky\" is set extremely low, or when items that don't qualify are charged anyway." },
+        { kind: "p", text: "How to protect yourself: List your large items when requesting a quote. Ask whether any of them would trigger a bulky item fee and what that fee is." },
+        { kind: "h3", text: "8. Minimum Hour Inflation" },
+        { kind: "p", text: "Most movers have a 2-hour minimum. Some use this as a floor and bill honestly from there. Others use it as a baseline and then find reasons to extend the clock — slow working, unnecessary breaks, excessive wrapping of items that don't need it." },
+        { kind: "p", text: "How to protect yourself: Watch the crew. A professional crew works steadily. If you notice significant downtime, note the times. You have the right to question time charges that seem inconsistent with the work performed." },
       ],
-      questions: [
-        {
-          lead: "Is your quote all-inclusive, or are there fees not listed here?",
-          body: "A reputable mover will tell you exactly what's covered. If they hesitate or give a vague answer, that's your signal.",
-        },
-        {
-          lead: "Do you charge a fuel surcharge or travel fee on top of the hourly rate?",
-          body: "Make them answer this directly. \"It depends\" is not an answer.",
-        },
-        {
-          lead: "Is there a minimum number of hours?",
-          body: "Know this upfront. A 2-hour minimum on a small job is fine as long as you know about it.",
-        },
-        {
-          lead: "What's your policy for stairs, long carries, or oversized items?",
-          body: "If your new place has stairs or a tricky parking situation, ask specifically. Get the answer in writing.",
-        },
-        {
-          lead: "What is your cancellation or rescheduling policy?",
-          body: "Orlando closings get delayed. Apartment availability shifts. Know what it costs to change the date before you're in that situation.",
-        },
-      ],
-      note: {
-        before: "The ",
-        linkText: "FMCSA (Federal Motor Carrier Safety Administration)",
-        href: "https://www.fmcsa.dot.gov/protect-your-move",
-        after:
-          " recommends always getting a written estimate and reviewing it line by line before the move. If a company won't provide a written quote, walk away.",
-      },
-      image: {
-        src: "/blog/hidden-moving-fees-orlando/fmcsa-protect-your-move.jpg",
-        alt: "FMCSA Protect Your Move consumer guide page with tips for avoiding hidden moving fees in Orlando",
-      },
     },
     {
-      h2: "How We Do It Differently",
-      body: [
-        "At Toro Movers, we charge a flat $75 per mover, per hour, with a two-hour minimum — and that's it. No fuel surcharges added on top. No stair fees. No weekend premiums. No surprise line items when the job is done. The clock stops when the job ends.",
-        "When you get a quote from us, we walk through your specific situation: how many rooms, what floor you're on, whether there's elevator access, what large items you have. We account for all of it upfront so the number we give you reflects the actual job, not a best-case scenario designed to win your business.",
-        "We're a family-owned company based right here in Orlando. We're not a franchise with a call center. When you call us, you're talking to the people who will show up on moving day. That accountability matters to us, and it should matter to you when you're choosing who to trust with everything you own.",
-        "If a quote sounds too good to be true, it usually is. The cheapest option on paper is rarely the cheapest option on moving day.",
+      h2: "The Pre-Move Checklist: Protect Yourself Before Signing Anything",
+      blocks: [
+        { kind: "p", text: "Every hidden fee problem is easier to prevent than to fix after the fact. Once your belongings are on a truck, your leverage disappears. Before that happens, you hold all the cards." },
+        { kind: "h3", text: "Before you get a quote" },
+        { kind: "ul", items: [
+          "Decide on your full inventory before calling. Know your home size, the number of large items, and whether you have stairs or access restrictions at either address.",
+          "Get at least three quotes. This tells you what the market rate actually is and makes lowball estimates immediately obvious.",
+        ] },
+        { kind: "h3", text: "When you get a quote" },
+        { kind: "p", text: "Ask these questions specifically and get the answers in writing:" },
+        { kind: "ul", items: [
+          "What is the hourly rate, and what does it include?",
+          "Is there a fuel or truck fee? How much?",
+          "What is the minimum hours requirement?",
+          "Are there additional charges for stairs, long carry distances, or large items? What triggers them, and what do they cost?",
+          "Are packing materials included or billed separately?",
+          "When does the clock start and stop?",
+          "What forms of payment do you accept?",
+        ] },
+        { kind: "h3", text: "When you sign the contract" },
+        { kind: "ul", items: [
+          "Read it. All of it. Look for language like \"additional charges may apply,\" \"conditions apply,\" or \"fees subject to change.\" These are flags.",
+          "If you see vague language, ask for it to be clarified in writing before you sign.",
+          "Make sure the rate you were quoted matches the rate in the contract.",
+        ] },
+        { kind: "h3", text: "On move day" },
+        { kind: "ul", items: [
+          "Pay by credit card, not cash. Cash payments eliminate your ability to dispute a charge.",
+          "Note the start time and stay aware of the clock.",
+          "If the crew starts wrapping or packing things you didn't discuss, ask about the cost before they continue.",
+        ] },
+        { kind: "p", text: "Bottom line: A legitimate moving company welcomes these questions. Transparency is easy when you have nothing to hide. If a mover gets defensive, evasive, or pressures you to decide quickly without answering your questions, that tells you everything you need to know." },
+      ],
+    },
+    {
+      h2: "How Toro Movers Prices Moves",
+      blocks: [
+        { kind: "p", text: "Toro Movers operates on transparent hourly pricing with no hidden fees. Every charge — the hourly rate, the minimum, and what's included — is disclosed before you book. The rate covers the crew, the truck on full-service moves, shrink wrap, furniture blankets, and assembly/disassembly. No fuel surcharge, no materials fee, no stair charge." },
+        { kind: "table", table: {
+          headers: ["Service", "Rate", "Minimum"],
+          rows: [
+            ["Labor-only · 2 movers", "$150/hr", "2 hours"],
+            ["Labor-only · each additional mover", "+$75/hr", "—"],
+            ["Full-service · 2 movers + truck (up to 26 ft)", "$220/hr", "3 hours"],
+            ["Full-service · each additional mover", "+$110/hr", "—"],
+          ],
+        } },
+        { kind: "p", text: "For moves beyond 100 miles, a $3/mile charge applies to the distance driven. Everything else is included in the hourly rate." },
       ],
     },
   ],
   cta: {
-    heading: "Ready to Get a Quote With No Surprises?",
+    heading: "Want a Quote You Can Actually Trust?",
     body: [
-      "Moving in Orlando doesn't have to come with a side of anxiety about what the final bill will say. You deserve to know the number before the truck shows up, not after it leaves.",
+      "If you're planning a move in Orlando and want a straightforward estimate with every charge disclosed up front, get in touch.",
     ],
     linkText: "Get a transparent quote from Toro Movers",
     href: "/",
-    after:
-      " and see exactly what your move will cost. Same-week scheduling available, bilingual team, and a pricing model built around honesty.",
+    after: " — same-week scheduling across Central Florida.",
   },
   faqs: [
     {
       q: "What are the most common hidden moving fees in Orlando?",
-      a: "The ones we hear about most are fuel or travel surcharges, per-flight stair fees, long-carry fees when the truck can't park close, bulky-item charges, marked-up packing materials, undisclosed hour minimums, and last-minute cancellation or rescheduling fees. Each sounds small on its own, but together they can add 15 to 30% to your original quote.",
+      a: "Lowball estimates that climb once you're committed, shrink-wrap and packing-material markups, per-flight stair fees, long-carry fees when the truck can't park close, surprise fuel surcharges, bulky-item fees, minimum-hour inflation, and in the worst cases \"hostage\" situations where a mover won't unload until you pay an inflated bill. Almost all of them come down to one thing: charges that weren't disclosed before you booked.",
     },
     {
-      q: "How can I avoid hidden fees when hiring a mover?",
-      a: "Ask for an all-inclusive written estimate and review it line by line before you book. Confirm directly whether there's a fuel surcharge, an hour minimum, or extra charges for stairs, long carries, or oversized items, and ask about the cancellation policy. If a company won't put the quote in writing or gives vague answers, walk away.",
+      q: "How do I avoid hidden moving fees?",
+      a: "Get at least three written quotes and compare what each includes. Ask directly about fuel or truck fees, the hour minimum, and charges for stairs, long carries, and large items — and get the answers in writing. Read the contract before signing, make sure it matches your quote, and pay by credit card so you keep dispute rights.",
     },
     {
-      q: "Does Toro Movers charge fuel surcharges or stair fees?",
-      a: "No. We charge $75 per mover, per hour, with a two-hour minimum and the rate agreed up front — no fuel surcharges, no stair fees, no weekend premiums, and no surprise line items on the final bill. We walk through your floor, access, and large items when we quote so the number reflects the actual job.",
+      q: "Does Toro Movers charge fuel, stair, or material fees?",
+      a: "No. Toro bills a straight hourly rate — $150/hr for two labor-only movers (2-hour minimum) or $220/hr for two movers with a truck (3-hour minimum), plus $75 or $110 per additional mover. Shrink wrap, furniture blankets, and assembly/disassembly are included. No fuel surcharge, no materials fee, no stair charge; beyond 100 miles a $3/mile charge applies to the distance driven.",
     },
     {
-      q: "Why is hourly pricing more transparent than a flat rate?",
-      a: "An honest hourly rate means you pay for the time your move actually takes, with the rate and any short minimum disclosed before you book. Flat quotes are often padded for the worst case and can hide per-mile fees or fuel surcharges — so if the job goes faster, you don't see the savings.",
+      q: "What should I do if a mover holds my belongings for a higher price?",
+      a: "Don't pay a surprise bill under pressure. Contact local law enforcement, file a complaint with the Florida Attorney General's consumer protection division at myfloridalegal.com, and dispute the charge with your credit card company. This is why you should always pay by card, never cash, and read the contract before anything is loaded.",
+    },
+  ],
+};
+
+export const MOVING_RATES_EXPLAINED: GuideData = {
+  slug: "what-youre-paying-for-orlando-movers",
+  href: "/blog/what-youre-paying-for-orlando-movers",
+  metadata: {
+    title: "Orlando Moving Rates 2026: What You're Actually Paying For",
+    description:
+      "How Orlando hourly moving rates work in 2026 — the crew rate, what's included, minimums, what drives the hours, and what a realistic bill looks like.",
+  },
+  h1: "What You're Actually Paying For When You Hire Orlando Movers",
+  intro:
+    "When a mover quotes you an hourly rate, that rate covers a bundle of things, not just labor. Understanding the bundle is how you compare quotes accurately.",
+  datePublished: "2026-07-02",
+  readMins: 8,
+  sections: [
+    {
+      h2: "The Crew Rate",
+      blocks: [
+        { kind: "p", text: "The core charge is the crew rate: a per-hour fee for the movers and the truck together. In Orlando in 2026, Toro's rates look like this:" },
+        { kind: "table", table: {
+          headers: ["Service", "Hourly Rate", "Minimum"],
+          rows: [
+            ["2 movers (labor only)", "$150/hr", "2 hours"],
+            ["Each additional mover (labor only)", "+$75/hr", "—"],
+            ["2 movers + truck (up to 26 ft)", "$220/hr", "3 hours"],
+            ["Each additional mover + truck", "+$110/hr", "—"],
+          ],
+        } },
+        { kind: "p", text: "All rates include shrink wrap, furniture blankets, and full assembly/disassembly. No extra fees for materials, equipment, or stairs. The right crew size depends on your home's volume. A 1-bedroom apartment moves efficiently with 2 movers. A 3-bedroom house with a garage almost always benefits from 3, because the time savings from an extra set of hands usually outweighs the higher hourly cost." },
+      ],
+    },
+    {
+      h2: "What's Included in the Rate",
+      blocks: [
+        { kind: "p", text: "Most Orlando movers charge a separate fuel fee ($75 to $150) and bill materials like shrink wrap and furniture blankets as line items on top of the hourly rate. Toro's pricing works differently: the hourly rate covers the crew, the truck (on full-service moves), shrink wrap, furniture blankets, and assembly/disassembly. One number, nothing added at the end." },
+        { kind: "p", text: "Why this matters: When you compare quotes, a $220/hr rate that includes everything is often cheaper than a $180/hr rate that adds a $100 truck fee, $50 in materials, and a stair charge. Always ask what the hourly rate actually includes before comparing numbers." },
+      ],
+    },
+    {
+      h2: "The Minimum Hours Requirement",
+      blocks: [
+        { kind: "p", text: "Moving companies in Orlando set a minimum booking to account for crew scheduling and drive time. Toro's minimums are straightforward: 2 hours for labor-only jobs, 3 hours when a truck is included. If your studio apartment takes 90 minutes to load and unload, you pay for 2 hours on a labor-only booking." },
+        { kind: "p", text: "After the minimum, billing continues by the hour. Ask any mover how they handle partial hours — whether they round up to the nearest 30 minutes or bill in 15-minute increments. On a job that runs 3 hours and 20 minutes, that difference shows up on your bill." },
+      ],
+    },
+    {
+      h2: "What Determines How Many Hours Your Move Takes",
+      blocks: [
+        { kind: "p", text: "The hourly rate is only half the equation. The other half is time. These are the factors that drive the clock in either direction." },
+        { kind: "h3", text: "Home Size and Volume" },
+        { kind: "p", text: "This is the biggest driver. A studio with a bed, a couch, and 20 boxes moves in 2 to 3 hours with a 2-person crew. A fully furnished 3-bedroom house with a garage, a dining set, and a decade of accumulated belongings can run 6 to 8 hours. Here are realistic time estimates for Central Florida moves:" },
+        { kind: "table", table: {
+          headers: ["Home Size", "Crew", "Estimated Hours"],
+          rows: [
+            ["Studio / 1-BR (light)", "2 movers", "2 – 3 hrs"],
+            ["1-BR (fully furnished)", "2 movers", "3 – 4 hrs"],
+            ["2-BR", "2 – 3 movers", "4 – 5 hrs"],
+            ["3-BR", "3 – 4 movers", "5 – 8 hrs"],
+            ["4-BR or larger", "4 movers", "7 – 10+ hrs"],
+          ],
+        } },
+        { kind: "h3", text: "Access and Layout" },
+        { kind: "p", text: "How easy is it to get furniture in and out? A ground-floor apartment with a parking lot 20 feet from the door moves faster than a third-floor walkup in a building with a narrow staircase. Factors that add time include:" },
+        { kind: "ul", items: [
+          "Stairs: each flight adds carry time and crew fatigue.",
+          "Long carry distance: if the truck has to park 100 feet from the entrance (gated communities, downtown buildings, tight driveways), every item takes longer.",
+          "Elevator waits: in high-rise buildings, waiting for an elevator on every trip adds up fast.",
+          "Tight hallways or doorways: large furniture pieces that require disassembly or careful maneuvering slow the crew down.",
+        ] },
+        { kind: "h3", text: "How Well You've Prepared" },
+        { kind: "p", text: "This is the variable most customers underestimate. A crew arriving to a home where everything is packed, labeled, and staged near the door will move significantly faster than one that arrives to find half-packed rooms and loose items scattered around." },
+        { kind: "p", text: "The practical implication: every 30 minutes you spend preparing before move day can save 30 minutes of billable time. Pack everything. Break down what you can. Clear pathways. The crew's job on move day should be lifting and loading, not waiting for you to finish packing." },
+        { kind: "h3", text: "Drive Time" },
+        { kind: "p", text: "On hourly moves, the clock typically runs from when the crew arrives at your origin to when they finish unloading at your destination. The drive between locations is billed. For most moves within the Orlando metro (say, Windermere to Winter Park), this adds 30 to 45 minutes. For moves crossing the full metro, budget more." },
+      ],
+    },
+    {
+      h2: "Why Hourly Pricing Is Actually Better for Most Customers",
+      blocks: [
+        { kind: "p", text: "Flat-rate quotes feel safer because the number is fixed. But that certainty comes at a cost: movers who give flat rates have to build in a cushion to protect themselves from jobs that run long. You're often paying for time you won't use." },
+        { kind: "p", text: "Hourly pricing works in your favor when:" },
+        { kind: "ul", items: [
+          "Your move is smaller or simpler than average. A flat-rate quote for a 2-bedroom assumes a worst-case scenario. If you're organized, have minimal furniture, and have an easy-access property, an hourly move will almost always come in lower.",
+          "You want to control the cost. With hourly pricing, decluttering, pre-packing, and disassembling large furniture each reduce time. With a flat rate, none of that effort changes what you pay.",
+          "You're moving a short distance. Local moves within the Orlando metro are typically efficient. A 3-hour labor-only job at $150/hour totals $450. A flat-rate quote for the same move often runs $700 to $900 because the company is hedging against delays.",
+        ] },
+        { kind: "p", text: "The real risk with flat-rate quotes: if the company's estimate was based on incomplete information (and many are), the mover may show up, assess the job, and revise the price before they start. At that point, you've already scheduled the move, arranged time off work, and have no leverage to negotiate." },
+        { kind: "p", text: "The transparency of hourly pricing cuts both ways. If the job takes longer than expected because of an unexpected complication (a couch that won't fit through the door, an elevator that goes down), you pay for that time. But you're paying for reality, not a padded estimate." },
+      ],
+    },
+    {
+      h2: "How to Get an Accurate Hourly Estimate",
+      blocks: [
+        { kind: "p", text: "The quality of a moving quote is only as good as the information behind it. Here's what to tell your mover when you call or fill out a quote form:" },
+        { kind: "ol", items: [
+          { lead: "Exact home size.", body: "Not \"2-bedroom\" — tell them whether it's a furnished 2-bedroom with a garage or a lightly furnished apartment. Volume matters more than bedroom count." },
+          { lead: "Inventory of large items.", body: "Mention the king bed, the sectional, the dining table, the piano, the treadmill. Large or heavy items take disproportionate time." },
+          { lead: "Access details at both addresses.", body: "Stairs, elevator availability, distance from parking to door, gated entry, narrow hallways." },
+          { lead: "Distance between locations.", body: "Even within Orlando, a move from Ocoee to Lake Nona is materially longer than a move from Baldwin Park to Thornton Park." },
+          { lead: "Any packing help needed.", body: "If the crew is packing boxes, that time is billed. If you're pre-packed, say so." },
+        ] },
+        { kind: "p", text: "A mover who asks you these questions before giving you a rate is doing their job. One who quotes you a rate without asking is guessing — and that guess usually goes in their favor, not yours." },
+      ],
+    },
+    {
+      h2: "What a Realistic Bill Looks Like",
+      blocks: [
+        { kind: "p", text: "Using 2026 Orlando market rates, here's what to expect for common move types." },
+        { kind: "h3", text: "Full-service (truck included)" },
+        { kind: "table", table: {
+          caption: "Toro full-service rate: $220/hr for 2 movers, 3-hr minimum.",
+          headers: ["Move Type", "Crew", "Est. Hours", "Rate", "Estimated Total"],
+          rows: [
+            ["Studio", "2 movers + truck", "3 hrs (min)", "$220/hr", "$660"],
+            ["1-BR (furnished)", "2 movers + truck", "3 – 4 hrs", "$220/hr", "$660 – $880"],
+            ["2-BR", "3 movers + truck", "4 – 5 hrs", "$330/hr", "$1,320 – $1,650"],
+            ["3-BR", "3 movers + truck", "6 – 8 hrs", "$330/hr", "$1,980 – $2,640"],
+          ],
+        } },
+        { kind: "h3", text: "Labor-only (you provide the truck)" },
+        { kind: "table", table: {
+          caption: "Toro labor-only rate: $150/hr for 2 movers, 2-hr minimum.",
+          headers: ["Move Type", "Crew", "Est. Hours", "Rate", "Estimated Total"],
+          rows: [
+            ["Studio", "2 movers", "2 hrs (min)", "$150/hr", "$300"],
+            ["1-BR (furnished)", "2 movers", "2 – 3 hrs", "$150/hr", "$300 – $450"],
+            ["2-BR", "3 movers", "3 – 4 hrs", "$225/hr", "$675 – $900"],
+            ["3-BR", "3 movers", "5 – 7 hrs", "$225/hr", "$1,125 – $1,575"],
+          ],
+        } },
+        { kind: "p", text: "All rates include shrink wrap, furniture blankets, and assembly/disassembly. No truck fee, no materials surcharge, no stair charge. For moves beyond 100 miles, a $3/mile charge applies to the distance driven." },
+        { kind: "p", text: "These are estimates, not guarantees. Your actual bill depends on the factors covered above. But if a quote comes in dramatically lower than these ranges, ask why. A lowball quote often leads to a very different final number." },
+      ],
+    },
+    {
+      h2: "Questions to Ask Before You Book",
+      blocks: [
+        { kind: "p", text: "Most moving disputes come down to a mismatch between what the customer expected and what the mover charged. A few direct questions before booking eliminate most of that risk." },
+        { kind: "ul", items: [
+          "What is your hourly rate, and what exactly does it include? Truck, fuel, equipment, padding — confirm what's in the rate.",
+          "Is there a fuel or truck fee, and how much is it? Get the number in writing.",
+          "What is the minimum hours requirement?",
+          "How do you bill partial hours? (15-minute increments vs. rounding up to the nearest half-hour.)",
+          "Are there any additional charges for stairs, long carry distances, or large items? If yes, what triggers them and how much?",
+          "When does the clock start and stop? Some companies start it when the truck leaves their facility; others start when they arrive at your door.",
+        ] },
+        { kind: "p", text: "A mover who answers these questions clearly and without hesitation is a mover worth booking. One who hedges, deflects, or says \"it depends\" without explanation is telling you something important about how they'll handle your bill." },
+      ],
+    },
+  ],
+  cta: {
+    heading: "Get a Straightforward Orlando Moving Quote",
+    body: [
+      "Toro Movers operates on straightforward hourly pricing with no hidden fees. The rate, the minimum, and what's included are shared before you book.",
+    ],
+    linkText: "Get a same-week estimate from Toro Movers",
+    href: "/",
+    after: " for your Orlando move.",
+  },
+  faqs: [
+    {
+      q: "How much do movers cost per hour in Orlando in 2026?",
+      a: "Toro's labor-only rate is $150/hour for two movers (2-hour minimum), plus $75/hour per additional mover. Full-service with a truck up to 26 feet is $220/hour for two movers (3-hour minimum), plus $110/hour per additional mover. Every rate includes shrink wrap, furniture blankets, and assembly/disassembly.",
+    },
+    {
+      q: "What's included in the hourly rate?",
+      a: "The crew, the truck on full-service moves, shrink wrap, furniture blankets, equipment, and assembly/disassembly. There's no separate fuel fee, materials fee, or stair charge. For moves beyond 100 miles, a $3/mile charge applies to the distance driven.",
+    },
+    {
+      q: "How many hours will my move take?",
+      a: "It depends mostly on home size, access, and how well you've packed. A light studio runs 2–3 hours with two movers; a fully furnished 3-bedroom can run 5–8 hours with three or four. Being fully packed and staged before the crew arrives is the single biggest way to lower the hours.",
+    },
+    {
+      q: "Is hourly pricing cheaper than a flat rate?",
+      a: "For most local Orlando moves, yes. Flat quotes are padded to protect the mover against jobs that run long, so you often pay for time you don't use. With hourly pricing, decluttering and pre-packing directly lower your bill.",
+    },
+  ],
+};
+
+export const FULL_VS_LABOR: GuideData = {
+  slug: "full-service-vs-labor-only-orlando",
+  href: "/blog/full-service-vs-labor-only-orlando",
+  metadata: {
+    title: "Full-Service vs. Labor-Only Movers in Orlando (2026)",
+    description:
+      "Full-service or labor-only for your Orlando move? Compare 2026 costs, what's included, and which option fits your move — with real price examples.",
+  },
+  h1: "Full-Service Moving vs. Labor-Only in Orlando: How to Choose the Right Option",
+  intro:
+    "Most people searching for movers in Orlando are really asking one question before they even realize it: do I need a truck, or just the muscle?",
+  lead: [
+    "The answer determines everything — your total cost, your scheduling flexibility, and how much work you're taking on yourself. Full-service moving and labor-only moving are both legitimate options, and for the right job, each one saves you real money over the alternative. The mistake is defaulting to one without understanding what the other actually offers.",
+    "This guide breaks down exactly how the two services differ, what each one costs in Orlando in 2026, and the specific situations where one clearly beats the other.",
+  ],
+  datePublished: "2026-07-02",
+  readMins: 9,
+  sections: [
+    {
+      h2: "Quick Answer",
+      blocks: [
+        { kind: "p", text: "If you don't have a truck and don't want to deal with renting one, book full-service. If you already have a rental truck or a portable container, labor-only is almost always the cheaper call." },
+      ],
+    },
+    {
+      h2: "What Each Service Actually Includes",
+      blocks: [
+        { kind: "p", text: "Before comparing costs, it helps to be clear on what you're actually buying with each option." },
+        { kind: "h3", text: "Full-Service Moving (Truck + Crew)" },
+        { kind: "p", text: "Full-service means Toro handles everything from the moment the crew arrives to the moment the last box is placed at your new address. You don't need to arrange transportation — the truck is part of the service. What's included:" },
+        { kind: "ul", items: [
+          "Professional crew (2 movers minimum)",
+          "Moving truck up to 26 ft",
+          "Shrink wrap and furniture blankets",
+          "Full furniture disassembly and reassembly",
+          "Loading, transport, and unloading",
+          "All equipment (dollies, straps, pads)",
+        ] },
+        { kind: "p", text: "You don't touch a truck. You don't coordinate a rental. You show up at the new place and direct traffic." },
+        { kind: "h3", text: "Labor-Only Moving (Crew, No Truck)" },
+        { kind: "p", text: "Labor-only means you supply the vehicle — a rental truck, a PODS container, a U-Box, or any portable storage unit. Toro supplies the crew and everything else. What's included:" },
+        { kind: "ul", items: [
+          "Professional crew (2 movers minimum)",
+          "Shrink wrap and furniture blankets",
+          "Full furniture disassembly and reassembly",
+          "Loading, unloading, or both",
+          "All equipment",
+        ] },
+        { kind: "p", text: "What's not included: the truck or container (your responsibility to rent and return) and the driving between locations (you or someone you designate drives). The division is clean — you handle the vehicle logistics; the crew handles the physical labor." },
+        { kind: "table", table: {
+          headers: ["", "Full-Service", "Labor-Only"],
+          rows: [
+            ["Truck provided", "Yes (up to 26 ft)", "No"],
+            ["Professional crew", "Yes", "Yes"],
+            ["Shrink wrap + blankets", "Yes", "Yes"],
+            ["Assembly / disassembly", "Yes", "Yes"],
+            ["You drive anything", "No", "Yes"],
+            ["Truck rental required", "No", "Yes"],
+          ],
+        } },
+      ],
+    },
+    {
+      h2: "How the Pricing Compares",
+      blocks: [
+        { kind: "p", text: "This is where most people make their decision. Both services bill hourly, but the rates and minimums differ — and the total cost comparison changes depending on your home size." },
+        { kind: "h3", text: "Toro's Rates (2026)" },
+        { kind: "table", table: {
+          headers: ["Service", "Rate", "Minimum"],
+          rows: [
+            ["Labor-only: 2 movers", "$150/hr", "2 hours"],
+            ["Labor-only: each additional mover", "+$75/hr", "—"],
+            ["Full-service: 2 movers + truck (up to 26 ft)", "$220/hr", "3 hours"],
+            ["Full-service: each additional mover", "+$110/hr", "—"],
+          ],
+        } },
+        { kind: "p", text: "Everything is included in both rates: shrink wrap, furniture blankets, assembly and disassembly. No fuel surcharge, no materials fee, no stair charge. For moves beyond 100 miles, a $3/mile charge applies to the distance driven." },
+        { kind: "h3", text: "Side-by-Side Cost Comparison" },
+        { kind: "p", text: "The numbers below compare a typical full-service Toro move against a labor-only Toro booking plus a standard local truck rental (U-Haul or Penske, typically $80 to $150 for a local one-way or round trip in Orlando)." },
+        { kind: "table", table: {
+          caption: "2-bedroom move (estimated 4 to 5 hours, 3 movers):",
+          headers: ["Option", "Crew Cost", "Truck Cost", "Estimated Total"],
+          rows: [
+            ["Full-service (3 movers + truck)", "$330/hr × 4–5 hrs", "Included", "$1,320 – $1,650"],
+            ["Labor-only (3 movers) + rental truck", "$225/hr × 3–4 hrs", "~$120", "$795 – $1,020"],
+          ],
+        } },
+        { kind: "table", table: {
+          caption: "1-bedroom move (estimated 2 to 3 hours, 2 movers):",
+          headers: ["Option", "Crew Cost", "Truck Cost", "Estimated Total"],
+          rows: [
+            ["Full-service (2 movers + truck)", "$220/hr × 3 hrs (min)", "Included", "$660"],
+            ["Labor-only (2 movers) + rental truck", "$150/hr × 2 hrs (min)", "~$100", "$400"],
+          ],
+        } },
+        { kind: "p", text: "The real cost gap: on a 2-bedroom move, labor-only typically saves $300 to $600 compared to full-service. On a 3-bedroom move, the savings can reach $700 to $900. The tradeoff is that you're managing the truck rental yourself." },
+        { kind: "p", text: "Important note: these estimates assume you're doing the driving. If coordinating a rental truck feels like a burden — picking it up, driving a large vehicle, returning it on time — that friction has real value. Full-service removes it entirely." },
+      ],
+    },
+    {
+      h2: "When Full-Service Is the Right Call",
+      blocks: [
+        { kind: "p", text: "Full-service moving is the better choice when the convenience of a single, all-in booking is worth more to you than the savings from managing a truck rental yourself. That's not always true — but in these situations, it usually is." },
+        { kind: "h3", text: "You don't want to deal with a rental truck" },
+        { kind: "p", text: "Renting a moving truck means reserving it in advance, picking it up the morning of your move, driving a vehicle that's significantly larger than anything you normally drive, and returning it on time. If any part of that sounds stressful on top of an already stressful move day, full-service eliminates it. The truck shows up with the crew." },
+        { kind: "h3", text: "Your move is time-sensitive" },
+        { kind: "p", text: "Full-service moves are faster to coordinate. One call, one booking, one crew that handles everything. If you're working with a tight timeline — a same-week move, a lease end date, a closing day — full-service is simpler to execute." },
+        { kind: "h3", text: "You're moving a large home" },
+        { kind: "p", text: "For 3-bedroom homes and larger, the logistics of a rental truck get complicated. You may need a larger truck than a standard 15-footer, and driving a 26-foot truck through residential Orlando neighborhoods requires real comfort behind the wheel. A full-service crew brings the right truck and knows how to use it." },
+        { kind: "h3", text: "You're moving long-distance within Florida" },
+        { kind: "p", text: "If you're relocating from Orlando to Tampa, Jacksonville, or Miami, driving a rental truck yourself for 3 to 4 hours on I-4 or the Turnpike is a different proposition than a 20-minute local move. Full-service handles the drive. You take your car." },
+        { kind: "h3", text: "You want one point of accountability" },
+        { kind: "p", text: "With full-service, if something goes wrong — a piece of furniture is damaged, a box is missing — there's one company responsible. With labor-only, the line of responsibility can blur between the moving crew and the rental truck company. Full-service keeps it simple." },
+      ],
+    },
+    {
+      h2: "When Labor-Only Is the Right Call",
+      blocks: [
+        { kind: "p", text: "Labor-only wins on cost — sometimes by a significant margin. But cost isn't the only reason to choose it. These are the situations where labor-only is the smarter move, not just the cheaper one." },
+        { kind: "h3", text: "You've already rented a truck" },
+        { kind: "p", text: "This is the most common scenario. You booked a U-Haul or Penske because you planned to handle the move yourself, then realized loading a king mattress and a 200-pound dresser up a ramp alone is a different experience than it looked on paper. A labor crew can typically be booked same-week, and the cost of adding professional loaders is far less than canceling the truck and rescheduling everything as a full-service move." },
+        { kind: "h3", text: "You're using a PODS or portable container" },
+        { kind: "p", text: "PODS and U-Box containers are popular in Central Florida because they let you pack on your own schedule. But loading a container efficiently — weight balanced, fragile items protected, nothing shifting in transit — takes real experience. A professional crew loads it correctly. An amateur load leads to broken items and a difficult unload on the other end." },
+        { kind: "h3", text: "You only need help on one end" },
+        { kind: "p", text: "Not every job requires a crew at both locations. Moving out of a storage unit into a new home? Book an unload-only job. Clearing out your old apartment before handing over the keys? Book a load-only job. Hourly billing means you pay for the help you actually need, nothing more." },
+        { kind: "h3", text: "You're moving furniture within your home" },
+        { kind: "p", text: "Rearranging a living room, moving a home office to another room, or staging a property for sale all require the same muscle as a move but no truck at all. Labor-only crews handle these jobs routinely." },
+        { kind: "h3", text: "You want maximum cost control" },
+        { kind: "p", text: "With labor-only, you control two of the three cost variables: the truck (you pick the size and rental company) and the crew time (your preparation directly affects how fast the job goes). The more organized you are on move day, the lower your bill." },
+        { kind: "p", text: "The honest tradeoff: labor-only requires more coordination from you. You're managing a truck rental on top of everything else a move involves. If that's a burden, it's not the right choice regardless of the savings." },
+      ],
+    },
+    {
+      h2: "The Decision Guide: Which Option Fits Your Move",
+      blocks: [
+        { kind: "p", text: "Still not sure? Run through this. Most people land on a clear answer by the end." },
+        { kind: "table", table: {
+          headers: ["Your situation", "Better option"],
+          rows: [
+            ["No truck, don't want to deal with renting one", "Full-service"],
+            ["Already have a U-Haul or Penske reserved", "Labor-only"],
+            ["Using PODS, U-Box, or portable container", "Labor-only"],
+            ["Moving a 3-bedroom home or larger", "Full-service (unless you're comfortable driving a large truck)"],
+            ["Moving a studio or 1-bedroom", "Either — labor-only saves money if you can handle the truck"],
+            ["Moving long-distance within Florida", "Full-service"],
+            ["Only need help loading or unloading, not both", "Labor-only"],
+            ["Want one company responsible for everything", "Full-service"],
+            ["Want to maximize cost savings", "Labor-only"],
+            ["Moving furniture within your home (no truck needed)", "Labor-only"],
+          ],
+        } },
+        { kind: "h3", text: "The one question that settles it for most people" },
+        { kind: "p", text: "Are you willing to rent, drive, and return a moving truck?" },
+        { kind: "p", text: "If yes, labor-only will save you money — often several hundred dollars on a standard Orlando move. If no, full-service is worth the premium. Both options use the same professional crew, the same included materials, and the same hourly billing structure. The only real difference is who's responsible for the truck." },
+      ],
+    },
+  ],
+  cta: {
+    heading: "Not Sure Which Fits Your Move?",
+    body: [
+      "Toro Movers offers both services across Central Florida, billed by the hour with no hidden fees. Whether you've got a U-Haul in the driveway or need a crew and truck to show up ready to go, the pricing is the same straightforward structure: one rate that covers everything.",
+    ],
+    linkText: "Get a quote from Toro Movers",
+    href: "/",
+    after: " and tell them which service fits your move — same-week scheduling across the Orlando metro.",
+  },
+  faqs: [
+    {
+      q: "Is labor-only cheaper than full-service moving in Orlando?",
+      a: "Usually, yes — if you already have or can rent a truck. On a 2-bedroom move, labor-only plus a local truck rental typically runs $795–$1,020 versus $1,320–$1,650 full-service, a $300–$600 saving. The tradeoff is that you rent, drive, and return the truck yourself.",
+    },
+    {
+      q: "What's the difference between full-service and labor-only?",
+      a: "Full-service includes the truck (up to 26 ft) plus the crew, who handle loading, transport, and unloading. Labor-only is the crew only — you supply the truck, PODS, or container and do the driving. Both include shrink wrap, furniture blankets, and assembly/disassembly.",
+    },
+    {
+      q: "How much does full-service moving cost in Orlando?",
+      a: "Toro's full-service rate is $220/hour for two movers and a truck (3-hour minimum), plus $110/hour per additional mover. A 1-bedroom typically runs about $660; a 2-bedroom with three movers runs about $1,320–$1,650.",
+    },
+    {
+      q: "Which should I choose for a small apartment move?",
+      a: "Either works. If you're comfortable renting and driving a truck, labor-only is cheaper — around $400 all-in for a 1-bedroom versus $660 full-service. If you'd rather not deal with a truck at all, full-service is worth the difference.",
+    },
+  ],
+};
+
+export const LABOR_ONLY_GUIDE: GuideData = {
+  slug: "labor-only-moving-orlando",
+  href: "/blog/labor-only-moving-orlando",
+  metadata: {
+    title: "Labor-Only Moving in Orlando: Load & Unload Help (2026)",
+    description:
+      "Have a U-Haul or PODS but need the muscle? How labor-only moving works in Orlando, what it costs in 2026, and who it's the right call for.",
+  },
+  h1: "Labor-Only Moving in Orlando: When You Have the Truck But Need the Muscle",
+  intro:
+    "Renting a U-Haul to save money on a move makes sense on paper. The truck is cheaper than hiring a full-service moving company, you control the schedule, and you only pay for what you use. The part that breaks down is the loading and unloading.",
+  lead: [
+    "Moving furniture is physically brutal work, and doing it alone — or with a friend who \"owes you one\" — is how couches get dropped on stairs and backs get thrown out.",
+    "Labor-only moving is the solution most people don't know exists. You keep the rental truck. You keep the cost savings. You just hire a professional crew to handle the heavy lifting on one or both ends.",
+    "The average cost of labor-only moving help in Orlando runs $303 to $630 for a standard job, according to market data from move.org, with hourly rates averaging around $77 to $80 per mover. That's a fraction of what a full-service move costs — and you still get experienced hands on your furniture.",
+  ],
+  datePublished: "2026-07-02",
+  readMins: 8,
+  sections: [
+    {
+      h2: "What Labor-Only Moving Actually Includes",
+      blocks: [
+        { kind: "p", text: "Labor-only service is exactly what it sounds like: professional movers without the truck. You provide the vehicle (rental truck, PODS container, U-Box, Penske, Budget, or any other container in your driveway). The crew provides everything else." },
+        { kind: "h3", text: "What the crew handles" },
+        { kind: "ul", items: [
+          "Loading your truck or container, packed tight so nothing shifts in transit",
+          "Unloading at the destination and placing items in the rooms you specify",
+          "Furniture wrapping and padding to protect surfaces during the move",
+          "Disassembly and reassembly of bed frames, desks, and other pieces that need it",
+          "Stair carries, tight hallways, and awkward pieces that require technique",
+        ] },
+        { kind: "h3", text: "What it does NOT include" },
+        { kind: "ul", items: [
+          "The truck or container itself (that's your responsibility to rent and return)",
+          "Driving between locations (you or someone you designate drives the rental)",
+          "Packing boxes (unless you specifically request and pay for packing services)",
+        ] },
+        { kind: "p", text: "The division is clean. You handle transportation logistics; the crew handles physical labor. For anyone who has already rented a truck or is using a portable storage container, this model is significantly cheaper than paying for a full-service move that includes a truck you don't need." },
+        { kind: "p", text: "Key distinction: labor-only is not a lesser service. The crew is the same caliber as a full-service crew. The only difference is that you're supplying the vehicle, which removes the truck cost from your bill." },
+      ],
+    },
+    {
+      h2: "Who Should Use Labor-Only Moving",
+      blocks: [
+        { kind: "p", text: "Labor-only is the right call in a specific set of situations. It is not the right call for everyone — but for the people it fits, it saves real money without sacrificing safety or professionalism." },
+        { kind: "h3", text: "You've already rented a truck" },
+        { kind: "p", text: "This is the most common scenario. You booked a U-Haul or Penske because you thought you'd handle the move yourself, then realized the physical reality of loading a king mattress and a 200-pound dresser up a ramp. A labor crew can be booked same-week in most cases, and the cost is far lower than canceling the truck and booking a full-service move." },
+        { kind: "h3", text: "You're using a PODS or portable container" },
+        { kind: "p", text: "PODS, U-Box, and similar container services are popular in Central Florida because they let you pack on your own timeline. But filling a container efficiently — weight balanced, fragile items protected, nothing shifting in transit — takes experience. A professional loading crew packs containers correctly." },
+        { kind: "h3", text: "You're moving long-distance but loading locally" },
+        { kind: "p", text: "If you're relocating from Orlando to another state and driving the truck yourself, you still need help loading. Hiring a labor crew for the Orlando end means your furniture is loaded by professionals before you hit the road. This is one of the most underutilized applications of labor-only service." },
+        { kind: "h3", text: "You need help on just one end" },
+        { kind: "p", text: "Not every job requires a crew at both locations. If you're moving into a furnished place and just need help unloading at the new address, book an unload-only job. If you're moving out of your old home into temporary storage, book a load-only job. Billing by the hour means you only pay for the help you actually need." },
+        { kind: "h3", text: "You're moving furniture within your home" },
+        { kind: "p", text: "Rearranging a living room, moving a home office, or staging a home for sale all require the same muscle as a move but no truck at all. Labor-only crews handle these jobs too." },
+        { kind: "table", table: {
+          headers: ["Scenario", "Labor-only?"],
+          rows: [
+            ["Rented a U-Haul, need loading help", "Yes"],
+            ["Using PODS or portable container", "Yes"],
+            ["Long-distance move, loading in Orlando", "Yes"],
+            ["Need help on one end only", "Yes"],
+            ["Want full-service with truck included", "No — book a full-service move"],
+            ["Moving internationally", "No — different service category"],
+          ],
+        } },
+      ],
+    },
+    {
+      h2: "How Much Does Labor-Only Moving Cost in Orlando?",
+      blocks: [
+        { kind: "p", text: "Labor-only pricing in Orlando follows the same hourly structure as full-service moving, minus the truck. You're paying for the crew's time, not the vehicle." },
+        { kind: "h3", text: "Toro's labor-only rates" },
+        { kind: "ul", items: [
+          "2 movers: $150/hr (2-hour minimum)",
+          "Each additional mover: +$75/hr",
+          "Everything included: shrink wrap, furniture blankets, assembly and disassembly",
+        ] },
+        { kind: "p", text: "No fuel surcharge. No materials fee. No stair charge. The hourly rate is the total rate. For moves beyond 100 miles, a $3/mile charge applies to the distance driven." },
+        { kind: "p", text: "For most standard jobs, here's what to expect:" },
+        { kind: "table", table: {
+          headers: ["Job Type", "Crew", "Est. Hours", "Estimated Total"],
+          rows: [
+            ["Studio load or unload", "2 movers", "2 hrs (min)", "$300"],
+            ["1-BR load or unload", "2 movers", "2 – 3 hrs", "$300 – $450"],
+            ["2-BR load or unload", "2 – 3 movers", "3 – 4 hrs", "$450 – $900"],
+            ["3-BR load or unload", "3 movers", "4 – 6 hrs", "$900 – $1,350"],
+            ["PODS / container load", "2 movers", "2 – 3 hrs", "$300 – $450"],
+          ],
+        } },
+        { kind: "p", text: "These figures are for one end of the move (loading only or unloading only). If you need the crew at both locations, add the time for both ends plus drive time between them." },
+        { kind: "h3", text: "How it compares to full-service" },
+        { kind: "p", text: "Toro's full-service rate (truck included) is $220/hr for 2 movers with a 3-hour minimum. On a typical 2-bedroom move that takes 4 to 5 hours, that comes to $880 to $1,100. The same job labor-only runs $450 to $675 in crew time — plus your truck rental, typically $80 to $150 for a local U-Haul or Penske. Total out-of-pocket: $530 to $825, often less. The savings are real, and they grow on larger moves." },
+        { kind: "p", text: "The tradeoff: you're responsible for the truck. That means picking it up, driving it, and returning it. If that's not a burden for you, labor-only is almost always the more cost-effective choice." },
+      ],
+    },
+    {
+      h2: "What to Look for in a Labor-Only Moving Company",
+      blocks: [
+        { kind: "p", text: "Not all labor-only services are equal. Because the barrier to entry is low (no truck required), the market includes a lot of informal operations. Here's how to tell the difference." },
+        { kind: "h3", text: "Ask what the hourly rate includes" },
+        { kind: "p", text: "Some labor-only services advertise a low hourly rate but attach a longer minimum or charge a travel fee on top. Get the full pricing structure before booking: hourly rate, minimum hours, and any additional charges. A rate that includes wrap, blankets, and equipment is often cheaper than a lower rate with materials billed separately." },
+        { kind: "h3", text: "Check for background-screened crews" },
+        { kind: "p", text: "You're letting a crew into your home and trusting them with everything you own. Background-checked crews are a basic expectation, not a premium feature. Ask whether the company screens the people who actually show up." },
+        { kind: "h3", text: "Confirm hourly billing with no hidden minimums" },
+        { kind: "p", text: "Get the minimum in writing — two hours is standard for labor-only. Watch for services that quote a low rate but quietly attach a longer minimum or a fuel/travel fee." },
+        { kind: "h3", text: "Read recent reviews" },
+        { kind: "p", text: "Labor-only moving is a physical, high-stakes service. Reviews tell you whether the crew was careful with furniture, showed up on time, and communicated clearly. Look for patterns in the feedback, not just the star rating." },
+      ],
+    },
+  ],
+  cta: {
+    heading: "Have the Truck? We'll Bring the Muscle.",
+    body: [
+      "Toro Movers offers labor-only loading and unloading across Orlando, billed by the hour with a background-checked crew. Whether you've got a U-Haul in the driveway or a PODS container on the street, the team loads it tight and handles your furniture with the same care as a full-service move.",
+    ],
+    linkText: "Get a labor-only quote from Toro Movers",
+    href: "/",
+    after: " — same-week scheduling available across Central Florida.",
+  },
+  faqs: [
+    {
+      q: "How much does labor-only moving cost in Orlando?",
+      a: "Toro's labor-only rate is $150/hour for two movers with a 2-hour minimum, plus $75/hour per additional mover. A studio load or unload starts around $300; a 3-bedroom runs about $900–$1,350 for one end. Shrink wrap, blankets, and assembly/disassembly are included.",
+    },
+    {
+      q: "Will labor-only movers load my U-Haul or PODS?",
+      a: "Yes — loading and unloading a U-Haul, Penske, Budget, PODS, U-Box, or any rental truck or storage container is exactly what labor-only moving is. You keep the vehicle; the crew loads it tight so nothing shifts, or unloads and carries everything in.",
+    },
+    {
+      q: "Can I book help for just loading or just unloading?",
+      a: "Yes. You can book one end or both. Load-only, unload-only, or a crew at both addresses — it's all billed by the hour with a two-hour minimum, so you only pay for the help you actually need.",
+    },
+    {
+      q: "Is labor-only cheaper than a full-service move?",
+      a: "Usually. You skip the truck portion of the bill and supply your own rental or container. On a 2-bedroom move, labor-only crew time runs about $450–$675 plus an $80–$150 truck rental — often several hundred dollars less than full-service.",
     },
   ],
 };
 
 export const GUIDES: GuideData[] = [
+  MOVING_RATES_EXPLAINED,
+  FULL_VS_LABOR,
+  LABOR_ONLY_GUIDE,
+  HIDDEN_FEES,
+  MOVING_COST,
   ORLANDO_MOVE_PREP,
   APARTMENT_CHECKLIST,
   BEST_TIME_TO_MOVE,
-  MOVING_COST,
-  HIDDEN_FEES,
 ];
