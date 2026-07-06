@@ -4,17 +4,21 @@
 // 2-column shell: LEFT = form step (focal), RIGHT = softer trust panel.
 //
 // MOBILE KEYBOARD PERSISTENCE (iOS Safari + Instagram in-app browser):
-// The five typed steps (from/to/name/phone/email) share ONE persistent <input>
-// node that is ALWAYS mounted and never unmounts/remounts between steps — only
-// its inputMode/value/autocomplete change. The node keeps a stable key, so a
-// rerender never tears it down and focus (and the keyboard) survive step
-// changes. The chip→first-text boundary focuses that input IN THE SAME pointer
-// gesture (onPointerDown) so iOS opens the keyboard; the Continue button uses
-// onPointerDown + preventDefault so it never steals focus / blurs the input.
-// A requestAnimationFrame refocus after each rerender keeps it locked in.
+// Each typed step (from/to/name/phone/email) mounts a FRESH <input> node
+// (key changes per step). A shared node turned out to be poison: browser/OS
+// autofill profiles a node ONCE (as postal-code at the zip step) and kept
+// re-inserting the zip into phone/name/email no matter what autoComplete said
+// — autofill heuristics ignore autocomplete="off" for contact data and never
+// re-profile a live node. A brand-new node per step carries no stale profile
+// and no stale DOM text. The keyboard survives the swap because step
+// advancement happens inside a DISCRETE event (pointerdown / Enter keydown):
+// React flushes the render synchronously within the user gesture and the
+// useLayoutEffect below refocuses the new input in that same gesture, so iOS
+// treats it as user-initiated focus and keeps the keyboard open. The Continue
+// button uses onPointerDown + preventDefault so it never steals focus.
 // Steps never advance on blur.
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { newEventId, trackLead } from "@/lib/track";
 import {
@@ -139,17 +143,19 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // The persistent input node is profiled ONCE by browser autofill (as the
-  // first field it focuses, e.g. postal-code) and changing autoComplete on the
-  // live node does NOT re-profile it — so autofill kept re-inserting the zip
-  // into phone/name/email. Autofill is disabled on this node instead, and the
-  // DOM value is force-synced on every step change in case autofill (which
-  // bypasses React's onChange) left stale text behind.
-  useEffect(() => {
+  // Refocus the (freshly mounted) input on every typed-step change. Layout
+  // effects run synchronously inside the discrete event's render flush, i.e.
+  // still within the user's tap/keypress gesture — that's what keeps the iOS
+  // keyboard open across the input swap. Also force-sync the DOM value in case
+  // autofill (which bypasses React's onChange) wrote into the node.
+  useLayoutEffect(() => {
+    if (!isTyped) return;
     const el = inputRef.current;
-    if (el && el.value !== field.value) el.value = field.value;
+    if (!el) return;
+    if (el.value !== field.value) el.value = field.value;
+    el.focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
+  }, [fieldKey, isTyped]);
 
   // Blur-proof the Continue button. React attaches touch listeners as PASSIVE,
   // so onTouchStart preventDefault is ignored — and on iOS the default touch
@@ -234,9 +240,9 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     if (!validateTyped()) return;
     if (step !== "email") {
       setErr("");
+      // The layout effect refocuses the next step's fresh input synchronously
+      // within this same discrete event, keeping the keyboard open.
       setIdx((i) => Math.min(i + 1, steps.length - 1));
-      // keep the same node focused across the step change
-      requestAnimationFrame(() => inputRef.current?.focus());
       return;
     }
     void submit();
@@ -351,13 +357,15 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
             )}
           </div>
 
-          {/* Input is ALWAYS mounted with a stable key (display:none on chip
-              steps) so it NEVER remounts — focus + keyboard survive every step
-              change. Native tap opens the keyboard; the return/"next" key
-              advances without blurring; the CTA is blur-proofed via a
-              non-passive touchstart listener (see effect above). */}
+          {/* FRESH node per typed step (key changes with fieldKey) so browser
+              autofill can never reuse the previous step's profiling or text.
+              During chip steps it's pre-armed as "from" (display:none) so the
+              job→from tap focuses an already-mounted node in-gesture. The
+              layout effect above refocuses on each swap within the same
+              discrete event, keeping the keyboard open; the CTA is
+              blur-proofed via a non-passive touchstart listener. */}
           <input
-            key="intake-typed-input"
+            key={`intake-input-${fieldKey}`}
             ref={inputRef}
             className={isTyped ? styles.input : styles.off}
             type="text"
@@ -395,7 +403,6 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
             onPointerDown={(e) => {
               e.preventDefault();
               next();
-              if (step !== "email") inputRef.current?.focus();
             }}
           >
             {step === "email"
