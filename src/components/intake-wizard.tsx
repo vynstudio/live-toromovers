@@ -97,26 +97,26 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
 
   const FIELD: Record<
     string,
-    { im: InputMode; ac: string; max?: number; ph: string; value: string; set: (v: string) => void }
+    { im: InputMode; max?: number; ph: string; value: string; set: (v: string) => void }
   > = {
     from: {
-      im: "numeric", ac: "postal-code", max: 5, ph: COPY.fromPh[L],
+      im: "numeric", max: 5, ph: COPY.fromPh[L],
       value: data.from_zip, set: (v) => set("from_zip", v.replace(/\D/g, "").slice(0, 5)),
     },
     to: {
-      im: "text", ac: "postal-code", ph: COPY.toPh[L],
+      im: "text", ph: COPY.toPh[L],
       value: data.to_location, set: (v) => set("to_location", v),
     },
     name: {
-      im: "text", ac: "name", ph: COPY.namePh[L],
+      im: "text", ph: COPY.namePh[L],
       value: data.full_name, set: (v) => set("full_name", v),
     },
     phone: {
-      im: "tel", ac: "tel", ph: COPY.phonePh[L],
+      im: "tel", ph: COPY.phonePh[L],
       value: data.phone, set: (v) => set("phone", fmtPhone(v)),
     },
     email: {
-      im: "email", ac: "email", ph: COPY.emailPh[L],
+      im: "email", ph: COPY.emailPh[L],
       value: data.email, set: (v) => set("email", v),
     },
   };
@@ -138,6 +138,18 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
     (window.dataLayer = window.dataLayer || []).push({ event: "view_content", funnel: entry });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // The persistent input node is profiled ONCE by browser autofill (as the
+  // first field it focuses, e.g. postal-code) and changing autoComplete on the
+  // live node does NOT re-profile it — so autofill kept re-inserting the zip
+  // into phone/name/email. Autofill is disabled on this node instead, and the
+  // DOM value is force-synced on every step change in case autofill (which
+  // bypasses React's onChange) left stale text behind.
+  useEffect(() => {
+    const el = inputRef.current;
+    if (el && el.value !== field.value) el.value = field.value;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
 
   // Blur-proof the Continue button. React attaches touch listeners as PASSIVE,
   // so onTouchStart preventDefault is ignored — and on iOS the default touch
@@ -349,9 +361,13 @@ export function IntakeWizard({ entry }: { entry: "home" | "ad" }) {
             ref={inputRef}
             className={isTyped ? styles.input : styles.off}
             type="text"
+            name={`intake-${fieldKey}`}
             inputMode={field.im}
             enterKeyHint={step === "email" ? "send" : "next"}
-            autoComplete={field.ac}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize={fieldKey === "name" ? "words" : "off"}
+            spellCheck={false}
             maxLength={field.max}
             placeholder={isTyped ? field.ph : ""}
             value={field.value}
