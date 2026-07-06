@@ -8,3 +8,15 @@
 [build.environment]
   NODE_VERSION = "20"
   NEXT_TELEMETRY_DISABLED = "1"
+
+[[redirects]]
+  from = "https://toromudanzas.com/*"
+  to = "https://toromovers.net/?utm_source=toromudanzas&utm_medium=redirect"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.toromudanzas.com/*"
+  to = "https://toromovers.net/?utm_source=toromudanzas&utm_medium=redirect"
+  status = 301
+  force = true
