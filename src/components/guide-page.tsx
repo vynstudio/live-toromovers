@@ -63,12 +63,12 @@ const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
   "what-youre-paying-for-orlando-movers": [
     { href: "/blog/full-service-vs-labor-only-orlando", name: "Full-service vs. labor-only", desc: "Which option fits your move — with price examples." },
     { href: "/blog/hidden-moving-fees-orlando", name: "Hidden moving fees", desc: "The charges shady movers add — and how to avoid them." },
-    { href: "/full-service-moving", name: "Full-service moving", desc: "$220/hr for 2 + truck. Everything included." },
-    { href: "/labor-only-moving", name: "Labor-only moving", desc: "$150/hr for 2. You keep the truck; we bring the muscle." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck + crew. Everything included." },
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "You keep the truck; we bring the muscle." },
   ],
   "full-service-vs-labor-only-orlando": [
-    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck + crew, door to door. $220/hr for 2." },
-    { href: "/labor-only-moving", name: "Labor-only moving", desc: "Crew only, you supply the truck. $150/hr for 2." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck + crew, door to door." },
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "Crew only, you supply the truck." },
     { href: "/blog/labor-only-moving-orlando", name: "Labor-only guide", desc: "When you've got the truck but need the muscle." },
     { href: "/blog/what-youre-paying-for-orlando-movers", name: "What you're paying for", desc: "How Orlando hourly rates actually work." },
   ],

@@ -52,8 +52,8 @@ export function AdLanding() {
             </h1>
             <p className="ad-hero-lede">
               {es
-                ? "$75 por persona en solo mano de obra, o servicio completo con camión desde $220/hr. Sin tarifas ocultas. Cotización en 60 segundos."
-                : "$75 per mover on labor-only, or full-service with a truck from $220/hr. No hidden fees. Quote in 60 seconds."}
+                ? "Solo mano de obra o servicio completo con camión — precio por hora, sin tarifas ocultas. Cotización en 60 segundos."
+                : "Labor-only or full-service with a truck — up-front hourly pricing, no hidden fees. Quote in 60 seconds."}
             </p>
             <AdQuoteStart />
           </div>
@@ -68,7 +68,7 @@ export function AdLanding() {
         </div>
 
         <div className="ad-strip" aria-label={es ? "Datos rápidos" : "At a glance"}>
-          <div className="ad-strip-cell"><b>$75</b><span>{es ? "por persona · mano de obra" : "per mover · labor-only"}</span></div>
+          <div className="ad-strip-cell"><b>$0</b><span>{es ? "tarifas ocultas" : "hidden fees"}</span></div>
           <div className="ad-strip-cell"><b>{GOOGLE_RATING}★</b><span>{es ? "Google · 30+ reseñas" : "Google · 30+ reviews"}</span></div>
           <div className="ad-strip-cell"><b>2h</b><span>{es ? "mínimo" : "minimum"}</span></div>
           <div className="ad-strip-cell"><b>60s</b><span>{es ? "cotización" : "quote"}</span></div>

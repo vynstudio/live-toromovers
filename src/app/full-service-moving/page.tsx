@@ -61,7 +61,7 @@ const FAQS = [
   },
   {
     q: "How is a full-service move priced?",
-    a: "Up front, by the hour — $220/hr for two movers and our truck (up to 26 ft) with a three-hour minimum, plus $110/hr per additional mover. Shrink wrap, furniture blankets, and assembly/disassembly are included; no fuel surcharge, no stair fee. Beyond 100 miles a $3/mile charge applies to the distance driven. We confirm your price before we start — no surprise add-ons.",
+    a: "Up front, by the hour — a two-mover crew and our truck (up to 26 ft) with a three-hour minimum, and you can add movers for larger homes. Shrink wrap, furniture blankets, and assembly/disassembly are included; no fuel surcharge, no stair fee. For long-distance moves a per-mile charge applies beyond 100 miles. Send your details and you'll get your exact price in about 60 seconds — confirmed before we start, no surprise add-ons.",
   },
   {
     q: "Do you bring packing supplies?",

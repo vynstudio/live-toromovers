@@ -38,7 +38,7 @@ export default function ThankYouPage() {
         </div>
 
         <p className="thanks-fine">
-          Hablamos español. Family-owned. Labor-only $150/hr, full-service $220/hr (2 movers).
+          Hablamos español. Family-owned. Up-front hourly pricing on every move.
         </p>
       </div>
     </main>
