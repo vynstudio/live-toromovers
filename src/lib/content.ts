@@ -262,7 +262,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       tiers: [
         {
           title: "Loading help",
-          sub: "$150/hr for two movers, two-hour minimum (+$75/hr per extra mover). You bring the truck — we bring the muscle.",
+          sub: "You bring the truck — we bring the muscle. A two-mover crew by the hour, two-hour minimum, with your up-front rate confirmed before we lift a box.",
           bullets: [
             "Load or unload your U-Haul, PODS, rental truck",
             "Blankets, dollies, shrink wrap",
@@ -274,7 +274,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         {
           tag: "Most booked",
           title: "In-town move",
-          sub: "Truck included — $220/hr for two movers and our 16′ or 26′ truck, three-hour minimum. Apartments, condos, and family homes inside Central Florida.",
+          sub: "Truck included — a two-mover crew and our 16′ or 26′ truck, three-hour minimum. Apartments, condos, and family homes inside Central Florida.",
           bullets: [
             "16′ or 26′ truck included",
             "Blankets, dollies, shrink wrap",
@@ -285,7 +285,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           title: "Big-day move",
-          sub: "$330/hr for three movers and our truck — larger homes or full-day moves. Same up-front hourly pricing, just more hands and more hours.",
+          sub: "Three movers and our truck — larger homes or full-day moves. Same up-front hourly pricing, just more hands and more hours.",
           bullets: [
             "Three-mover crew",
             "16′ or 26′ truck included",
@@ -462,7 +462,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       tiers: [
         {
           title: "Solo mano de obra",
-          sub: "$150/hr por dos mudanceros, mínimo 2 horas (+$75/hr por mudancero adicional). Tú pones el camión — nosotros ponemos la fuerza.",
+          sub: "Tú pones el camión — nosotros ponemos la fuerza. Una cuadrilla de dos mudanceros por hora, mínimo 2 horas, con tu tarifa clara confirmada antes de empezar.",
           bullets: [
             "Cargamos o descargamos tu U-Haul, PODS, camión de alquiler",
             "Mantas, carretillas, envoltura plástica",
@@ -474,7 +474,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         {
           tag: "Más reservado",
           title: "Mudanza local",
-          sub: "Camión incluido — $220/hr por dos mudanceros y nuestro camión de 16′ o 26′, mínimo 3 horas. Apartamentos, condos y casas familiares en Florida Central.",
+          sub: "Camión incluido — una cuadrilla de dos mudanceros y nuestro camión de 16′ o 26′, mínimo 3 horas. Apartamentos, condos y casas familiares en Florida Central.",
           bullets: [
             "Camión de 16′ o 26′ incluido",
             "Mantas, carretillas, envoltura plástica",
@@ -485,7 +485,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           title: "Mudanza grande",
-          sub: "$330/hr por tres mudanceros y nuestro camión — casas grandes o mudanzas de día completo. Misma tarifa por hora, solo más manos y más horas.",
+          sub: "Tres mudanceros y nuestro camión — casas grandes o mudanzas de día completo. Misma tarifa por hora, solo más manos y más horas.",
           bullets: [
             "Cuadrilla de tres mudanceros",
             "Camión de 16′ o 26′ incluido",
