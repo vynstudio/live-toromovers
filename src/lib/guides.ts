@@ -560,15 +560,15 @@ export const HIDDEN_FEES: GuideData = {
       blocks: [
         { kind: "p", text: "Toro Movers operates on transparent hourly pricing with no hidden fees. Every charge — the hourly rate, the minimum, and what's included — is disclosed before you book. The rate covers the crew, the truck on full-service moves, shrink wrap, furniture blankets, and assembly/disassembly. No fuel surcharge, no materials fee, no stair charge." },
         { kind: "table", table: {
-          headers: ["Service", "Rate", "Minimum"],
+          headers: ["Service", "Minimum"],
           rows: [
-            ["Labor-only · 2 movers", "$150/hr", "2 hours"],
-            ["Labor-only · each additional mover", "+$75/hr", "—"],
-            ["Full-service · 2 movers + truck (up to 26 ft)", "$220/hr", "3 hours"],
-            ["Full-service · each additional mover", "+$110/hr", "—"],
+            ["Labor-only · 2 movers", "2 hours"],
+            ["Labor-only · each additional mover", "—"],
+            ["Full-service · 2 movers + truck (up to 26 ft)", "3 hours"],
+            ["Full-service · each additional mover", "—"],
           ],
         } },
-        { kind: "p", text: "For moves beyond 100 miles, a $3/mile charge applies to the distance driven. Everything else is included in the hourly rate." },
+        { kind: "p", text: "For moves beyond 100 miles, a per-mile charge applies to the distance driven. Everything else is included in the hourly rate." },
       ],
     },
   ],
@@ -592,7 +592,7 @@ export const HIDDEN_FEES: GuideData = {
     },
     {
       q: "Does Toro Movers charge fuel, stair, or material fees?",
-      a: "No. Toro bills a straight hourly rate — $150/hr for two labor-only movers (2-hour minimum) or $220/hr for two movers with a truck (3-hour minimum), plus $75 or $110 per additional mover. Shrink wrap, furniture blankets, and assembly/disassembly are included. No fuel surcharge, no materials fee, no stair charge; beyond 100 miles a $3/mile charge applies to the distance driven.",
+      a: "No. Toro bills a straight up-front hourly rate — a two-mover crew with a minimum on labor-only or full-service, and you add movers for bigger jobs. Shrink wrap, furniture blankets, and assembly/disassembly are included. No fuel surcharge, no materials fee, no stair charge; beyond 100 miles a per-mile charge applies to the distance driven. You get your exact rate in about 60 seconds when you send your move details.",
     },
     {
       q: "What should I do if a mover holds my belongings for a higher price?",
@@ -618,14 +618,14 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
     {
       h2: "The Crew Rate",
       blocks: [
-        { kind: "p", text: "The core charge is the crew rate: a per-hour fee for the movers and the truck together. In Orlando in 2026, Toro's rates look like this:" },
+        { kind: "p", text: "The core charge is the crew rate: a per-hour fee for the movers and the truck together, quoted up front. In Orlando in 2026, Toro's crew options and minimums look like this:" },
         { kind: "table", table: {
-          headers: ["Service", "Hourly Rate", "Minimum"],
+          headers: ["Service", "Minimum"],
           rows: [
-            ["2 movers (labor only)", "$150/hr", "2 hours"],
-            ["Each additional mover (labor only)", "+$75/hr", "—"],
-            ["2 movers + truck (up to 26 ft)", "$220/hr", "3 hours"],
-            ["Each additional mover + truck", "+$110/hr", "—"],
+            ["2 movers (labor only)", "2 hours"],
+            ["Each additional mover (labor only)", "—"],
+            ["2 movers + truck (up to 26 ft)", "3 hours"],
+            ["Each additional mover + truck", "—"],
           ],
         } },
         { kind: "p", text: "All rates include shrink wrap, furniture blankets, and full assembly/disassembly. No extra fees for materials, equipment, or stairs. The right crew size depends on your home's volume. A 1-bedroom apartment moves efficiently with 2 movers. A 3-bedroom house with a garage almost always benefits from 3, because the time savings from an extra set of hands usually outweighs the higher hourly cost." },
@@ -635,7 +635,7 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
       h2: "What's Included in the Rate",
       blocks: [
         { kind: "p", text: "Most Orlando movers charge a separate fuel fee ($75 to $150) and bill materials like shrink wrap and furniture blankets as line items on top of the hourly rate. Toro's pricing works differently: the hourly rate covers the crew, the truck (on full-service moves), shrink wrap, furniture blankets, and assembly/disassembly. One number, nothing added at the end." },
-        { kind: "p", text: "Why this matters: When you compare quotes, a $220/hr rate that includes everything is often cheaper than a $180/hr rate that adds a $100 truck fee, $50 in materials, and a stair charge. Always ask what the hourly rate actually includes before comparing numbers." },
+        { kind: "p", text: "Why this matters: When you compare quotes, an all-inclusive hourly rate is often cheaper than a lower rate that tacks on a truck fee, materials, and a stair charge. Always ask what the hourly rate actually includes before comparing numbers." },
       ],
     },
     {
@@ -684,7 +684,7 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
         { kind: "ul", items: [
           "Your move is smaller or simpler than average. A flat-rate quote for a 2-bedroom assumes a worst-case scenario. If you're organized, have minimal furniture, and have an easy-access property, an hourly move will almost always come in lower.",
           "You want to control the cost. With hourly pricing, decluttering, pre-packing, and disassembling large furniture each reduce time. With a flat rate, none of that effort changes what you pay.",
-          "You're moving a short distance. Local moves within the Orlando metro are typically efficient. A 3-hour labor-only job at $150/hour totals $450. A flat-rate quote for the same move often runs $700 to $900 because the company is hedging against delays.",
+          "You're moving a short distance. Local moves within the Orlando metro are typically efficient, wrapping up in just a few billable hours. A flat-rate quote for the same move often runs noticeably higher because the company is hedging against delays.",
         ] },
         { kind: "p", text: "The real risk with flat-rate quotes: if the company's estimate was based on incomplete information (and many are), the mover may show up, assess the job, and revise the price before they start. At that point, you've already scheduled the move, arranged time off work, and have no leverage to negotiate." },
         { kind: "p", text: "The transparency of hourly pricing cuts both ways. If the job takes longer than expected because of an unexpected complication (a couch that won't fit through the door, an elevator that goes down), you pay for that time. But you're paying for reality, not a padded estimate." },
@@ -710,28 +710,28 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
         { kind: "p", text: "Using 2026 Orlando market rates, here's what to expect for common move types." },
         { kind: "h3", text: "Full-service (truck included)" },
         { kind: "table", table: {
-          caption: "Toro full-service rate: $220/hr for 2 movers, 3-hr minimum.",
-          headers: ["Move Type", "Crew", "Est. Hours", "Rate", "Estimated Total"],
+          caption: "Full-service move types and typical crew sizes.",
+          headers: ["Move Type", "Crew", "Est. Hours"],
           rows: [
-            ["Studio", "2 movers + truck", "3 hrs (min)", "$220/hr", "$660"],
-            ["1-BR (furnished)", "2 movers + truck", "3 – 4 hrs", "$220/hr", "$660 – $880"],
-            ["2-BR", "3 movers + truck", "4 – 5 hrs", "$330/hr", "$1,320 – $1,650"],
-            ["3-BR", "3 movers + truck", "6 – 8 hrs", "$330/hr", "$1,980 – $2,640"],
+            ["Studio", "2 movers + truck", "3 hrs (min)"],
+            ["1-BR (furnished)", "2 movers + truck", "3 – 4 hrs"],
+            ["2-BR", "3 movers + truck", "4 – 5 hrs"],
+            ["3-BR", "3 movers + truck", "6 – 8 hrs"],
           ],
         } },
         { kind: "h3", text: "Labor-only (you provide the truck)" },
         { kind: "table", table: {
-          caption: "Toro labor-only rate: $150/hr for 2 movers, 2-hr minimum.",
-          headers: ["Move Type", "Crew", "Est. Hours", "Rate", "Estimated Total"],
+          caption: "Labor-only move types and typical crew sizes.",
+          headers: ["Move Type", "Crew", "Est. Hours"],
           rows: [
-            ["Studio", "2 movers", "2 hrs (min)", "$150/hr", "$300"],
-            ["1-BR (furnished)", "2 movers", "2 – 3 hrs", "$150/hr", "$300 – $450"],
-            ["2-BR", "3 movers", "3 – 4 hrs", "$225/hr", "$675 – $900"],
-            ["3-BR", "3 movers", "5 – 7 hrs", "$225/hr", "$1,125 – $1,575"],
+            ["Studio", "2 movers", "2 hrs (min)"],
+            ["1-BR (furnished)", "2 movers", "2 – 3 hrs"],
+            ["2-BR", "3 movers", "3 – 4 hrs"],
+            ["3-BR", "3 movers", "5 – 7 hrs"],
           ],
         } },
-        { kind: "p", text: "All rates include shrink wrap, furniture blankets, and assembly/disassembly. No truck fee, no materials surcharge, no stair charge. For moves beyond 100 miles, a $3/mile charge applies to the distance driven." },
-        { kind: "p", text: "These are estimates, not guarantees. Your actual bill depends on the factors covered above. But if a quote comes in dramatically lower than these ranges, ask why. A lowball quote often leads to a very different final number." },
+        { kind: "p", text: "All rates include shrink wrap, furniture blankets, and assembly/disassembly. No truck fee, no materials surcharge, no stair charge. For moves beyond 100 miles, a per-mile charge applies to the distance driven." },
+        { kind: "p", text: "These are estimates, not guarantees. Your actual time and crew depend on the factors covered above. But if a quote comes in dramatically lower than the market, ask why. A lowball quote often leads to a very different final number." },
       ],
     },
     {
@@ -762,11 +762,11 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
   faqs: [
     {
       q: "How much do movers cost per hour in Orlando in 2026?",
-      a: "Toro's labor-only rate is $150/hour for two movers (2-hour minimum), plus $75/hour per additional mover. Full-service with a truck up to 26 feet is $220/hour for two movers (3-hour minimum), plus $110/hour per additional mover. Every rate includes shrink wrap, furniture blankets, and assembly/disassembly.",
+      a: "Toro bills a straight up-front hourly rate — a two-mover crew with a minimum on labor-only, or two movers and a truck (up to 26 ft) with a minimum on full-service, and you add movers for bigger jobs. Every rate includes shrink wrap, furniture blankets, and assembly/disassembly, with no fuel, materials, or stair fees. You get your exact rate in about 60 seconds when you send your move details.",
     },
     {
       q: "What's included in the hourly rate?",
-      a: "The crew, the truck on full-service moves, shrink wrap, furniture blankets, equipment, and assembly/disassembly. There's no separate fuel fee, materials fee, or stair charge. For moves beyond 100 miles, a $3/mile charge applies to the distance driven.",
+      a: "The crew, the truck on full-service moves, shrink wrap, furniture blankets, equipment, and assembly/disassembly. There's no separate fuel fee, materials fee, or stair charge. For moves beyond 100 miles, a per-mile charge applies to the distance driven.",
     },
     {
       q: "How many hours will my move take?",
@@ -845,36 +845,22 @@ export const FULL_VS_LABOR: GuideData = {
       h2: "How the Pricing Compares",
       blocks: [
         { kind: "p", text: "This is where most people make their decision. Both services bill hourly, but the rates and minimums differ — and the total cost comparison changes depending on your home size." },
-        { kind: "h3", text: "Toro's Rates (2026)" },
+        { kind: "h3", text: "Toro's Crew Options & Minimums (2026)" },
         { kind: "table", table: {
-          headers: ["Service", "Rate", "Minimum"],
+          headers: ["Service", "Minimum"],
           rows: [
-            ["Labor-only: 2 movers", "$150/hr", "2 hours"],
-            ["Labor-only: each additional mover", "+$75/hr", "—"],
-            ["Full-service: 2 movers + truck (up to 26 ft)", "$220/hr", "3 hours"],
-            ["Full-service: each additional mover", "+$110/hr", "—"],
+            ["Labor-only: 2 movers", "2 hours"],
+            ["Labor-only: each additional mover", "—"],
+            ["Full-service: 2 movers + truck (up to 26 ft)", "3 hours"],
+            ["Full-service: each additional mover", "—"],
           ],
         } },
-        { kind: "p", text: "Everything is included in both rates: shrink wrap, furniture blankets, assembly and disassembly. No fuel surcharge, no materials fee, no stair charge. For moves beyond 100 miles, a $3/mile charge applies to the distance driven." },
+        { kind: "p", text: "Everything is included in both rates: shrink wrap, furniture blankets, assembly and disassembly. No fuel surcharge, no materials fee, no stair charge. For moves beyond 100 miles, a per-mile charge applies to the distance driven." },
         { kind: "h3", text: "Side-by-Side Cost Comparison" },
-        { kind: "p", text: "The numbers below compare a typical full-service Toro move against a labor-only Toro booking plus a standard local truck rental (U-Haul or Penske, typically $80 to $150 for a local one-way or round trip in Orlando)." },
-        { kind: "table", table: {
-          caption: "2-bedroom move (estimated 4 to 5 hours, 3 movers):",
-          headers: ["Option", "Crew Cost", "Truck Cost", "Estimated Total"],
-          rows: [
-            ["Full-service (3 movers + truck)", "$330/hr × 4–5 hrs", "Included", "$1,320 – $1,650"],
-            ["Labor-only (3 movers) + rental truck", "$225/hr × 3–4 hrs", "~$120", "$795 – $1,020"],
-          ],
-        } },
-        { kind: "table", table: {
-          caption: "1-bedroom move (estimated 2 to 3 hours, 2 movers):",
-          headers: ["Option", "Crew Cost", "Truck Cost", "Estimated Total"],
-          rows: [
-            ["Full-service (2 movers + truck)", "$220/hr × 3 hrs (min)", "Included", "$660"],
-            ["Labor-only (2 movers) + rental truck", "$150/hr × 2 hrs (min)", "~$100", "$400"],
-          ],
-        } },
-        { kind: "p", text: "The real cost gap: on a 2-bedroom move, labor-only typically saves $300 to $600 compared to full-service. On a 3-bedroom move, the savings can reach $700 to $900. The tradeoff is that you're managing the truck rental yourself." },
+        { kind: "p", text: "The comparison comes down to this: a typical full-service Toro move bundles the truck into one hourly rate, while a labor-only Toro booking pairs a smaller crew charge with a standard local truck rental you arrange yourself (U-Haul or Penske, typically $80 to $150 for a local one-way or round trip in Orlando)." },
+        { kind: "p", text: "On a 2-bedroom move (roughly 4 to 5 hours, 3 movers), labor-only plus your own rental truck usually comes out several hundred dollars cheaper than full-service. The tradeoff is that you rent, drive, and return the truck yourself." },
+        { kind: "p", text: "On a 1-bedroom move (roughly 2 to 3 hours, 2 movers), the gap is smaller but still favors labor-only once you add a local truck rental (around $100). Full-service is the pick if you'd rather not touch a truck at all." },
+        { kind: "p", text: "The real cost gap: on a 2-bedroom move, labor-only typically saves several hundred dollars compared to full-service, and the savings grow on a 3-bedroom or larger. The tradeoff is that you're managing the truck rental yourself." },
         { kind: "p", text: "Important note: these estimates assume you're doing the driving. If coordinating a rental truck feels like a burden — picking it up, driving a large vehicle, returning it on time — that friction has real value. Full-service removes it entirely." },
       ],
     },
@@ -948,7 +934,7 @@ export const FULL_VS_LABOR: GuideData = {
   faqs: [
     {
       q: "Is labor-only cheaper than full-service moving in Orlando?",
-      a: "Usually, yes — if you already have or can rent a truck. On a 2-bedroom move, labor-only plus a local truck rental typically runs $795–$1,020 versus $1,320–$1,650 full-service, a $300–$600 saving. The tradeoff is that you rent, drive, and return the truck yourself.",
+      a: "Usually, yes — if you already have or can rent a truck. On a 2-bedroom move, labor-only plus a local truck rental typically runs several hundred dollars less than full-service, and the gap grows on larger homes. The tradeoff is that you rent, drive, and return the truck yourself.",
     },
     {
       q: "What's the difference between full-service and labor-only?",
@@ -956,11 +942,11 @@ export const FULL_VS_LABOR: GuideData = {
     },
     {
       q: "How much does full-service moving cost in Orlando?",
-      a: "Toro's full-service rate is $220/hour for two movers and a truck (3-hour minimum), plus $110/hour per additional mover. A 1-bedroom typically runs about $660; a 2-bedroom with three movers runs about $1,320–$1,650.",
+      a: "Toro bills a straight up-front hourly rate for full-service — two movers and a truck (up to 26 ft) with a minimum, and you add movers for bigger jobs. Everything's included: shrink wrap, furniture blankets, and assembly/disassembly. You get your exact rate in about 60 seconds when you send your move details.",
     },
     {
       q: "Which should I choose for a small apartment move?",
-      a: "Either works. If you're comfortable renting and driving a truck, labor-only is cheaper — around $400 all-in for a 1-bedroom versus $660 full-service. If you'd rather not deal with a truck at all, full-service is worth the difference.",
+      a: "Either works. If you're comfortable renting and driving a truck, labor-only is cheaper for a 1-bedroom once you factor in the rental. If you'd rather not deal with a truck at all, full-service is worth the difference.",
     },
   ],
 };
@@ -1037,27 +1023,27 @@ export const LABOR_ONLY_GUIDE: GuideData = {
       h2: "How Much Does Labor-Only Moving Cost in Orlando?",
       blocks: [
         { kind: "p", text: "Labor-only pricing in Orlando follows the same hourly structure as full-service moving, minus the truck. You're paying for the crew's time, not the vehicle." },
-        { kind: "h3", text: "Toro's labor-only rates" },
+        { kind: "h3", text: "How Toro prices labor-only" },
         { kind: "ul", items: [
-          "2 movers: $150/hr (2-hour minimum)",
-          "Each additional mover: +$75/hr",
+          "A two-mover crew with a short minimum",
+          "Add movers for bigger jobs",
           "Everything included: shrink wrap, furniture blankets, assembly and disassembly",
         ] },
-        { kind: "p", text: "No fuel surcharge. No materials fee. No stair charge. The hourly rate is the total rate. For moves beyond 100 miles, a $3/mile charge applies to the distance driven." },
+        { kind: "p", text: "No fuel surcharge. No materials fee. No stair charge. The hourly rate is the total rate. For moves beyond 100 miles, a per-mile charge applies to the distance driven." },
         { kind: "p", text: "For most standard jobs, here's what to expect:" },
         { kind: "table", table: {
-          headers: ["Job Type", "Crew", "Est. Hours", "Estimated Total"],
+          headers: ["Job Type", "Crew", "Est. Hours"],
           rows: [
-            ["Studio load or unload", "2 movers", "2 hrs (min)", "$300"],
-            ["1-BR load or unload", "2 movers", "2 – 3 hrs", "$300 – $450"],
-            ["2-BR load or unload", "2 – 3 movers", "3 – 4 hrs", "$450 – $900"],
-            ["3-BR load or unload", "3 movers", "4 – 6 hrs", "$900 – $1,350"],
-            ["PODS / container load", "2 movers", "2 – 3 hrs", "$300 – $450"],
+            ["Studio load or unload", "2 movers", "2 hrs (min)"],
+            ["1-BR load or unload", "2 movers", "2 – 3 hrs"],
+            ["2-BR load or unload", "2 – 3 movers", "3 – 4 hrs"],
+            ["3-BR load or unload", "3 movers", "4 – 6 hrs"],
+            ["PODS / container load", "2 movers", "2 – 3 hrs"],
           ],
         } },
         { kind: "p", text: "These figures are for one end of the move (loading only or unloading only). If you need the crew at both locations, add the time for both ends plus drive time between them." },
         { kind: "h3", text: "How it compares to full-service" },
-        { kind: "p", text: "Toro's full-service rate (truck included) is $220/hr for 2 movers with a 3-hour minimum. On a typical 2-bedroom move that takes 4 to 5 hours, that comes to $880 to $1,100. The same job labor-only runs $450 to $675 in crew time — plus your truck rental, typically $80 to $150 for a local U-Haul or Penske. Total out-of-pocket: $530 to $825, often less. The savings are real, and they grow on larger moves." },
+        { kind: "p", text: "Toro's full-service option (truck included) bills a higher hourly rate than labor-only because it bundles the truck and the driving. On a typical 2-bedroom move, going labor-only and supplying your own rental — typically $80 to $150 for a local U-Haul or Penske — usually lands several hundred dollars below full-service. The savings are real, and they grow on larger moves." },
         { kind: "p", text: "The tradeoff: you're responsible for the truck. That means picking it up, driving it, and returning it. If that's not a burden for you, labor-only is almost always the more cost-effective choice." },
       ],
     },
@@ -1088,7 +1074,7 @@ export const LABOR_ONLY_GUIDE: GuideData = {
   faqs: [
     {
       q: "How much does labor-only moving cost in Orlando?",
-      a: "Toro's labor-only rate is $150/hour for two movers with a 2-hour minimum, plus $75/hour per additional mover. A studio load or unload starts around $300; a 3-bedroom runs about $900–$1,350 for one end. Shrink wrap, blankets, and assembly/disassembly are included.",
+      a: "Toro bills a straight up-front hourly rate for labor-only — a two-mover crew with a short minimum, and you add movers for bigger jobs. Shrink wrap, blankets, and assembly/disassembly are included, with no fuel, materials, or stair fees. You get your exact rate in about 60 seconds when you send your move details.",
     },
     {
       q: "Will labor-only movers load my U-Haul or PODS?",
@@ -1100,7 +1086,7 @@ export const LABOR_ONLY_GUIDE: GuideData = {
     },
     {
       q: "Is labor-only cheaper than a full-service move?",
-      a: "Usually. You skip the truck portion of the bill and supply your own rental or container. On a 2-bedroom move, labor-only crew time runs about $450–$675 plus an $80–$150 truck rental — often several hundred dollars less than full-service.",
+      a: "Usually. You skip the truck portion of the bill and supply your own rental or container. On a 2-bedroom move, labor-only crew time plus an $80–$150 truck rental often comes in several hundred dollars less than full-service.",
     },
   ],
 };
