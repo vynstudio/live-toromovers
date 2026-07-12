@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 type Endpoint = {
   address?: string;
@@ -50,6 +51,11 @@ function endpointSummary(e?: Endpoint): string {
 }
 
 export async function POST(req: Request) {
+  // Rate-limit public form submits per IP to blunt bot spam (best-effort, fails open).
+  const rl = await rateLimit({ key: `form:intake:${clientIp(req)}`, limit: 5, windowMs: 10 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } });
+  }
   const body = (await req.json().catch(() => null)) as IntakePayload | null;
   if (!body || !body.name || !body.phone || !body.email) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });

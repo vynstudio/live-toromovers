@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { createHash } from "crypto";
 
 // Toro Movers — ad-funnel lead intake. Serves the paid-traffic funnel at
@@ -47,6 +48,11 @@ function cookie(raw: string | null, name: string): string | undefined {
 }
 
 export async function POST(req: Request) {
+  // Rate-limit public form submits per IP to blunt bot spam (best-effort, fails open).
+  const rl = await rateLimit({ key: `form:adfunnel:${clientIp(req)}`, limit: 5, windowMs: 10 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } });
+  }
   let p: Payload;
   try {
     p = (await req.json()) as Payload;

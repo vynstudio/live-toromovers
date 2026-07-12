@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { createHash } from "crypto";
 import {
   LeadMagnetSchema,
@@ -14,6 +15,11 @@ const WEB_CHECKLIST_URL = `${SITE_URL}/checklist`;
 const QUOTE_URL = `${SITE_URL}/quote`;
 
 export async function POST(req: Request) {
+  // Rate-limit public form submits per IP to blunt bot spam (best-effort, fails open).
+  const rl = await rateLimit({ key: `form:leadmagnet:${clientIp(req)}`, limit: 5, windowMs: 10 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } });
+  }
   const body = await req.json().catch(() => null);
 
   // Spam filter: honeypot filled, or submitted implausibly fast (bots) →

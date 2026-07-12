@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { createHash } from "crypto";
 import {
   BookingSchema,
@@ -11,6 +12,11 @@ import {
 import { normalizePhone, sendConfirmationSms } from "@/lib/verify";
 
 export async function POST(req: Request) {
+  // Rate-limit public form submits per IP to blunt bot spam (best-effort, fails open).
+  const rl = await rateLimit({ key: `form:booking:${clientIp(req)}`, limit: 5, windowMs: 10 * 60 * 1000 });
+  if (!rl.ok) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } });
+  }
   const body = await req.json().catch(() => null);
 
   // Spam filter: honeypot filled, or submitted implausibly fast (bots) →
