@@ -108,6 +108,23 @@ const nextConfig: NextConfig = {
       ...NO_PAGE_CITY_REDIRECTS,
     ];
   },
+  // Conservative security headers on every route. Set here (not in netlify.toml)
+  // because netlify.toml [[headers]] don't attach to Next prerendered/SSR
+  // responses. No script/style CSP yet — only frame-ancestors, which is safe.
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -20,16 +20,3 @@
   to = "https://toromovers.net/?utm_source=toromudanzas&utm_medium=redirect"
   status = 301
   force = true
-
-# Security hardening headers. Kept intentionally conservative so nothing on the
-# live site breaks: clickjacking + MIME + referrer + feature-policy protection.
-# (HSTS is already sent by Netlify. A full script/style CSP is a separate,
-# test-heavy follow-up — only frame-ancestors is set here, which is safe.)
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=(), browsing-topics=()"
-    Content-Security-Policy = "frame-ancestors 'self'"
