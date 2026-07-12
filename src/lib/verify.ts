@@ -2,7 +2,7 @@
 // Stateless: the code (hashed) lives in a signed cookie, so it works in
 // Netlify's stateless functions without a database.
 
-import { createHmac, createHash, randomInt } from "crypto";
+import { createHmac, randomInt, timingSafeEqual } from "crypto";
 
 const SECRET =
   process.env.VERIFY_SIGNING_SECRET || "dev-only-fallback-CHANGE-ME";
@@ -55,9 +55,21 @@ export function newCode(): string {
   return String(randomInt(0, 1_000_000)).padStart(6, "0");
 }
 
+// Bind the code to the phone and key it with the server SECRET (HMAC, not a
+// bare hash). A 6-digit code's plain sha256 is crackable offline in
+// milliseconds from the cookie; an HMAC with a secret the client never sees is
+// not — so the code can't be recovered from the challenge token.
+function codeMac(phone: string, code: string): string {
+  return createHmac("sha256", SECRET).update(`${phone}:${code}`).digest("hex");
+}
+
+function safeEqualHex(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b));
+}
+
 export function makeChallenge(phone: string, code: string): string {
-  const codeHash = createHash("sha256").update(code).digest("hex");
-  return pack({ phone, codeHash, exp: Date.now() + CHALLENGE_TTL_MS });
+  return pack({ phone, codeHash: codeMac(phone, code), exp: Date.now() + CHALLENGE_TTL_MS });
 }
 
 export function checkChallenge(
@@ -68,8 +80,7 @@ export function checkChallenge(
   const data = unpack<Challenge>(token);
   if (!data) return "expired";
   if (data.phone !== phone) return "bad_phone";
-  const codeHash = createHash("sha256").update(code).digest("hex");
-  if (codeHash !== data.codeHash) return "bad_code";
+  if (!safeEqualHex(codeMac(phone, code), data.codeHash)) return "bad_code";
   return "ok";
 }
 

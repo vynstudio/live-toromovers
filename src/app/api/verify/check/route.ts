@@ -6,6 +6,7 @@ import {
   makePass,
   normalizePhone,
 } from "@/lib/verify";
+import { rateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
@@ -15,6 +16,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "bad_input" }, { status: 400 });
   }
   const phone = normalizePhone(rawPhone);
+
+  // Cap guesses so the 6-digit code can't be brute-forced online (offline is
+  // already impossible now that the code is HMAC'd, not plainly hashed).
+  const guard = await rateLimit({ key: `check:${phone}`, limit: 8, windowMs: 10 * 60 * 1000 });
+  if (!guard.ok) {
+    return NextResponse.json(
+      { ok: false, error: "rate_limited" },
+      { status: 429, headers: { "Retry-After": String(guard.retryAfterSec) } },
+    );
+  }
 
   const challenge = req.headers
     .get("cookie")
