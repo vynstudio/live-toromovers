@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Schibsted_Grotesk, Inter } from "next/font/google";
+import { Raleway, Inter } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "@/components/lang-provider";
 import { Analytics } from "@/components/analytics";
@@ -16,10 +16,9 @@ import {
   SOCIAL_PROFILES,
 } from "@/lib/contact";
 
-// Minimalist display face — clean modern grotesque replacing the old serif.
-// Variable kept as --font-serif to avoid churning ~25 heading rules; it now
-// resolves to Schibsted Grotesk everywhere the display face is used.
-const serif = Schibsted_Grotesk({
+// Display face — Raleway (Relume design system heading font).
+// Variable kept as --font-serif to avoid churning ~25 heading rules.
+const serif = Raleway({
   variable: "--font-serif",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -27,13 +26,10 @@ const serif = Schibsted_Grotesk({
   display: "swap",
 });
 
-// Body/UI stays on Inter (optimized for small sizes / readability); the
-// Schibsted grotesque is reserved for display headings via --font-serif.
+// Body/UI stays on Inter (optimized for small sizes / readability).
 const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  // 300 dropped — not referenced anywhere in globals.css or components,
-  // so it was a dead font file on every page load.
   weight: ["400", "500", "600", "700"],
   display: "swap",
 });
