@@ -2,11 +2,13 @@
 
 import { useLang } from "./lang-provider";
 import Link from "next/link";
-import { PHONE_TEL } from "@/lib/contact";
+import { PHONE_TEL, PHONE_DISPLAY, GOOGLE_RATING, SOCIAL_PROFILES } from "@/lib/contact";
 
-// Single static hero image (WebP @1440px). Originals kept in
-// .image-backups/hero/ (gitignored) if a re-export is ever needed.
-const HERO_IMAGE = "/hero/slide-01.webp";
+const GOOGLE_REVIEWS_URL =
+  SOCIAL_PROFILES.find((u) => u.includes("google.com/maps")) ?? SOCIAL_PROFILES[1];
+
+// Prefer Relume env hero when present; fall back to existing optimized set.
+const HERO_IMAGE = "/images/env-hero.webp";
 
 export function Hero() {
   const { t, lang } = useLang();
@@ -15,10 +17,21 @@ export function Hero() {
     <section className="hero hero--split">
       <div className="hero-inner">
         <div className="hero-copy">
-          <div className="hero-badge">
-            <span className="stars" aria-hidden>★★★★★</span>
-            {t.hero.badge}
-          </div>
+          <p className="hero-badge">
+            <a
+              href={GOOGLE_REVIEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="stars" aria-hidden>
+                ★★★★★
+              </span>
+              {GOOGLE_RATING}★{" "}
+              {lang === "es" ? "en Google" : "on Google"}
+            </a>
+            {" · "}
+            {lang === "es" ? "Familiares · Florida Central" : "Family-owned · Central Florida"}
+          </p>
           <h1>
             {t.hero.h1Line1}
             {t.hero.h1Line2 ? (
@@ -26,7 +39,7 @@ export function Hero() {
                 <br />
                 {t.hero.h1Line2}
               </>
-            ) : null}
+            ) : null}{" "}
             <span className="accent">{t.hero.h1Line3}</span>
           </h1>
           <p className="hero-lede">
@@ -41,13 +54,17 @@ export function Hero() {
               </>
             )}
           </p>
+          <p className="hero-cities">
+            {lang === "es"
+              ? "Orlando · Kissimmee · Clermont · Davenport · Lakeland · Winter Haven — y todo el área metropolitana"
+              : "Orlando · Kissimmee · Clermont · Davenport · Lakeland · Winter Haven — and everywhere in between"}
+          </p>
           <div className="hero-cta-row">
             <Link href="/quote" className="btn btn-primary">
-              {lang === "es" ? "Ver mi precio" : "Get my price"}
-              <span className="arrow" aria-hidden />
+              {t.hero.ctaPrimary}
             </Link>
             <a href={PHONE_TEL} className="btn btn-outline">
-              {t.hero.ctaSecondary}
+              {lang === "es" ? "Llamar" : "Call"} {PHONE_DISPLAY}
             </a>
           </div>
           <div className="hero-note">{t.hero.note}</div>
@@ -56,10 +73,8 @@ export function Hero() {
         <div className="hero-media">
           <img
             src={HERO_IMAGE}
-            srcSet="/hero/slide-01-760.webp 760w, /hero/slide-01-1140.webp 1140w, /hero/slide-01.webp 1440w"
-            sizes="(min-width: 980px) 560px, 100vw"
-            width={1440}
-            height={960}
+            width={1600}
+            height={1000}
             alt="Couple relaxing among moving boxes after their Central Florida move with Toro Movers"
             title="Toro Movers — Orlando & Central Florida Apartment and Home Movers"
             className="hero-media-img"

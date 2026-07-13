@@ -6,16 +6,22 @@ import { TextCta } from "./funnel-tracking";
 import { PHONE_TEL, PHONE_DISPLAY } from "@/lib/contact";
 
 export function StickyCta() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   return (
     <div className="sticky-cta" role="region" aria-label="Quick contact">
-      <a href={PHONE_TEL} className="call-cta" aria-label={`Call ${PHONE_DISPLAY}`}>
+      <a
+        href={PHONE_TEL}
+        className="call-cta"
+        aria-label={`Call ${PHONE_DISPLAY}`}
+      >
         📞 {t.nav.callNow}
       </a>
       <Link href="/quote" className="quote-cta">
         {t.nav.quote} →
       </Link>
-      <TextCta className="text-cta">💬 {t.nav.textUs}</TextCta>
+      <TextCta className="text-cta">
+        💬 {lang === "es" ? t.nav.textUs : t.nav.textUs}
+      </TextCta>
     </div>
   );
 }

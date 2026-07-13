@@ -12,6 +12,7 @@ import { Footer } from "@/components/footer";
 import { StickyCta } from "@/components/sticky-cta";
 import { content, REVIEWS } from "@/lib/content";
 import { GOOGLE_RATING, REVIEW_COUNT, BUSINESS_NAME } from "@/lib/contact";
+import "./home-relume.css";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 
@@ -62,18 +63,22 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
-      <Nav />
-      <Hero />
-      <TrustBand />
-      <Services />
-      <EditorialQuote />
-      <StatsBand />
-      <Process />
-      <FeatureQuote />
-      <Faq />
-      <ClosingCta />
-      <Footer />
-      <StickyCta />
+      {/* .home-relume scopes the Relume layout shell to the homepage only
+          so city/service/blog pages keep their existing presentation. */}
+      <div className="home-relume">
+        <Nav />
+        <Hero />
+        <TrustBand />
+        <Services />
+        <EditorialQuote />
+        <StatsBand />
+        <Process />
+        <FeatureQuote />
+        <Faq />
+        <ClosingCta />
+        <Footer />
+        <StickyCta />
+      </div>
     </>
   );
 }
