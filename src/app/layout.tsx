@@ -41,29 +41,33 @@ const sans = Inter({
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 
+// SERP limits we respect: title ≤60, meta/OG/Twitter description ≤155.
 export const metadata: Metadata = {
   title: {
-    default:
-      "Toro Movers — Orlando & Central Florida Movers · 4.9★ Google",
+    // 48 chars — full-service first without overflowing SERP truncation
+    default: "Toro Movers — Full-Service Orlando Movers · 4.9★",
     template: "%s | Toro Movers",
   },
+  // 132 chars
   description:
-    "Local Orlando movers — apartment, loading help & full-service moves across Central Florida. Up-front hourly pricing, bilingual crew. Quote in 60s.",
+    "Full-service Orlando movers — truck, crew & packing. Up-front pricing, no hidden fees. Labor-only if you have a truck. Quote in 60s.",
   keywords: [
     "Orlando movers",
     "Central Florida movers",
+    "full service movers Orlando",
     "moving company Orlando",
     "Orlando moving company",
+    "full service moving Central Florida",
     "Kissimmee movers",
     "Lake Nona movers",
     "Lake Mary movers",
     "Winter Park movers",
     "Clermont movers",
+    "apartment movers Orlando",
+    "bilingual movers Orlando",
     "labor only movers Orlando",
     "U-Haul loading help Orlando",
     "POD loading help Central Florida",
-    "apartment movers Orlando",
-    "bilingual movers Orlando",
     "mudanceros Orlando",
     "compañía de mudanzas Florida Central",
     "family-owned movers",
@@ -74,25 +78,33 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    alternateLocale: "es_US",
+    // No alternateLocale until a real /es URL exists (hreflang gap).
     url: SITE_URL,
     siteName: BUSINESS_NAME,
-    title:
-      "Toro Movers — Family-owned Movers Orlando & Central Florida · 4.9★ Google",
+    // 48 chars
+    title: "Toro Movers — Full-Service Movers Orlando · 4.9★",
+    // 128 chars
     description:
-      "Family-owned Orlando moving company. Local moves, loading help, full-service moves with truck. Bilingual crew. Up-front hourly pricing — quote in 60 seconds.",
+      "Full-service Central Florida movers with truck & crew. Up-front pricing. Labor-only when you already have a truck. Quote in 60s.",
     // Explicit OG image so it's INHERITED by child routes. The root
     // opengraph-image.tsx only auto-applies to "/" — once a page sets its own
     // openGraph (every city/service page does), it loses the file-based image.
     images: [
-      { url: "/opengraph-image", width: 1200, height: 630, alt: "Toro Movers — Family-owned movers across Central Florida · 4.9★ on Google" },
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Toro Movers — Full-service movers across Central Florida · 4.9★",
+      },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Toro Movers — Family-owned Movers Orlando & Central Florida",
+    // 41 chars
+    title: "Toro Movers — Full-Service Orlando Movers",
+    // 86 chars
     description:
-      "Up-front hourly pricing, bilingual crew, 4.9★ on Google. Quote in 60 seconds.",
+      "Full-service moves with truck & crew. Labor-only secondary. 4.9★ Google. Quote in 60s.",
     images: ["/opengraph-image"],
   },
   robots: {
@@ -115,8 +127,9 @@ const movingCompanyJsonLd = {
   name: BUSINESS_NAME,
   legalName: LEGAL_NAME,
   slogan: SLOGAN,
+  // AEO: full-service identity first; labor-only is secondary in offers below.
   description:
-    "Family-owned Orlando moving company offering local moves, apartment moves, loading help, and full-service moves with truck across Central Florida. Bilingual crew. Up-front hourly pricing — quote in 60 seconds.",
+    "Family-owned full-service moving company in Orlando and Central Florida. Truck, crew, packing, apartment and home moves first. Labor-only loading available as a secondary option. Bilingual. Up-front hourly pricing — quote in 60 seconds.",
   "@id": `${SITE_URL}/#movingcompany`,
   url: SITE_URL,
   telephone: "+16896002720",
@@ -165,13 +178,14 @@ const movingCompanyJsonLd = {
       closes: "19:00",
     },
   ],
+  // Offer order is AEO hierarchy — full-service first, labor-only last.
   makesOffer: [
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Loading help · labor only" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "In-town move · labor + truck" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Big-day move · 3 movers + truck" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Full-service moving · crew + truck" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "In-town residential & apartment moves" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Packing & unpacking" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Storage moves" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Furniture wrapping & protection" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Storage moves" } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Labor-only loading help · secondary option" } },
   ],
   sameAs: SOCIAL_PROFILES,
 };

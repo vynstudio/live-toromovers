@@ -14,16 +14,18 @@ import {
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/central-florida-moving-checklist";
 
+// Title uses template → final "… | Toro Movers"; keep segment short (≤45).
 const TITLE = "Free Central Florida Moving Checklist";
+// 141 chars
 const DESCRIPTION =
-  "Free moving checklist for Orlando & Central Florida — plan your move, pack faster, beat the heat, and be ready for an accurate quote. From Toro Movers.";
+  "Free moving checklist for Orlando & Central Florida — plan, pack faster, beat the heat, and prep for an accurate full-service quote.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: HREF },
   openGraph: {
-    title: `${TITLE} · ${BUSINESS_NAME}`,
+    title: "Free Central Florida Moving Checklist | Toro Movers",
     description: DESCRIPTION,
     url: `${SITE_URL}${HREF}`,
     type: "website",

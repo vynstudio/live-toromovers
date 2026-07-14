@@ -16,15 +16,16 @@ import {
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/full-service-moving";
 
+// Title ≤60, description ≤155.
 const DESCRIPTION =
-  "Full-service movers in Central Florida — Toro Movers handles packing, loading, transport, and local moves with up-front pricing. Bilingual.";
+  "Full-service movers in Central Florida — packing, loading, truck transport & placement. Up-front pricing, bilingual crew. Quote in 60s.";
 
 export const metadata: Metadata = {
-  title: { absolute: "Full-Service Movers in Central Florida | Toro Movers" },
+  title: { absolute: "Full-Service Movers Orlando | Toro Movers" },
   description: DESCRIPTION,
   alternates: { canonical: HREF },
   openGraph: {
-    title: "Full-Service Movers in Central Florida | Toro Movers",
+    title: "Full-Service Movers Orlando | Toro Movers",
     description: DESCRIPTION,
     url: `${SITE_URL}${HREF}`,
     type: "website",

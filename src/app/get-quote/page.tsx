@@ -6,9 +6,11 @@ import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 // Paid-traffic ad funnel. Same engine as /quote, same submit path
 // (/api/ad-funnel). noindex — this is an ad landing page, not an SEO page.
 export const metadata: Metadata = {
-  title: "Get your moving quote · Toro Movers",
+  // No brand in title — root template adds " | Toro Movers".
+  title: "Get your moving quote",
+  // 121 chars — full-service first; labor-only secondary
   description:
-    "Fast moving quote across Central Florida — labor only or labor + truck. Apartment, house, storage, U-Haul / POD load & unload.",
+    "Fast full-service moving quote across Central Florida. Truck & crew, or labor-only if you have a truck. Up-front pricing.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/get-quote" },
 };

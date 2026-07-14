@@ -4,7 +4,7 @@ import { ThankYouTracking } from "@/components/thank-you-tracking";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: `Thanks — we'll call you shortly · ${BUSINESS_NAME}`,
+  title: "Thanks — we'll call you shortly",
   description:
     "Your moving quote request is in. A Toro Movers team member will call you within minutes to confirm details and lock in your slot.",
   robots: { index: false, follow: false },

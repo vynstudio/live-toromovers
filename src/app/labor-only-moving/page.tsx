@@ -17,16 +17,16 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/labor-only-moving";
 
 // CHANGE 1 (meta description updated to match new H1 keyword focus)
+// Secondary service page — title ≤60, description ≤155.
 const DESCRIPTION =
-  "Labor-only movers in Orlando & Central Florida — loading, unloading & stair help by the hour. Family-owned, bilingual. Get a quote today.";
+  "Labor-only movers in Orlando — load/unload U-Haul, PODS & trucks by the hour. Secondary to our full-service moves. Family-owned. Quote today.";
 
 export const metadata: Metadata = {
-  // CHANGE 1 cont. (title updated to match H1)
-  title: { absolute: "Labor-Only Movers in Orlando & Central Florida | Toro Movers" },
+  title: { absolute: "Labor-Only Movers Orlando | Toro Movers" },
   description: DESCRIPTION,
   alternates: { canonical: HREF },
   openGraph: {
-    title: "Labor-Only Movers in Orlando & Central Florida | Toro Movers",
+    title: "Labor-Only Movers Orlando | Toro Movers",
     description: DESCRIPTION,
     url: `${SITE_URL}${HREF}`,
     type: "website",

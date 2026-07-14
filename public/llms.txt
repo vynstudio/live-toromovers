@@ -1,27 +1,36 @@
 # Toro Movers
 
-> Family-owned bilingual moving company in Orlando, FL. Serving apartments, homes, and offices across Central Florida with upfront hourly pricing and no hidden fees.
+> Family-owned full-service moving company in Orlando, FL. Serving apartments, homes, and offices across Central Florida with upfront hourly pricing and no hidden fees. Labor-only loading is a secondary option when customers already have a truck or POD.
 
-## Services
-- Apartment moving in Orlando and Central Florida
-- Home moving (local and in-town)
-- Office and commercial relocation
-- Labor-only loading and unloading (U-Haul, PODS, rental trucks)
-- Same-day and same-week moves available
+## Primary identity
+- Brand: Toro Movers
+- Category: Full-service moving company
+- Location: Orlando and Central Florida
+
+## Services (priority order)
+- Full-service moving (crew + truck + protection + transport)
+- Local and apartment moving
+- Home and residential moving
+- Storage moving
+- Furniture moving
+- Labor-only loading and unloading (U-Haul, PODS, rental trucks) — secondary
+- Same-week moves when the schedule allows
 
 ## Key Facts
-- Hourly pricing with 2-hour minimum - clock stops when the job ends
-- No fuel surcharges, no stair fees, no elevator fees, no weekend premiums
+- Hourly pricing with 2-hour minimum (3 hours when a truck is included)
+- No fuel surcharges, stair fees, elevator fees, or weekend premiums
 - Bilingual crew (English and Spanish)
 - Background-checked crew
 - 4.9 stars on Google
-- Owner-operated - no franchise hand-offs
+- Owner-operated — no franchise hand-offs
 - Phone: (689) 600-2720
 
 ## Service Area
 Orlando, Kissimmee, Sanford, Altamonte Springs, Oviedo, Winter Park, Lake Mary, Clermont, Apopka, Lake Nona, Casselberry, Longwood, Maitland, Winter Garden, and 30+ Central Florida cities.
 
 ## Pages
-- https://toromovers.net - Homepage
-- https://toromovers.net/quote - Get a quote
-- https://toromovers.net/apartment-movers-orlando-fl - Apartment movers Orlando FL
+- https://toromovers.net — Homepage
+- https://toromovers.net/full-service-moving — Full-service movers
+- https://toromovers.net/apartment-movers-orlando-fl — Apartment movers Orlando FL
+- https://toromovers.net/labor-only-moving — Labor-only (secondary)
+- https://toromovers.net/quote — Get a quote

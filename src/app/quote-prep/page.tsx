@@ -4,9 +4,9 @@ import { StickyCta } from "@/components/sticky-cta";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: `Prep for your moving quote · ${BUSINESS_NAME}`,
+  title: "Prep for your moving quote",
   description:
-    "A 60-second prep before you request your Toro Movers quote — what we need, what affects price, and how to get ready for apartment and residential moves.",
+    "A 60-second prep before your Toro Movers quote — what we need, what affects price, and how to get ready for apartment and home moves.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/quote-prep" },
 };

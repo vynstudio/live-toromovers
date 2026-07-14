@@ -7,7 +7,7 @@ import {
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: `Your checklist is on its way · ${BUSINESS_NAME}`,
+  title: "Your checklist is on its way",
   description:
     "Your Central Florida Moving Checklist is ready — check your email. Need a price? Request an up-front hourly quote from Toro Movers.",
   robots: { index: false, follow: false },

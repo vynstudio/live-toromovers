@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useLang } from "./lang-provider";
 import { RequestButton } from "./request-button";
 
-// Homepage service cards → their dedicated service pages. Index-aligned with
-// t.services.tiers: 0 Loading help, 1 In-town move, 2 Big-day move.
+// Homepage service cards → dedicated pages. Index-aligned with t.services.tiers:
+// 0 Full-service (primary), 1 Big-day, 2 Labor-only (secondary).
 const TIER_LINKS = [
-  "/labor-only-moving",
-  "/residential-movers",
   "/full-service-moving",
+  "/residential-movers",
+  "/labor-only-moving",
 ];
 
 export function Services() {
@@ -25,7 +25,10 @@ export function Services() {
 
         <div className="tiers">
           {t.services.tiers.map((tier, i) => (
-            <article key={i} className={`tier reveal${i === 1 ? " featured reveal-d1" : i === 2 ? " reveal-d2" : ""}`}>
+            <article
+              key={i}
+              className={`tier reveal${i === 0 ? " featured" : i === 1 ? " reveal-d1" : " reveal-d2"}`}
+            >
               {tier.tag && <span className="tier-tag">{tier.tag}</span>}
               <h3 className="tier-title">{tier.title}</h3>
               <p className="tier-sub">{tier.sub}</p>
@@ -34,7 +37,7 @@ export function Services() {
                   <li key={j}>{b}</li>
                 ))}
               </ul>
-              <RequestButton label={tier.cta} variant={i === 1 ? "primary" : "secondary"} />
+              <RequestButton label={tier.cta} variant={i === 0 ? "primary" : "secondary"} />
               <Link href={TIER_LINKS[i]} className="tier-learn-more">
                 {lang === "es" ? "Ver más →" : "Learn more →"}
               </Link>

@@ -18,15 +18,16 @@ import {
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const HREF = "/apartment-movers-orlando-fl";
 
+// Description ≤155 chars; absolute title ≤60.
 const DESCRIPTION =
-  "Toro Movers handles apartment moves across Orlando with honest hourly pricing, a bilingual crew, and same-week availability. No stair fees. No fuel surcharges. Get a quote in 60 seconds.";
+  "Apartment movers in Orlando — honest hourly pricing, bilingual crew, same-week dates. No stair or fuel fees. Full-service or labor-only. Quote in 60s.";
 
 export const metadata: Metadata = {
-  title: { absolute: "Apartment Movers Orlando FL | Toro Movers — Hourly, No Hidden Fees" },
+  title: { absolute: "Apartment Movers Orlando FL | Toro Movers" },
   description: DESCRIPTION,
   alternates: { canonical: HREF },
   openGraph: {
-    title: "Apartment Movers Orlando FL | Toro Movers — Hourly, No Hidden Fees",
+    title: "Apartment Movers Orlando FL | Toro Movers",
     description: DESCRIPTION,
     url: `${SITE_URL}${HREF}`,
     type: "website",

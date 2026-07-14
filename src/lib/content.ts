@@ -75,22 +75,23 @@ export const AREAS_BY_COUNTY = [
   },
 ] as const;
 
-// Real reviews from toromovers.net — kept verbatim.
+// Real reviews — order full-service / whole-move first so AEO/schema doesn't
+// lead with labor-only as the brand identity. Text kept verbatim.
 export const REVIEWS = [
   {
-    body: "Used their labor-only option since I already had a U-Haul. Two guys loaded everything in under 2 hours and unloaded in 45 minutes at the new place. They Tetris'd that truck like it was their job (because it is, lol).",
-    name: "Giuseppe F. V.",
-    meta: "Labor only",
-  },
-  {
-    body: "Moved my mom from her apartment in Kissimmee to assisted living in Clermont. The crew was patient with her — she kept changing her mind about what was going and what was staying. Nobody complained. Took longer than expected but the hourly rate was upfront so no shock.",
-    name: "Kony C.",
-    meta: "Kissimmee → Clermont",
+    body: "Great experience! The team was on time, professional, and handled everything with care. Very easy to work with and made my move stress-free, I highly recommend!",
+    name: "Stael G.",
+    meta: "Apartment move",
   },
   {
     body: "Very communicative about timing and friendly throughout. They even hauled some large furniture to the dumpster for me — huge help, didn't have to hire a different service. So far everything made it to the new place without damage. Highly recommend!",
     name: "Olivia H.",
     meta: "Full-service move",
+  },
+  {
+    body: "Moved my mom from her apartment in Kissimmee to assisted living in Clermont. The crew was patient with her — she kept changing her mind about what was going and what was staying. Nobody complained. Took longer than expected but the hourly rate was upfront so no shock.",
+    name: "Kony C.",
+    meta: "Kissimmee → Clermont",
   },
   {
     body: "Obed and his team did a fantastic job on short notice — moved furniture from another house I'd purchased. Disassembled and reassembled everything quickly and efficiently!",
@@ -103,9 +104,9 @@ export const REVIEWS = [
     meta: "Same-week storage move",
   },
   {
-    body: "Great experience! The team was on time, professional, and handled everything with care. Very easy to work with and made my move stress-free, I highly recommend!",
-    name: "Stael G.",
-    meta: "Apartment move",
+    body: "Used their labor-only option since I already had a U-Haul. Two guys loaded everything in under 2 hours and unloaded in 45 minutes at the new place. They Tetris'd that truck like it was their job (because it is, lol).",
+    name: "Giuseppe F. V.",
+    meta: "Labor only",
   },
 ] as const;
 
@@ -189,6 +190,7 @@ type ContentShape = {
     serviceArea: string;
     callNow: string;
     legal: string;
+    privacy: string;
   };
   quote: {
     title: string;
@@ -256,25 +258,14 @@ export const content: { en: ContentShape; es: ContentShape } = {
     ],
     services: {
       eyebrow: "What we do",
-      head: "Three ways we move you.",
-      headItalic: "Up-front pricing on every one.",
-      sub: "Hourly rates · from a 2-hour minimum · clock stops when the job ends · no fuel surcharges, no stair fees, no weekend premiums.",
+      head: "Full-service first.",
+      headItalic: "Labor-only when you already have a truck.",
+      sub: "We are a full-service Central Florida moving company — truck, crew, and materials. Labor-only loading help is available as a secondary option if you bring the truck.",
       tiers: [
         {
-          title: "Loading help",
-          sub: "You bring the truck — we bring the muscle. A two-mover crew by the hour, two-hour minimum, with your up-front rate confirmed before we lift a box.",
-          bullets: [
-            "Load or unload your U-Haul, PODS, rental truck",
-            "Blankets, dollies, shrink wrap",
-            "Furniture wrapping & protection",
-            "Background-checked, bilingual crew",
-          ],
-          cta: "Get my quote",
-        },
-        {
-          tag: "Most booked",
-          title: "In-town move",
-          sub: "Truck included — a two-mover crew and our 16′ or 26′ truck, three-hour minimum. Apartments, condos, and family homes inside Central Florida.",
+          tag: "Primary",
+          title: "Full-service move",
+          sub: "Truck + crew included — two movers and our 16′ or 26′ truck, materials, wrap, and careful placement. The main way we move families across Central Florida.",
           bullets: [
             "16′ or 26′ truck included",
             "Blankets, dollies, shrink wrap",
@@ -285,12 +276,24 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           title: "Big-day move",
-          sub: "Three movers and our truck — larger homes or full-day moves. Same up-front hourly pricing, just more hands and more hours.",
+          sub: "Three movers and our truck — larger homes or full-day full-service moves. Same up-front hourly pricing, more hands.",
           bullets: [
             "Three-mover crew",
             "16′ or 26′ truck included",
             "Furniture wrapping & protection",
             "Packing & unpacking add-on available",
+          ],
+          cta: "Get my quote",
+        },
+        {
+          tag: "Secondary",
+          title: "Labor-only help",
+          sub: "You already have a U-Haul, POD, or rental — we bring the muscle only. Secondary option when you don’t need our truck.",
+          bullets: [
+            "Load or unload your U-Haul, PODS, rental truck",
+            "Blankets, dollies, shrink wrap",
+            "Furniture wrapping & protection",
+            "Background-checked, bilingual crew",
           ],
           cta: "Get my quote",
         },
@@ -352,6 +355,10 @@ export const content: { en: ContentShape; es: ContentShape } = {
       headItalic: "answered.",
       items: [
         {
+          q: "Is Toro Movers a full-service moving company?",
+          a: "Yes. Toro Movers is a full-service moving company in Orlando and Central Florida. We bring the crew, truck, furniture protection, loading, transport, unloading, and placement. Labor-only help is available if you already have a truck or POD.",
+        },
+        {
           q: "Do you move evenings or weekends in Orlando?",
           a: "Yes — we run crews Monday through Saturday from 7:00 AM – 7:00 PM. Sunday moves are available on request when the schedule allows.",
         },
@@ -386,10 +393,11 @@ export const content: { en: ContentShape; es: ContentShape } = {
       secondary: "Call (689) 600-2720",
     },
     footer: {
-      tagline: "Family-owned movers across Central Florida.",
+      tagline: "Family-owned full-service movers across Central Florida.",
       serviceArea: "Service area",
       callNow: "Call now",
       legal: "Toro Movers LLC · Family-owned · Bilingual",
+      privacy: "Privacy policy",
     },
     quote: {
       title: "Free quote",
@@ -456,25 +464,14 @@ export const content: { en: ContentShape; es: ContentShape } = {
     ],
     services: {
       eyebrow: "Lo que hacemos",
-      head: "Tres formas en que te movemos.",
-      headItalic: "Precios claros en cada una.",
-      sub: "Tarifa por hora · desde un mínimo de 2 horas · El reloj se detiene cuando termina el trabajo · Sin recargos por gasolina, sin tarifa por escaleras, sin recargos de fin de semana.",
+      head: "Servicio completo primero.",
+      headItalic: "Solo carga si ya tienes camión.",
+      sub: "Somos una compañía de mudanzas de servicio completo en Florida Central — camión, cuadrilla y materiales. La ayuda solo de carga es una opción secundaria si ya tienes el camión.",
       tiers: [
         {
-          title: "Solo mano de obra",
-          sub: "Tú pones el camión — nosotros ponemos la fuerza. Una cuadrilla de dos mudanceros por hora, mínimo 2 horas, con tu tarifa clara confirmada antes de empezar.",
-          bullets: [
-            "Cargamos o descargamos tu U-Haul, PODS, camión de alquiler",
-            "Mantas, carretillas, envoltura plástica",
-            "Envoltura y protección de muebles",
-            "Cuadrilla verificada y bilingüe",
-          ],
-          cta: "Mi cotización",
-        },
-        {
-          tag: "Más reservado",
-          title: "Mudanza local",
-          sub: "Camión incluido — una cuadrilla de dos mudanceros y nuestro camión de 16′ o 26′, mínimo 3 horas. Apartamentos, condos y casas familiares en Florida Central.",
+          tag: "Principal",
+          title: "Mudanza completa",
+          sub: "Camión + cuadrilla incluidos — dos mudanceros y nuestro camión de 16′ o 26′, materiales y colocación cuidadosa. La forma principal en que movemos familias en Florida Central.",
           bullets: [
             "Camión de 16′ o 26′ incluido",
             "Mantas, carretillas, envoltura plástica",
@@ -485,12 +482,24 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           title: "Mudanza grande",
-          sub: "Tres mudanceros y nuestro camión — casas grandes o mudanzas de día completo. Misma tarifa por hora, solo más manos y más horas.",
+          sub: "Tres mudanceros y nuestro camión — casas grandes o mudanzas de día completo de servicio completo. Misma tarifa por hora, más manos.",
           bullets: [
             "Cuadrilla de tres mudanceros",
             "Camión de 16′ o 26′ incluido",
             "Envoltura y protección de muebles",
             "Servicio adicional de empaque disponible",
+          ],
+          cta: "Mi cotización",
+        },
+        {
+          tag: "Secundario",
+          title: "Solo mano de obra",
+          sub: "Ya tienes U-Haul, POD o alquiler — solo traemos la fuerza. Opción secundaria cuando no necesitas nuestro camión.",
+          bullets: [
+            "Cargamos o descargamos tu U-Haul, PODS, camión de alquiler",
+            "Mantas, carretillas, envoltura plástica",
+            "Envoltura y protección de muebles",
+            "Cuadrilla verificada y bilingüe",
           ],
           cta: "Mi cotización",
         },
@@ -552,6 +561,10 @@ export const content: { en: ContentShape; es: ContentShape } = {
       headItalic: "respondidas.",
       items: [
         {
+          q: "¿Toro Movers es una compañía de mudanzas de servicio completo?",
+          a: "Sí. Toro Movers es una compañía de mudanzas de servicio completo en Orlando y Florida Central. Llevamos cuadrilla, camión, protección de muebles, carga, transporte, descarga y colocación. También hay solo mano de obra si ya tienes camión o POD.",
+        },
+        {
           q: "¿Hacen mudanzas en la noche o en fin de semana en Orlando?",
           a: "Sí — trabajamos de lunes a sábado, de 7:00 AM a 7:00 PM. Mudanzas de domingo bajo solicitud cuando la agenda lo permite.",
         },
@@ -586,10 +599,11 @@ export const content: { en: ContentShape; es: ContentShape } = {
       secondary: "Llamar (689) 600-2720",
     },
     footer: {
-      tagline: "Mudanceros familiares en toda Florida Central.",
+      tagline: "Mudanceros familiares de servicio completo en Florida Central.",
       serviceArea: "Área de servicio",
       callNow: "Llamar ahora",
       legal: "Toro Movers LLC · Familiares · Bilingües",
+      privacy: "Política de privacidad",
     },
     quote: {
       title: "Cotización gratis",

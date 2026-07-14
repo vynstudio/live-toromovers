@@ -4,9 +4,11 @@ import { IntakeWizard } from "@/components/intake-wizard";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: "Get your moving quote · Toro Movers",
+  // No brand in title — root template adds " | Toro Movers" (≤60 total).
+  title: "Get your moving quote",
+  // 118 chars
   description:
-    "Tell us where you're moving from and to — get an up-front quote from Toro Movers, family-owned Central Florida movers.",
+    "Tell us where you're moving from and to — get an up-front full-service quote from Toro Movers in Central Florida.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/quote" },
 };

@@ -6,7 +6,8 @@ import { ChecklistIntakeBanner } from "@/components/checklist-banner";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: `Pre-move checklist · ${BUSINESS_NAME}`,
+  // No brand in title — root template adds " | Toro Movers".
+  title: "Pre-move checklist",
   description:
     "Everything to do before moving day so the crew lands at a ready house. Use this in the week leading up to your move.",
   robots: { index: false, follow: false },

@@ -5,7 +5,7 @@ import { IntakeForm } from "@/components/intake-form";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: `Move-day intake form · ${BUSINESS_NAME}`,
+  title: "Move-day intake form",
   description:
     "Tell us everything we need to plan your move — addresses, access, inventory, special items, and day-of contacts.",
   robots: { index: false, follow: false },

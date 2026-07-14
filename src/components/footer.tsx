@@ -54,14 +54,14 @@ export function Footer() {
             <Link href="/central-florida-movers">
               {lang === "es" ? "Florida Central" : "Central Florida movers"}
             </Link>
+            <Link href="/full-service-moving">
+              {lang === "es" ? "Mudanza completa" : "Full-service moving"}
+            </Link>
             {SERVICES.map((s) => (
               <Link key={s.slug} href={s.href}>{s.name}</Link>
             ))}
             <Link href="/labor-only-moving">
               {lang === "es" ? "Mudanza solo carga" : "Labor-only moving"}
-            </Link>
-            <Link href="/full-service-moving">
-              {lang === "es" ? "Mudanza completa" : "Full-service moving"}
             </Link>
             <Link href="/blog">{lang === "es" ? "Guías de mudanza" : "Moving guides"}</Link>
             <Link href="/central-florida-moving-checklist">
@@ -91,7 +91,10 @@ export function Footer() {
 
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} {LEGAL_NAME}. {t.footer.legal}.</span>
-          <span>{lang === "es" ? "Hablamos español" : "Bilingual · Hablamos español"}</span>
+          <span style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <Link href="/privacy">{t.footer.privacy}</Link>
+            <span>{lang === "es" ? "Hablamos español" : "Bilingual · Hablamos español"}</span>
+          </span>
         </div>
       </div>
     </footer>
