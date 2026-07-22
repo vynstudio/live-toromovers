@@ -9,7 +9,6 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
-import { CITIES } from "@/lib/cities";
 import {
   HOME_SIZE_LABELS,
   SERVICE_LABELS,
@@ -24,8 +23,16 @@ import {
   sanitizeReturnPath,
 } from "@/lib/open-quote";
 
+/** Tiny city list — do NOT import cities.ts (43KB of SEO page data). */
 const CITY_CHIPS = [
-  ...CITIES.slice(0, 8).map((c) => c.name),
+  "Orlando",
+  "Lake Mary",
+  "Winter Park",
+  "Maitland",
+  "Kissimmee",
+  "Sanford",
+  "Clermont",
+  "Winter Garden",
   "Other Central FL",
 ];
 

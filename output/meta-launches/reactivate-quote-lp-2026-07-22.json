@@ -1,0 +1,112 @@
+{
+  "action": "reactivate_quote_lp_winners",
+  "quote_lp_campaign": "120245617827210325",
+  "activated_adsets": [
+    "120245617832480325",
+    "120245617837580325"
+  ],
+  "left_paused_adsets": [
+    "120245617827660325",
+    "120245853340060325"
+  ],
+  "paused_labor_ads": [
+    "120247054745920325",
+    "120247054761390325",
+    "120247054770640325",
+    "120247054763540325"
+  ],
+  "call_set_kept": "120251403916900325",
+  "log": [
+    {
+      "ok": true,
+      "label": "pause labor ad 120247054745920325",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "pause labor ad 120247054761390325",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "pause labor ad 120247054770640325",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "pause labor ad 120247054763540325",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "activate A2 Squares",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "activate A3 Stories",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "ensure ad ACTIVE es-sq1-mudanza",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "ensure ad ACTIVE st1-heavy",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "ensure ad ACTIVE st1v-underhour",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "ensure ad ACTIVE st3-sofa",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "ensure ad ACTIVE es-st2-cargas",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "pause weak A3 st1v-sofas",
+      "res": {
+        "success": true
+      }
+    },
+    {
+      "ok": true,
+      "label": "activate Quote LP campaign",
+      "res": {
+        "success": true
+      }
+    }
+  ]
+}

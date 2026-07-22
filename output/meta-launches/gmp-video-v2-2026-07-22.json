@@ -1,0 +1,19 @@
+{
+  "stamp": "2026-07-22",
+  "video_path": "/Users/vynstudio/Downloads/grok-video-215172aa-6d5d-4887-be96-02e8799b8197.mp4",
+  "video_id": "868099156101615",
+  "landing": "https://toromovers.net/get-my-price?utm_source=meta&utm_medium=paid_social&utm_campaign=gmp_video_20260722&utm_content=grok_video_v2&utm_term=full_service&source=meta-gmp-video-v2",
+  "variation": {
+    "adset": "120251467530230325",
+    "creative": "1372583361469903",
+    "ad": "120251467619340325"
+  },
+  "retargeting": {
+    "audience_id": null,
+    "adset": null,
+    "budget_usd": 0,
+    "creative": null,
+    "ad": null
+  },
+  "note": "IG Stories-specific creatives can be added later as additional ads with story placements."
+}

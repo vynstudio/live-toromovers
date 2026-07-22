@@ -1,0 +1,70 @@
+{
+  "stamp": "2026-07-22",
+  "keep_only": {
+    "campaign": "120251467525070325",
+    "adset": "120251467530230325",
+    "ad": "120251467531370325"
+  },
+  "log": [
+    {
+      "action": "keep_campaign",
+      "id": "120251467525070325",
+      "name": "TM \u2014 Get My Price \u00b7 Video \u00b7 2026-07-22"
+    },
+    {
+      "action": "pause_campaign",
+      "id": "120251403916800325",
+      "name": "FS \u00b7 Call Now \u00b7 $10 \u00b7 v3 \u00b7 2026-07-19",
+      "ok": true
+    },
+    {
+      "action": "pause_campaign",
+      "id": "120245617827210325",
+      "name": "TM \u2014 Orlando Metro \u2014 Quote LP \u2014 2026-04-14",
+      "ok": true
+    },
+    {
+      "action": "keep_adset",
+      "id": "120251467530230325",
+      "name": "GMP Video \u00b7 LEAD \u00b7 CFL 45mi \u00b7 $15/d \u00b7 2026-07-22"
+    },
+    {
+      "action": "ensure_active_campaign",
+      "id": "120251467525070325",
+      "ok": true
+    },
+    {
+      "action": "ensure_active_adset",
+      "id": "120251467530230325",
+      "ok": true
+    },
+    {
+      "action": "ensure_active_ad",
+      "id": "120251467531370325",
+      "ok": true
+    }
+  ],
+  "final_active_campaigns": [
+    {
+      "id": "120251467525070325",
+      "name": "TM \u2014 Get My Price \u00b7 Video \u00b7 2026-07-22",
+      "effective_status": "ACTIVE"
+    }
+  ],
+  "final_active_adsets": [
+    {
+      "id": "120251467530230325",
+      "name": "GMP Video \u00b7 LEAD \u00b7 CFL 45mi \u00b7 $15/d \u00b7 2026-07-22",
+      "effective_status": "ACTIVE",
+      "daily_budget": "1500",
+      "campaign_id": "120251467525070325"
+    }
+  ],
+  "gmp_ad": {
+    "id": "120251467531370325",
+    "name": "GMP \u00b7 Video sole \u00b7 get-my-price \u00b7 2026-07-22",
+    "status": "ACTIVE",
+    "effective_status": "IN_PROCESS",
+    "configured_status": "ACTIVE"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "stamp": "2026-07-18",
+  "activated": true,
+  "budget_usd_per_day": 20,
+  "split": {
+    "call_lp_utm": 12,
+    "lp_lpv_utm": 8
+  },
+  "pixel_id": "985575491098437",
+  "phone_on_page_now": "+13217580094",
+  "phone_desired": "+16896002720",
+  "phone_note": "Meta Page still shows 321. API rejects 689 as invalid. Update Page phone in Meta Business Suite manually for true CALL_NOW dial. Current ads use LEARN_MORE \u2192 toromoveit.com with UTM + site click-to-call (689).",
+  "campaigns": [
+    {
+      "id": "120251382535580325",
+      "name": "TM \u2014 Call Now FS \u2014 2026-07-18",
+      "role": "call/lp $12"
+    },
+    {
+      "id": "120251382535660325",
+      "name": "TM \u2014 LP+UTM FS Pixel \u2014 2026-07-18",
+      "role": "lpv $8"
+    }
+  ],
+  "adsets": [
+    {
+      "id": "120251382535800325",
+      "budget": 12,
+      "goal": "LINK_CLICKS"
+    },
+    {
+      "id": "120251382536160325",
+      "budget": 8,
+      "goal": "LANDING_PAGE_VIEWS"
+    }
+  ],
+  "ads": [
+    {
+      "id": "120251382536800325",
+      "name": "CALL \u00b7 tap_to_call"
+    },
+    {
+      "id": "120251382536900325",
+      "name": "UTM-LP \u00b7 tap_to_call"
+    },
+    {
+      "id": "120251382537380325",
+      "name": "CALL \u00b7 call_us_now"
+    },
+    {
+      "id": "120251382537600325",
+      "name": "UTM-LP \u00b7 call_us_now"
+    },
+    {
+      "id": "120251382537660325",
+      "name": "CALL \u00b7 truck_crew"
+    },
+    {
+      "id": "120251382537730325",
+      "name": "UTM-LP \u00b7 truck_crew"
+    },
+    {
+      "id": "120251382537940325",
+      "name": "CALL \u00b7 need_movers"
+    },
+    {
+      "id": "120251382538080325",
+      "name": "UTM-LP \u00b7 need_movers"
+    }
+  ],
+  "utm_template": "https://toromoveit.com/?utm_source=meta&utm_medium=paid_social&utm_campaign=call_fs_20260718&utm_content={slug}&utm_term=full_service_call",
+  "labor": "left paused",
+  "geo": "Orlando 45mi mobile FB+IG"
+}
