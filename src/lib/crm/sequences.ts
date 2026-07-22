@@ -61,15 +61,15 @@ export function buildSequence(
         email: {
           subject: es
             ? "Toro Movers — te contactamos pronto"
-            : "Toro Movers — we'll call you shortly",
+            : "Toro Movers — a team member will contact you shortly",
           html: wrap(
             es
               ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hola ${esc(name)},</h2><p>Gracias por tu interés en mudanzas full-service en Florida Central. Un miembro del equipo te llama pronto al número que nos diste.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hi ${esc(name)},</h2><p>Thanks for checking out full-service movers in Central Florida. A Toro team member will call you shortly at the number you used.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hi ${esc(name)},</h2><p>Thanks for checking out full-service movers in Central Florida. A team member will contact you in a couple minutes at the number you used.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
           ),
           text: es
             ? `Hola ${name}, Toro Movers te contacta pronto. ${PHONE_DISPLAY}`
-            : `Hi ${name}, Toro Movers will call you shortly. ${PHONE_DISPLAY}`,
+            : `Hi ${name}, a team member will contact you in a couple minutes. ${PHONE_DISPLAY}`,
         },
       };
 

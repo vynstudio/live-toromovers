@@ -430,7 +430,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       confirm: "Send my quote request",
       successTitle: "Quote request received",
       successBody:
-        "A Toro Movers owner will call or text you today with your written quote. Need us now? Call (689) 600-2720.",
+        "A team member will contact you in a couple minutes with your quote. Need us now? Call (689) 600-2720.",
       back: "Back",
       next: "Continue",
       submit: "Send",
@@ -640,7 +640,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       confirm: "Enviar mi solicitud",
       successTitle: "Solicitud de cotización recibida",
       successBody:
-        "Un dueño de Toro Movers te llamará o te escribirá hoy con tu cotización por escrito. ¿Nos necesitas ahora? Llama al (689) 600-2720.",
+        "Un miembro del equipo te contactará en un par de minutos con tu cotización. ¿Nos necesitas ahora? Llama al (689) 600-2720.",
       back: "Atrás",
       next: "Continuar",
       submit: "Enviar",

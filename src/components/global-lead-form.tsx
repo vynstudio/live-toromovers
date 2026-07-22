@@ -210,8 +210,8 @@ export function GlobalLeadForm({
         <h3>{es ? "¡Listo! Recibimos tu solicitud." : "You're in — we got it."}</h3>
         <p>
           {es
-            ? "Un dueño de Toro te llama o escribe hoy con tu cotización. ¿Urgente?"
-            : "A Toro owner will call or text you today with your quote. Need us now?"}{" "}
+            ? "Un miembro del equipo te contactará en un par de minutos. ¿Urgente?"
+            : "A team member will contact you in a couple minutes. Need us now?"}{" "}
           <a href={PHONE_TEL}>
             {es ? "Llama" : "Call"} {PHONE_DISPLAY}
           </a>

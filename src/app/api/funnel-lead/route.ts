@@ -107,8 +107,8 @@ async function sendCustomerEmail(lead: FunnelLeadInput, isLabor: boolean): Promi
     ? `Thanks, ${escapeHtml(lead.firstName)} — your labor-only request is in.`
     : `Thanks, ${escapeHtml(lead.firstName)} — your full-service request is in.`;
   const line = isLabor
-    ? "A Toro Movers team member will call you shortly to check availability and confirm your up-front hourly rate. You'll get a text too."
-    : "A Toro Movers team member will call you shortly to check availability and put together your full-service pricing. You'll get a text too.";
+    ? "A team member will contact you in a couple minutes to check availability and confirm your up-front hourly rate. You'll get a text too."
+    : "A team member will contact you in a couple minutes to check availability and put together your full-service pricing. You'll get a text too.";
 
   const html = `
   <div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#ffffff;font:15px/1.6 system-ui,sans-serif;color:#0A0A0A">

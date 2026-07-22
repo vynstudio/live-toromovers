@@ -171,8 +171,8 @@ export const COPY = {
   badEmail: { en: "Enter a valid email", es: "Ingresa un correo válido" },
   doneTitle: { en: "You're all set!", es: "¡Listo!" },
   doneBody: {
-    en: "A Toro Movers crew member will text or call you shortly with your quote.",
-    es: "Un miembro de Toro Movers te llamará o escribirá en breve con tu precio.",
+    en: "A team member will contact you in a couple minutes with your quote.",
+    es: "Un miembro del equipo te contactará en un par de minutos con tu cotización.",
   },
   trust: {
     en: "★ 4.9 Google · Family-owned · No hidden fees",

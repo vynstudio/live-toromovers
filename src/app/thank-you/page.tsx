@@ -6,7 +6,7 @@ import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 export const metadata: Metadata = {
   title: "Quote request received",
   description:
-    "Your moving quote request is in. A Toro Movers owner will call or text you today to confirm details and pricing.",
+    "Your moving quote request is in. A team member will contact you in a couple minutes to confirm details and pricing.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/thank-you" },
 };
@@ -18,7 +18,7 @@ export default function ThankYouPage() {
       <div className="thanks-card">
         <div className="thanks-check" aria-hidden>✓</div>
         <p className="thanks-eyebrow">Quote request received</p>
-        <h1 className="thanks-h1">A Toro Movers owner will call or text you today.</h1>
+        <h1 className="thanks-h1">A team member will contact you in a couple minutes.</h1>
         <p className="thanks-lede">
           We have your move details. Expect a call or text today with your
           quote and next steps to book the date.

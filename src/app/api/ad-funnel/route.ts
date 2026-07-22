@@ -305,7 +305,7 @@ async function customerEmail(
   const html = `
   <div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#fff;font:15px/1.6 system-ui,sans-serif;color:#0A0A0A">
     <h2 style="font:600 22px/1.3 system-ui,sans-serif;margin:0 0 10px">Thanks, ${esc(firstName)} — your moving request is in.</h2>
-    <p style="margin:0 0 18px;color:#3A3A3A">A Toro Movers team member will text or call you shortly to check availability and confirm your up-front rate.</p>
+    <p style="margin:0 0 18px;color:#3A3A3A">A team member will contact you in a couple minutes to check availability and confirm your up-front rate.</p>
     <p style="margin:0 0 4px">Want to speed it up? Call us now:</p>
     <p style="font:600 18px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">(689) 600-2720</a></p>
     <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Up-front pricing · Hablamos español<br>Toro Movers · (689) 600-2720</p>
@@ -323,7 +323,7 @@ async function customerEmail(
         reply_to: from,
         subject: "Your moving quote request — Toro Movers",
         html,
-        text: `Hi ${firstName}, we got your ${service || "moving"} request and a Toro Movers crew member will text or call shortly. Speed it up: (689) 600-2720.`,
+        text: `Hi ${firstName}, we got your ${service || "moving"} request — a team member will contact you in a couple minutes. Speed it up: (689) 600-2720.`,
       }),
     });
     return res.ok;

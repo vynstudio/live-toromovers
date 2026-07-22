@@ -328,7 +328,7 @@ async function sendClientConfirmationEmail(
   const html = `
   <div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#ffffff;font:15px/1.55 system-ui,sans-serif;color:#0A0A0A">
     <h2 style="font:600 22px/1.3 system-ui,sans-serif;margin:0 0 12px">Thanks, ${q.firstName} — we got your request.</h2>
-    <p>A Toro Movers team member will call you shortly to confirm details and lock in your slot. You'll also get a text from us.</p>
+    <p>A team member will contact you in a couple minutes to confirm details and lock in your slot. You'll also get a text from us.</p>
     <p style="margin-top:18px">If you'd like to speed things up, give us a call:</p>
     <p style="font:600 17px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">(689) 600-2720</a></p>
     <p style="color:#6B6B72;font-size:13px;margin-top:24px">Family-owned · Up-front hourly pricing · Hablamos español</p>
@@ -343,7 +343,7 @@ async function sendClientConfirmationEmail(
         to: [q.email],
         subject: `We got your moving request — Toro Movers`,
         html,
-        text: `Hi ${q.firstName}, thanks for your request. We'll call you shortly. Speed it up by calling (689) 600-2720. — Toro Movers`,
+        text: `Hi ${q.firstName}, thanks for your request. A team member will contact you in a couple minutes. Speed it up by calling (689) 600-2720. — Toro Movers`,
       }),
     });
     return res.ok;
