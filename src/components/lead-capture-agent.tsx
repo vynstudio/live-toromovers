@@ -2,19 +2,15 @@
 
 /**
  * Mobile-first lead capture agent.
- * Flow: phone first → qualify → price band + call CTAs.
- * Progressive capture: posts soft lead after name+phone, full lead on finish.
+ * Flow: phone first → qualify → thank-you + call CTAs.
+ * Progressive capture: soft lead after name+phone, full lead on finish.
+ * NEVER shows rates or hour estimates — owner quotes on the call.
  */
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
-import {
-  PHONE_DISPLAY,
-  PHONE_TEL,
-  GOOGLE_RATING,
-} from "@/lib/contact";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 import { CITIES } from "@/lib/cities";
 import {
-  estimateBand,
   HOME_SIZE_LABELS,
   SERVICE_LABELS,
   type HomeSize,
@@ -125,16 +121,6 @@ export function LeadCaptureAgent({
           ? "90%"
           : "100%";
 
-  const band = useMemo(() => {
-    const svc: ServiceKind =
-      service === "labor"
-        ? "labor"
-        : service === "not-sure"
-          ? "full-service"
-          : "full-service";
-    return estimateBand(svc, homeSize || "2br");
-  }, [service, homeSize]);
-
   const whenLabel =
     WHEN_CHIPS.find((w) => w.id === whenId)?.label || whenId || "";
 
@@ -151,13 +137,14 @@ export function LeadCaptureAgent({
       : "";
     return [
       priority,
-      kind === "soft" ? "Soft capture (name+phone) — still qualifying" : "Full agent funnel complete",
+      kind === "soft"
+        ? "Soft capture (name+phone) — still qualifying"
+        : "Full agent funnel complete",
       service && `Service: ${SERVICE_LABELS[service as ServiceKind] || service}`,
       city && `City: ${city}`,
       whenLabel && `When: ${whenLabel}`,
       homeSize &&
         `Size: ${HOME_SIZE_LABELS[homeSize as Exclude<HomeSize, "">] || homeSize}`,
-      band && kind === "full" && `Shown band: ${band.rangeLabel} @ $${band.hourly}/hr`,
       `event_id=${eventIdRef.current}`,
     ]
       .filter(Boolean)
@@ -302,18 +289,11 @@ export function LeadCaptureAgent({
             ? `Gracias, ${name.trim().split(/\s+/)[0]} — te contactamos en minutos.`
             : `Thanks, ${name.trim().split(/\s+/)[0]} — we'll contact you in minutes.`}
         </h2>
-
-        <div className="lca-band">
-          <p className="lca-band-label">
-            {es ? "Rango típico para tu mudanza" : "Typical range for your move"}
-          </p>
-          <p className="lca-band-price">{band.rangeLabel}</p>
-          <p className="lca-band-meta">{band.crewNote}</p>
-          <p className="lca-band-hours">
-            {es ? "Horas típicas" : "Typical hours"}: {band.typicalHours}
-          </p>
-          <p className="lca-band-caveat">{band.caveats}</p>
-        </div>
+        <p className="lca-done-lede">
+          {es
+            ? "Un miembro del equipo te llama o escribe pronto con disponibilidad y un precio claro. Sin tarifas ocultas."
+            : "A team member will call or text shortly with availability and a clear price. No hidden fees."}
+        </p>
 
         <div className="lca-done-actions">
           <a href={PHONE_TEL} className="fn-btn fn-btn-primary fn-btn-lg lca-full">
@@ -356,8 +336,8 @@ export function LeadCaptureAgent({
                 ? " · casi listo"
                 : " · almost done"
               : es
-                ? " · ver precio"
-                : " · see price"}
+                ? " · enviar"
+                : " · submit"}
         </span>
       </p>
 
@@ -366,8 +346,8 @@ export function LeadCaptureAgent({
         <form className="lca-form" onSubmit={onCaptureContinue} noValidate>
           <h2 className="lca-q">
             {es
-              ? "¿Cómo te contactamos con tu precio?"
-              : "How should we reach you with your price?"}
+              ? "¿Cómo te contactamos?"
+              : "How should we reach you?"}
           </h2>
           <p className="lca-help">
             {es
@@ -542,8 +522,8 @@ export function LeadCaptureAgent({
           </h2>
           <p className="lca-help">
             {es
-              ? "Así te mostramos un rango de precio al instante."
-              : "So we can show you a price range instantly."}
+              ? "Así preparamos tu cotización cuando te llamemos."
+              : "So we’re ready with the right quote when we call."}
           </p>
 
           <div className="lca-options lca-options-stack" role="radiogroup" aria-label="Service">
@@ -608,11 +588,11 @@ export function LeadCaptureAgent({
             >
               {sending
                 ? es
-                  ? "Calculando…"
-                  : "Getting price…"
+                  ? "Enviando…"
+                  : "Sending…"
                 : es
-                  ? "Ver mi rango de precio"
-                  : "See my price range"}
+                  ? "Enviar solicitud"
+                  : "Request my quote"}
             </button>
           </div>
         </div>
@@ -630,7 +610,7 @@ export function LeadCaptureSticky({ lang = "en" }: { lang?: "en" | "es" }) {
         {es ? "Llamar" : "Call"}
       </a>
       <a href="#get-price" className="lca-sticky-quote">
-        {es ? "Ver mi precio" : "Get my price"}
+        {es ? "Cotizar" : "Get my quote"}
       </a>
     </div>
   );

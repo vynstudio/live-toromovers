@@ -10,12 +10,11 @@ import {
   GOOGLE_RATING,
   BUSINESS_NAME,
 } from "@/lib/contact";
-import { PRICING } from "@/lib/pricing";
 
 export const metadata: Metadata = {
-  title: { absolute: "Get My Moving Price in 60 Seconds | Toro Movers" },
+  title: { absolute: "Get a Free Moving Quote | Toro Movers" },
   description:
-    "Up-front hourly moving prices for Central Florida. Name + phone, then see a typical price range. No hidden fees. Family-owned · bilingual.",
+    "Request your Central Florida moving quote. Family-owned, bilingual crew, no hidden fees. We call you back with clear pricing.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/get-my-price" },
 };
@@ -42,9 +41,6 @@ const PROOF = [
 ];
 
 export default function GetMyPricePage() {
-  const fs = PRICING.fullService;
-  const lo = PRICING.laborOnly;
-
   return (
     <main className="lca-page">
       <header className="lca-top">
@@ -70,28 +66,22 @@ export default function GetMyPricePage() {
             {GOOGLE_RATING} on Google · Family-owned · Central Florida
           </p>
           <h1 className="lca-h1">
-            Get your move price.
+            Get your free quote.
             <em> No hidden fees.</em>
           </h1>
           <p className="lca-lede">
-            Up-front hourly rates. Tell us your phone — we show a typical range
-            in under a minute, then a real person confirms exact pricing.
+            Tell us a bit about your move — a real person calls back with
+            availability and clear pricing. You never see a surprise bill.
           </p>
           <ul className="lca-bullets">
-            <li>
-              Full-service from ${fs.baseRate}/hr (2 movers + truck, {fs.minimumHours}
-              -hr min)
-            </li>
-            <li>
-              Labor-only from ${lo.baseRate}/hr (you bring the truck,{" "}
-              {lo.minimumHours}-hr min)
-            </li>
+            <li>Full-service: truck + crew, packing help available</li>
+            <li>Labor-only: you bring the truck or POD — we lift</li>
             <li>No fuel · no stair fees · bilingual crew · same-week dates</li>
           </ul>
         </div>
 
         <div className="lca-card" id="get-price">
-          <p className="lca-card-kicker">Free price · ~45 seconds</p>
+          <p className="lca-card-kicker">Free quote · under a minute</p>
           <LeadCaptureAgent lang="en" />
         </div>
       </section>
@@ -123,7 +113,7 @@ export default function GetMyPricePage() {
           </div>
           <div>
             <h3>Clock stops when the job ends</h3>
-            <p>Hourly pricing from a clear minimum. No surprise add-ons later.</p>
+            <p>Hourly pricing with a clear minimum. No surprise add-ons later.</p>
           </div>
           <div>
             <h3>Materials included</h3>
@@ -140,7 +130,7 @@ export default function GetMyPricePage() {
             Call {PHONE_DISPLAY}
           </a>
           <a href="#get-price" className="fn-btn fn-btn-ghost-light">
-            Get my price
+            Get my quote
           </a>
         </div>
       </section>

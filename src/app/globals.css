@@ -2863,51 +2863,15 @@ html[data-quote-open="1"] .sticky-cta {
   font-weight: 600;
   font-size: clamp(20px, 5vw, 24px);
   line-height: 1.2;
-  margin: 0 0 16px;
+  margin: 0 0 10px;
   color: var(--ink);
   text-wrap: balance;
 }
-.lca-band {
-  background: var(--bg-soft);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 16px 14px;
-  margin: 0 0 16px;
-  text-align: center;
-}
-.lca-band-label {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.lca-done-lede {
+  font-size: 14.5px;
+  line-height: 1.5;
   color: var(--muted);
-  margin: 0 0 6px;
-}
-.lca-band-price {
-  font-family: var(--font-serif), system-ui, sans-serif;
-  font-weight: 700;
-  font-size: clamp(28px, 8vw, 36px);
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  margin: 0 0 6px;
-  line-height: 1.1;
-}
-.lca-band-meta {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--ink-soft);
-  margin: 0 0 4px;
-}
-.lca-band-hours {
-  font-size: 13px;
-  color: var(--muted);
-  margin: 0 0 8px;
-}
-.lca-band-caveat {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 0;
-  line-height: 1.4;
+  margin: 0 0 18px;
 }
 .lca-done-actions {
   display: flex;

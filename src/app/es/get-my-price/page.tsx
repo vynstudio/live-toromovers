@@ -10,12 +10,11 @@ import {
   GOOGLE_RATING,
   BUSINESS_NAME,
 } from "@/lib/contact";
-import { PRICING } from "@/lib/pricing";
 
 export const metadata: Metadata = {
-  title: { absolute: "Cotiza tu mudanza en 60 segundos | Toro Movers" },
+  title: { absolute: "Cotización gratis de mudanza | Toro Movers" },
   description:
-    "Precios por hora claros en Florida Central. Nombre + teléfono y ve un rango típico. Sin cargos ocultos. Empresa familiar · bilingüe.",
+    "Solicita tu cotización de mudanza en Florida Central. Empresa familiar, bilingüe, sin cargos ocultos. Te llamamos con un precio claro.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/es/get-my-price" },
 };
@@ -42,9 +41,6 @@ const PROOF = [
 ];
 
 export default function GetMyPriceEsPage() {
-  const fs = PRICING.fullService;
-  const lo = PRICING.laborOnly;
-
   return (
     <main className="lca-page" lang="es">
       <header className="lca-top">
@@ -70,29 +66,22 @@ export default function GetMyPriceEsPage() {
             {GOOGLE_RATING} en Google · Familiar · Florida Central
           </p>
           <h1 className="lca-h1">
-            Cotiza tu mudanza.
+            Cotiza gratis.
             <em> Sin cargos ocultos.</em>
           </h1>
           <p className="lca-lede">
-            Precio por hora por adelantado. Déjanos tu teléfono — te mostramos un
-            rango típico en menos de un minuto y una persona real confirma el
-            precio exacto.
+            Cuéntanos un poco de tu mudanza — una persona real te llama con
+            disponibilidad y un precio claro. Sin sorpresas en la factura.
           </p>
           <ul className="lca-bullets">
-            <li>
-              Full-service desde ${fs.baseRate}/hr (2 mudanceros + camión, mín.{" "}
-              {fs.minimumHours} hrs)
-            </li>
-            <li>
-              Solo labor desde ${lo.baseRate}/hr (tú traes el camión, mín.{" "}
-              {lo.minimumHours} hrs)
-            </li>
+            <li>Full-service: camión + cuadrilla, empaque disponible</li>
+            <li>Solo labor: tú traes el camión o POD — nosotros cargamos</li>
             <li>Sin gasolina extra · sin cargos por escaleras · bilingüe</li>
           </ul>
         </div>
 
         <div className="lca-card" id="get-price">
-          <p className="lca-card-kicker">Precio gratis · ~45 segundos</p>
+          <p className="lca-card-kicker">Cotización gratis · menos de un minuto</p>
           <LeadCaptureAgent lang="es" />
         </div>
       </section>
@@ -124,7 +113,7 @@ export default function GetMyPriceEsPage() {
           </div>
           <div>
             <h3>El reloj para al terminar</h3>
-            <p>Precio por hora con mínimo claro. Sin sorpresas al final.</p>
+            <p>Tarifa por hora con mínimo claro. Sin sorpresas al final.</p>
           </div>
           <div>
             <h3>Materiales incluidos</h3>
@@ -141,7 +130,7 @@ export default function GetMyPriceEsPage() {
             Llamar {PHONE_DISPLAY}
           </a>
           <a href="#get-price" className="fn-btn fn-btn-ghost-light">
-            Ver mi precio
+            Pedir cotización
           </a>
         </div>
       </section>
