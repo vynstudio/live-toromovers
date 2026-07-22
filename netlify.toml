@@ -20,3 +20,7 @@
   to = "https://toromovers.net/?utm_source=toromudanzas&utm_medium=redirect"
   status = 301
   force = true
+
+# Legacy ad domains are hosted on the toro-ads-landing Netlify project and
+# 301 to this site (see docs/domain-consolidation.md). Do not re-add
+# toromoveit.com as a content host — SEO home is toromovers.net only.

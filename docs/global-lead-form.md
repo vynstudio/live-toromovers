@@ -5,7 +5,7 @@ Same UX across:
 | Host | Codebase | Popup |
 |------|----------|--------|
 | **toromovers.net** | `toromovers-site` | `QuoteModal` + `GlobalLeadForm` |
-| **toromoveit.com** | `toro-ads-landing` | `QuoteModal` + `QuoteFormFields` |
+| **toromoveit.com** (legacy) | 301 → toromovers.net | See `docs/domain-consolidation.md` |
 | **go.toromovers.net** | same as toromoveit (alias) | same |
 
 ## Behavior

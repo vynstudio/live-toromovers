@@ -64,7 +64,7 @@ Config lives in **`next.config.ts` `redirects()` (:91-110)** and **`netlify.toml
 - Ad LP aliases → `/ads/meta-orlando-movers` (307); `/mudanza→/es/ads/…`; legacy content → `/#…` (307).
 - Cross-domain: **`toromudanzas.com` → `toromovers.net` 301** (netlify.toml, force).
 
-⚠️ **Pre-existing issue (NOT reskin-related):** apex `https://toromoveit.com` returns **200** (serves homepage) instead of 301 — canonical-protected (`canonical→toromovers.net`) so low risk, but a real 301 is cleaner. Separate ticket; blocked previously on SSL cert coverage.
+✅ **Resolved:** `toromoveit.com` / `go.toromovers.net` 301 → `toromovers.net` funnels (see `docs/domain-consolidation.md`).
 
 ## 6. Internal-link graph (preserve — core local-SEO asset)
 
