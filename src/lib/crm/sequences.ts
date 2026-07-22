@@ -73,6 +73,26 @@ export function buildSequence(
         },
       };
 
+    case "agent_instant":
+      return {
+        sms: es
+          ? `Hola ${name}, Toro Movers. Recibimos tu solicitud de precio. Te llamamos o escribimos en minutos desde ${PHONE_DISPLAY}. Responde con fecha y ciudades (de→a) para ir más rápido. STOP para salir.`
+          : `Hi ${name}, Toro Movers — we got your price request. We'll call or text within minutes from ${PHONE_DISPLAY}. Reply with your move date + from/to cities to speed it up. Reply STOP to opt out.`,
+        email: {
+          subject: es
+            ? "Toro Movers — recibimos tu solicitud de precio"
+            : "Toro Movers — we got your price request",
+          html: wrap(
+            es
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hola ${esc(name)},</h2><p>Recibimos tu solicitud. Un miembro del equipo te contacta en minutos con disponibilidad y precio por hora.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Agregar más detalles →</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hi ${esc(name)},</h2><p>We got your price request. A team member will contact you in minutes with availability and up-front hourly pricing.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Add more details →</a></p>`,
+          ),
+          text: es
+            ? `Hola ${name}, Toro recibió tu solicitud. ${PHONE_DISPLAY}`
+            : `Hi ${name}, Toro got your price request. ${PHONE_DISPLAY}`,
+        },
+      };
+
     case "followup_1h":
       return {
         sms: es

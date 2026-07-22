@@ -52,6 +52,7 @@ export type CrmLead = {
 export type SequenceKey =
   | "funnel_instant" // already handled in funnel-lead
   | "call_instant" // after call ad / missed → still notify CRM
+  | "agent_instant" // /get-my-price phone-first agent
   | "followup_1h"
   | "followup_24h"
   | "followup_72h"

@@ -34,10 +34,31 @@ function firstNameOf(name: string) {
   return name.trim().split(/\s+/)[0] || "there";
 }
 
+function isPriorityLead(lead: CrmLead): boolean {
+  const blob = `${lead.note || ""} ${lead.moveDate || ""}`.toLowerCase();
+  return (
+    blob.includes("priority") ||
+    blob.includes("this week") ||
+    blob.includes("esta semana") ||
+    blob.includes("asap")
+  );
+}
+
+function isAgentLead(lead: CrmLead): boolean {
+  const blob = `${lead.source} ${lead.landingPage || ""} ${lead.note || ""}`.toLowerCase();
+  return blob.includes("get-my-price") || blob.includes("agent funnel");
+}
+
 function summarize(lead: CrmLead): string {
   const phone = lead.phone ? normalizePhone(lead.phone) : "—";
+  const priority = isPriorityLead(lead);
+  const agent = isAgentLead(lead);
   return [
-    `🚚 New ${lead.funnel.toUpperCase()} lead — Toro CRM`,
+    priority
+      ? `🔥 PRIORITY — call ASAP · ${lead.funnel.toUpperCase()}`
+      : agent
+        ? `⚡ Agent lead · ${lead.funnel.toUpperCase()} — Toro CRM`
+        : `🚚 New ${lead.funnel.toUpperCase()} lead — Toro CRM`,
     ``,
     `Name: ${lead.firstName}${lead.lastName ? ` ${lead.lastName}` : ""}`,
     `Phone: ${phone}`,
@@ -58,6 +79,12 @@ function summarize(lead: CrmLead): string {
   ]
     .filter(Boolean)
     .join("\n");
+}
+
+function instantSequenceKey(lead: CrmLead): "call_instant" | "agent_instant" | "followup_1h" {
+  if (lead.source === "meta_call") return "call_instant";
+  if (isAgentLead(lead)) return "agent_instant";
+  return "followup_1h";
 }
 
 /** Phone-only leads (Meta Call Now) — HubSpot without email. */
@@ -162,19 +189,17 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
   channels.push(team);
 
   // 4) Customer instant touch (email + SMS when consented / call funnel)
+  const seqKey = instantSequenceKey(lead);
   const wantsCustomerComms =
     lead.source === "meta_call" ||
     lead.source === "manual" ||
     lead.consentEmail !== false;
   if (wantsCustomerComms && email) {
-    const seq = buildSequence(
-      lead.source === "meta_call" ? "call_instant" : "followup_1h",
-      {
-        firstName: lead.firstName,
-        lang: lead.lang,
-        funnel: lead.funnel,
-      },
-    );
+    const seq = buildSequence(seqKey, {
+      firstName: lead.firstName,
+      lang: lead.lang,
+      funnel: lead.funnel,
+    });
     if (seq.email) {
       channels.push(
         await sendEmail({
@@ -194,10 +219,11 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
       lead.source === "meta_call" ||
       lead.funnel === "call");
   if (wantsSms && phone) {
-    const seq = buildSequence(
-      lead.source === "meta_call" ? "call_instant" : "followup_1h",
-      { firstName: lead.firstName, lang: lead.lang, funnel: lead.funnel },
-    );
+    const seq = buildSequence(seqKey, {
+      firstName: lead.firstName,
+      lang: lead.lang,
+      funnel: lead.funnel,
+    });
     if (seq.sms) {
       channels.push(await sendSms(phone, seq.sms));
     }
