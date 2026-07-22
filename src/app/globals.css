@@ -2764,6 +2764,19 @@ html[data-quote-open="1"] .sticky-cta {
 .lca-options-stack {
   grid-template-columns: 1fr;
 }
+/* One-question screens: full-width options, bigger tap targets */
+.lca-focus .lca-q {
+  font-size: clamp(22px, 6vw, 26px);
+  margin-bottom: 6px;
+}
+.lca-options-focus {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.lca-options-focus.lca-options-city {
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
 .lca-opt {
   appearance: none;
   border: 1.5px solid var(--line-strong);
@@ -2774,17 +2787,26 @@ html[data-quote-open="1"] .sticky-cta {
   min-height: 50px;
   font: 600 14px var(--font-sans), system-ui, sans-serif;
   cursor: pointer;
-  transition: border-color 0.12s, background 0.12s, color 0.12s, box-shadow 0.12s;
+  transition: border-color 0.12s, background 0.12s, color 0.12s, box-shadow 0.12s, transform 0.12s;
   text-align: center;
   -webkit-tap-highlight-color: transparent;
 }
+.lca-opt-focus {
+  min-height: 56px;
+  padding: 16px 16px;
+  font-size: 16px;
+  border-radius: 14px;
+  border-width: 2px;
+}
 .lca-opt:hover { border-color: var(--ink-soft); }
 .lca-opt:active { transform: scale(0.98); }
+.lca-opt:disabled { opacity: 0.85; cursor: default; }
 .lca-opt.on {
   border-color: var(--red);
   background: var(--red);
   color: #fff;
   box-shadow: 0 6px 16px var(--red-glow);
+  transform: scale(1.02);
 }
 .lca-opt-hot:not(.on) {
   border-color: rgba(200, 16, 46, 0.35);
@@ -2794,6 +2816,26 @@ html[data-quote-open="1"] .sticky-cta {
   text-align: left;
   padding-left: 16px;
   padding-right: 16px;
+}
+.lca-opt-busy { pointer-events: none; }
+.lca-back-solo {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 16px;
+  min-height: 44px;
+}
+/* Step enter — keep eyes on the new question */
+@keyframes lca-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.lca-enter {
+  animation: lca-in 0.22s ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lca-enter { animation: none; }
+  .lca-opt.on { transform: none; }
 }
 .lca-actions {
   display: flex;

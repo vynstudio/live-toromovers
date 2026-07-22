@@ -2,12 +2,12 @@
 
 /**
  * Mobile-first lead capture agent.
- * Flow: phone first → qualify → thank-you + call CTAs.
- * Progressive capture: soft lead after name+phone, full lead on finish.
+ * Contact first → then ONE question at a time with auto-advance on tap.
+ * Progressive CRM: soft lead after name+phone, full lead after last answer.
  * NEVER shows rates or hour estimates — owner quotes on the call.
  */
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 import { CITIES } from "@/lib/cities";
 import {
@@ -25,13 +25,24 @@ const CITY_CHIPS = [
 ];
 
 const WHEN_CHIPS = [
-  { id: "this-week", label: "This week", priority: true },
-  { id: "next-2-weeks", label: "Next 2 weeks", priority: false },
-  { id: "30-plus", label: "30+ days", priority: false },
-  { id: "flexible", label: "Flexible", priority: false },
+  { id: "this-week", labelEn: "This week", labelEs: "Esta semana", priority: true },
+  {
+    id: "next-2-weeks",
+    labelEn: "Next 2 weeks",
+    labelEs: "Próximas 2 semanas",
+    priority: false,
+  },
+  { id: "30-plus", labelEn: "30+ days", labelEs: "En 30+ días", priority: false },
+  { id: "flexible", labelEn: "Flexible", labelEs: "Flexible", priority: false },
 ] as const;
 
-type Phase = "capture" | "qualify" | "service" | "done";
+/** After contact: one screen = one question. */
+type Phase = "capture" | "when" | "city" | "service" | "size" | "done";
+
+const PHASE_ORDER: Phase[] = ["capture", "when", "city", "service", "size", "done"];
+
+/** Brief highlight before advancing so the tap feels intentional. */
+const ADVANCE_MS = 180;
 
 function formatPhone(raw: string) {
   const d = String(raw || "")
@@ -62,9 +73,7 @@ async function postLead(payload: Record<string, unknown>) {
 }
 
 type Props = {
-  /** Prefill from ad URL ?service=labor|full-service */
   defaultService?: ServiceKind | "";
-  /** Prefill from ad URL ?city=Orlando */
   defaultCity?: string;
   lang?: "en" | "es";
 };
@@ -87,48 +96,62 @@ export function LeadCaptureAgent({
   const [sending, setSending] = useState(false);
   const [started, setStarted] = useState(false);
   const [hp, setHp] = useState("");
+  const [animKey, setAnimKey] = useState(0);
+  const [advancing, setAdvancing] = useState(false);
   const startRef = useRef(Date.now());
   const eventIdRef = useRef(newEventId());
   const softSentRef = useRef(false);
+  const prefillService = useRef(defaultService);
+  const prefillCity = useRef(defaultCity);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const q = new URLSearchParams(window.location.search);
     const s = q.get("service")?.toLowerCase();
-    if (s === "labor" || s === "labor-only") setService("labor");
-    if (s === "full-service" || s === "full") setService("full-service");
+    if (s === "labor" || s === "labor-only") {
+      setService("labor");
+      prefillService.current = "labor";
+    }
+    if (s === "full-service" || s === "full") {
+      setService("full-service");
+      prefillService.current = "full-service";
+    }
     const c = q.get("city");
     if (c) {
       const match = CITY_CHIPS.find(
         (x) => x.toLowerCase() === c.trim().toLowerCase(),
       );
-      if (match) setCity(match);
-      else setCity(c.trim());
+      const val = match || c.trim();
+      setCity(val);
+      prefillCity.current = val;
     }
   }, []);
 
   const phoneOk = digits(phone).length === 10;
   const nameOk = name.trim().length >= 2;
 
-  const stepNum =
-    phase === "capture" ? 1 : phase === "qualify" ? 2 : phase === "service" ? 3 : 3;
+  const stepIndex = Math.max(0, PHASE_ORDER.indexOf(phase));
+  const stepTotal = 5; // capture + 4 questions (done excluded)
+  const stepNum = phase === "done" ? stepTotal : Math.min(stepIndex + 1, stepTotal);
   const progress =
-    phase === "capture"
-      ? "33%"
-      : phase === "qualify"
-        ? "66%"
-        : phase === "service"
-          ? "90%"
-          : "100%";
+    phase === "done"
+      ? "100%"
+      : `${Math.round((stepNum / stepTotal) * 100)}%`;
 
   const whenLabel =
-    WHEN_CHIPS.find((w) => w.id === whenId)?.label || whenId || "";
+    WHEN_CHIPS.find((w) => w.id === whenId)?.labelEn || whenId || "";
 
   function begin() {
     if (!started) {
       setStarted(true);
       trackFormStart("agent");
     }
+  }
+
+  function goTo(next: Phase) {
+    setError("");
+    setAnimKey((k) => k + 1);
+    setPhase(next);
   }
 
   function buildNote(kind: "soft" | "full") {
@@ -185,12 +208,97 @@ export function LeadCaptureAgent({
     trackFormSubmit("agent_soft_capture");
   }
 
+  const submitFull = useCallback(
+    async (size: HomeSize, svc: ServiceKind | "") => {
+      setSending(true);
+      setError("");
+      try {
+        const eventId = eventIdRef.current;
+        const sizeLabel =
+          size && HOME_SIZE_LABELS[size as Exclude<HomeSize, "">]
+            ? HOME_SIZE_LABELS[size as Exclude<HomeSize, "">]
+            : "";
+        await postLead({
+          name: name.trim(),
+          phone: digits(phone),
+          funnel: svc === "labor" ? "labor" : "full-service",
+          source: "get-my-price",
+          serviceType: [
+            svc ? SERVICE_LABELS[svc as ServiceKind] : "",
+            sizeLabel,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+          moveDate: whenLabel || undefined,
+          city: city || undefined,
+          note: [
+            isUrgentWhen(whenId)
+              ? "🔥 PRIORITY — move THIS WEEK — call ASAP"
+              : "",
+            "Full agent funnel complete",
+            svc && `Service: ${SERVICE_LABELS[svc as ServiceKind]}`,
+            city && `City: ${city}`,
+            whenLabel && `When: ${whenLabel}`,
+            sizeLabel && `Size: ${sizeLabel}`,
+            `event_id=${eventId}`,
+          ]
+            .filter(Boolean)
+            .join(" — "),
+          lang: es ? "es" : "en",
+          consentSms: softSentRef.current ? false : smsConsent,
+          consentEmail: true,
+          landingPage:
+            typeof window !== "undefined"
+              ? window.location.pathname
+              : "/get-my-price",
+          utm: getAttribution(),
+          hp: "",
+          elapsedMs: Math.max(Date.now() - startRef.current, 0),
+          eventId: `${eventId}-full`,
+        });
+        trackFormSubmit("agent_full");
+        goTo("done");
+      } catch {
+        setError(
+          es
+            ? `No se pudo enviar. Llame al ${PHONE_DISPLAY}.`
+            : `Couldn't send. Please call ${PHONE_DISPLAY}.`,
+        );
+      } finally {
+        setSending(false);
+        setAdvancing(false);
+      }
+    },
+    [name, phone, whenLabel, city, whenId, es, smsConsent],
+  );
+
+  /** Pick option → flash selected → auto-advance (or finish). */
+  function pickAndAdvance(
+    apply: () => void,
+    next: Phase | "finish",
+    finishArgs?: { size: HomeSize; svc: ServiceKind | "" },
+  ) {
+    if (advancing || sending) return;
+    setAdvancing(true);
+    apply();
+    window.setTimeout(() => {
+      if (next === "finish" && finishArgs) {
+        void submitFull(finishArgs.size, finishArgs.svc);
+        return;
+      }
+      if (next !== "finish") {
+        goTo(next);
+        setAdvancing(false);
+      }
+    }, ADVANCE_MS);
+  }
+
   async function onCaptureContinue(e: FormEvent) {
     e.preventDefault();
     setError("");
     begin();
     if (hp.trim()) {
-      setPhase("qualify");
+      goTo("when");
       return;
     }
     if (!nameOk) {
@@ -207,77 +315,42 @@ export function LeadCaptureAgent({
     }
     setSending(true);
     try {
-      // Allow spam filter: ensure ≥1.2s elapsed
       const wait = 1200 - (Date.now() - startRef.current);
       if (wait > 0) await new Promise((r) => setTimeout(r, wait));
       await sendSoftLead();
-      setPhase("qualify");
     } catch {
-      // Still advance — don't block UX if CRM is down; retry on full submit
       softSentRef.current = false;
-      setPhase("qualify");
     } finally {
       setSending(false);
+    }
+    // After contact: one question at a time. Skip prefilled fields.
+    if (prefillCity.current && prefillService.current) {
+      goTo("when");
+    } else if (prefillCity.current) {
+      goTo("when");
+    } else {
+      goTo("when");
     }
   }
 
-  async function onFinish() {
-    setError("");
-    if (!service) {
-      setError(es ? "Elija un tipo de servicio." : "Choose a service type.");
-      return;
-    }
-    if (!homeSize) {
-      setError(es ? "Elija el tamaño del hogar." : "Choose your home size.");
-      return;
-    }
-    setSending(true);
-    try {
-      const eventId = eventIdRef.current;
-      await postLead({
-        name: name.trim(),
-        phone: digits(phone),
-        funnel: funnelOf(),
-        source: "get-my-price",
-        serviceType: [
-          SERVICE_LABELS[service as ServiceKind],
-          HOME_SIZE_LABELS[homeSize as Exclude<HomeSize, "">],
-        ]
-          .filter(Boolean)
-          .join(" · "),
-        moveDate: whenLabel || undefined,
-        city: city || undefined,
-        note: buildNote("full"),
-        lang: es ? "es" : "en",
-        // Soft capture already texted; avoid a second SMS on full complete.
-        consentSms: softSentRef.current ? false : smsConsent,
-        consentEmail: true,
-        landingPage:
-          typeof window !== "undefined"
-            ? window.location.pathname
-            : "/get-my-price",
-        utm: getAttribution(),
-        hp: "",
-        elapsedMs: Math.max(Date.now() - startRef.current, 0),
-        eventId: `${eventId}-full`,
-      });
-      trackFormSubmit("agent_full");
-      setPhase("done");
-    } catch {
-      setError(
-        es
-          ? `No se pudo enviar. Llame al ${PHONE_DISPLAY}.`
-          : `Couldn't send. Please call ${PHONE_DISPLAY}.`,
-      );
-    } finally {
-      setSending(false);
+  function backFrom(current: Phase) {
+    if (advancing || sending) return;
+    if (current === "when") goTo("capture");
+    else if (current === "city") goTo("when");
+    else if (current === "service") goTo(prefillCity.current ? "when" : "city");
+    else if (current === "size") {
+      if (prefillService.current) {
+        goTo(prefillCity.current ? "when" : "city");
+      } else {
+        goTo("service");
+      }
     }
   }
 
   /* ---------- SUCCESS ---------- */
   if (phase === "done") {
     return (
-      <div className="lca-done" role="status">
+      <div className="lca-done lca-enter" role="status">
         <div className="lca-done-check" aria-hidden>
           ✓
         </div>
@@ -319,40 +392,40 @@ export function LeadCaptureAgent({
     );
   }
 
+  const stepHint =
+    phase === "capture"
+      ? es
+        ? " · datos de contacto"
+        : " · contact"
+      : es
+        ? " · toca una opción"
+        : " · tap one";
+
   return (
     <div className="lca">
       <div className="lca-progress" aria-hidden>
         <span style={{ width: progress }} />
       </div>
       <p className="lca-step">
-        {es ? `Paso ${stepNum} de 3` : `Step ${stepNum} of 3`}
-        <span className="lca-step-hint">
-          {phase === "capture"
-            ? es
-              ? " · ~15 seg"
-              : " · ~15 sec"
-            : phase === "qualify"
-              ? es
-                ? " · casi listo"
-                : " · almost done"
-              : es
-                ? " · enviar"
-                : " · submit"}
-        </span>
+        {es ? `Paso ${stepNum} de ${stepTotal}` : `Step ${stepNum} of ${stepTotal}`}
+        <span className="lca-step-hint">{stepHint}</span>
       </p>
 
-      {/* STEP 1 — CONTACT FIRST */}
+      {/* ── 1. CONTACT (name + phone) ── */}
       {phase === "capture" && (
-        <form className="lca-form" onSubmit={onCaptureContinue} noValidate>
+        <form
+          key={animKey}
+          className="lca-form lca-enter"
+          onSubmit={onCaptureContinue}
+          noValidate
+        >
           <h2 className="lca-q">
-            {es
-              ? "¿Cómo te contactamos?"
-              : "How should we reach you?"}
+            {es ? "¿Cómo te contactamos?" : "How should we reach you?"}
           </h2>
           <p className="lca-help">
             {es
-              ? "Sin spam. Respuesta en minutos — o llámanos ya."
-              : "No spam. Reply in minutes — or call us now."}
+              ? "Sin spam. Te llamamos o escribimos en minutos."
+              : "No spam. We’ll call or text in minutes."}
           </p>
 
           <input
@@ -408,8 +481,8 @@ export function LeadCaptureAgent({
             />
             <span>
               {es
-                ? `Acepto SMS de Toro Movers al ${PHONE_DISPLAY} (precio y horarios). STOP para salir.`
-                : `I agree to receive texts from Toro Movers at ${PHONE_DISPLAY} about pricing & scheduling. Reply STOP to opt out.`}
+                ? `Acepto SMS de Toro Movers al ${PHONE_DISPLAY}. STOP para salir.`
+                : `I agree to texts from Toro Movers at ${PHONE_DISPLAY}. Reply STOP to opt out.`}
             </span>
           </label>
 
@@ -418,12 +491,12 @@ export function LeadCaptureAgent({
           <button
             type="submit"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
-            disabled={sending}
+            disabled={sending || !nameOk || !phoneOk}
           >
             {sending
               ? es
-                ? "Guardando…"
-                : "Saving…"
+                ? "Un momento…"
+                : "One moment…"
               : es
                 ? "Continuar →"
                 : "Continue →"}
@@ -435,120 +508,148 @@ export function LeadCaptureAgent({
         </form>
       )}
 
-      {/* STEP 2 — WHEN + WHERE */}
-      {phase === "qualify" && (
-        <div className="lca-form">
+      {/* ── 2. WHEN (auto-advance) ── */}
+      {phase === "when" && (
+        <div key={animKey} className="lca-form lca-enter lca-focus">
           <h2 className="lca-q">
-            {es ? "¿Cuándo y dónde es la mudanza?" : "When and where is the move?"}
+            {es ? "¿Cuándo te mudas?" : "When are you moving?"}
           </h2>
           <p className="lca-help">
-            {es
-              ? "Así priorizamos tu llamada y confirmamos cobertura."
-              : "Helps us prioritize your call and confirm we cover your area."}
+            {es ? "Toca una opción para seguir." : "Tap one to continue."}
           </p>
-
-          <p className="lca-label">{es ? "¿Cuándo?" : "When?"}</p>
-          <div className="lca-options" role="radiogroup" aria-label="When">
+          <div className="lca-options lca-options-focus" role="radiogroup" aria-label="When">
             {WHEN_CHIPS.map((w) => (
               <button
                 key={w.id}
                 type="button"
-                className={`lca-opt${whenId === w.id ? " on" : ""}${w.priority ? " lca-opt-hot" : ""}`}
-                onClick={() => setWhenId(w.id)}
+                className={`lca-opt lca-opt-focus${whenId === w.id ? " on" : ""}${w.priority ? " lca-opt-hot" : ""}`}
+                disabled={advancing || sending}
+                onClick={() =>
+                  pickAndAdvance(
+                    () => setWhenId(w.id),
+                    prefillCity.current ? "service" : "city",
+                  )
+                }
               >
-                {es
-                  ? w.id === "this-week"
-                    ? "Esta semana"
-                    : w.id === "next-2-weeks"
-                      ? "Próximas 2 semanas"
-                      : w.id === "30-plus"
-                        ? "En 30+ días"
-                        : "Flexible"
-                  : w.label}
+                {es ? w.labelEs : w.labelEn}
               </button>
             ))}
           </div>
+          <button type="button" className="lca-back lca-back-solo" onClick={() => backFrom("when")}>
+            {es ? "← Atrás" : "← Back"}
+          </button>
+        </div>
+      )}
 
-          <p className="lca-label" style={{ marginTop: 18 }}>
-            {es ? "Ciudad" : "City"}
+      {/* ── 3. CITY (auto-advance) ── */}
+      {phase === "city" && (
+        <div key={animKey} className="lca-form lca-enter lca-focus">
+          <h2 className="lca-q">
+            {es ? "¿En qué ciudad?" : "Which city?"}
+          </h2>
+          <p className="lca-help">
+            {es
+              ? "Confirmamos que cubrimos tu zona."
+              : "We confirm we serve your area."}
           </p>
-          <div className="lca-options lca-options-city" role="radiogroup" aria-label="City">
+          <div
+            className="lca-options lca-options-focus lca-options-city"
+            role="radiogroup"
+            aria-label="City"
+          >
             {CITY_CHIPS.map((c) => (
               <button
                 key={c}
                 type="button"
-                className={`lca-opt${city === c ? " on" : ""}`}
-                onClick={() => setCity(c)}
+                className={`lca-opt lca-opt-focus${city === c ? " on" : ""}`}
+                disabled={advancing || sending}
+                onClick={() =>
+                  pickAndAdvance(
+                    () => setCity(c),
+                    prefillService.current ? "size" : "service",
+                  )
+                }
               >
                 {c}
               </button>
             ))}
           </div>
-
-          {error && <p className="lca-err">{error}</p>}
-
-          <div className="lca-actions">
-            <button type="button" className="lca-back" onClick={() => setPhase("capture")}>
-              {es ? "Atrás" : "Back"}
-            </button>
-            <button
-              type="button"
-              className="fn-btn fn-btn-primary lca-grow"
-              disabled={!whenId || !city}
-              onClick={() => {
-                if (!whenId || !city) {
-                  setError(
-                    es
-                      ? "Elige cuándo y la ciudad."
-                      : "Pick when and your city.",
-                  );
-                  return;
-                }
-                setError("");
-                setPhase("service");
-              }}
-            >
-              {es ? "Continuar →" : "Continue →"}
-            </button>
-          </div>
+          <button type="button" className="lca-back lca-back-solo" onClick={() => backFrom("city")}>
+            {es ? "← Atrás" : "← Back"}
+          </button>
         </div>
       )}
 
-      {/* STEP 3 — SERVICE + SIZE → PRICE */}
+      {/* ── 4. SERVICE (auto-advance) ── */}
       {phase === "service" && (
-        <div className="lca-form">
+        <div key={animKey} className="lca-form lca-enter lca-focus">
           <h2 className="lca-q">
             {es ? "¿Qué necesitas?" : "What do you need?"}
           </h2>
           <p className="lca-help">
-            {es
-              ? "Así preparamos tu cotización cuando te llamemos."
-              : "So we’re ready with the right quote when we call."}
+            {es ? "Toca una opción para seguir." : "Tap one to continue."}
           </p>
-
-          <div className="lca-options lca-options-stack" role="radiogroup" aria-label="Service">
+          <div
+            className="lca-options lca-options-focus lca-options-stack"
+            role="radiogroup"
+            aria-label="Service"
+          >
             {(
               [
-                ["full-service", es ? "Full-service (camión + cuadrilla)" : "Full-service (truck + crew)"],
-                ["labor", es ? "Solo labor (tú traes el camión)" : "Labor-only (you have a truck)"],
+                [
+                  "full-service",
+                  es
+                    ? "Full-service (camión + cuadrilla)"
+                    : "Full-service (truck + crew)",
+                ],
+                [
+                  "labor",
+                  es
+                    ? "Solo labor (tú traes el camión)"
+                    : "Labor-only (you have a truck)",
+                ],
                 ["not-sure", es ? "No estoy seguro/a" : "Not sure yet"],
               ] as const
             ).map(([id, label]) => (
               <button
                 key={id}
                 type="button"
-                className={`lca-opt lca-opt-wide${service === id ? " on" : ""}`}
-                onClick={() => setService(id)}
+                className={`lca-opt lca-opt-focus lca-opt-wide${service === id ? " on" : ""}`}
+                disabled={advancing || sending}
+                onClick={() =>
+                  pickAndAdvance(() => setService(id), "size")
+                }
               >
                 {label}
               </button>
             ))}
           </div>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => backFrom("service")}
+          >
+            {es ? "← Atrás" : "← Back"}
+          </button>
+        </div>
+      )}
 
-          <p className="lca-label" style={{ marginTop: 18 }}>
-            {es ? "Tamaño del hogar" : "Home size"}
+      {/* ── 5. HOME SIZE (auto-advance → submit) ── */}
+      {phase === "size" && (
+        <div key={animKey} className="lca-form lca-enter lca-focus">
+          <h2 className="lca-q">
+            {es ? "¿Qué tamaño es el hogar?" : "How big is the home?"}
+          </h2>
+          <p className="lca-help">
+            {es
+              ? "Última pregunta — te contactamos al instante."
+              : "Last question — we contact you right away."}
           </p>
-          <div className="lca-options" role="radiogroup" aria-label="Home size">
+          <div
+            className="lca-options lca-options-focus"
+            role="radiogroup"
+            aria-label="Home size"
+          >
             {(
               Object.entries(HOME_SIZE_LABELS) as [
                 Exclude<HomeSize, "">,
@@ -558,8 +659,16 @@ export function LeadCaptureAgent({
               <button
                 key={id}
                 type="button"
-                className={`lca-opt${homeSize === id ? " on" : ""}`}
-                onClick={() => setHomeSize(id)}
+                className={`lca-opt lca-opt-focus${homeSize === id ? " on" : ""}${sending ? " lca-opt-busy" : ""}`}
+                disabled={advancing || sending}
+                onClick={() => {
+                  const svc = service || prefillService.current || "full-service";
+                  pickAndAdvance(
+                    () => setHomeSize(id),
+                    "finish",
+                    { size: id, svc: svc as ServiceKind },
+                  );
+                }}
               >
                 {es
                   ? id === "studio-1br"
@@ -573,35 +682,26 @@ export function LeadCaptureAgent({
               </button>
             ))}
           </div>
-
+          {sending && (
+            <p className="lca-help" style={{ marginTop: 14, textAlign: "center" }}>
+              {es ? "Enviando…" : "Sending…"}
+            </p>
+          )}
           {error && <p className="lca-err">{error}</p>}
-
-          <div className="lca-actions">
-            <button type="button" className="lca-back" onClick={() => setPhase("qualify")}>
-              {es ? "Atrás" : "Back"}
-            </button>
-            <button
-              type="button"
-              className="fn-btn fn-btn-primary lca-grow"
-              disabled={sending || !service || !homeSize}
-              onClick={onFinish}
-            >
-              {sending
-                ? es
-                  ? "Enviando…"
-                  : "Sending…"
-                : es
-                  ? "Enviar solicitud"
-                  : "Request my quote"}
-            </button>
-          </div>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => backFrom("size")}
+            disabled={sending}
+          >
+            {es ? "← Atrás" : "← Back"}
+          </button>
         </div>
       )}
     </div>
   );
 }
 
-/** Sticky bar: Call + scroll to agent form */
 export function LeadCaptureSticky({ lang = "en" }: { lang?: "en" | "es" }) {
   const es = lang === "es";
   return (
