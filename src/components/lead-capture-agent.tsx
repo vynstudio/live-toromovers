@@ -18,6 +18,11 @@ import {
 } from "@/lib/price-bands";
 import { newEventId, trackFormStart, trackFormSubmit, trackLead } from "@/lib/track";
 import { getAttribution, getAttributionSummary } from "@/lib/utm";
+import {
+  readRememberedReturnPath,
+  rememberReturnPath,
+  sanitizeReturnPath,
+} from "@/lib/open-quote";
 
 const CITY_CHIPS = [
   ...CITIES.slice(0, 8).map((c) => c.name),
@@ -98,6 +103,8 @@ export function LeadCaptureAgent({
   const [hp, setHp] = useState("");
   const [animKey, setAnimKey] = useState(0);
   const [advancing, setAdvancing] = useState(false);
+  const [returnTo, setReturnTo] = useState("/");
+  const [redirectIn, setRedirectIn] = useState(0);
   const startRef = useRef(Date.now());
   const eventIdRef = useRef(newEventId());
   const softSentRef = useRef(false);
@@ -125,7 +132,33 @@ export function LeadCaptureAgent({
       setCity(val);
       prefillCity.current = val;
     }
+    // Where to send the visitor after the funnel
+    const fromQuery = q.get("return");
+    if (fromQuery) {
+      const safe = sanitizeReturnPath(fromQuery);
+      rememberReturnPath(safe);
+      setReturnTo(safe);
+    } else {
+      setReturnTo(readRememberedReturnPath());
+    }
   }, []);
+
+  // After success: auto-return to main site (or ?return= page)
+  useEffect(() => {
+    if (phase !== "done") return;
+    setRedirectIn(5);
+    const tick = window.setInterval(() => {
+      setRedirectIn((n) => {
+        if (n <= 1) {
+          window.clearInterval(tick);
+          window.location.assign(returnTo || "/");
+          return 0;
+        }
+        return n - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(tick);
+  }, [phase, returnTo]);
 
   const phoneOk = digits(phone).length === 10;
   const nameOk = name.trim().length >= 2;
@@ -396,6 +429,15 @@ export function LeadCaptureAgent({
 
   /* ---------- SUCCESS ---------- */
   if (phase === "done") {
+    const backLabel =
+      returnTo === "/" || !returnTo
+        ? es
+          ? "Volver al sitio"
+          : "Back to site"
+        : es
+          ? "Continuar en el sitio"
+          : "Continue on the site";
+
     return (
       <div className="lca-done lca-enter" role="status">
         <div className="lca-done-check" aria-hidden>
@@ -420,20 +462,32 @@ export function LeadCaptureAgent({
             {es ? "Llamar ahora" : "Call now"} — {PHONE_DISPLAY}
           </a>
           <a
+            href={returnTo || "/"}
+            className="fn-btn fn-btn-ghost-light lca-full lca-text-btn"
+          >
+            {backLabel}
+            {redirectIn > 0
+              ? es
+                ? ` (${redirectIn})`
+                : ` (${redirectIn})`
+              : ""}
+          </a>
+          <a
             href={`sms:+16896002720?&body=${encodeURIComponent(
               es
                 ? `Hola Toro, soy ${name.trim()}. Quiero cotizar mi mudanza (${whenLabel || "fecha flexible"}).`
                 : `Hi Toro, this is ${name.trim()}. I'd like to lock in my move quote (${whenLabel || "flexible date"}).`,
             )}`}
-            className="fn-btn fn-btn-ghost-light lca-full lca-text-btn"
+            className="lca-call-link"
+            style={{ marginTop: 4 }}
           >
-            {es ? "Escribir por SMS" : "Text us"}
+            {es ? "O escríbenos por SMS" : "Or text us"}
           </a>
         </div>
         <p className="lca-done-fine">
           {es
-            ? "Depósito reembolsable pequeño reserva la fecha. Misma cuadrilla que cotiza suele presentarse."
-            : "Small refundable deposit locks your date. Same crew that quotes often shows up."}
+            ? "Te llevamos de vuelta al sitio en unos segundos. Depósito reembolsable reserva la fecha."
+            : "Taking you back to the site in a few seconds. Small refundable deposit locks your date."}
         </p>
       </div>
     );

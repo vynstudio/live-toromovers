@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { StepFunnelForm } from "@/components/step-funnel-form";
+
 import { FunnelView, CallCta, TextCta } from "@/components/funnel-tracking";
 import { FaqSection } from "@/components/faq-section";
 import { REVIEWS } from "@/lib/content";
@@ -148,8 +148,21 @@ export default function FullServiceMovingPage() {
           </div>
 
           <div className="fn-card" id="lead-form">
-            <p className="fn-card-kicker">Free quote · ~30 seconds</p>
-            <StepFunnelForm funnel="full-service" />
+            <p className="fn-card-kicker">Free quote · under a minute</p>
+            <h2 className="sf-q" style={{ marginBottom: 8 }}>Get your free quote</h2>
+            <p className="sf-help">
+              A few quick questions — a team member calls back with availability and clear pricing.
+            </p>
+            <a
+              href="/get-my-price?service=full-service&source=full-service-card&return=%2Ffull-service-moving"
+              className="fn-btn fn-btn-primary fn-btn-lg"
+              style={{ width: "100%" }}
+            >
+              Start free quote →
+            </a>
+            <p className="sf-help" style={{ marginTop: 14, marginBottom: 0, textAlign: "center" }}>
+              Or call <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
+            </p>
           </div>
         </div>
       </section>

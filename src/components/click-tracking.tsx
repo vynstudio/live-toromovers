@@ -17,7 +17,16 @@ export function ClickTracking() {
       if (href.startsWith("tel:")) {
         window.gtag?.("event", "phone_click", { transport_type: "beacon" });
         window.fbq?.("trackCustom", "PhoneClick");
-      } else if (href === "/quote" || href.startsWith("/quote?")) {
+      } else if (
+        href === "/quote" ||
+        href.startsWith("/quote?") ||
+        href === "/get-my-price" ||
+        href.startsWith("/get-my-price?") ||
+        href === "/es/get-my-price" ||
+        href.startsWith("/es/get-my-price?") ||
+        href === "#quote" ||
+        a.hasAttribute("data-open-quote")
+      ) {
         window.gtag?.("event", "quote_click");
         window.fbq?.("trackCustom", "QuoteClick");
       }

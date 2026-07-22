@@ -101,6 +101,11 @@ const nextConfig: NextConfig = {
       // (UTMs/fbclid) are preserved automatically. "/mudanza" is a Spanish ad.
       { source: "/moving", destination: AD_LP, permanent: false },
       { source: "/mudanza", destination: "/es/ads/meta-orlando-movers", permanent: false },
+      // All quote CTAs / legacy wizards → mobile lead funnel
+      { source: "/quote", destination: "/get-my-price", permanent: false },
+      { source: "/quote/:path*", destination: "/get-my-price", permanent: false },
+      { source: "/get-quote", destination: "/get-my-price", permanent: false },
+      { source: "/get-quote/:path*", destination: "/get-my-price", permanent: false },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       APARTMENT_REDIRECT,
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),
