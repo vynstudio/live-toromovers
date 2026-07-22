@@ -2661,6 +2661,89 @@ html[data-quote-open="1"] .sticky-cta {
   margin: 0 0 10px;
 }
 
+/* ── Post-contact: dock form to bottom thumb zone (mobile) ── */
+html[data-lca-dock="1"] {
+  /* Room so content isn't trapped under the docked card */
+  --lca-dock-h: min(72vh, 560px);
+}
+html[data-lca-dock="1"] .lca-page {
+  padding-bottom: calc(var(--lca-dock-h) + 24px + env(safe-area-inset-bottom));
+}
+html[data-lca-dock="1"] .lca-sticky {
+  display: none !important;
+}
+html[data-lca-dock="1"] .lca-card {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  z-index: 60;
+  max-height: var(--lca-dock-h);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  margin: 0;
+  border-radius: 18px;
+  box-shadow:
+    0 -12px 48px rgba(0, 0, 0, 0.55),
+    0 8px 24px rgba(0, 0, 0, 0.35);
+  padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+}
+html[data-lca-dock="1"] .lca-card-kicker {
+  display: none;
+}
+html[data-lca-dock="1"] .lca-hero-copy {
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+html[data-lca-dock="1"] .lca-options-focus {
+  padding-bottom: 4px;
+}
+/* Pull options toward the lower part of the docked card */
+html[data-lca-dock="1"] .lca-docked-inner .lca-form.lca-focus {
+  display: flex;
+  flex-direction: column;
+  min-height: min(52vh, 420px);
+}
+html[data-lca-dock="1"] .lca-docked-inner .lca-form.lca-focus .lca-options-focus {
+  margin-top: auto;
+}
+html[data-lca-dock="1"] .lca-docked-inner .lca-back-solo {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+@media (min-width: 760px) {
+  /* Desktop: keep card in the grid column; no fixed dock */
+  html[data-lca-dock="1"] .lca-card {
+    position: sticky;
+    top: 72px;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    max-height: none;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
+  html[data-lca-dock="1"] .lca-page {
+    padding-bottom: 0;
+  }
+  html[data-lca-dock="1"] .lca-hero-copy {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  html[data-lca-dock="1"] .lca-card-kicker {
+    display: block;
+  }
+  html[data-lca-dock="1"] .lca-docked-inner .lca-form.lca-focus {
+    min-height: 0;
+  }
+  html[data-lca-dock="1"] .lca-docked-inner .lca-form.lca-focus .lca-options-focus {
+    margin-top: 0;
+  }
+}
+
 /* Form internals */
 .lca-progress {
   height: 5px;

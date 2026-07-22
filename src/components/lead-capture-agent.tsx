@@ -154,6 +154,53 @@ export function LeadCaptureAgent({
     setPhase(next);
   }
 
+  /** After contact, dock the form near the bottom (thumb zone) and keep it there. */
+  const isQuestion =
+    phase === "when" ||
+    phase === "city" ||
+    phase === "service" ||
+    phase === "size";
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    if (isQuestion) {
+      root.dataset.lcaDock = "1";
+    } else {
+      delete root.dataset.lcaDock;
+    }
+    return () => {
+      delete root.dataset.lcaDock;
+    };
+  }, [isQuestion]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!isQuestion && phase !== "done") return;
+
+    const pinCard = () => {
+      const card = document.getElementById("get-price");
+      if (!card) return;
+      // Fixed dock handles mobile; still scroll so desktop/card stays in view.
+      const stickyReserve = 80;
+      const rect = card.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const targetBottom = vh - stickyReserve;
+      const delta = rect.bottom - targetBottom;
+      if (Math.abs(delta) > 12) {
+        window.scrollBy({ top: delta, behavior: "smooth" });
+      }
+      // Focus first option for a11y without scrolling page to top
+      const firstOpt = card.querySelector<HTMLButtonElement>(
+        ".lca-opt-focus:not(:disabled)",
+      );
+      firstOpt?.focus({ preventScroll: true });
+    };
+
+    const t = window.setTimeout(pinCard, 50);
+    return () => window.clearTimeout(t);
+  }, [phase, isQuestion, animKey]);
+
   function buildNote(kind: "soft" | "full") {
     const priority = isUrgentWhen(whenId)
       ? "🔥 PRIORITY — move THIS WEEK — call ASAP"
@@ -402,7 +449,7 @@ export function LeadCaptureAgent({
         : " · tap one";
 
   return (
-    <div className="lca">
+    <div className={`lca${isQuestion ? " lca-docked-inner" : ""}`}>
       <div className="lca-progress" aria-hidden>
         <span style={{ width: progress }} />
       </div>
