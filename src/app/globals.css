@@ -2279,3 +2279,243 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
   color: var(--ink);
   text-decoration: underline;
 }
+
+/* ==========================================================================
+   Global lead form popup (shared UX with toromoveit.com / go.toromovers.net)
+   ========================================================================== */
+
+.quote-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(16, 28, 58, 0.55);
+  padding: 0;
+}
+
+.quote-modal-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: min(92dvh, 100%);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  color: var(--ink, #0a0a0a);
+}
+
+@media (min-width: 640px) {
+  .quote-modal-root {
+    align-items: center;
+    padding: 16px;
+  }
+  .quote-modal-sheet {
+    border-radius: 16px;
+    max-height: min(88dvh, 720px);
+  }
+}
+
+.quote-modal-handle {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+.quote-modal-handle span {
+  width: 40px;
+  height: 4px;
+  border-radius: 99px;
+  background: #d8d8de;
+}
+@media (min-width: 640px) {
+  .quote-modal-handle { display: none; }
+}
+
+.quote-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 18px 14px;
+  border-bottom: 1px solid #ececf0;
+}
+.quote-modal-eyebrow {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red, #c8102e);
+}
+.quote-modal-head h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.quote-modal-sub {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--muted, #5a5a62);
+  line-height: 1.35;
+}
+.quote-modal-close {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  color: #444;
+  cursor: pointer;
+}
+.quote-modal-close:hover { background: #f3f3f5; }
+
+.quote-modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px;
+}
+
+/* Form inside modal */
+.glf-form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  gap: 0;
+}
+.glf-form > .glf-field,
+.glf-form > .glf-row,
+.glf-form > .glf-error {
+  flex-shrink: 0;
+}
+.glf-form {
+  /* scrollable middle */
+  overflow: hidden;
+}
+.glf-field,
+.glf-row {
+  margin-bottom: 14px;
+}
+.glf-field > span {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.glf-opt {
+  font-weight: 400;
+  font-style: normal;
+  color: var(--muted, #6b6b72);
+}
+.glf-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid #d8d8de;
+  border-radius: 10px;
+  font-size: 16px; /* prevent iOS zoom */
+  background: #fff;
+  color: inherit;
+  box-sizing: border-box;
+}
+.glf-input:focus {
+  outline: 2px solid color-mix(in srgb, var(--red, #c8102e) 35%, transparent);
+  border-color: var(--red, #c8102e);
+}
+.glf-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 480px) {
+  .glf-row { grid-template-columns: 1fr 1fr; }
+}
+.glf-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.glf-pill {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #d8d8de;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: inherit;
+}
+.glf-pill.on {
+  background: var(--navy, #1b2a52);
+  border-color: var(--navy, #1b2a52);
+  color: #fff;
+}
+.glf-error {
+  color: var(--red, #c8102e);
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+.glf-error a { color: inherit; font-weight: 600; }
+
+/* Scrollable fields + sticky submit */
+.glf-form {
+  padding-top: 14px;
+}
+.glf-sticky {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px));
+  background: #fff;
+  border-top: 1px solid #ececf0;
+}
+.glf-submit {
+  width: 100%;
+  min-height: 52px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.glf-consent {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--muted, #6b6b72);
+  text-align: center;
+}
+.glf-success {
+  padding: 20px 4px 28px;
+  text-align: center;
+}
+.glf-success h3 {
+  margin: 0 0 10px;
+  font-size: 1.35rem;
+}
+.glf-success p {
+  margin: 0 0 16px;
+  color: var(--muted, #5a5a62);
+  line-height: 1.5;
+}
+.glf-success a { color: var(--red, #c8102e); font-weight: 600; }
+.glf-call {
+  width: 100%;
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide mobile sticky bar while modal open */
+html[data-quote-open="1"] .sticky-cta {
+  display: none !important;
+}

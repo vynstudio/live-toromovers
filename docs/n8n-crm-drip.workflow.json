@@ -1,0 +1,136 @@
+{
+  "name": "Toro Movers — CRM follow-up drip (1h / 24h / 72h)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "toro-crm-drip",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "wh",
+      "name": "Webhook CRM lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-900, 300],
+      "webhookId": "toro-crm-drip",
+      "notes": "Point N8N_CRM_WEBHOOK_URL or funnel webhook here. Expects firstName, email?, phone?, lang?, funnel?, consentSms?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b = $input.first().json.body || $input.first().json;\nconst firstName = b.firstName || (b.name || 'there').split(' ')[0];\nreturn [{ json: {\n  firstName,\n  email: b.email || '',\n  phone: b.phone || '',\n  lang: b.lang === 'es' ? 'es' : 'en',\n  funnel: b.funnel || 'full-service',\n  consentSms: !!(b.consentSms || b.smsConsent),\n  base: 'https://toromovers.net'\n}}];"
+      },
+      "id": "norm",
+      "name": "Normalize",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-680, 300]
+    },
+    {
+      "parameters": { "amount": 1, "unit": "hours" },
+      "id": "w1",
+      "name": "Wait 1h",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [-460, 300],
+      "webhookId": "wait-1h"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.base }}/api/crm/sequences/run",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "x-toro-secret", "value": "={{ $env.N8N_WEBHOOK_SECRET }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ sequence: 'followup_1h', firstName: $json.firstName, email: $json.email || undefined, phone: $json.phone || undefined, lang: $json.lang, funnel: $json.funnel, channels: $json.consentSms ? ['email','sms'] : ['email'] }) }}",
+        "options": {}
+      },
+      "id": "s1",
+      "name": "Run followup_1h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-240, 300],
+      "continueOnFail": true
+    },
+    {
+      "parameters": { "amount": 23, "unit": "hours" },
+      "id": "w2",
+      "name": "Wait 23h",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [-20, 300],
+      "webhookId": "wait-23h"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Normalize').first().json.base }}/api/crm/sequences/run",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "x-toro-secret", "value": "={{ $env.N8N_WEBHOOK_SECRET }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ sequence: 'followup_24h', firstName: $('Normalize').first().json.firstName, email: $('Normalize').first().json.email || undefined, phone: $('Normalize').first().json.phone || undefined, lang: $('Normalize').first().json.lang, funnel: $('Normalize').first().json.funnel, channels: $('Normalize').first().json.consentSms ? ['email','sms'] : ['email'] }) }}",
+        "options": {}
+      },
+      "id": "s2",
+      "name": "Run followup_24h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [200, 300],
+      "continueOnFail": true
+    },
+    {
+      "parameters": { "amount": 48, "unit": "hours" },
+      "id": "w3",
+      "name": "Wait 48h",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [420, 300],
+      "webhookId": "wait-48h"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Normalize').first().json.base }}/api/crm/sequences/run",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "x-toro-secret", "value": "={{ $env.N8N_WEBHOOK_SECRET }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ sequence: 'followup_72h', firstName: $('Normalize').first().json.firstName, email: $('Normalize').first().json.email || undefined, phone: $('Normalize').first().json.phone || undefined, lang: $('Normalize').first().json.lang, funnel: $('Normalize').first().json.funnel, channels: $('Normalize').first().json.consentSms ? ['email','sms'] : ['email'] }) }}",
+        "options": {}
+      },
+      "id": "s3",
+      "name": "Run followup_72h",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [640, 300],
+      "continueOnFail": true
+    }
+  ],
+  "connections": {
+    "Webhook CRM lead": { "main": [[{ "node": "Normalize", "type": "main", "index": 0 }]] },
+    "Normalize": { "main": [[{ "node": "Wait 1h", "type": "main", "index": 0 }]] },
+    "Wait 1h": { "main": [[{ "node": "Run followup_1h", "type": "main", "index": 0 }]] },
+    "Run followup_1h": { "main": [[{ "node": "Wait 23h", "type": "main", "index": 0 }]] },
+    "Wait 23h": { "main": [[{ "node": "Run followup_24h", "type": "main", "index": 0 }]] },
+    "Run followup_24h": { "main": [[{ "node": "Wait 48h", "type": "main", "index": 0 }]] },
+    "Wait 48h": { "main": [[{ "node": "Run followup_72h", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

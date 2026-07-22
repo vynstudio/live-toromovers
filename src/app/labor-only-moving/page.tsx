@@ -188,7 +188,7 @@ export default function LaborOnlyMovingPage() {
               <span>{GOOGLE_RATING} on Google · Family-owned · Bilingual</span>
             </div>
             <div className="fn-hero-cta">
-              <a href="#lead-form" className="fn-btn fn-btn-primary fn-btn-lg">Get My Hourly Quote</a>
+              <a href="#quote" data-open-quote data-source="funnel-labor-hero" data-service="Labor only" className="fn-btn fn-btn-primary fn-btn-lg">Get My Hourly Quote</a>
               <div className="fn-hero-cta-row">
                 <CallCta>Call Now</CallCta>
                 <TextCta>Text Us</TextCta>
@@ -261,7 +261,7 @@ export default function LaborOnlyMovingPage() {
         <h2 className="fn-cta-h2">Need a crew this week?</h2>
         <p>Get your up-front hourly quote in about 30 seconds.</p>
         <div className="fn-cta-band-row">
-          <a href="#lead-form" className="fn-btn fn-btn-primary fn-btn-lg">Get Labor Help Now</a>
+          <a href="#quote" data-open-quote data-source="funnel-labor-band" data-service="Labor only" className="fn-btn fn-btn-primary fn-btn-lg">Get Labor Help Now</a>
           <CallCta className="fn-btn fn-btn-ghost-light">Call Now — {PHONE_DISPLAY}</CallCta>
         </div>
       </section>
@@ -283,7 +283,7 @@ export default function LaborOnlyMovingPage() {
       {/* STICKY MOBILE CTA */}
       <div className="fn-sticky" role="region" aria-label="Quick contact">
         <CallCta className="fn-sticky-call">📞 Call</CallCta>
-        <a href="#lead-form" className="fn-sticky-quote">Check Availability</a>
+        <a href="#quote" data-open-quote data-source="funnel-labor-sticky" data-service="Labor only" className="fn-sticky-quote">Check Availability</a>
       </div>
     </main>
   );

@@ -192,10 +192,10 @@ export default function ApartmentMoversOrlandoPage() {
               The clock stops when the job ends.
             </p>
             <div className="city-hero-cta">
-              <Link href="/quote" className="btn btn-primary">
+              <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
                 Get my quote
                 <span className="arrow" aria-hidden />
-              </Link>
+              </a>
               <a href={PHONE_TEL} className="btn btn-secondary">
                 Call {PHONE_DISPLAY}
               </a>
@@ -366,10 +366,10 @@ export default function ApartmentMoversOrlandoPage() {
                 Family-owned · Bilingual crew.
               </p>
               <div className="city-hero-cta" style={{ marginTop: 24 }}>
-                <Link href="/quote" className="btn btn-primary">
+                <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
                   Get my free quote
                   <span className="arrow" aria-hidden />
-                </Link>
+                </a>
                 <a href={PHONE_TEL} className="btn btn-secondary">
                   Call {PHONE_DISPLAY}
                 </a>

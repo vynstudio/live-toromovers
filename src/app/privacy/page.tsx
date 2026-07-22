@@ -35,11 +35,13 @@ export default function PrivacyPage() {
         Privacy policy
       </h1>
       <div style={{ display: "grid", gap: "1rem", lineHeight: 1.6, color: "var(--text, #1a1a1a)" }}>
-        <p>Last updated: July 14, 2026</p>
+        <p>Last updated: July 15, 2026</p>
         <p>
-          {BUSINESS_NAME} (&ldquo;we&rdquo;, &ldquo;us&rdquo;) operates toromovers.net
-          to provide moving quotes and bookings in Central Florida. This policy
-          explains what we collect and how we use it.
+          {BUSINESS_NAME} is a DBA of{" "}
+          <strong>Diler Dynamics Group LLC</strong> (&ldquo;we&rdquo;,
+          &ldquo;us&rdquo;). We operate toromovers.net to provide moving quotes
+          and bookings in Central Florida. This policy explains what we collect
+          and how we use it.
         </p>
         <h2 style={{ fontSize: "1.15rem", fontWeight: 700, marginTop: "0.5rem" }}>
           What we collect
@@ -73,9 +75,19 @@ export default function PrivacyPage() {
           Cookies
         </h2>
         <p>
-          This site may use cookies set by advertising platforms (such as the
-          Meta pixel) to measure ad performance. You can control cookies through
-          your browser settings.
+          We use cookies and similar technologies on this site. That includes
+          cookies set by advertising and measurement platforms (such as the Meta
+          pixel) to measure ad performance, and cookies needed for basic site
+          function. You can control cookies through your browser settings.
+          Continuing to use the site means you understand we collect cookies for
+          these purposes.
+        </p>
+        <h2 style={{ fontSize: "1.15rem", fontWeight: 700, marginTop: "0.5rem" }}>
+          Business identity
+        </h2>
+        <p>
+          Toro Movers is a DBA of Diler Dynamics Group LLC. Legal and privacy
+          requests may be directed to the contact information below.
         </p>
         <h2 style={{ fontSize: "1.15rem", fontWeight: 700, marginTop: "0.5rem" }}>
           Contact

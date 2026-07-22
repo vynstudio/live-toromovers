@@ -160,10 +160,10 @@ export function GuidePage({ guide }: { guide: GuideData }) {
               </p>
               <p className="city-subline">{guide.intro}</p>
               <div className="city-hero-cta">
-                <Link href="/quote" className="btn btn-primary">
+                <a href="#quote" data-open-quote data-source="guide-hero" className="btn btn-primary">
                   Get my free estimate
                   <span className="arrow" aria-hidden />
-                </Link>
+                </a>
               </div>
             </div>
           </section>
@@ -311,16 +311,16 @@ export function GuidePage({ guide }: { guide: GuideData }) {
                   <p key={i} className="guide-p">{p}</p>
                 ))}
                 <p className="guide-p">
-                  <Link href={guide.cta.href} className="guide-cta-link">
+                  <a href="#quote" data-open-quote data-source="guide-cta" className="guide-cta-link">
                     {guide.cta.linkText}
-                  </Link>
+                  </a>
                   {guide.cta.after}
                 </p>
                 <div className="city-hero-cta" style={{ marginTop: 8 }}>
-                  <Link href={guide.cta.href} className="btn btn-primary">
+                  <a href="#quote" data-open-quote data-source="guide-cta-btn" className="btn btn-primary">
                     {guide.cta.linkText}
                     <span className="arrow" aria-hidden />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </section>

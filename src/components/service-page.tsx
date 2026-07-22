@@ -73,10 +73,15 @@ export function ServicePage({ service }: { service: ServiceData }) {
             <h1 className="city-h1">{service.h1}</h1>
             <p className="city-subline">{service.subline}</p>
             <div className="city-hero-cta">
-              <Link href="/quote" className="btn btn-primary">
+              <a
+                href="#quote"
+                data-open-quote
+                data-source="service-hero"
+                className="btn btn-primary"
+              >
                 Get my free estimate
                 <span className="arrow" aria-hidden />
-              </Link>
+              </a>
             </div>
             <div className="city-hero-meta">
               <span className="city-stars" aria-hidden>★★★★★</span>

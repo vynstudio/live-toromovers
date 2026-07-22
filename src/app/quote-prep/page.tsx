@@ -132,10 +132,10 @@ export default function QuotePrepPage() {
           <h2 className="magnet-h2">Ready?</h2>
           <p>You’ve got what you need — let’s price your move.</p>
           <div className="magnet-cta-row">
-            <Link href="/quote" className="btn btn-primary">
+            <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
               Get My Price
               <span className="arrow" aria-hidden />
-            </Link>
+            </a>
             <a href={PHONE_TEL} className="btn btn-outline">
               Or call {PHONE_DISPLAY}
             </a>

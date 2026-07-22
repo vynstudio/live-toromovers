@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useLang } from "./lang-provider";
 import { TextCta } from "./funnel-tracking";
 import { PHONE_TEL, PHONE_DISPLAY } from "@/lib/contact";
+import { openQuote } from "@/lib/open-quote";
 
 export function StickyCta() {
   const { t } = useLang();
@@ -12,9 +12,15 @@ export function StickyCta() {
       <a href={PHONE_TEL} className="call-cta" aria-label={`Call ${PHONE_DISPLAY}`}>
         📞 {t.nav.callNow}
       </a>
-      <Link href="/quote" className="quote-cta">
+      <button
+        type="button"
+        className="quote-cta"
+        data-open-quote
+        data-source="sticky-cta"
+        onClick={() => openQuote({ source: "sticky-cta" })}
+      >
         {t.nav.quote} →
-      </Link>
+      </button>
       <TextCta className="text-cta">💬 {t.nav.textUs}</TextCta>
     </div>
   );

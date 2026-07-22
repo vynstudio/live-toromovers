@@ -191,6 +191,8 @@ type ContentShape = {
     callNow: string;
     legal: string;
     privacy: string;
+    dba: string;
+    cookies: string;
   };
   quote: {
     title: string;
@@ -396,8 +398,11 @@ export const content: { en: ContentShape; es: ContentShape } = {
       tagline: "Family-owned full-service movers across Central Florida.",
       serviceArea: "Service area",
       callNow: "Call now",
-      legal: "Toro Movers LLC · Family-owned · Bilingual",
+      legal: "Family-owned · Bilingual",
       privacy: "Privacy policy",
+      dba: "Toro Movers is a DBA of Diler Dynamics Group LLC.",
+      cookies:
+        "We use cookies and similar technologies (including Meta) to measure ads and improve this site.",
     },
     quote: {
       title: "Free quote",
@@ -423,8 +428,9 @@ export const content: { en: ContentShape; es: ContentShape } = {
       phone: "Phone",
       review: "Review your request",
       confirm: "Send my quote request",
-      successTitle: "Got it.",
-      successBody: "We'll review your details and send a written quote the same day. For anything urgent, call (689) 600-2720.",
+      successTitle: "Quote request received",
+      successBody:
+        "A Toro Movers owner will call or text you today with your written quote. Need us now? Call (689) 600-2720.",
       back: "Back",
       next: "Continue",
       submit: "Send",
@@ -602,8 +608,11 @@ export const content: { en: ContentShape; es: ContentShape } = {
       tagline: "Mudanceros familiares de servicio completo en Florida Central.",
       serviceArea: "Área de servicio",
       callNow: "Llamar ahora",
-      legal: "Toro Movers LLC · Familiares · Bilingües",
+      legal: "Familiares · Bilingües",
       privacy: "Política de privacidad",
+      dba: "Toro Movers es un DBA de Diler Dynamics Group LLC.",
+      cookies:
+        "Usamos cookies y tecnologías similares (incluidas las de Meta) para medir anuncios y mejorar este sitio.",
     },
     quote: {
       title: "Cotización gratis",
@@ -629,8 +638,9 @@ export const content: { en: ContentShape; es: ContentShape } = {
       phone: "Teléfono",
       review: "Revisa tu solicitud",
       confirm: "Enviar mi solicitud",
-      successTitle: "Recibido.",
-      successBody: "Revisaremos tus detalles y enviaremos una cotización por escrito el mismo día. Para algo urgente, llama al (689) 600-2720.",
+      successTitle: "Solicitud de cotización recibida",
+      successBody:
+        "Un dueño de Toro Movers te llamará o te escribirá hoy con tu cotización por escrito. ¿Nos necesitas ahora? Llama al (689) 600-2720.",
       back: "Atrás",
       next: "Continuar",
       submit: "Enviar",

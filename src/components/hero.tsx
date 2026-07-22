@@ -3,6 +3,7 @@
 import { useLang } from "./lang-provider";
 import Link from "next/link";
 import { PHONE_TEL } from "@/lib/contact";
+import { openQuote } from "@/lib/open-quote";
 
 // Single static hero image (WebP @1440px). Originals kept in
 // .image-backups/hero/ (gitignored) if a re-export is ever needed.
@@ -42,10 +43,16 @@ export function Hero() {
             )}
           </p>
           <div className="hero-cta-row">
-            <Link href="/quote" className="btn btn-primary">
+            <button
+              type="button"
+              className="btn btn-primary"
+              data-open-quote
+              data-source="hero"
+              onClick={() => openQuote({ source: "hero" })}
+            >
               {lang === "es" ? "Ver mi precio" : "Get my price"}
               <span className="arrow" aria-hidden />
-            </Link>
+            </button>
             <a href={PHONE_TEL} className="btn btn-outline">
               {t.hero.ctaSecondary}
             </a>

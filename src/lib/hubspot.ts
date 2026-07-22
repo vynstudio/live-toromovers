@@ -19,10 +19,12 @@ export const HS_STAGE = {
   reviewObtained: "3825293016",
 } as const;
 
-// n8n webhook that the Telegram stage buttons open (not secret). Tapping a
-// button moves that lead's deal to the chosen stage. See
-// docs/n8n-telegram-stage.workflow.json.
-const STAGE_HOOK = "https://n8n-production-d3d0.up.railway.app/webhook/toro-stage";
+// Stage buttons open the site CRM stage endpoint (primary) or legacy n8n hook.
+// Prefer NEXT_PUBLIC_SITE_URL so stage moves work without n8n.
+// Legacy n8n: docs/n8n-telegram-stage.workflow.json
+const STAGE_HOOK =
+  process.env.TELEGRAM_STAGE_HOOK_URL ||
+  `${process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net"}/api/crm/stage`;
 
 /** Inline-keyboard (URL buttons) for the internal Telegram lead alert so the
  *  team can move the deal's stage with one tap. Returns undefined without an

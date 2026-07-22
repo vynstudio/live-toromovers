@@ -141,10 +141,10 @@ export default function ChecklistPage() {
             Worked through the list? Get an up-front hourly quote in about 60
             seconds — no obligation.
           </p>
-          <Link href="/quote" className="btn btn-primary">
+          <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
             Get my free estimate
             <span className="arrow" aria-hidden />
-          </Link>
+          </a>
         </section>
 
         <div className="checklist-footer">

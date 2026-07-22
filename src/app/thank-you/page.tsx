@@ -4,9 +4,9 @@ import { ThankYouTracking } from "@/components/thank-you-tracking";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: "Thanks — we'll call you shortly",
+  title: "Quote request received",
   description:
-    "Your moving quote request is in. A Toro Movers team member will call you within minutes to confirm details and lock in your slot.",
+    "Your moving quote request is in. A Toro Movers owner will call or text you today to confirm details and pricing.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/thank-you" },
 };
@@ -17,14 +17,14 @@ export default function ThankYouPage() {
       <ThankYouTracking />
       <div className="thanks-card">
         <div className="thanks-check" aria-hidden>✓</div>
-        <p className="thanks-eyebrow">Your request is in</p>
-        <h1 className="thanks-h1">Thanks — we'll call you shortly.</h1>
+        <p className="thanks-eyebrow">Quote request received</p>
+        <h1 className="thanks-h1">A Toro Movers owner will call or text you today.</h1>
         <p className="thanks-lede">
-          A Toro Movers team member is reviewing your move and will call you
-          within a few minutes to confirm the details and book your slot.
+          We have your move details. Expect a call or text today with your
+          quote and next steps to book the date.
         </p>
         <p className="thanks-lede">
-          You'll also get a confirmation email and a text from us.
+          You will also get a confirmation email and a text from us.
         </p>
 
         <div className="thanks-cta-row">

@@ -41,10 +41,10 @@ export default function ThankYouChecklistPage() {
           surprises.
         </p>
         <div className="thanks-cta-row">
-          <Link href="/quote" className="btn btn-primary">
+          <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
             Request a Quote
             <span className="arrow" aria-hidden />
-          </Link>
+          </a>
           <a href={PHONE_TEL} className="btn btn-outline">
             Call us now — {PHONE_DISPLAY}
           </a>

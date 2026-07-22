@@ -89,12 +89,19 @@ export function Footer() {
           </div>
         </nav>
 
-        <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} {LEGAL_NAME}. {t.footer.legal}.</span>
-          <span style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-            <Link href="/privacy">{t.footer.privacy}</Link>
-            <span>{lang === "es" ? "Hablamos español" : "Bilingual · Hablamos español"}</span>
+        <div className="footer-bottom" style={{ flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+          <span className="text-small" style={{ opacity: 0.85 }}>{t.footer.dba}</span>
+          <span className="text-small" style={{ opacity: 0.85 }}>
+            {t.footer.cookies}{" "}
+            <Link href="/privacy">{t.footer.privacy}</Link>.
           </span>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 16, width: "100%", justifyContent: "space-between", marginTop: 4 }}>
+            <span>© {new Date().getFullYear()} Toro Movers / Diler Dynamics Group LLC. {t.footer.legal}.</span>
+            <span style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+              <Link href="/privacy">{t.footer.privacy}</Link>
+              <span>{lang === "es" ? "Hablamos español" : "Bilingual · Hablamos español"}</span>
+            </span>
+          </div>
         </div>
       </div>
     </footer>

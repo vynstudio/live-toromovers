@@ -110,10 +110,15 @@ export function CityPage({ city }: { city: CityData }) {
             <h1 className="city-h1">{city.h1}</h1>
             <p className="city-subline">{city.subline}</p>
             <div className="city-hero-cta">
-              <Link href="/quote" className="btn btn-primary">
+              <a
+                href="#quote"
+                data-open-quote
+                data-source="city-hero"
+                className="btn btn-primary"
+              >
                 Get my free estimate
                 <span className="arrow" aria-hidden />
-              </Link>
+              </a>
             </div>
             <div className="city-hero-meta">
               <span className="city-stars" aria-hidden>★★★★★</span>

@@ -139,7 +139,7 @@ export default function FullServiceMovingPage() {
               <span>{GOOGLE_RATING} on Google · Family-owned · Bilingual</span>
             </div>
             <div className="fn-hero-cta">
-              <a href="#lead-form" className="fn-btn fn-btn-primary fn-btn-lg">Get My Quote</a>
+              <a href="#quote" data-open-quote data-source="funnel-fs-hero" data-service="Full-service move" className="fn-btn fn-btn-primary fn-btn-lg">Get My Quote</a>
               <div className="fn-hero-cta-row">
                 <CallCta>Call Now</CallCta>
                 <TextCta>Text Us</TextCta>
@@ -188,7 +188,7 @@ export default function FullServiceMovingPage() {
         <h2 className="fn-cta-h2">Ready for a stress-free move?</h2>
         <p>Get up-front full-service pricing in about 30 seconds.</p>
         <div className="fn-cta-band-row">
-          <a href="#lead-form" className="fn-btn fn-btn-primary fn-btn-lg">Request Full-Service Pricing</a>
+          <a href="#quote" data-open-quote data-source="funnel-fs-band" data-service="Full-service move" className="fn-btn fn-btn-primary fn-btn-lg">Request Full-Service Pricing</a>
           <CallCta className="fn-btn fn-btn-ghost-light">Call Now — {PHONE_DISPLAY}</CallCta>
         </div>
       </section>
@@ -210,7 +210,7 @@ export default function FullServiceMovingPage() {
       {/* STICKY MOBILE CTA */}
       <div className="fn-sticky" role="region" aria-label="Quick contact">
         <CallCta className="fn-sticky-call">📞 Call</CallCta>
-        <a href="#lead-form" className="fn-sticky-quote">Check Availability</a>
+        <a href="#quote" data-open-quote data-source="funnel-fs-sticky" data-service="Full-service move" className="fn-sticky-quote">Check Availability</a>
       </div>
     </main>
   );
