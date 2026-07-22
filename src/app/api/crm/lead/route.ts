@@ -19,9 +19,11 @@ export async function POST(req: Request) {
     Boolean(secret) && req.headers.get("x-lead-secret") === secret;
 
   if (!isInternal) {
+    // Public quote form: generous enough for retries / multi-tab, still
+    // blocks SMS/email spam bombs. Internal secret bypasses entirely.
     const rl = await rateLimit({
       key: `crm:lead:${clientIp(req)}`,
-      limit: 8,
+      limit: 30,
       windowMs: 10 * 60 * 1000,
     });
     if (!rl.ok) {

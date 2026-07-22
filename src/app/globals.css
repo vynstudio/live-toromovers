@@ -2379,28 +2379,28 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
 .quote-modal-body {
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow: hidden; /* scroll lives on .glf-scroll */
   display: flex;
   flex-direction: column;
-  padding: 0 18px;
+  padding: 0;
 }
 
-/* Form inside modal */
+/* Form inside modal — scrollable fields + sticky submit */
 .glf-form {
   display: flex;
   flex-direction: column;
   min-height: 0;
   flex: 1;
   gap: 0;
+  padding: 0;
 }
-.glf-form > .glf-field,
-.glf-form > .glf-row,
-.glf-form > .glf-error {
-  flex-shrink: 0;
-}
-.glf-form {
-  /* scrollable middle */
-  overflow: hidden;
+.glf-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 14px 18px 8px;
 }
 .glf-field,
 .glf-row {
@@ -2468,15 +2468,10 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
 }
 .glf-error a { color: inherit; font-weight: 600; }
 
-/* Scrollable fields + sticky submit */
-.glf-form {
-  padding-top: 14px;
-}
 .glf-sticky {
-  position: sticky;
-  bottom: 0;
+  flex-shrink: 0;
   margin-top: auto;
-  padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px));
+  padding: 12px 18px max(12px, env(safe-area-inset-bottom, 0px));
   background: #fff;
   border-top: 1px solid #ececf0;
 }
@@ -2494,7 +2489,7 @@ nav.top { padding-top: max(18px, env(safe-area-inset-top, 0)); }
   text-align: center;
 }
 .glf-success {
-  padding: 20px 4px 28px;
+  padding: 20px 18px 28px;
   text-align: center;
 }
 .glf-success h3 {

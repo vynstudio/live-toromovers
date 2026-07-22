@@ -96,6 +96,7 @@ export function GlobalLeadForm({
   const [jobType, setJobType] = useState("");
   const [phone, setPhone] = useState("");
   const [fieldError, setFieldError] = useState("");
+  /** Honeypot — obscure name so password managers do not autofill it. */
   const [hp, setHp] = useState("");
   const startRef = useRef(Date.now());
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
@@ -105,7 +106,12 @@ export function GlobalLeadForm({
     e.preventDefault();
     setFieldError("");
     const fd = new FormData(e.currentTarget);
-    if (String(fd.get("company") || "")) return;
+
+    // Bot honeypot filled → fake success (do not silently no-op).
+    if (String(fd.get("toro_hp") || hp || "").trim()) {
+      setStatus("sent");
+      return;
+    }
 
     const name = String(fd.get("name") || "").trim();
     const digits = phoneDigits(phone);
@@ -144,7 +150,7 @@ export function GlobalLeadForm({
         body: JSON.stringify({
           name,
           phone: digits,
-          email,
+          email: email || undefined,
           funnel,
           source,
           serviceType: [serviceType, jobType].filter(Boolean).join(" · "),
@@ -162,11 +168,29 @@ export function GlobalLeadForm({
           consentEmail: true,
           landingPage:
             typeof window !== "undefined" ? window.location.pathname : "/",
-          hp,
-          elapsedMs: Date.now() - startRef.current,
+          hp: "",
+          elapsedMs: Math.max(Date.now() - startRef.current, 0),
         }),
       });
-      if (!res.ok) throw new Error(`status ${res.status}`);
+      const data = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        spam?: boolean;
+        error?: string;
+      } | null;
+
+      if (res.status === 429) {
+        setFieldError(
+          es
+            ? "Demasiados intentos. Espera un momento o llámanos."
+            : "Too many tries. Wait a moment or call us.",
+        );
+        setStatus("error");
+        return;
+      }
+      if (!res.ok) {
+        throw new Error(data?.error || `status ${res.status}`);
+      }
+      // spam:true is intentional soft-drop — show success to bots
       try {
         localStorage.setItem("toro-lead-sent", "1");
       } catch {
@@ -201,9 +225,10 @@ export function GlobalLeadForm({
 
   return (
     <form className="glf-form" onSubmit={handleSubmit} noValidate>
+      {/* Honeypot: not named company/email/name — browsers autofill those. */}
       <input
         type="text"
-        name="company"
+        name="toro_hp"
         tabIndex={-1}
         autoComplete="off"
         className="hp-field"
@@ -212,91 +237,93 @@ export function GlobalLeadForm({
         onChange={(e) => setHp(e.target.value)}
       />
 
-      <label className="glf-field">
-        <span>{es ? "Nombre" : "Name"}</span>
-        <input
-          id={`${idPrefix}-name`}
-          name="name"
-          required
-          autoComplete="name"
-          className="glf-input"
-        />
-      </label>
-
-      <div className="glf-row">
+      <div className="glf-scroll">
         <label className="glf-field">
-          <span>{es ? "Teléfono" : "Phone"}</span>
+          <span>{es ? "Nombre" : "Name"}</span>
           <input
-            id={`${idPrefix}-phone`}
-            name="phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
+            id={`${idPrefix}-name`}
+            name="name"
             required
-            value={phone}
-            onChange={(e) => setPhone(formatPhone(e.target.value))}
-            placeholder={PHONE_DISPLAY}
+            autoComplete="name"
             className="glf-input"
-            aria-invalid={phone.length > 0 && !phoneOk}
           />
         </label>
+
+        <div className="glf-row">
+          <label className="glf-field">
+            <span>{es ? "Teléfono" : "Phone"}</span>
+            <input
+              id={`${idPrefix}-phone`}
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              required
+              value={phone}
+              onChange={(e) => setPhone(formatPhone(e.target.value))}
+              placeholder={PHONE_DISPLAY}
+              className="glf-input"
+              aria-invalid={phone.length > 0 && !phoneOk}
+            />
+          </label>
+          <label className="glf-field">
+            <span>
+              {es ? "Email" : "Email"}{" "}
+              <em className="glf-opt">{es ? "(opcional)" : "(optional)"}</em>
+            </span>
+            <input
+              id={`${idPrefix}-email`}
+              name="email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              className="glf-input"
+            />
+          </label>
+        </div>
+
         <label className="glf-field">
-          <span>
-            {es ? "Email" : "Email"}{" "}
-            <em className="glf-opt">{es ? "(opcional)" : "(optional)"}</em>
-          </span>
+          <span>{es ? "Fecha de mudanza" : "Move date"}</span>
           <input
-            id={`${idPrefix}-email`}
-            name="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
+            id={`${idPrefix}-date`}
+            name="moveDate"
+            type="date"
+            min={today}
             className="glf-input"
           />
         </label>
+
+        <div className="glf-field">
+          <span>{es ? "Servicio" : "Service"}</span>
+          <Pills
+            options={services}
+            value={serviceType}
+            onChange={setServiceType}
+            label={es ? "Servicio" : "Service"}
+          />
+        </div>
+
+        <div className="glf-field">
+          <span>{es ? "Tipo de mudanza" : "Moving"}</span>
+          <Pills
+            options={jobs}
+            value={jobType}
+            onChange={setJobType}
+            label={es ? "Tipo" : "Moving"}
+          />
+        </div>
+
+        {(fieldError || status === "error") && (
+          <p className="glf-error" role="alert">
+            {fieldError || (
+              <>
+                {es ? "Algo falló. Llama" : "Something went wrong. Call"}{" "}
+                <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>.
+              </>
+            )}
+          </p>
+        )}
       </div>
-
-      <label className="glf-field">
-        <span>{es ? "Fecha de mudanza" : "Move date"}</span>
-        <input
-          id={`${idPrefix}-date`}
-          name="moveDate"
-          type="date"
-          min={today}
-          className="glf-input"
-        />
-      </label>
-
-      <div className="glf-field">
-        <span>{es ? "Servicio" : "Service"}</span>
-        <Pills
-          options={services}
-          value={serviceType}
-          onChange={setServiceType}
-          label={es ? "Servicio" : "Service"}
-        />
-      </div>
-
-      <div className="glf-field">
-        <span>{es ? "Tipo de mudanza" : "Moving"}</span>
-        <Pills
-          options={jobs}
-          value={jobType}
-          onChange={setJobType}
-          label={es ? "Tipo" : "Moving"}
-        />
-      </div>
-
-      {(fieldError || status === "error") && (
-        <p className="glf-error" role="alert">
-          {fieldError || (
-            <>
-              {es ? "Algo falló. Llama" : "Something went wrong. Call"}{" "}
-              <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>.
-            </>
-          )}
-        </p>
-      )}
 
       <div className="glf-sticky">
         <button
