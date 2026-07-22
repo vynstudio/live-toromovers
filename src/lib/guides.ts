@@ -641,7 +641,7 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
     {
       h2: "The Minimum Hours Requirement",
       blocks: [
-        { kind: "p", text: "Moving companies in Orlando set a minimum booking to account for crew scheduling and drive time. Toro's minimums are straightforward: 2 hours for labor-only jobs, 3 hours when a truck is included. If your studio apartment takes 90 minutes to load and unload, you pay for 2 hours on a labor-only booking." },
+        { kind: "p", text: "Moving companies in Orlando set a minimum booking to account for crew scheduling and drive time. Toro's minimums are straightforward: 2 hours for labor-only jobs, 4 hours when a truck is included. If your studio apartment takes 90 minutes to load and unload, you pay for 2 hours on a labor-only booking." },
         { kind: "p", text: "After the minimum, billing continues by the hour. Ask any mover how they handle partial hours — whether they round up to the nearest 30 minutes or bill in 15-minute increments. On a job that runs 3 hours and 20 minutes, that difference shows up on your bill." },
       ],
     },
@@ -713,9 +713,9 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
           caption: "Full-service move types and typical crew sizes.",
           headers: ["Move Type", "Crew", "Est. Hours"],
           rows: [
-            ["Studio", "2 movers + truck", "3 hrs (min)"],
-            ["1-BR (furnished)", "2 movers + truck", "3 – 4 hrs"],
-            ["2-BR", "3 movers + truck", "4 – 5 hrs"],
+            ["Studio", "2 movers + truck", "4 hrs (min)"],
+            ["1-BR (furnished)", "2 movers + truck", "4 – 5 hrs"],
+            ["2-BR", "3 movers + truck", "4 – 6 hrs"],
             ["3-BR", "3 movers + truck", "6 – 8 hrs"],
           ],
         } },

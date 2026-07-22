@@ -20,10 +20,10 @@ const LO = PRICING.laborOnly;
 
 /** Typical hour ranges by home size (full-service, 2 movers + truck). */
 const FS_HOURS: Record<Exclude<HomeSize, "">, [number, number]> = {
-  "studio-1br": [3, 5],
+  "studio-1br": [4, 5], // 4-hr full-service minimum
   "2br": [4, 7],
   "3br+": [6, 10],
-  office: [3, 6],
+  office: [4, 6],
 };
 
 /** Typical hour ranges for labor-only (2 movers, customer truck). */

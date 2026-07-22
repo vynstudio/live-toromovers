@@ -366,7 +366,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           q: "Do you charge fuel, stair, or travel fees?",
-          a: "No surprises. Hourly pricing from a two-hour minimum (three hours when a truck is included), quoted up-front in 60 seconds. No fuel surcharges, no stair fees, no travel fees inside Central Florida.",
+          a: "No surprises. Hourly pricing from a two-hour minimum (four hours when a truck is included), quoted up-front in 60 seconds. No fuel surcharges, no stair fees, no travel fees inside Central Florida.",
         },
         {
           q: "How big a deposit do you take to lock in the date?",
@@ -576,7 +576,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
         },
         {
           q: "¿Cobran tarifas por gasolina, escaleras o desplazamiento?",
-          a: "Sin sorpresas. Tarifa por hora con mínimo de 2 horas, cotizada por adelantado en 60 segundos. Sin recargo por gasolina, sin tarifa por escaleras, sin tarifa por desplazamiento dentro de Florida Central.",
+          a: "Sin sorpresas. Tarifa por hora con mínimo de 2 horas (4 horas cuando incluye camión), cotizada por adelantado en 60 segundos. Sin recargo por gasolina, sin tarifa por escaleras, sin tarifa por desplazamiento dentro de Florida Central.",
         },
         {
           q: "¿Qué tan grande es el depósito para apartar la fecha?",

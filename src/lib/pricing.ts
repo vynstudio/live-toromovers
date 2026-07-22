@@ -16,10 +16,10 @@ export const PRICING = {
   },
   fullService: {
     label: "Full-service",
-    baseRate: 220, // 2 movers + truck (up to 26 ft), per hour
+    baseRate: 195, // 2 movers + truck (up to 26 ft), per hour
     baseCrew: 2,
-    additionalMover: 110, // per extra mover, per hour
-    minimumHours: 3,
+    additionalMover: 100, // per extra mover, per hour
+    minimumHours: 4,
     truckMaxFt: 26,
   },
   longDistance: {
