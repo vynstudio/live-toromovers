@@ -70,7 +70,7 @@ export default function GetMyPricePage() {
             <em> No hidden fees.</em>
           </h1>
           <p className="lca-lede">
-            Tell us a bit about your move — a real person calls back with
+            Tell us a bit about your move — a team member calls back with
             availability and clear pricing. You never see a surprise bill.
           </p>
           <ul className="lca-bullets">
@@ -124,7 +124,7 @@ export default function GetMyPricePage() {
 
       <section className="lca-bottom-cta">
         <h2>Prefer to talk it through?</h2>
-        <p>We’re real people in Central Florida — not a franchise desk.</p>
+        <p>Family-owned in Central Florida — not a franchise desk.</p>
         <div className="lca-bottom-row">
           <a href={PHONE_TEL} className="fn-btn fn-btn-primary fn-btn-lg">
             Call {PHONE_DISPLAY}

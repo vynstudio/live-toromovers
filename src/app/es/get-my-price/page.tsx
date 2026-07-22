@@ -70,7 +70,7 @@ export default function GetMyPriceEsPage() {
             <em> Sin cargos ocultos.</em>
           </h1>
           <p className="lca-lede">
-            Cuéntanos un poco de tu mudanza — una persona real te llama con
+            Cuéntanos un poco de tu mudanza — un miembro del equipo te llama con
             disponibilidad y un precio claro. Sin sorpresas en la factura.
           </p>
           <ul className="lca-bullets">
@@ -124,7 +124,7 @@ export default function GetMyPriceEsPage() {
 
       <section className="lca-bottom-cta">
         <h2>¿Prefieres hablarlo?</h2>
-        <p>Somos personas reales en Florida Central — no un franquicia.</p>
+        <p>Empresa familiar en Florida Central — no una franquicia.</p>
         <div className="lca-bottom-row">
           <a href={PHONE_TEL} className="fn-btn fn-btn-primary fn-btn-lg">
             Llamar {PHONE_DISPLAY}
