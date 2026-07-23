@@ -2,7 +2,7 @@
 
 /**
  * Get-my-price sales funnel — mirrors toro-sales-funnel.
- * Contact first (name + phone + email) → soft lead → service → ZIPs → size
+ * Contact first (name + phone) → soft lead → service → ZIPs → size
  * → optional specials/details → when → full lead.
  * NEVER shows rates or hour estimates — owner quotes on the call.
  */
@@ -69,6 +69,15 @@ const SIZE_OPTS: { id: Exclude<HomeSize, "">; labelEn: string; labelEs: string }
   { id: "office", labelEn: "Office / storage", labelEs: "Oficina / bodega" },
 ];
 
+/** Uniform Google-review image cards (same size) — contact step only. */
+const GOOGLE_REVIEW_SLIDES = [
+  { src: "/reviews/r1.svg", name: "Stael G." },
+  { src: "/reviews/r2.svg", name: "Olivia H." },
+  { src: "/reviews/r3.svg", name: "Kony C." },
+  { src: "/reviews/r4.svg", name: "Hector L." },
+  { src: "/reviews/r5.svg", name: "Giuseppe F. V." },
+] as const;
+
 function formatPhone(raw: string) {
   const d = String(raw || "")
     .replace(/\D/g, "")
@@ -81,10 +90,6 @@ function formatPhone(raw: string) {
 
 function digits(raw: string) {
   return String(raw || "").replace(/\D/g, "");
-}
-
-function emailOk(v: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v || "").trim());
 }
 
 async function postLead(payload: Record<string, unknown>) {
@@ -112,8 +117,9 @@ export function LeadCaptureAgent({
   const [phase, setPhase] = useState<Phase>("capture");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
   const [smsConsent, setSmsConsent] = useState(true);
+  const [reviewIdx, setReviewIdx] = useState(0);
+  const reviewTrackRef = useRef<HTMLDivElement | null>(null);
   const [service, setService] = useState<ServiceKind | "">(defaultService);
   const [fromZip, setFromZip] = useState("");
   const [toZip, setToZip] = useState("");
@@ -166,7 +172,60 @@ export function LeadCaptureAgent({
 
   const phoneOk = digits(phone).length === 10;
   const nameOk = name.trim().length >= 2;
-  const emailOkVal = emailOk(email);
+
+  // Auto-advance Google review slider on contact step only
+  useEffect(() => {
+    if (phase !== "capture") return;
+    const id = window.setInterval(() => {
+      setReviewIdx((i) => (i + 1) % GOOGLE_REVIEW_SLIDES.length);
+    }, 3500);
+    return () => window.clearInterval(id);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "capture") return;
+    const track = reviewTrackRef.current;
+    if (!track) return;
+    const card = track.children[reviewIdx] as HTMLElement | undefined;
+    if (card) {
+      track.scrollTo({
+        left: card.offsetLeft - (track.clientWidth - card.clientWidth) / 2,
+        behavior: "smooth",
+      });
+    }
+  }, [reviewIdx, phase]);
+
+  // Keep dots in sync when user swipes the track manually
+  useEffect(() => {
+    if (phase !== "capture") return;
+    const track = reviewTrackRef.current;
+    if (!track) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const kids = Array.from(track.children) as HTMLElement[];
+        if (!kids.length) return;
+        const mid = track.scrollLeft + track.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        kids.forEach((el, i) => {
+          const c = el.offsetLeft + el.clientWidth / 2;
+          const d = Math.abs(c - mid);
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        });
+        setReviewIdx((cur) => (cur === best ? cur : best));
+      });
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      track.removeEventListener("scroll", onScroll);
+    };
+  }, [phase]);
 
   const stepTotal = PHASE_ORDER.length;
   const stepIndex =
@@ -219,14 +278,13 @@ export function LeadCaptureAgent({
     await postLead({
       name: name.trim(),
       phone: digits(phone),
-      email: email.trim(),
       funnel: funnelOf(service || prefillService.current),
       source: "get-my-price",
       serviceType: "Pending qualify",
-      note: "Soft capture (contact first) — still qualifying",
+      note: "Soft capture (contact first · name + phone) — still qualifying",
       lang: es ? "es" : "en",
       consentSms: smsConsent,
-      consentEmail: true,
+      consentEmail: false,
       landingPage:
         typeof window !== "undefined" ? window.location.pathname : "/get-my-price",
       utm: getAttribution(),
@@ -259,7 +317,6 @@ export function LeadCaptureAgent({
         await postLead({
           name: name.trim(),
           phone: digits(phone),
-          email: email.trim(),
           funnel: funnelOf(resolvedSvc),
           source: "get-my-price",
           serviceType: [
@@ -291,7 +348,7 @@ export function LeadCaptureAgent({
             .join(" — "),
           lang: es ? "es" : "en",
           consentSms: softSentRef.current ? false : smsConsent,
-          consentEmail: true,
+          consentEmail: false,
           landingPage:
             typeof window !== "undefined"
               ? window.location.pathname
@@ -314,17 +371,7 @@ export function LeadCaptureAgent({
         setAdvancing(false);
       }
     },
-    [
-      name,
-      phone,
-      email,
-      fromZip,
-      toZip,
-      specials,
-      details,
-      es,
-      smsConsent,
-    ],
+    [name, phone, fromZip, toZip, specials, details, es, smsConsent],
   );
 
   function pickAndAdvance(apply: () => void, next: ActivePhase | "done" | "finish") {
@@ -360,10 +407,6 @@ export function LeadCaptureAgent({
           ? "Ingrese un teléfono de 10 dígitos."
           : "Enter a 10-digit US phone number.",
       );
-      return;
-    }
-    if (!emailOkVal) {
-      setError(es ? "Ingrese un email válido." : "Enter a valid email.");
       return;
     }
     if (!smsConsent) {
@@ -501,8 +544,8 @@ export function LeadCaptureAgent({
             </h2>
             <p className="lca-help">
               {es
-                ? "Nombre, teléfono y email primero — luego unas preguntas rápidas."
-                : "Name, phone, and email first — then a few quick questions about your move."}
+                ? "Nombre y teléfono primero — luego unas preguntas rápidas."
+                : "Name and phone first — then a few quick questions about your move."}
             </p>
 
             <div className="lca-biz">
@@ -517,6 +560,48 @@ export function LeadCaptureAgent({
                     {GOOGLE_RATING} · {es ? "Florida Central" : "Central Florida"}
                   </span>
                 </div>
+              </div>
+            </div>
+
+            {/* Google review image slider — contact step only, fixed card size */}
+            <div
+              className="lca-g-reviews"
+              aria-label={es ? "Reseñas de Google" : "Google reviews"}
+            >
+              <div className="lca-g-reviews-track" ref={reviewTrackRef}>
+                {GOOGLE_REVIEW_SLIDES.map((r, i) => (
+                  <figure
+                    key={r.src}
+                    className={`lca-g-card${i === reviewIdx ? " is-active" : ""}`}
+                  >
+                    <img
+                      src={r.src}
+                      alt={
+                        es
+                          ? `Reseña de Google de ${r.name}`
+                          : `Google review by ${r.name}`
+                      }
+                      width={640}
+                      height={360}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      draggable={false}
+                    />
+                  </figure>
+                ))}
+              </div>
+              <div className="lca-g-dots" role="tablist" aria-label="Reviews">
+                {GOOGLE_REVIEW_SLIDES.map((r, i) => (
+                  <button
+                    key={r.src}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === reviewIdx}
+                    className={`lca-g-dot${i === reviewIdx ? " on" : ""}`}
+                    onClick={() => setReviewIdx(i)}
+                    aria-label={`${r.name} ${i + 1}/${GOOGLE_REVIEW_SLIDES.length}`}
+                  />
+                ))}
               </div>
             </div>
 
@@ -558,7 +643,7 @@ export function LeadCaptureAgent({
                 name="phone"
                 inputMode="tel"
                 autoComplete="tel"
-                enterKeyHint="next"
+                enterKeyHint="done"
                 value={phone}
                 onChange={(e) => setPhone(formatPhone(e.target.value))}
                 onFocus={(e) =>
@@ -567,25 +652,6 @@ export function LeadCaptureAgent({
                 placeholder={PHONE_DISPLAY}
                 required
                 aria-invalid={phone.length > 0 && !phoneOk}
-              />
-            </label>
-
-            <label className="lca-field">
-              <span>Email</span>
-              <input
-                type="email"
-                name="email"
-                inputMode="email"
-                autoComplete="email"
-                enterKeyHint="done"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={(e) =>
-                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
-                }
-                placeholder="you@email.com"
-                required
-                aria-invalid={email.length > 0 && !emailOkVal}
               />
             </label>
 
@@ -906,9 +972,7 @@ export function LeadCaptureAgent({
             type="submit"
             form="lca-form"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
-            disabled={
-              sending || !nameOk || !phoneOk || !emailOkVal || !smsConsent
-            }
+            disabled={sending || !nameOk || !phoneOk || !smsConsent}
           >
             {sending
               ? es

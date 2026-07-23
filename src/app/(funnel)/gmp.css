@@ -327,6 +327,90 @@ a {
   }
 }
 
+/* —— Google review image slider (contact step only) —— */
+.lca-g-reviews {
+  margin: 0 0 18px;
+  /* full-bleed within padded scroll */
+  margin-left: calc(-1 * var(--pad-x));
+  margin-right: calc(-1 * var(--pad-x));
+}
+
+.lca-g-reviews-track {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  padding: 2px var(--pad-x) 10px;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
+
+.lca-g-reviews-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fixed card size — all placeholders identical */
+.lca-g-card {
+  flex: 0 0 min(280px, 78vw);
+  width: min(280px, 78vw);
+  height: 158px;
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.lca-g-card.is-active {
+  border-color: rgba(200, 16, 46, 0.28);
+  box-shadow: 0 6px 18px rgba(200, 16, 46, 0.12);
+}
+
+.lca-g-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lca-g-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  padding: 0 var(--pad-x);
+  min-height: 20px;
+}
+
+.lca-g-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 0;
+  padding: 0;
+  background: #d0d0d6;
+  cursor: pointer;
+  transition: width 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lca-g-dot.on {
+  width: 18px;
+  border-radius: 999px;
+  background: var(--red);
+}
+
 /* Trust card */
 .lca-biz {
   display: flex;
@@ -875,6 +959,12 @@ a {
   .lca-biz {
     padding: 10px 12px;
     margin-bottom: 14px;
+  }
+
+  .lca-g-card {
+    flex-basis: min(260px, 82vw);
+    width: min(260px, 82vw);
+    height: 146px;
   }
 
   .lca-opt {
