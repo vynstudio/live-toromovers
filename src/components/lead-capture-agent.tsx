@@ -1,9 +1,9 @@
 "use client";
 
 /**
- * Mobile-first lead capture agent.
- * Contact first → then ONE question at a time with auto-advance on tap.
- * Progressive CRM: soft lead after name+phone, full lead after last answer.
+ * Get-my-price sales funnel — mirrors toro-sales-funnel.
+ * Contact first (name + phone + email) → soft lead → service → ZIPs → size
+ * → optional specials/details → when → full lead.
  * NEVER shows rates or hour estimates — owner quotes on the call.
  */
 
@@ -17,44 +17,57 @@ import {
 } from "@/lib/price-bands";
 import { newEventId, trackFormStart, trackFormSubmit, trackLead } from "@/lib/track";
 import { getAttribution, getAttributionSummary } from "@/lib/utm";
-import {
-  readRememberedReturnPath,
-  rememberReturnPath,
-  sanitizeReturnPath,
-} from "@/lib/open-quote";
 
-/** Tiny city list — do NOT import cities.ts (43KB of SEO page data). */
-const CITY_CHIPS = [
-  "Orlando",
-  "Lake Mary",
-  "Winter Park",
-  "Maitland",
-  "Kissimmee",
-  "Sanford",
-  "Clermont",
-  "Winter Garden",
-  "Other Central FL",
+type Phase =
+  | "capture"
+  | "service"
+  | "fromZip"
+  | "toZip"
+  | "size"
+  | "specials"
+  | "details"
+  | "when"
+  | "done";
+
+/** Phases the user can navigate (excludes terminal success). */
+type ActivePhase = Exclude<Phase, "done">;
+
+const PHASE_ORDER: ActivePhase[] = [
+  "capture",
+  "service",
+  "fromZip",
+  "toZip",
+  "size",
+  "specials",
+  "details",
+  "when",
 ];
 
-const WHEN_CHIPS = [
-  { id: "this-week", labelEn: "This week", labelEs: "Esta semana", priority: true },
-  {
-    id: "next-2-weeks",
-    labelEn: "Next 2 weeks",
-    labelEs: "Próximas 2 semanas",
-    priority: false,
-  },
-  { id: "30-plus", labelEn: "30+ days", labelEs: "En 30+ días", priority: false },
-  { id: "flexible", labelEn: "Flexible", labelEs: "Flexible", priority: false },
+const ADVANCE_MS = 200;
+
+const SPECIALS = [
+  { id: "art", labelEn: "Fine art or antiques", labelEs: "Arte o antigüedades" },
+  { id: "theater", labelEn: "Home theater", labelEs: "Cine en casa" },
+  { id: "appliances", labelEn: "Large appliances", labelEs: "Electrodomésticos" },
+  { id: "piano", labelEn: "Piano", labelEs: "Piano" },
+  { id: "pool-table", labelEn: "Pool table", labelEs: "Mesa de billar" },
+  { id: "vehicle", labelEn: "Vehicle", labelEs: "Vehículo" },
+  { id: "other", labelEn: "Other", labelEs: "Otro" },
 ] as const;
 
-/** After contact: one screen = one question. */
-type Phase = "capture" | "when" | "city" | "service" | "size" | "done";
+const WHEN_OPTS = [
+  { id: "asap", labelEn: "As soon as possible", labelEs: "Lo antes posible", hot: true },
+  { id: "this-week", labelEn: "This week", labelEs: "Esta semana", hot: true },
+  { id: "next-2-weeks", labelEn: "Next 2 weeks", labelEs: "Próximas 2 semanas", hot: false },
+  { id: "flexible", labelEn: "I'm flexible", labelEs: "Soy flexible", hot: false },
+] as const;
 
-const PHASE_ORDER: Phase[] = ["capture", "when", "city", "service", "size", "done"];
-
-/** Brief highlight before advancing so the tap feels intentional. */
-const ADVANCE_MS = 180;
+const SIZE_OPTS: { id: Exclude<HomeSize, "">; labelEn: string; labelEs: string }[] = [
+  { id: "studio-1br", labelEn: "Studio / 1 bedroom", labelEs: "Studio / 1 hab" },
+  { id: "2br", labelEn: "2 bedrooms", labelEs: "2 habitaciones" },
+  { id: "3br+", labelEn: "3+ bedrooms", labelEs: "3+ habitaciones" },
+  { id: "office", labelEn: "Office / storage", labelEs: "Oficina / bodega" },
+];
 
 function formatPhone(raw: string) {
   const d = String(raw || "")
@@ -70,8 +83,8 @@ function digits(raw: string) {
   return String(raw || "").replace(/\D/g, "");
 }
 
-function isUrgentWhen(whenId: string) {
-  return whenId === "this-week";
+function emailOk(v: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v || "").trim());
 }
 
 async function postLead(payload: Record<string, unknown>) {
@@ -86,37 +99,39 @@ async function postLead(payload: Record<string, unknown>) {
 
 type Props = {
   defaultService?: ServiceKind | "";
+  /** @deprecated city chips removed — ZIP only */
   defaultCity?: string;
   lang?: "en" | "es";
 };
 
 export function LeadCaptureAgent({
   defaultService = "",
-  defaultCity = "",
   lang = "en",
 }: Props) {
   const es = lang === "es";
   const [phase, setPhase] = useState<Phase>("capture");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [smsConsent, setSmsConsent] = useState(true);
-  const [city, setCity] = useState(defaultCity);
-  const [whenId, setWhenId] = useState("");
   const [service, setService] = useState<ServiceKind | "">(defaultService);
+  const [fromZip, setFromZip] = useState("");
+  const [toZip, setToZip] = useState("");
   const [homeSize, setHomeSize] = useState<HomeSize>("");
+  const [specials, setSpecials] = useState<string[]>([]);
+  const [details, setDetails] = useState("");
+  const [whenId, setWhenId] = useState("");
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [started, setStarted] = useState(false);
   const [hp, setHp] = useState("");
   const [animKey, setAnimKey] = useState(0);
   const [advancing, setAdvancing] = useState(false);
-  const [returnTo, setReturnTo] = useState("/");
   const [redirectIn, setRedirectIn] = useState(0);
   const startRef = useRef(Date.now());
   const eventIdRef = useRef(newEventId());
   const softSentRef = useRef(false);
   const prefillService = useRef(defaultService);
-  const prefillCity = useRef(defaultCity);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -130,56 +145,40 @@ export function LeadCaptureAgent({
       setService("full-service");
       prefillService.current = "full-service";
     }
-    const c = q.get("city");
-    if (c) {
-      const match = CITY_CHIPS.find(
-        (x) => x.toLowerCase() === c.trim().toLowerCase(),
-      );
-      const val = match || c.trim();
-      setCity(val);
-      prefillCity.current = val;
-    }
-    // Where to send the visitor after the funnel
-    const fromQuery = q.get("return");
-    if (fromQuery) {
-      const safe = sanitizeReturnPath(fromQuery);
-      rememberReturnPath(safe);
-      setReturnTo(safe);
-    } else {
-      setReturnTo(readRememberedReturnPath());
-    }
   }, []);
 
-  // After success: auto-return to main site (or ?return= page)
+  // After full lead: always send visitor home in 3 seconds.
   useEffect(() => {
     if (phase !== "done") return;
-    setRedirectIn(5);
+    setRedirectIn(3);
     const tick = window.setInterval(() => {
       setRedirectIn((n) => {
         if (n <= 1) {
           window.clearInterval(tick);
-          window.location.assign(returnTo || "/");
+          window.location.assign("/");
           return 0;
         }
         return n - 1;
       });
     }, 1000);
     return () => window.clearInterval(tick);
-  }, [phase, returnTo]);
+  }, [phase]);
 
   const phoneOk = digits(phone).length === 10;
   const nameOk = name.trim().length >= 2;
+  const emailOkVal = emailOk(email);
 
-  const stepIndex = Math.max(0, PHASE_ORDER.indexOf(phase));
-  const stepTotal = 5; // capture + 4 questions (done excluded)
-  const stepNum = phase === "done" ? stepTotal : Math.min(stepIndex + 1, stepTotal);
+  const stepTotal = PHASE_ORDER.length;
+  const stepIndex =
+    phase === "done"
+      ? stepTotal - 1
+      : Math.max(0, PHASE_ORDER.indexOf(phase as ActivePhase));
+  const stepNum =
+    phase === "done" ? stepTotal : Math.min(stepIndex + 1, stepTotal);
   const progress =
     phase === "done"
       ? "100%"
       : `${Math.round((stepNum / stepTotal) * 100)}%`;
-
-  const whenLabel =
-    WHEN_CHIPS.find((w) => w.id === whenId)?.labelEn || whenId || "";
 
   function begin() {
     if (!started) {
@@ -194,21 +193,13 @@ export function LeadCaptureAgent({
     setPhase(next);
   }
 
-  /** After contact, dock the form near the bottom (thumb zone) and keep it there. */
-  const isQuestion =
-    phase === "when" ||
-    phase === "city" ||
-    phase === "service" ||
-    phase === "size";
+  const isQuestion = phase !== "capture" && phase !== "done";
 
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
-    if (isQuestion) {
-      root.dataset.lcaDock = "1";
-    } else {
-      delete root.dataset.lcaDock;
-    }
+    if (isQuestion) root.dataset.lcaDock = "1";
+    else delete root.dataset.lcaDock;
     return () => {
       delete root.dataset.lcaDock;
     };
@@ -217,11 +208,9 @@ export function LeadCaptureAgent({
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!isQuestion && phase !== "done") return;
-
     const pinCard = () => {
       const card = document.getElementById("get-price");
       if (!card) return;
-      // Fixed dock handles mobile; still scroll so desktop/card stays in view.
       const stickyReserve = 80;
       const rect = card.getBoundingClientRect();
       const vh = window.innerHeight;
@@ -230,39 +219,13 @@ export function LeadCaptureAgent({
       if (Math.abs(delta) > 12) {
         window.scrollBy({ top: delta, behavior: "smooth" });
       }
-      // Focus first option for a11y without scrolling page to top
-      const firstOpt = card.querySelector<HTMLButtonElement>(
-        ".lca-opt-focus:not(:disabled)",
-      );
-      firstOpt?.focus({ preventScroll: true });
     };
-
     const t = window.setTimeout(pinCard, 50);
     return () => window.clearTimeout(t);
   }, [phase, isQuestion, animKey]);
 
-  function buildNote(kind: "soft" | "full") {
-    const priority = isUrgentWhen(whenId)
-      ? "🔥 PRIORITY — move THIS WEEK — call ASAP"
-      : "";
-    return [
-      priority,
-      kind === "soft"
-        ? "Soft capture (name+phone) — still qualifying"
-        : "Full agent funnel complete",
-      service && `Service: ${SERVICE_LABELS[service as ServiceKind] || service}`,
-      city && `City: ${city}`,
-      whenLabel && `When: ${whenLabel}`,
-      homeSize &&
-        `Size: ${HOME_SIZE_LABELS[homeSize as Exclude<HomeSize, "">] || homeSize}`,
-      `event_id=${eventIdRef.current}`,
-    ]
-      .filter(Boolean)
-      .join(" — ");
-  }
-
-  function funnelOf(): "labor" | "full-service" {
-    return service === "labor" ? "labor" : "full-service";
+  function funnelOf(svc: ServiceKind | ""): "labor" | "full-service" {
+    return svc === "labor" ? "labor" : "full-service";
   }
 
   async function sendSoftLead() {
@@ -272,14 +235,11 @@ export function LeadCaptureAgent({
     await postLead({
       name: name.trim(),
       phone: digits(phone),
-      funnel: funnelOf(),
+      email: email.trim(),
+      funnel: funnelOf(service || prefillService.current),
       source: "get-my-price",
-      serviceType: service
-        ? SERVICE_LABELS[service as ServiceKind]
-        : "Pending qualify",
-      moveDate: whenLabel || undefined,
-      city: city || undefined,
-      note: buildNote("soft"),
+      serviceType: "Pending qualify",
+      note: "Soft capture (contact first) — still qualifying",
       lang: es ? "es" : "en",
       consentSms: smsConsent,
       consentEmail: true,
@@ -296,37 +256,51 @@ export function LeadCaptureAgent({
   }
 
   const submitFull = useCallback(
-    async (size: HomeSize, svc: ServiceKind | "") => {
+    async (when: string, size: HomeSize, svc: ServiceKind | "") => {
       setSending(true);
       setError("");
       try {
         const eventId = eventIdRef.current;
+        const resolvedSvc = (svc || prefillService.current || "full-service") as ServiceKind;
         const sizeLabel =
           size && HOME_SIZE_LABELS[size as Exclude<HomeSize, "">]
             ? HOME_SIZE_LABELS[size as Exclude<HomeSize, "">]
             : "";
+        const whenLbl =
+          WHEN_OPTS.find((w) => w.id === when)?.labelEn || when || "";
+        const specialsLabel = specials
+          .map((id) => SPECIALS.find((s) => s.id === id)?.labelEn || id)
+          .join(", ");
+
         await postLead({
           name: name.trim(),
           phone: digits(phone),
-          funnel: svc === "labor" ? "labor" : "full-service",
+          email: email.trim(),
+          funnel: funnelOf(resolvedSvc),
           source: "get-my-price",
           serviceType: [
-            svc ? SERVICE_LABELS[svc as ServiceKind] : "",
+            SERVICE_LABELS[resolvedSvc] || resolvedSvc,
             sizeLabel,
+            fromZip && `from ${fromZip}`,
+            toZip && `to ${toZip}`,
+            whenLbl,
           ]
             .filter(Boolean)
             .join(" · "),
-          moveDate: whenLabel || undefined,
-          city: city || undefined,
+          moveDate: whenLbl || undefined,
+          city: fromZip || undefined,
           note: [
-            isUrgentWhen(whenId)
-              ? "🔥 PRIORITY — move THIS WEEK — call ASAP"
+            when === "this-week" || when === "asap"
+              ? "🔥 PRIORITY — move soon — call ASAP"
               : "",
             "Full agent funnel complete",
-            svc && `Service: ${SERVICE_LABELS[svc as ServiceKind]}`,
-            city && `City: ${city}`,
-            whenLabel && `When: ${whenLabel}`,
+            SERVICE_LABELS[resolvedSvc] && `Service: ${SERVICE_LABELS[resolvedSvc]}`,
+            fromZip && `From ZIP: ${fromZip}`,
+            toZip && `To ZIP: ${toZip}`,
             sizeLabel && `Size: ${sizeLabel}`,
+            whenLbl && `When: ${whenLbl}`,
+            specialsLabel && `Specials: ${specialsLabel}`,
+            details.trim() && `Notes: ${details.trim()}`,
             `event_id=${eventId}`,
           ]
             .filter(Boolean)
@@ -356,27 +330,31 @@ export function LeadCaptureAgent({
         setAdvancing(false);
       }
     },
-    [name, phone, whenLabel, city, whenId, es, smsConsent],
+    [
+      name,
+      phone,
+      email,
+      fromZip,
+      toZip,
+      specials,
+      details,
+      es,
+      smsConsent,
+    ],
   );
 
-  /** Pick option → flash selected → auto-advance (or finish). */
-  function pickAndAdvance(
-    apply: () => void,
-    next: Phase | "finish",
-    finishArgs?: { size: HomeSize; svc: ServiceKind | "" },
-  ) {
+  function pickAndAdvance(apply: () => void, next: ActivePhase | "done" | "finish") {
     if (advancing || sending) return;
     setAdvancing(true);
     apply();
     window.setTimeout(() => {
-      if (next === "finish" && finishArgs) {
-        void submitFull(finishArgs.size, finishArgs.svc);
+      if (next === "finish") {
+        const svc = service || prefillService.current || "full-service";
+        void submitFull(whenId || "flexible", homeSize, svc as ServiceKind);
         return;
       }
-      if (next !== "finish") {
-        goTo(next);
-        setAdvancing(false);
-      }
+      goTo(next);
+      setAdvancing(false);
     }, ADVANCE_MS);
   }
 
@@ -385,7 +363,7 @@ export function LeadCaptureAgent({
     setError("");
     begin();
     if (hp.trim()) {
-      goTo("when");
+      goTo("service");
       return;
     }
     if (!nameOk) {
@@ -400,9 +378,21 @@ export function LeadCaptureAgent({
       );
       return;
     }
+    if (!emailOkVal) {
+      setError(es ? "Ingrese un email válido." : "Enter a valid email.");
+      return;
+    }
+    if (!smsConsent) {
+      setError(
+        es
+          ? "Acepte el contacto para continuar."
+          : "Please agree so we can contact you about your quote.",
+      );
+      return;
+    }
     setSending(true);
     try {
-      const wait = 1200 - (Date.now() - startRef.current);
+      const wait = 800 - (Date.now() - startRef.current);
       if (wait > 0) await new Promise((r) => setTimeout(r, wait));
       await sendSoftLead();
     } catch {
@@ -410,41 +400,29 @@ export function LeadCaptureAgent({
     } finally {
       setSending(false);
     }
-    // After contact: one question at a time. Skip prefilled fields.
-    if (prefillCity.current && prefillService.current) {
-      goTo("when");
-    } else if (prefillCity.current) {
-      goTo("when");
-    } else {
-      goTo("when");
-    }
+    goTo(prefillService.current ? "fromZip" : "service");
   }
 
-  function backFrom(current: Phase) {
+  function backFrom(current: ActivePhase) {
     if (advancing || sending) return;
-    if (current === "when") goTo("capture");
-    else if (current === "city") goTo("when");
-    else if (current === "service") goTo(prefillCity.current ? "when" : "city");
-    else if (current === "size") {
-      if (prefillService.current) {
-        goTo(prefillCity.current ? "when" : "city");
-      } else {
-        goTo("service");
-      }
+    const i = PHASE_ORDER.indexOf(current);
+    if (i <= 0) return;
+    let prev: ActivePhase = PHASE_ORDER[i - 1]!;
+    // Skip service if prefilled
+    if (prev === "service" && prefillService.current) {
+      prev = "capture";
     }
+    goTo(prev);
+  }
+
+  function toggleSpecial(id: string) {
+    setSpecials((cur) =>
+      cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id],
+    );
   }
 
   /* ---------- SUCCESS ---------- */
   if (phase === "done") {
-    const backLabel =
-      returnTo === "/" || !returnTo
-        ? es
-          ? "Volver al sitio"
-          : "Back to site"
-        : es
-          ? "Continuar en el sitio"
-          : "Continue on the site";
-
     return (
       <div className="lca-done lca-enter" role="status">
         <div className="lca-done-check" aria-hidden>
@@ -463,38 +441,22 @@ export function LeadCaptureAgent({
             ? "Un miembro del equipo te llama o escribe pronto con disponibilidad y un precio claro. Sin tarifas ocultas."
             : "A team member will call or text shortly with availability and a clear price. No hidden fees."}
         </p>
-
         <div className="lca-done-actions">
           <a href={PHONE_TEL} className="fn-btn fn-btn-primary fn-btn-lg lca-full">
             {es ? "Llamar ahora" : "Call now"} — {PHONE_DISPLAY}
           </a>
           <a
-            href={returnTo || "/"}
+            href="/"
             className="fn-btn fn-btn-ghost-light lca-full lca-text-btn"
           >
-            {backLabel}
-            {redirectIn > 0
-              ? es
-                ? ` (${redirectIn})`
-                : ` (${redirectIn})`
-              : ""}
-          </a>
-          <a
-            href={`sms:+16896002720?&body=${encodeURIComponent(
-              es
-                ? `Hola Toro, soy ${name.trim()}. Quiero cotizar mi mudanza (${whenLabel || "fecha flexible"}).`
-                : `Hi Toro, this is ${name.trim()}. I'd like to lock in my move quote (${whenLabel || "flexible date"}).`,
-            )}`}
-            className="lca-call-link"
-            style={{ marginTop: 4 }}
-          >
-            {es ? "O escríbenos por SMS" : "Or text us"}
+            {es ? "Volver al inicio" : "Back to home"}
+            {redirectIn > 0 ? ` (${redirectIn})` : ""}
           </a>
         </div>
         <p className="lca-done-fine">
           {es
-            ? "Te llevamos de vuelta al sitio en unos segundos. Depósito reembolsable reserva la fecha."
-            : "Taking you back to the site in a few seconds. Small refundable deposit locks your date."}
+            ? "Te llevamos al inicio en 3 segundos."
+            : "Taking you to the home page in 3 seconds."}
         </p>
       </div>
     );
@@ -503,11 +465,15 @@ export function LeadCaptureAgent({
   const stepHint =
     phase === "capture"
       ? es
-        ? " · datos de contacto"
+        ? " · contacto"
         : " · contact"
-      : es
-        ? " · toca una opción"
-        : " · tap one";
+      : phase === "specials" || phase === "details"
+        ? es
+          ? " · opcional"
+          : " · optional"
+        : es
+          ? " · toca una opción"
+          : " · tap one";
 
   return (
     <div className={`lca${isQuestion ? " lca-docked-inner" : ""}`}>
@@ -519,7 +485,7 @@ export function LeadCaptureAgent({
         <span className="lca-step-hint">{stepHint}</span>
       </p>
 
-      {/* ── 1. CONTACT (name + phone) ── */}
+      {/* 1. CONTACT */}
       {phase === "capture" && (
         <form
           key={animKey}
@@ -528,12 +494,12 @@ export function LeadCaptureAgent({
           noValidate
         >
           <h2 className="lca-q">
-            {es ? "¿Cómo te contactamos?" : "How should we reach you?"}
+            {es ? "Cotización gratis." : "Get your free quote."}
           </h2>
           <p className="lca-help">
             {es
-              ? "Sin spam. Te llamamos o escribimos en minutos."
-              : "No spam. We’ll call or text in minutes."}
+              ? "Nombre, teléfono y email primero — luego unas preguntas rápidas."
+              : "Name, phone, and email first — then a few quick questions about your move."}
           </p>
 
           <input
@@ -548,7 +514,7 @@ export function LeadCaptureAgent({
           />
 
           <label className="lca-field">
-            <span>{es ? "Nombre" : "Name"}</span>
+            <span>{es ? "Nombre" : "Full name"}</span>
             <input
               type="text"
               name="name"
@@ -572,12 +538,28 @@ export function LeadCaptureAgent({
               name="phone"
               inputMode="tel"
               autoComplete="tel"
-              enterKeyHint="done"
+              enterKeyHint="next"
               value={phone}
               onChange={(e) => setPhone(formatPhone(e.target.value))}
-              placeholder="(689) 000-0000"
+              placeholder={PHONE_DISPLAY}
               required
               aria-invalid={phone.length > 0 && !phoneOk}
+            />
+          </label>
+
+          <label className="lca-field">
+            <span>Email</span>
+            <input
+              type="email"
+              name="email"
+              inputMode="email"
+              autoComplete="email"
+              enterKeyHint="done"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@email.com"
+              required
+              aria-invalid={email.length > 0 && !emailOkVal}
             />
           </label>
 
@@ -589,8 +571,8 @@ export function LeadCaptureAgent({
             />
             <span>
               {es
-                ? `Acepto SMS de Toro Movers al ${PHONE_DISPLAY}. STOP para salir.`
-                : `I agree to texts from Toro Movers at ${PHONE_DISPLAY}. Reply STOP to opt out.`}
+                ? `Acepto SMS y llamadas de Toro Movers al ${PHONE_DISPLAY}. STOP para salir.`
+                : `I agree to texts & calls from Toro Movers at ${PHONE_DISPLAY}. Reply STOP to opt out.`}
             </span>
           </label>
 
@@ -599,12 +581,14 @@ export function LeadCaptureAgent({
           <button
             type="submit"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
-            disabled={sending || !nameOk || !phoneOk}
+            disabled={
+              sending || !nameOk || !phoneOk || !emailOkVal || !smsConsent
+            }
           >
             {sending
               ? es
-                ? "Un momento…"
-                : "One moment…"
+                ? "Guardando…"
+                : "Saving…"
               : es
                 ? "Continuar →"
                 : "Continue →"}
@@ -616,106 +600,20 @@ export function LeadCaptureAgent({
         </form>
       )}
 
-      {/* ── 2. WHEN (auto-advance) ── */}
-      {phase === "when" && (
-        <div key={animKey} className="lca-form lca-enter lca-focus">
-          <h2 className="lca-q">
-            {es ? "¿Cuándo te mudas?" : "When are you moving?"}
-          </h2>
-          <p className="lca-help">
-            {es ? "Toca una opción para seguir." : "Tap one to continue."}
-          </p>
-          <div className="lca-options lca-options-focus" role="radiogroup" aria-label="When">
-            {WHEN_CHIPS.map((w) => (
-              <button
-                key={w.id}
-                type="button"
-                className={`lca-opt lca-opt-focus${whenId === w.id ? " on" : ""}${w.priority ? " lca-opt-hot" : ""}`}
-                disabled={advancing || sending}
-                onClick={() =>
-                  pickAndAdvance(
-                    () => setWhenId(w.id),
-                    prefillCity.current ? "service" : "city",
-                  )
-                }
-              >
-                {es ? w.labelEs : w.labelEn}
-              </button>
-            ))}
-          </div>
-          <button type="button" className="lca-back lca-back-solo" onClick={() => backFrom("when")}>
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </div>
-      )}
-
-      {/* ── 3. CITY (auto-advance) ── */}
-      {phase === "city" && (
-        <div key={animKey} className="lca-form lca-enter lca-focus">
-          <h2 className="lca-q">
-            {es ? "¿En qué ciudad?" : "Which city?"}
-          </h2>
-          <p className="lca-help">
-            {es
-              ? "Confirmamos que cubrimos tu zona."
-              : "We confirm we serve your area."}
-          </p>
-          <div
-            className="lca-options lca-options-focus lca-options-city"
-            role="radiogroup"
-            aria-label="City"
-          >
-            {CITY_CHIPS.map((c) => (
-              <button
-                key={c}
-                type="button"
-                className={`lca-opt lca-opt-focus${city === c ? " on" : ""}`}
-                disabled={advancing || sending}
-                onClick={() =>
-                  pickAndAdvance(
-                    () => setCity(c),
-                    prefillService.current ? "size" : "service",
-                  )
-                }
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-          <button type="button" className="lca-back lca-back-solo" onClick={() => backFrom("city")}>
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </div>
-      )}
-
-      {/* ── 4. SERVICE (auto-advance) ── */}
+      {/* 2. SERVICE */}
       {phase === "service" && (
         <div key={animKey} className="lca-form lca-enter lca-focus">
           <h2 className="lca-q">
-            {es ? "¿Qué necesitas?" : "What do you need?"}
+            {es ? "¿Qué necesitas?" : "What kind of help do you need?"}
           </h2>
-          <p className="lca-help">
-            {es ? "Toca una opción para seguir." : "Tap one to continue."}
-          </p>
           <div
             className="lca-options lca-options-focus lca-options-stack"
             role="radiogroup"
-            aria-label="Service"
           >
             {(
               [
-                [
-                  "full-service",
-                  es
-                    ? "Full-service (camión + cuadrilla)"
-                    : "Full-service (truck + crew)",
-                ],
-                [
-                  "labor",
-                  es
-                    ? "Solo labor (tú traes el camión)"
-                    : "Labor-only (you have a truck)",
-                ],
+                ["full-service", es ? "Full-service (camión + cuadrilla)" : "Full-service (truck + crew)"],
+                ["labor", es ? "Solo labor (tú traes el camión)" : "Labor-only (you have a truck)"],
                 ["not-sure", es ? "No estoy seguro/a" : "Not sure yet"],
               ] as const
             ).map(([id, label]) => (
@@ -725,7 +623,7 @@ export function LeadCaptureAgent({
                 className={`lca-opt lca-opt-focus lca-opt-wide${service === id ? " on" : ""}`}
                 disabled={advancing || sending}
                 onClick={() =>
-                  pickAndAdvance(() => setService(id), "size")
+                  pickAndAdvance(() => setService(id), "fromZip")
                 }
               >
                 {label}
@@ -742,51 +640,271 @@ export function LeadCaptureAgent({
         </div>
       )}
 
-      {/* ── 5. HOME SIZE (auto-advance → submit) ── */}
+      {/* 3. FROM ZIP */}
+      {phase === "fromZip" && (
+        <form
+          key={animKey}
+          className="lca-form lca-enter lca-focus"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (fromZip.length === 5) goTo("toZip");
+            else
+              setError(
+                es ? "Ingrese un ZIP de 5 dígitos." : "Enter a 5-digit ZIP code.",
+              );
+          }}
+        >
+          <h2 className="lca-q">
+            {es ? "¿Desde qué ZIP?" : "Where are you moving from?"}
+          </h2>
+          <p className="lca-help">
+            {es ? "Solo el código postal de 5 dígitos." : "Just the 5-digit ZIP."}
+          </p>
+          <label className="lca-field">
+            <span>{es ? "ZIP de origen" : "Origin ZIP"}</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              maxLength={5}
+              autoFocus
+              value={fromZip}
+              onChange={(e) => {
+                setFromZip(e.target.value.replace(/\D/g, "").slice(0, 5));
+                setError("");
+              }}
+              placeholder="e.g. 32801"
+            />
+          </label>
+          {error && <p className="lca-err">{error}</p>}
+          <button
+            type="submit"
+            className="fn-btn fn-btn-primary fn-btn-lg lca-full"
+            disabled={fromZip.length !== 5}
+          >
+            {es ? "Continuar →" : "Continue →"}
+          </button>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => backFrom("fromZip")}
+          >
+            {es ? "← Atrás" : "← Back"}
+          </button>
+        </form>
+      )}
+
+      {/* 4. TO ZIP */}
+      {phase === "toZip" && (
+        <form
+          key={animKey}
+          className="lca-form lca-enter lca-focus"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (toZip.length === 5) goTo("size");
+            else
+              setError(
+                es ? "Ingrese un ZIP de 5 dígitos." : "Enter a 5-digit ZIP code.",
+              );
+          }}
+        >
+          <h2 className="lca-q">
+            {es ? "¿A qué ZIP?" : "Where are you moving to?"}
+          </h2>
+          <p className="lca-help">
+            {es ? "Solo el código postal de 5 dígitos." : "Just the 5-digit ZIP."}
+          </p>
+          <label className="lca-field">
+            <span>{es ? "ZIP de destino" : "Destination ZIP"}</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              maxLength={5}
+              autoFocus
+              value={toZip}
+              onChange={(e) => {
+                setToZip(e.target.value.replace(/\D/g, "").slice(0, 5));
+                setError("");
+              }}
+              placeholder="e.g. 34787"
+            />
+          </label>
+          {error && <p className="lca-err">{error}</p>}
+          <button
+            type="submit"
+            className="fn-btn fn-btn-primary fn-btn-lg lca-full"
+            disabled={toZip.length !== 5}
+          >
+            {es ? "Continuar →" : "Continue →"}
+          </button>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => backFrom("toZip")}
+          >
+            {es ? "← Atrás" : "← Back"}
+          </button>
+        </form>
+      )}
+
+      {/* 5. SIZE */}
       {phase === "size" && (
         <div key={animKey} className="lca-form lca-enter lca-focus">
           <h2 className="lca-q">
-            {es ? "¿Qué tamaño es el hogar?" : "How big is the home?"}
+            {es ? "¿Qué tamaño es?" : "How big is the move?"}
+          </h2>
+          <div className="lca-options lca-options-focus" role="radiogroup">
+            {SIZE_OPTS.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                className={`lca-opt lca-opt-focus${homeSize === o.id ? " on" : ""}`}
+                disabled={advancing || sending}
+                onClick={() =>
+                  pickAndAdvance(() => setHomeSize(o.id), "specials")
+                }
+              >
+                {es ? o.labelEs : o.labelEn}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => backFrom("size")}
+          >
+            {es ? "← Atrás" : "← Back"}
+          </button>
+        </div>
+      )}
+
+      {/* 6. SPECIALS (optional) */}
+      {phase === "specials" && (
+        <div key={animKey} className="lca-form lca-enter lca-focus">
+          <h2 className="lca-q">
+            {es ? "¿Artículos especiales?" : "Any special items?"}
+          </h2>
+          <p className="lca-help">
+            {es
+              ? "Opcional — elige lo que aplique o continúa."
+              : "Optional — select any that apply, or continue."}
+          </p>
+          <div className="lca-options lca-options-focus" role="group">
+            {SPECIALS.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                className={`lca-opt lca-opt-focus${specials.includes(o.id) ? " on" : ""}`}
+                onClick={() => toggleSpecial(o.id)}
+              >
+                {es ? o.labelEs : o.labelEn}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="fn-btn fn-btn-primary fn-btn-lg lca-full"
+            style={{ marginTop: 14 }}
+            onClick={() => goTo("details")}
+          >
+            {es ? "Continuar →" : "Continue →"}
+          </button>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => goTo("details")}
+          >
+            {es ? "Saltar" : "Skip"}
+          </button>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => backFrom("specials")}
+          >
+            {es ? "← Atrás" : "← Back"}
+          </button>
+        </div>
+      )}
+
+      {/* 7. DETAILS (optional) */}
+      {phase === "details" && (
+        <div key={animKey} className="lca-form lca-enter lca-focus">
+          <h2 className="lca-q">
+            {es ? "¿Algo más?" : "Extra details"}
+          </h2>
+          <p className="lca-help">
+            {es
+              ? "Opcional — códigos, estacionamiento, horarios…"
+              : "Optional — gate codes, parking, preferred time…"}
+          </p>
+          <label className="lca-field">
+            <span>{es ? "Notas" : "Notes"}</span>
+            <textarea
+              className="lca-textarea"
+              rows={3}
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
+              placeholder={
+                es
+                  ? "Códigos, escaleras, horario preferido…"
+                  : "Gate codes, stairs, preferred time…"
+              }
+            />
+          </label>
+          <button
+            type="button"
+            className="fn-btn fn-btn-primary fn-btn-lg lca-full"
+            onClick={() => goTo("when")}
+          >
+            {es ? "Continuar →" : "Continue →"}
+          </button>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => goTo("when")}
+          >
+            {es ? "Saltar" : "Skip"}
+          </button>
+          <button
+            type="button"
+            className="lca-back lca-back-solo"
+            onClick={() => backFrom("details")}
+          >
+            {es ? "← Atrás" : "← Back"}
+          </button>
+        </div>
+      )}
+
+      {/* 8. WHEN → submit */}
+      {phase === "when" && (
+        <div key={animKey} className="lca-form lca-enter lca-focus">
+          <h2 className="lca-q">
+            {es ? "¿Cuándo nos necesitas?" : "When do you need us?"}
           </h2>
           <p className="lca-help">
             {es
               ? "Última pregunta — te contactamos al instante."
               : "Last question — we contact you right away."}
           </p>
-          <div
-            className="lca-options lca-options-focus"
-            role="radiogroup"
-            aria-label="Home size"
-          >
-            {(
-              Object.entries(HOME_SIZE_LABELS) as [
-                Exclude<HomeSize, "">,
-                string,
-              ][]
-            ).map(([id, label]) => (
+          <div className="lca-options lca-options-focus" role="radiogroup">
+            {WHEN_OPTS.map((w) => (
               <button
-                key={id}
+                key={w.id}
                 type="button"
-                className={`lca-opt lca-opt-focus${homeSize === id ? " on" : ""}${sending ? " lca-opt-busy" : ""}`}
+                className={`lca-opt lca-opt-focus${whenId === w.id ? " on" : ""}${w.hot ? " lca-opt-hot" : ""}${sending ? " lca-opt-busy" : ""}`}
                 disabled={advancing || sending}
                 onClick={() => {
-                  const svc = service || prefillService.current || "full-service";
-                  pickAndAdvance(
-                    () => setHomeSize(id),
-                    "finish",
-                    { size: id, svc: svc as ServiceKind },
-                  );
+                  setWhenId(w.id);
+                  setAdvancing(true);
+                  window.setTimeout(() => {
+                    const svc =
+                      service || prefillService.current || "full-service";
+                    void submitFull(w.id, homeSize, svc as ServiceKind);
+                  }, ADVANCE_MS);
                 }}
               >
-                {es
-                  ? id === "studio-1br"
-                    ? "Studio / 1 hab"
-                    : id === "2br"
-                      ? "2 habitaciones"
-                      : id === "3br+"
-                        ? "3+ habitaciones"
-                        : "Oficina / bodega"
-                  : label}
+                {es ? w.labelEs : w.labelEn}
               </button>
             ))}
           </div>
@@ -799,7 +917,7 @@ export function LeadCaptureAgent({
           <button
             type="button"
             className="lca-back lca-back-solo"
-            onClick={() => backFrom("size")}
+            onClick={() => backFrom("when")}
             disabled={sending}
           >
             {es ? "← Atrás" : "← Back"}

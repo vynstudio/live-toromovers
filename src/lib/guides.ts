@@ -146,7 +146,7 @@ export const ORLANDO_MOVE_PREP: GuideData = {
     {
       h2: "Decide what the crew handles vs. what you do",
       body: [
-        "You can hand over the whole move or just the heavy lifting. Common splits: full-service (we pack, load, move, and unload), labor-only if you already have a truck or POD, or load/unload help on one end. Whatever you choose, get the rate and crew size agreed up front, confirm the mover is insured, and make sure someone is reachable at both addresses on the day.",
+        "You can hand over the whole move or just the heavy lifting. Common splits: full-service (truck, load, move, and unload), labor-only if you already have a truck or POD, or load/unload help on one end. Whatever you choose, get the rate and crew size agreed up front, confirm the mover is insured, and make sure someone is reachable at both addresses on the day.",
       ],
     },
   ],
@@ -219,7 +219,7 @@ export const APARTMENT_CHECKLIST: GuideData = {
       ],
       bullets: [
         "Donate or sell what you don't want to carry to the next place.",
-        "Get boxes, tape, and wrap — or have your movers bring supplies.",
+        "Get boxes, tape, and labels ready so the crew can load without delay.",
         "Pack non-essentials first; label every box by room and contents.",
       ],
     },
@@ -409,7 +409,7 @@ export const MOVING_COST: GuideData = {
     {
       h2: "What's included — and what's extra",
       body: [
-        "The hourly rate covers the crew's labor (and the truck on a full-service move), basic furniture protection, and standard handling. Packing materials — boxes, paper, tape, wrap — are billed separately when you need them, and we tell you that cost up front. There are no surprise line items on the invoice.",
+        "The hourly rate covers the crew's labor (and the truck on a full-service move), furniture protection with blankets and shrink wrap, and standard handling. There are no surprise line items on the invoice.",
       ],
     },
     {
@@ -421,7 +421,7 @@ export const MOVING_COST: GuideData = {
         "Your two addresses (so we can factor distance and access).",
         "Rough size — bedrooms, or a quick list of the big items.",
         "Floors, stairs, and whether there's an elevator at each end.",
-        "Whether you need packing, or just loading and moving.",
+        "Access notes and any oversized items the crew should plan for.",
       ],
     },
   ],
@@ -435,8 +435,8 @@ export const MOVING_COST: GuideData = {
       a: "Yes, there's a short minimum (typically a couple of hours), then it's billed by the hour after that. We tell you the rate, crew size, and minimum before you book.",
     },
     {
-      q: "What's not included in the hourly rate?",
-      a: "Labor, the truck on a full-service move, and standard furniture protection are included. Packing materials (boxes, paper, tape, wrap) are billed separately when you need them, and we quote that cost up front — no surprise line items.",
+      q: "What's included in the hourly rate?",
+      a: "Labor, the truck on a full-service move, and standard furniture protection (blankets, shrink wrap) are included — no surprise line items.",
     },
     {
       q: "How can I lower my moving cost?",
@@ -699,7 +699,7 @@ export const MOVING_RATES_EXPLAINED: GuideData = {
           { lead: "Inventory of large items.", body: "Mention the king bed, the sectional, the dining table, the piano, the treadmill. Large or heavy items take disproportionate time." },
           { lead: "Access details at both addresses.", body: "Stairs, elevator availability, distance from parking to door, gated entry, narrow hallways." },
           { lead: "Distance between locations.", body: "Even within Orlando, a move from Ocoee to Lake Nona is materially longer than a move from Baldwin Park to Thornton Park." },
-          { lead: "Any packing help needed.", body: "If the crew is packing boxes, that time is billed. If you're pre-packed, say so." },
+          { lead: "How ready you'll be.", body: "Items boxed and labeled, pathways clear, and large furniture noted so the estimate matches the real job." },
         ] },
         { kind: "p", text: "A mover who asks you these questions before giving you a rate is doing their job. One who quotes you a rate without asking is guessing — and that guess usually goes in their favor, not yours." },
       ],
@@ -986,7 +986,6 @@ export const LABOR_ONLY_GUIDE: GuideData = {
         { kind: "ul", items: [
           "The truck or container itself (that's your responsibility to rent and return)",
           "Driving between locations (you or someone you designate drives the rental)",
-          "Packing boxes (unless you specifically request and pay for packing services)",
         ] },
         { kind: "p", text: "The division is clean. You handle transportation logistics; the crew handles physical labor. For anyone who has already rented a truck or is using a portable storage container, this model is significantly cheaper than paying for a full-service move that includes a truck you don't need." },
         { kind: "p", text: "Key distinction: labor-only is not a lesser service. The crew is the same caliber as a full-service crew. The only difference is that you're supplying the vehicle, which removes the truck cost from your bill." },

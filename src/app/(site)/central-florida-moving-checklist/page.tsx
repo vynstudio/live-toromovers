@@ -234,7 +234,12 @@ export default function ChecklistLandingPage() {
             Get My Free Checklist
             <span className="arrow" aria-hidden />
           </a>
-          <Link href="/quote" className="btn btn-outline">
+          <Link
+            href="/get-my-price"
+            data-open-quote
+            data-source="checklist-lp-cta"
+            className="btn btn-outline"
+          >
             Get My Price
           </Link>
         </div>

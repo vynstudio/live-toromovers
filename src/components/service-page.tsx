@@ -74,7 +74,7 @@ export function ServicePage({ service }: { service: ServiceData }) {
             <p className="city-subline">{service.subline}</p>
             <div className="city-hero-cta">
               <a
-                href="#quote"
+                href="/get-my-price"
                 data-open-quote
                 data-source="service-hero"
                 className="btn btn-primary"

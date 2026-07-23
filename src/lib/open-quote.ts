@@ -1,6 +1,5 @@
-// Canonical quote entry — every "Get a quote" CTA goes to the lead funnel.
-// After completion, the funnel returns the visitor to the main site (or
-// the page they came from via ?return=).
+// Canonical quote entry — every "Get a quote" CTA goes to /get-my-price.
+// After the sales funnel completes, the visitor is redirected home (/) in 3s.
 
 export const QUOTE_EVENT = "toro-open-quote";
 export const FUNNEL_PATH = "/get-my-price";

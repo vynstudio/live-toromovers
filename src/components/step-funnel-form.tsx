@@ -33,7 +33,6 @@ export function StepFunnelForm({ funnel }: { funnel: FunnelType }) {
   const [moveDate, setMoveDate] = useState("");
   const [helpNeeded, setHelpNeeded] = useState<string[]>([]);
   const [propertyType, setPropertyType] = useState("");
-  const [packingHelp, setPackingHelp] = useState<"yes" | "no" | "">("");
 
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
@@ -81,7 +80,7 @@ export function StepFunnelForm({ funnel }: { funnel: FunnelType }) {
       cur.includes(opt) ? cur.filter((x) => x !== opt) : [...cur, opt],
     );
 
-  const step3Valid = isLabor ? helpNeeded.length > 0 : propertyType !== "" && packingHelp !== "";
+  const step3Valid = isLabor ? helpNeeded.length > 0 : propertyType !== "";
 
   const contactErrors = {
     firstName: firstName.trim() === "" ? "Please enter your first name." : "",
@@ -112,7 +111,7 @@ export function StepFunnelForm({ funnel }: { funnel: FunnelType }) {
           city,
           helpNeeded: isLabor ? helpNeeded : [],
           propertyType: isLabor ? "" : propertyType,
-          packingHelp: !isLabor && packingHelp === "yes",
+          packingHelp: false,
           smsConsent,
           source: getAttributionSummary() || undefined,
           utm: getAttribution(),
@@ -241,7 +240,7 @@ export function StepFunnelForm({ funnel }: { funnel: FunnelType }) {
           ) : (
             <>
               <h2 className="sf-q">What are we moving?</h2>
-              <p className="sf-help">Property type and packing help.</p>
+              <p className="sf-help">Property type.</p>
               <div className="sf-options">
                 {PROPERTY_TYPE_OPTIONS.map((o) => (
                   <button
@@ -251,19 +250,6 @@ export function StepFunnelForm({ funnel }: { funnel: FunnelType }) {
                     onClick={() => setPropertyType(o)}
                   >
                     {o}
-                  </button>
-                ))}
-              </div>
-              <p className="sf-help" style={{ marginTop: 18 }}>Need packing help?</p>
-              <div className="sf-options">
-                {(["yes", "no"] as const).map((v) => (
-                  <button
-                    type="button"
-                    key={v}
-                    className={`sf-opt${packingHelp === v ? " on" : ""}`}
-                    onClick={() => setPackingHelp(v)}
-                  >
-                    {v === "yes" ? "Yes — pack for me" : "No — I'll pack"}
                   </button>
                 ))}
               </div>

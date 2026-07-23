@@ -262,12 +262,12 @@ export const content: { en: ContentShape; es: ContentShape } = {
       eyebrow: "What we do",
       head: "Full-service first.",
       headItalic: "Labor-only when you already have a truck.",
-      sub: "We are a full-service Central Florida moving company — truck, crew, and materials. Labor-only loading help is available as a secondary option if you bring the truck.",
+      sub: "We are a full-service Central Florida moving company — truck, crew, and careful placement. Labor-only loading help is available as a secondary option if you bring the truck.",
       tiers: [
         {
           tag: "Primary",
           title: "Full-service move",
-          sub: "Truck + crew included — two movers and our 16′ or 26′ truck, materials, wrap, and careful placement. The main way we move families across Central Florida.",
+          sub: "Truck + crew included — two movers and our 16′ or 26′ truck, furniture protection, and careful placement. The main way we move families across Central Florida.",
           bullets: [
             "16′ or 26′ truck included",
             "Blankets, dollies, shrink wrap",
@@ -283,7 +283,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
             "Three-mover crew",
             "16′ or 26′ truck included",
             "Furniture wrapping & protection",
-            "Packing & unpacking add-on available",
+            "Disassembly & reassembly when needed",
           ],
           cta: "Get my quote",
         },
@@ -455,7 +455,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       h1Line2: "Florida Central.",
       h1Line3: "Sin tarifas ocultas.",
       lede:
-        "Compañía de mudanzas familiar sirviendo a Orlando, Kissimmee, Lake Nona, Winter Garden, Clermont y 30+ ciudades de Florida Central. Carga, descarga, empaque y mudanzas completas con nuestro camión. Cotización en 60 segundos — sin tarifas ocultas.",
+        "Compañía de mudanzas familiar sirviendo a Orlando, Kissimmee, Lake Nona, Winter Garden, Clermont y 30+ ciudades de Florida Central. Carga, descarga y mudanzas completas con nuestro camión. Cotización en 60 segundos — sin tarifas ocultas.",
       ctaPrimary: "Cotización gratis",
       ctaSecondary: "Llamar · (689) 600-2720",
       note: "Precios claros por hora · desde un mínimo de 2 horas · Cuadrilla bilingüe · Fechas esta semana",
@@ -493,7 +493,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
             "Cuadrilla de tres mudanceros",
             "Camión de 16′ o 26′ incluido",
             "Envoltura y protección de muebles",
-            "Servicio adicional de empaque disponible",
+            "Desmontaje y montaje cuando haga falta",
           ],
           cta: "Mi cotización",
         },

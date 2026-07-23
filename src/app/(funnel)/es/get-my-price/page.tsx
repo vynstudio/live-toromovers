@@ -74,7 +74,7 @@ export default function GetMyPriceEsPage() {
             disponibilidad y un precio claro. Sin sorpresas en la factura.
           </p>
           <ul className="lca-bullets">
-            <li>Full-service: camión + cuadrilla, empaque disponible</li>
+            <li>Full-service: camión + cuadrilla, carga, mudanza y colocación</li>
             <li>Solo labor: tú traes el camión o POD — nosotros cargamos</li>
             <li>Sin gasolina extra · sin cargos por escaleras · bilingüe</li>
           </ul>
@@ -116,8 +116,8 @@ export default function GetMyPriceEsPage() {
             <p>Tarifa por hora con mínimo claro. Sin sorpresas al final.</p>
           </div>
           <div>
-            <h3>Materiales incluidos</h3>
-            <p>Plástico, frazadas y armado básico en la tarifa.</p>
+            <h3>Cuadrilla bilingüe</h3>
+            <p>Inglés y español en cada trabajo — cotización, agenda y el día de la mudanza.</p>
           </div>
         </div>
       </section>

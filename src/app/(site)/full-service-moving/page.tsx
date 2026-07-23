@@ -18,7 +18,7 @@ const HREF = "/full-service-moving";
 
 // Title ≤60, description ≤155.
 const DESCRIPTION =
-  "Full-service movers in Central Florida — packing, loading, truck transport & placement. Up-front pricing, bilingual crew. Quote in 60s.";
+  "Full-service movers in Central Florida — truck, crew, loading, transport & placement. Up-front pricing, bilingual crew. Quote in 60s.";
 
 export const metadata: Metadata = {
   title: { absolute: "Full-Service Movers Orlando | Toro Movers" },
@@ -36,14 +36,14 @@ export const metadata: Metadata = {
 };
 
 const BULLETS = [
-  "We pack, move, and set up your whole home",
+  "Truck, crew, and careful placement — door to door",
   "Local crew · up-front hourly pricing",
   "Family-owned · bilingual · Central Florida only",
 ];
 
 const VALUE = [
-  { h: "Packing & supplies", p: "We bring boxes and wrap and pack your home room by room — or just the fragile things." },
-  { h: "Door to door", p: "An experienced local crew loads, drives, protects, and unloads — you don't lift a box." },
+  { h: "Furniture protection", p: "Blankets, shrink wrap, and careful handling so pieces arrive the way they left." },
+  { h: "Door to door", p: "An experienced local crew loads, drives, protects, and unloads — you don't lift a thing." },
   { h: "Set up & reassembled", p: "Furniture placed where you want it, beds and tables put back together." },
 ];
 
@@ -54,7 +54,7 @@ const PROOF = REVIEWS.filter((r) =>
 const FAQS = [
   {
     q: "What does full-service moving include?",
-    a: "Everything end to end: packing and supplies, loading, transport, unloading, furniture placement, and disassembly/reassembly. You can also pick just the parts you want.",
+    a: "Truck, crew, furniture protection, loading, transport, unloading, placement, and disassembly/reassembly as needed. Same crew that quotes shows up on the day.",
   },
   {
     q: "Do you only move locally?",
@@ -65,8 +65,8 @@ const FAQS = [
     a: "Up front, by the hour — a two-mover crew and our truck (up to 26 ft) with a four-hour minimum, and you can add movers for larger homes. Shrink wrap, furniture blankets, and assembly/disassembly are included; no fuel surcharge, no stair fee. For long-distance moves a per-mile charge applies beyond 100 miles. Send your details and you'll get your exact price in about 60 seconds — confirmed before we start, no surprise add-ons.",
   },
   {
-    q: "Do you bring packing supplies?",
-    a: "Yes. If you choose packing help, we bring boxes, tape, and protective wrap and handle it for you — fragile items included.",
+    q: "How do you protect furniture on the truck?",
+    a: "We pad and secure furniture with moving blankets and careful loading so pieces stay protected door to door.",
   },
 ];
 
@@ -130,7 +130,7 @@ export default function FullServiceMovingPage() {
             <p className="fn-eyebrow">Full-service · {SERVICE_REGION}</p>
             <h1 className="fn-h1">Full-Service Movers in Central Florida</h1>
             <div className="fn-rule" aria-hidden />
-            <p className="fn-sub">Packing, loading, transport, and careful local moving from Toro Movers.</p>
+            <p className="fn-sub">Truck, crew, loading, transport, and careful placement from Toro Movers.</p>
             <ul className="fn-bullets">
               {BULLETS.map((b) => <li key={b}>{b}</li>)}
             </ul>
@@ -139,7 +139,7 @@ export default function FullServiceMovingPage() {
               <span>{GOOGLE_RATING} on Google · Family-owned · Bilingual</span>
             </div>
             <div className="fn-hero-cta">
-              <a href="#quote" data-open-quote data-source="funnel-fs-hero" data-service="Full-service move" className="fn-btn fn-btn-primary fn-btn-lg">Get My Quote</a>
+              <a href="/get-my-price" data-open-quote data-source="funnel-fs-hero" data-service="Full-service move" className="fn-btn fn-btn-primary fn-btn-lg">Get My Quote</a>
               <div className="fn-hero-cta-row">
                 <CallCta>Call Now</CallCta>
                 <TextCta>Text Us</TextCta>
@@ -201,7 +201,7 @@ export default function FullServiceMovingPage() {
         <h2 className="fn-cta-h2">Ready for a stress-free move?</h2>
         <p>Get up-front full-service pricing in about 30 seconds.</p>
         <div className="fn-cta-band-row">
-          <a href="#quote" data-open-quote data-source="funnel-fs-band" data-service="Full-service move" className="fn-btn fn-btn-primary fn-btn-lg">Request Full-Service Pricing</a>
+          <a href="/get-my-price" data-open-quote data-source="funnel-fs-band" data-service="Full-service move" className="fn-btn fn-btn-primary fn-btn-lg">Request Full-Service Pricing</a>
           <CallCta className="fn-btn fn-btn-ghost-light">Call Now — {PHONE_DISPLAY}</CallCta>
         </div>
       </section>
@@ -223,7 +223,7 @@ export default function FullServiceMovingPage() {
       {/* STICKY MOBILE CTA */}
       <div className="fn-sticky" role="region" aria-label="Quick contact">
         <CallCta className="fn-sticky-call">📞 Call</CallCta>
-        <a href="#quote" data-open-quote data-source="funnel-fs-sticky" data-service="Full-service move" className="fn-sticky-quote">Check Availability</a>
+        <a href="/get-my-price" data-open-quote data-source="funnel-fs-sticky" data-service="Full-service move" className="fn-sticky-quote">Check Availability</a>
       </div>
     </main>
   );

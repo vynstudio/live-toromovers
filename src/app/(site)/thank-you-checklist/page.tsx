@@ -41,7 +41,7 @@ export default function ThankYouChecklistPage() {
           surprises.
         </p>
         <div className="thanks-cta-row">
-          <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
+          <a href="/get-my-price" data-open-quote data-source="page-cta" className="btn btn-primary">
             Request a Quote
             <span className="arrow" aria-hidden />
           </a>

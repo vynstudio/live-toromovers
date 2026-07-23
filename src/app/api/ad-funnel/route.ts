@@ -15,7 +15,7 @@ type Payload = Record<string, string>;
 const SVC: Record<string, string> = {
   "labor-truck": "Home/Apartment — Labor moving + truck",
   "labor-only": "Home/Apartment — Labor moving only",
-  "full-service": "Full-service move (pack, load & move)",
+  "full-service": "Full-service move (truck, load & move)",
   storage: "Storage",
   uhaul: "Load / Unload U-Haul",
   rearrangement: "In-home rearrangement",

@@ -34,10 +34,10 @@ export const FunnelLeadSchema = z.object({
   // A chip label ("This week") or an ISO date — either satisfies it.
   moveDate: z.string().min(1).max(40),
   city: z.string().min(2).max(80),
-  // Labor: which help (multi). Full-service: property type + packing.
+  // Labor: which help (multi). Full-service: property type.
   helpNeeded: z.array(z.string().max(40)).max(6).optional().default([]),
   propertyType: z.string().max(40).optional().or(z.literal("")),
-  packingHelp: z.boolean().optional().default(false),
+  packingHelp: z.boolean().optional().default(false), // legacy; always false
   // TCPA consent for the SMS nurture sequence.
   smsConsent: z.boolean().optional().default(false),
   // Attribution + page context for HubSpot.

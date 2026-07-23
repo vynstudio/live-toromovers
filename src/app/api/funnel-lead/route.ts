@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
   const details = isLabor
     ? `Help needed: ${lead.helpNeeded?.length ? lead.helpNeeded.join(", ") : "—"}`
-    : `Property: ${lead.propertyType || "—"} · Packing: ${lead.packingHelp ? "yes" : "no"}`;
+    : `Property: ${lead.propertyType || "—"}`;
 
   const text = [
     `${isLabor ? "💪" : "⭐"} New ${funnelLabel.toUpperCase()} lead — Toro Movers`,
@@ -348,7 +348,7 @@ async function postToN8n(
   if (!url) return false; // drip not wired yet — instant delivery still worked
   const serviceType = lead.funnel === "labor"
     ? (lead.helpNeeded?.length ? lead.helpNeeded.join(", ") : "Labor-only")
-    : [lead.propertyType, lead.packingHelp ? "with packing" : "no packing"].filter(Boolean).join(" · ");
+    : [lead.propertyType].filter(Boolean).join(" · ");
   try {
     // Hard 2.5s cap: the drip is fire-and-forget, so a slow/unreachable n8n must
     // never delay the customer reaching the thank-you page. On timeout the fetch
@@ -377,7 +377,7 @@ async function postToN8n(
         moveDate: lead.moveDate,
         helpNeeded: lead.helpNeeded || [],
         propertyType: lead.propertyType || "",
-        packingHelp: Boolean(lead.packingHelp),
+        packingHelp: false,
         lang: lead.lang || "en",
         source: lead.source || "",
         landingPage: lead.landingPage || "",

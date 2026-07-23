@@ -26,7 +26,9 @@ export default function ThankYouFullServicePage() {
         </p>
         <div className="fn-thanks-cta">
           <CallCta className="fn-btn fn-btn-primary fn-btn-lg">Call Now — {PHONE_DISPLAY}</CallCta>
-          <Link href="/quote" className="fn-btn fn-btn-ghost-light">Get My Quote</Link>
+          <Link href="/get-my-price" data-open-quote data-source="thank-you-fs" className="fn-btn fn-btn-ghost-light">
+            Get My Quote
+          </Link>
         </div>
         <p className="fn-thanks-fine">
           Hablamos español · Family-owned · Up-front hourly pricing

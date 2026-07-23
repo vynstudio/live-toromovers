@@ -13,8 +13,8 @@ import { AdQuoteStart } from "./ad-quote-start";
 import { PHONE_DISPLAY, PHONE_TEL, GOOGLE_RATING } from "@/lib/contact";
 
 // Paid-traffic landing page. Conversion-focused split hero: form (step-1 of
-// the quote wizard) on the left above-fold, single static photo on the right.
-// All CTAs ultimately reach /quote with addresses prefilled.
+// the sales funnel) on the left above-fold, single static photo on the right.
+// All CTAs ultimately reach /get-my-price (LeadCaptureAgent).
 export function AdLanding() {
   const { t, lang } = useLang();
   const es = lang === "es";

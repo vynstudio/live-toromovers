@@ -26,14 +26,14 @@ type RelatedLink = { href: string; name: string; desc: string };
 const DEFAULT_RELATED: RelatedLink[] = [
   { href: "/orlando-movers", name: "Orlando movers", desc: "Local moves across Orlando and Orange County." },
   { href: "/apartment-movers-orlando-fl", name: "Apartment movers", desc: "Stairs, elevators, and tight complex windows, by the hour." },
-  { href: "/packing-services", name: "Packing services", desc: "Full or partial packing, done fast and carefully." },
+  { href: "/full-service-moving", name: "Full-service moving", desc: "Truck, crew, load, transport & placement." },
   { href: "/central-florida-movers", name: "Central Florida movers", desc: "Our full service area across the Orlando metro." },
 ];
 
 const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
   "how-to-prepare-for-a-local-move-in-orlando": [
     { href: "/labor-only-moving", name: "Labor-only moving", desc: "Loading, unloading & stair help by the hour." },
-    { href: "/full-service-moving", name: "Full-service moving", desc: "Packing, loading, transport — you don't lift a box." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck, crew, load & place — you don't lift a thing." },
     { href: "/orlando-movers", name: "Orlando movers", desc: "Local moves across Orlando and Orange County." },
     { href: "/central-florida-moving-checklist", name: "Free moving checklist", desc: "Plan your move and get quote-ready fast." },
   ],
@@ -46,7 +46,7 @@ const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
   "best-time-to-move-central-florida": [
     { href: "/central-florida-movers", name: "Central Florida movers", desc: "Our full service area across the metro." },
     { href: "/orlando-movers", name: "Orlando movers", desc: "Local moves across Orlando and Orange County." },
-    { href: "/full-service-moving", name: "Full-service moving", desc: "Packing, loading, transport — handled start to finish." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck, crew, load & place — handled start to finish." },
   ],
   "how-much-does-a-local-move-cost-orlando": [
     { href: "/labor-only-moving", name: "Labor-only moving", desc: "Lowest-cost option — hourly loading/unloading help." },
@@ -57,7 +57,7 @@ const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
   "hidden-moving-fees-orlando": [
     { href: "/blog/what-youre-paying-for-orlando-movers", name: "What you're paying for", desc: "Orlando moving rates and what's in the hourly rate." },
     { href: "/orlando-movers", name: "Orlando movers", desc: "Up-front pricing across Orlando and Orange County." },
-    { href: "/full-service-moving", name: "Full-service moving", desc: "Packing, loading, transport — no surprise line items." },
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck + crew, up-front pricing — no surprise line items." },
     { href: "/central-florida-movers", name: "Central Florida movers", desc: "Transparent, by-the-hour moves across the metro." },
   ],
   "what-youre-paying-for-orlando-movers": [
@@ -160,7 +160,7 @@ export function GuidePage({ guide }: { guide: GuideData }) {
               </p>
               <p className="city-subline">{guide.intro}</p>
               <div className="city-hero-cta">
-                <a href="#quote" data-open-quote data-source="guide-hero" className="btn btn-primary">
+                <a href="/get-my-price" data-open-quote data-source="guide-hero" className="btn btn-primary">
                   Get my free estimate
                   <span className="arrow" aria-hidden />
                 </a>
@@ -311,13 +311,13 @@ export function GuidePage({ guide }: { guide: GuideData }) {
                   <p key={i} className="guide-p">{p}</p>
                 ))}
                 <p className="guide-p">
-                  <a href="#quote" data-open-quote data-source="guide-cta" className="guide-cta-link">
+                  <a href="/get-my-price" data-open-quote data-source="guide-cta" className="guide-cta-link">
                     {guide.cta.linkText}
                   </a>
                   {guide.cta.after}
                 </p>
                 <div className="city-hero-cta" style={{ marginTop: 8 }}>
-                  <a href="#quote" data-open-quote data-source="guide-cta-btn" className="btn btn-primary">
+                  <a href="/get-my-price" data-open-quote data-source="guide-cta-btn" className="btn btn-primary">
                     {guide.cta.linkText}
                     <span className="arrow" aria-hidden />
                   </a>

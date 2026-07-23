@@ -15,13 +15,11 @@ const SERVICES_EN = [
   "Full-service move",
   "Labor only",
   "Long distance",
-  "Packing help",
 ];
 const SERVICES_ES = [
   "Mudanza full-service",
   "Solo labor",
   "Larga distancia",
-  "Empaque",
 ];
 const JOBS_EN = ["Apartment", "House", "Office", "Storage"];
 const JOBS_ES = ["Apartamento", "Casa", "Oficina", "Bodega"];

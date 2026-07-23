@@ -20,6 +20,8 @@ export function ClickTracking() {
       } else if (
         href === "/quote" ||
         href.startsWith("/quote?") ||
+        href === "/get-quote" ||
+        href.startsWith("/get-quote?") ||
         href === "/get-my-price" ||
         href.startsWith("/get-my-price?") ||
         href === "/es/get-my-price" ||

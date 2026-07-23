@@ -70,18 +70,18 @@ export default function GetMyPricePage() {
             <em> No hidden fees.</em>
           </h1>
           <p className="lca-lede">
-            Tell us a bit about your move — a team member calls back with
-            availability and clear pricing. You never see a surprise bill.
+            Name and phone first, then a few quick questions. A team member
+            calls back with clear pricing — no hidden fees.
           </p>
           <ul className="lca-bullets">
-            <li>Full-service: truck + crew, packing help available</li>
+            <li>Full-service: truck + crew, load, move & place</li>
             <li>Labor-only: you bring the truck or POD — we lift</li>
             <li>No fuel · no stair fees · bilingual crew · same-week dates</li>
           </ul>
         </div>
 
         <div className="lca-card" id="get-price">
-          <p className="lca-card-kicker">Free quote · under a minute</p>
+          <p className="lca-card-kicker">Free quote · about a minute</p>
           <LeadCaptureAgent lang="en" />
         </div>
       </section>
@@ -116,8 +116,8 @@ export default function GetMyPricePage() {
             <p>Hourly pricing with a clear minimum. No surprise add-ons later.</p>
           </div>
           <div>
-            <h3>Materials included</h3>
-            <p>Shrink wrap, blankets, and basic assembly in the rate — not extras.</p>
+            <h3>Bilingual crew</h3>
+            <p>English and Spanish on every job — quote, schedule, and move day.</p>
           </div>
         </div>
       </section>

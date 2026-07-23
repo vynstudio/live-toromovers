@@ -15,7 +15,7 @@ const HREF = "/central-florida-movers";
 
 const TITLE = "Central Florida Movers";
 const DESCRIPTION =
-  "Local movers serving Orlando & Central Florida. Family-owned, bilingual, up-front hourly pricing — apartments, homes, packing & loading help.";
+  "Local movers serving Orlando & Central Florida. Family-owned, bilingual, up-front hourly pricing — apartments, homes & loading help.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -109,11 +109,11 @@ export default function Page() {
             <p className="city-subline">
               Family-owned, bilingual movers serving Orlando and the
               surrounding Central Florida cities. Local moves only — apartments,
-              homes, offices, packing, and loading help, all at up-front hourly
+              homes, offices, and loading help, all at up-front hourly
               pricing with no hidden fees.
             </p>
             <div className="city-hero-cta">
-              <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
+              <a href="/get-my-price" data-open-quote data-source="page-cta" className="btn btn-primary">
                 Get my free estimate
                 <span className="arrow" aria-hidden />
               </a>

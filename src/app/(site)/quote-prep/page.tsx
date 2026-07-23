@@ -24,7 +24,7 @@ const PRICE_FACTORS = [
   ["Stairs vs. elevator", "Walk-ups and high floors add time; a reserved elevator keeps it fast."],
   ["Access & parking", "How close the truck can park to the door affects load/unload speed."],
   ["Special items", "Pianos, safes, and oversized pieces may need extra hands or equipment."],
-  ["Packing & supplies", "Optional — add full or partial packing if you'd rather we handle it."],
+  ["Ready to load", "Boxes packed and labeled before the crew arrives keeps the day moving fast."],
 ];
 
 const APARTMENT = [
@@ -67,7 +67,12 @@ export default function QuotePrepPage() {
             Have these details handy and we can give you an up-front hourly price
             in about a minute — no back-and-forth.
           </p>
-          <Link href="/quote" className="btn btn-primary prep-cta-top">
+          <Link
+            href="/get-my-price"
+            data-open-quote
+            data-source="quote-prep-top"
+            className="btn btn-primary prep-cta-top"
+          >
             Get My Price
             <span className="arrow" aria-hidden />
           </Link>
@@ -132,7 +137,7 @@ export default function QuotePrepPage() {
           <h2 className="magnet-h2">Ready?</h2>
           <p>You’ve got what you need — let’s price your move.</p>
           <div className="magnet-cta-row">
-            <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
+            <a href="/get-my-price" data-open-quote data-source="page-cta" className="btn btn-primary">
               Get My Price
               <span className="arrow" aria-hidden />
             </a>

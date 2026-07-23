@@ -192,7 +192,7 @@ export default function ApartmentMoversOrlandoPage() {
               The clock stops when the job ends.
             </p>
             <div className="city-hero-cta">
-              <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
+              <a href="/get-my-price" data-open-quote data-source="page-cta" className="btn btn-primary">
                 Get my quote
                 <span className="arrow" aria-hidden />
               </a>
@@ -263,7 +263,9 @@ export default function ApartmentMoversOrlandoPage() {
                   <p className="svc-point-body">{tier.body}</p>
                   <p className="svc-point-body"><strong>Best for:</strong> {tier.bestFor}</p>
                   <Link
-                    href="/quote"
+                    href="/get-my-price"
+                    data-open-quote
+                    data-source="apartment-tier"
                     className={`btn ${tier.featured ? "btn-primary" : "btn-secondary"}`}
                   >
                     Get a free quote
@@ -301,7 +303,10 @@ export default function ApartmentMoversOrlandoPage() {
                 We move apartments throughout the full Orlando metro and surrounding
                 cities. If your apartment is in Central Florida, we serve it —{" "}
                 <a href={PHONE_TEL}>call {PHONE_DISPLAY}</a> or{" "}
-                <Link href="/quote">get a free quote</Link> to confirm your area.
+                <Link href="/get-my-price" data-open-quote data-source="apartment-area">
+                  get a free quote
+                </Link>{" "}
+                to confirm your area.
               </p>
             </div>
             <div className="city-hoods">
@@ -366,7 +371,7 @@ export default function ApartmentMoversOrlandoPage() {
                 Family-owned · Bilingual crew.
               </p>
               <div className="city-hero-cta" style={{ marginTop: 24 }}>
-                <a href="#quote" data-open-quote data-source="page-cta" className="btn btn-primary">
+                <a href="/get-my-price" data-open-quote data-source="page-cta" className="btn btn-primary">
                   Get my free quote
                   <span className="arrow" aria-hidden />
                 </a>

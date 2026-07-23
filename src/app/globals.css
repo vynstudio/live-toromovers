@@ -2803,7 +2803,9 @@ html[data-lca-dock="1"] .lca-docked-inner .lca-back-solo {
   font-weight: 600;
   color: var(--ink-soft);
 }
-.lca-field input {
+.lca-field input,
+.lca-field .lca-textarea,
+.lca-textarea {
   width: 100%;
   min-height: 52px;
   padding: 14px 14px;
@@ -2814,8 +2816,14 @@ html[data-lca-dock="1"] .lca-docked-inner .lca-back-solo {
   border-radius: 12px;
   font-family: inherit;
   -webkit-appearance: none;
+  resize: vertical;
 }
-.lca-field input:focus {
+.lca-textarea {
+  min-height: 96px;
+  line-height: 1.45;
+}
+.lca-field input:focus,
+.lca-textarea:focus {
   outline: none;
   border-color: var(--red);
   box-shadow: 0 0 0 3px var(--red-glow);

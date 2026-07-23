@@ -12,7 +12,7 @@ type Props = {
   source?: string;
 };
 
-// Global quote CTA — opens the same lead form popup used on toromoveit.com / go.toromovers.net.
+// Global quote CTA — every instance routes to /get-my-price sales funnel.
 export function RequestButton({
   label,
   variant = "primary",

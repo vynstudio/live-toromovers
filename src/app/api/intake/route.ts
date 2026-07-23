@@ -25,8 +25,6 @@ type IntakePayload = {
   specialItems?: string[];
   otherSpecial?: string;
   services?: {
-    packing?: boolean; packingScope?: string;
-    supplies?: boolean;
     disassembly?: boolean; disassemblyItems?: string;
     storage?: boolean; storageNotes?: string;
   };
@@ -85,8 +83,6 @@ export async function POST(req: Request) {
     }${body.otherSpecial ? ` · other: ${body.otherSpecial}` : ""}`,
     ``,
     `Services:`,
-    `  Packing: ${body.services?.packing ? `Yes (${body.services.packingScope || "scope TBD"})` : "No"}`,
-    `  Supplies: ${body.services?.supplies ? "Yes" : "No"}`,
     `  Disassembly: ${body.services?.disassembly ? `Yes (${body.services.disassemblyItems || "items TBD"})` : "No"}`,
     `  Storage: ${body.services?.storage ? `Yes (${body.services.storageNotes || ""})` : "No"}`,
     ``,

@@ -188,58 +188,6 @@ export const COMMERCIAL_MOVERS: ServiceData = {
   ],
 };
 
-export const PACKING_SERVICES: ServiceData = {
-  slug: "packing-services",
-  href: "/packing-services",
-  name: "Packing services",
-  navLabel: "Packing services",
-  metadata: {
-    title: "Packing Services Orlando & Central Florida",
-    description:
-      "Professional packing services in Orlando & Central Florida — full or partial packing, supplies, fragile items. Bilingual, up-front pricing.",
-  },
-  h1: "Packing Services in Orlando & Central Florida",
-  subline:
-    "Full-home or kitchen-only packing, done fast and carefully by the same crew that moves you — up-front hourly pricing, packing materials available.",
-  intro: {
-    h2: "Skip the worst part of moving.",
-    lead: "Packing is the part everyone underestimates — and the part that keeps people up the night before a move. Toro Movers packs as much or as little as you want: the whole home, just the kitchen and breakables, or only the stuff you ran out of time for. We bring the boxes, paper, and wrap, label everything by room, and pack it so it actually survives the truck.",
-  },
-  points: [
-    {
-      h3: "Full or partial — your call",
-      body: "Hand us the whole home or just the rooms you didn't get to. We scale the crew and the materials to what you actually need, billed by the hour.",
-    },
-    {
-      h3: "Fragile items done right",
-      body: "Dishes, glassware, mirrors, art, and electronics are wrapped and boxed with the right materials so they don't rattle, shift, or break in transit.",
-    },
-    {
-      h3: "Labeled by room for a fast unload",
-      body: "Every box is labeled by room and contents, so unloading at the new place is quick and nothing ends up in the wrong room.",
-    },
-  ],
-  faqs: [
-    {
-      q: "Do you bring boxes and packing materials?",
-      a: "Yes — we can supply boxes, paper, tape, and wrap, or pack materials you already have. Supplies are billed separately from labor and we tell you the cost up front.",
-    },
-    {
-      q: "Can you pack just the kitchen or fragile items?",
-      a: "Absolutely. Partial packing — kitchens, glassware, art, electronics — is one of the most popular options. You only pay for the hours it takes.",
-    },
-    {
-      q: "Can you pack the day before the move?",
-      a: "Yes. Many customers book packing for the day before so move day itself is just loading and transport. We'll schedule whichever works for you.",
-    },
-  ],
-  serviceType: "Packing service",
-  references: [
-    { label: "USPS packing tips", href: "https://www.usps.com/ship/packages.htm" },
-    { label: "the FMCSA's guide to your rights as a mover", href: "https://www.fmcsa.dot.gov/protect-your-move" },
-  ],
-};
-
 export const LOADING_UNLOADING: ServiceData = {
   slug: "loading-unloading",
   href: "/loading-unloading",
@@ -278,7 +226,7 @@ export const LOADING_UNLOADING: ServiceData = {
     },
     {
       q: "Can you load a POD or U-Haul so nothing shifts?",
-      a: "That's exactly the job. We pack the load tight and balanced so furniture and boxes don't move on the road, whether you're driving across town or storing it.",
+      a: "That's exactly the job. We load the truck tight and balanced so furniture and boxes don't shift on the road, whether you're driving across town or storing it.",
     },
     {
       q: "Is there a minimum?",
@@ -292,7 +240,6 @@ export const SERVICES: ServiceData[] = [
   APARTMENT_MOVERS,
   RESIDENTIAL_MOVERS,
   COMMERCIAL_MOVERS,
-  PACKING_SERVICES,
   LOADING_UNLOADING,
 ];
 

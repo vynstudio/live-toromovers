@@ -40,8 +40,6 @@ type Data = {
   // special
   specialItems: string[]; otherSpecial: string;
   // services
-  svcPacking: "yes" | "no" | ""; svcPackingScope: string;
-  svcSupplies: "yes" | "no" | "";
   svcDisassembly: "yes" | "no" | ""; svcDisassemblyItems: string;
   svcStorage: "yes" | "no" | ""; svcStorageNotes: string;
   // day-of
@@ -56,8 +54,6 @@ const initial: Data = {
   toHoa: "", toCoi: "", toParking: "", toAccess: "",
   invBoxes: "", invLarge: "", invAwkward: "",
   specialItems: [], otherSpecial: "",
-  svcPacking: "", svcPackingScope: "",
-  svcSupplies: "",
   svcDisassembly: "", svcDisassemblyItems: "",
   svcStorage: "", svcStorageNotes: "",
   altPhone: "", specialInstructions: "",
@@ -162,7 +158,7 @@ export function IntakeForm() {
       case "inventory": return true; // optional rough numbers
       case "special": return true;
       case "services":
-        return !!data.svcPacking && !!data.svcSupplies && !!data.svcDisassembly && !!data.svcStorage;
+        return !!data.svcDisassembly && !!data.svcStorage;
       case "dayOf": return true;
     }
   };
@@ -231,8 +227,6 @@ export function IntakeForm() {
           inventory: { boxes: data.invBoxes, largeItems: data.invLarge, awkward: data.invAwkward },
           specialItems: data.specialItems, otherSpecial: data.otherSpecial,
           services: {
-            packing: data.svcPacking === "yes", packingScope: data.svcPackingScope,
-            supplies: data.svcSupplies === "yes",
             disassembly: data.svcDisassembly === "yes", disassemblyItems: data.svcDisassemblyItems,
             storage: data.svcStorage === "yes", storageNotes: data.svcStorageNotes,
           },
@@ -554,31 +548,6 @@ export function IntakeForm() {
         <>
           <h2 className="iwiz-q">Services you need.</h2>
           <p className="iwiz-sub">Tap yes or no for each.</p>
-
-          <div className="iwiz-field"><span>Packing service (we pack for you)?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
-              value={data.svcPacking}
-              onChange={(v) => update({ svcPacking: v as "yes" | "no" })}
-              columns={2}
-            />
-            {data.svcPacking === "yes" && (
-              <input
-                className="iwiz-inline" value={data.svcPackingScope}
-                onChange={(e) => update({ svcPackingScope: e.target.value })}
-                placeholder="What needs packing? (kitchen, closets, full apartment…)"
-              />
-            )}
-          </div>
-
-          <div className="iwiz-field"><span>Boxes / supplies delivered?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
-              value={data.svcSupplies}
-              onChange={(v) => update({ svcSupplies: v as "yes" | "no" })}
-              columns={2}
-            />
-          </div>
 
           <div className="iwiz-field"><span>Disassembly / reassembly help?</span>
             <Pills

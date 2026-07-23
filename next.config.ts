@@ -7,7 +7,10 @@ import type { NextConfig } from "next";
 // (temporary) on purpose until Ads Manager Final URLs are updated to the new
 // path — then flip to permanent:true (301). Query strings (UTMs/fbclid) are
 // preserved. "/orlando-movers" stays out — it is a real indexed SEO city page.
-const AD_LP = "/ads/meta-orlando-movers";
+// Paid traffic lands on the sales funnel (contact-first lead form).
+// Service pages stay for SEO; Meta Final URLs use /get-my-price.
+const AD_LP = "/get-my-price?service=full-service&source=meta-legacy";
+const AD_LP_ES = "/es/get-my-price?service=full-service&source=meta-legacy-es";
 const AD_LANDING_PATHS = [
   "/movers-orlando-lp",
   "/loading-help",
@@ -96,16 +99,42 @@ const nextConfig: NextConfig = {
         permanent: false,
       })),
       { source: "/quote-lp/:path*", destination: AD_LP, permanent: false },
-      // Old destinations still live in paused Meta ads (winner "Quote LP"
-      // campaign). Without these they 404 on reactivation. Query strings
+      // Old destinations still live in paused Meta ads. Query strings
       // (UTMs/fbclid) are preserved automatically. "/mudanza" is a Spanish ad.
       { source: "/moving", destination: AD_LP, permanent: false },
-      { source: "/mudanza", destination: "/es/ads/meta-orlando-movers", permanent: false },
-      // All quote CTAs / legacy wizards → mobile lead funnel
-      { source: "/quote", destination: "/get-my-price", permanent: false },
-      { source: "/quote/:path*", destination: "/get-my-price", permanent: false },
-      { source: "/get-quote", destination: "/get-my-price", permanent: false },
-      { source: "/get-quote/:path*", destination: "/get-my-price", permanent: false },
+      { source: "/mudanza", destination: AD_LP_ES, permanent: false },
+      // Meta ads that still list the SEO service LPs → sales funnel
+      {
+        source: "/full-service-moving",
+        has: [{ type: "query", key: "utm_source", value: "meta" }],
+        destination: "/get-my-price?service=full-service&source=meta-fs",
+        permanent: false,
+      },
+      {
+        source: "/labor-only-moving",
+        has: [{ type: "query", key: "utm_source", value: "meta" }],
+        destination: "/get-my-price?service=labor&source=meta-labor",
+        permanent: false,
+      },
+      {
+        source: "/ads/meta-orlando-movers",
+        has: [{ type: "query", key: "utm_source", value: "meta" }],
+        destination: "/get-my-price?service=full-service&source=meta-ad-lp",
+        permanent: false,
+      },
+      {
+        source: "/es/ads/meta-orlando-movers",
+        has: [{ type: "query", key: "utm_source", value: "meta" }],
+        destination: "/es/get-my-price?service=full-service&source=meta-ad-lp-es",
+        permanent: false,
+      },
+      // All quote CTAs / legacy wizards → canonical sales funnel
+      { source: "/quote", destination: "/get-my-price", permanent: true },
+      { source: "/quote/:path*", destination: "/get-my-price", permanent: true },
+      { source: "/get-quote", destination: "/get-my-price", permanent: true },
+      { source: "/get-quote/:path*", destination: "/get-my-price", permanent: true },
+      // Packing was never a standalone offer — send old links to full-service.
+      { source: "/packing-services", destination: "/full-service-moving", permanent: true },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       APARTMENT_REDIRECT,
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),

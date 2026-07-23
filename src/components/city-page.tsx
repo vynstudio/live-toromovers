@@ -111,7 +111,7 @@ export function CityPage({ city }: { city: CityData }) {
             <p className="city-subline">{city.subline}</p>
             <div className="city-hero-cta">
               <a
-                href="#quote"
+                href="/get-my-price"
                 data-open-quote
                 data-source="city-hero"
                 className="btn btn-primary"

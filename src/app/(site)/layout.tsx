@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     template: "%s | Toro Movers",
   },
   description:
-    "Full-service Orlando movers — truck, crew & packing. Up-front pricing, no hidden fees. Labor-only if you have a truck. Quote in 60s.",
+    "Full-service Orlando movers — truck, crew & careful placement. Up-front pricing, no hidden fees. Labor-only if you have a truck. Quote in 60s.",
   keywords: [
     "Orlando movers",
     "Central Florida movers",
@@ -105,7 +105,7 @@ const movingCompanyJsonLd = {
   legalName: LEGAL_NAME,
   slogan: SLOGAN,
   description:
-    "Family-owned full-service moving company in Orlando and Central Florida. Truck, crew, packing, apartment and home moves first. Labor-only loading available as a secondary option. Bilingual. Up-front hourly pricing — quote in 60 seconds.",
+    "Family-owned full-service moving company in Orlando and Central Florida. Truck, crew, furniture protection, apartment and home moves first. Labor-only loading available as a secondary option. Bilingual. Up-front hourly pricing — quote in 60 seconds.",
   "@id": `${SITE_URL}/#movingcompany`,
   url: SITE_URL,
   telephone: "+16896002720",
@@ -155,7 +155,6 @@ const movingCompanyJsonLd = {
   makesOffer: [
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Full-service moving · crew + truck" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "In-town residential & apartment moves" } },
-    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Packing & unpacking" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Furniture wrapping & protection" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Storage moves" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Labor-only loading help · secondary option" } },
