@@ -55,13 +55,6 @@ const SIZE_OPTS: { id: Exclude<HomeSize, "">; labelEn: string; labelEs: string }
   { id: "office", labelEn: "Office / storage", labelEs: "Oficina / bodega" },
 ];
 
-/** Real Google review screenshots — contact step only, fixed card frame. */
-const GOOGLE_REVIEW_SLIDES = [
-  { src: "/reviews/hector-rene-baez.png", name: "Héctor René Báez" },
-  { src: "/reviews/olivia-hawley.png", name: "Olivia Hawley" },
-  { src: "/reviews/sophia-kemi.png", name: "Sophia Kemi" },
-] as const;
-
 function formatPhone(raw: string) {
   const d = String(raw || "")
     .replace(/\D/g, "")
@@ -102,8 +95,6 @@ export function LeadCaptureAgent({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [smsConsent, setSmsConsent] = useState(true);
-  const [reviewIdx, setReviewIdx] = useState(0);
-  const reviewTrackRef = useRef<HTMLDivElement | null>(null);
   const [service, setService] = useState<ServiceKind | "">(defaultService);
   const [fromZip, setFromZip] = useState("");
   const [toZip, setToZip] = useState("");
@@ -154,62 +145,6 @@ export function LeadCaptureAgent({
 
   const phoneOk = digits(phone).length === 10;
   const nameOk = name.trim().length >= 2;
-
-  // Auto-advance Google review slider on contact + success screens
-  const showReviews = phase === "capture" || phase === "done";
-
-  useEffect(() => {
-    if (!showReviews) return;
-    const id = window.setInterval(() => {
-      setReviewIdx((i) => (i + 1) % GOOGLE_REVIEW_SLIDES.length);
-    }, 3500);
-    return () => window.clearInterval(id);
-  }, [showReviews]);
-
-  useEffect(() => {
-    if (!showReviews) return;
-    const track = reviewTrackRef.current;
-    if (!track) return;
-    const card = track.children[reviewIdx] as HTMLElement | undefined;
-    if (card) {
-      track.scrollTo({
-        left: card.offsetLeft - (track.clientWidth - card.clientWidth) / 2,
-        behavior: "smooth",
-      });
-    }
-  }, [reviewIdx, showReviews]);
-
-  // Keep dots in sync when user swipes the track manually
-  useEffect(() => {
-    if (!showReviews) return;
-    const track = reviewTrackRef.current;
-    if (!track) return;
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const kids = Array.from(track.children) as HTMLElement[];
-        if (!kids.length) return;
-        const mid = track.scrollLeft + track.clientWidth / 2;
-        let best = 0;
-        let bestDist = Infinity;
-        kids.forEach((el, i) => {
-          const c = el.offsetLeft + el.clientWidth / 2;
-          const d = Math.abs(c - mid);
-          if (d < bestDist) {
-            bestDist = d;
-            best = i;
-          }
-        });
-        setReviewIdx((cur) => (cur === best ? cur : best));
-      });
-    };
-    track.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      track.removeEventListener("scroll", onScroll);
-    };
-  }, [showReviews]);
 
   const stepTotal = PHASE_ORDER.length;
   const stepIndex =
@@ -432,49 +367,6 @@ export function LeadCaptureAgent({
           ? " · toca una opción"
           : " · tap one";
 
-  const reviewSlider = (
-    <div
-      className="lca-g-reviews"
-      aria-label={es ? "Reseñas de Google" : "Google reviews"}
-    >
-      <div className="lca-g-reviews-track" ref={reviewTrackRef}>
-        {GOOGLE_REVIEW_SLIDES.map((r, i) => (
-          <figure
-            key={r.src}
-            className={`lca-g-card${i === reviewIdx ? " is-active" : ""}`}
-          >
-            <img
-              src={r.src}
-              alt={
-                es
-                  ? `Reseña de Google de ${r.name}`
-                  : `Google review by ${r.name}`
-              }
-              width={640}
-              height={360}
-              loading={i === 0 ? "eager" : "lazy"}
-              decoding="async"
-              draggable={false}
-            />
-          </figure>
-        ))}
-      </div>
-      <div className="lca-g-dots" role="tablist" aria-label="Reviews">
-        {GOOGLE_REVIEW_SLIDES.map((r, i) => (
-          <button
-            key={r.src}
-            type="button"
-            role="tab"
-            aria-selected={i === reviewIdx}
-            className={`lca-g-dot${i === reviewIdx ? " on" : ""}`}
-            onClick={() => setReviewIdx(i)}
-            aria-label={`${r.name} ${i + 1}/${GOOGLE_REVIEW_SLIDES.length}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
   /* ---------- SUCCESS ---------- */
   if (phase === "done") {
     return (
@@ -500,8 +392,6 @@ export function LeadCaptureAgent({
                 ? "Un miembro del equipo te llama o escribe pronto con disponibilidad y un precio claro. Sin tarifas ocultas."
                 : "A team member will call or text shortly with availability and a clear price. No hidden fees."}
             </p>
-            {/* Keep social proof while they wait / before home redirect */}
-            {reviewSlider}
             <div className="lca-done-actions">
               <a href={PHONE_TEL} className="fn-btn fn-btn-primary fn-btn-lg lca-full">
                 {es ? "Llamar ahora" : "Call now"} — {PHONE_DISPLAY}
@@ -571,9 +461,6 @@ export function LeadCaptureAgent({
                 </div>
               </div>
             </div>
-
-            {/* Google review slider — also shown on success screen */}
-            {reviewSlider}
 
             <input
               className="hp-field"
