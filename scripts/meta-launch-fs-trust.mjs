@@ -24,6 +24,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { homedir } from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -59,7 +60,7 @@ const IG_USER = process.env.META_IG_USER_ID || "17841470412443785";
 
 const CREATIVE_DIR =
   process.env.CREATIVE_DIR ||
-  "/Users/vynstudio/toro-ads-landing/public/ads/full-service-trust-2026-07";
+  join(homedir(), "toro-ads-landing/public/ads/full-service-trust-2026-07");
 
 // Canonical paid landing = sales funnel (contact-first lead form)
 const LP_BASE =

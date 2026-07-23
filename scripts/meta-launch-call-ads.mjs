@@ -10,6 +10,7 @@
  */
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
 import { join, basename } from "node:path";
+import { homedir } from "node:os";
 
 const TOKEN = process.env.META_ACCESS_TOKEN;
 const ACCT_RAW = process.env.META_AD_ACCOUNT_ID || "971361825561389";
@@ -27,7 +28,7 @@ const WEB_BUDGET_CENTS = 800; // $8 — UTM + pixel LP
 
 const CLONED =
   process.env.CREATIVE_DIR ||
-  "/Users/vynstudio/toro-ads-landing/public/ads/call/cloned";
+  join(homedir(), "toro-ads-landing/public/ads/call/cloned");
 
 if (!TOKEN) {
   console.error("META_ACCESS_TOKEN missing");

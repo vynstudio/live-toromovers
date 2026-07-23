@@ -16,10 +16,8 @@ const PIXEL = process.env.NEXT_PUBLIC_META_PIXEL_ID || "985575491098437";
 const PAGE_ID = process.env.META_PAGE_ID || "722514634274519";
 const IG_USER = process.env.META_IG_USER_ID || "17841470412443785";
 
-const VIDEO_PATH =
-  process.env.VIDEO_PATH ||
-  process.argv[2] ||
-  "/Users/vynstudio/Downloads/grok-video-da0fdd2b-c77d-4b7f-8856-34ee2fa0f9d0.mp4";
+// Require explicit VIDEO_PATH or CLI arg — no hard-coded home paths
+const VIDEO_PATH = process.env.VIDEO_PATH || process.argv[2] || "";
 
 const DAILY_BUDGET_CENTS = Number(process.env.DAILY_BUDGET_CENTS || 1500); // $15
 const STAMP = new Date().toISOString().slice(0, 10);
@@ -44,6 +42,10 @@ const COPY = {
 
 if (!TOKEN) {
   console.error("META_ACCESS_TOKEN missing");
+  process.exit(1);
+}
+if (!VIDEO_PATH) {
+  console.error("Pass video path: node scripts/meta-launch-gmp-video.mjs /path/to/video.mp4");
   process.exit(1);
 }
 if (!statSync(VIDEO_PATH).isFile()) {

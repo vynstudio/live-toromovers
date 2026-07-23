@@ -44,5 +44,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Daily Meta API audit dumps
+# Meta API dumps / launch journals (may include local machine paths; never secrets,
+# but not source code — keep local only)
 output/meta-audits/
+output/meta-launches/
+

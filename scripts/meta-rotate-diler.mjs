@@ -19,6 +19,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import { homedir } from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -51,7 +52,7 @@ const LAUNCH_JOURNAL = join(ROOT, "output/meta-launches/fs-diler-2026-07-23.json
 const STATE_PATH = join(ROOT, "output/meta-launches/diler-rotation-state.json");
 const ASSET_DIR =
   process.env.DILER_ASSET_DIR ||
-  "/Users/vynstudio/toro-ads-landing/public/ads/toro-diler-2026-07";
+  join(homedir(), "toro-ads-landing/public/ads/toro-diler-2026-07");
 // Canonical paid landing = sales funnel (contact-first lead form)
 const LP =
   "https://toromovers.net/get-my-price?service=full-service&source=meta-diler";
