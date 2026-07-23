@@ -897,8 +897,14 @@ a {
   font-size: 14.5px;
   line-height: 1.5;
   color: var(--muted);
-  margin: 0 auto 22px;
+  margin: 0 auto 16px;
   max-width: 34ch;
+}
+
+/* Reviews under success copy */
+.lca-done .lca-g-reviews {
+  margin: 4px 0 18px;
+  text-align: left;
 }
 
 .lca-done-actions {
