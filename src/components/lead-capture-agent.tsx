@@ -193,11 +193,20 @@ export function LeadCaptureAgent({
     setPhase(next);
   }
 
-  // Pure mobile funnel — no dock/pin chrome (matches toro-sales-funnel).
+  // Pure mobile funnel — no dock chrome; scroll step body to top on advance.
   useEffect(() => {
     if (typeof document === "undefined") return;
     delete document.documentElement.dataset.lcaDock;
-  }, [phase]);
+    const sc = document.querySelector(".lca-scroll");
+    if (sc) sc.scrollTop = 0;
+    // Keep focused field visible above sticky footer / keyboard
+    window.setTimeout(() => {
+      const el = document.activeElement as HTMLElement | null;
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+        el.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    }, 80);
+  }, [phase, animKey]);
 
   function funnelOf(svc: ServiceKind | ""): "labor" | "full-service" {
     return svc === "labor" ? "labor" : "full-service";
@@ -396,47 +405,6 @@ export function LeadCaptureAgent({
     );
   }
 
-  /* ---------- SUCCESS ---------- */
-  if (phase === "done") {
-    return (
-      <div className="lca-done lca-enter" role="status">
-        <div className="lca-done-check" aria-hidden>
-          ✓
-        </div>
-        <p className="lca-done-eyebrow">
-          {es ? "Solicitud recibida" : "Request received"}
-        </p>
-        <h2 className="lca-done-h2">
-          {es
-            ? `Gracias, ${name.trim().split(/\s+/)[0]} — te contactamos en minutos.`
-            : `Thanks, ${name.trim().split(/\s+/)[0]} — we'll contact you in minutes.`}
-        </h2>
-        <p className="lca-done-lede">
-          {es
-            ? "Un miembro del equipo te llama o escribe pronto con disponibilidad y un precio claro. Sin tarifas ocultas."
-            : "A team member will call or text shortly with availability and a clear price. No hidden fees."}
-        </p>
-        <div className="lca-done-actions">
-          <a href={PHONE_TEL} className="fn-btn fn-btn-primary fn-btn-lg lca-full">
-            {es ? "Llamar ahora" : "Call now"} — {PHONE_DISPLAY}
-          </a>
-          <a
-            href="/"
-            className="fn-btn fn-btn-ghost-light lca-full lca-text-btn"
-          >
-            {es ? "Volver al inicio" : "Back to home"}
-            {redirectIn > 0 ? ` (${redirectIn})` : ""}
-          </a>
-        </div>
-        <p className="lca-done-fine">
-          {es
-            ? "Te llevamos al inicio en 3 segundos."
-            : "Taking you to the home page in 3 seconds."}
-        </p>
-      </div>
-    );
-  }
-
   const stepHint =
     phase === "capture"
       ? es
@@ -446,129 +414,497 @@ export function LeadCaptureAgent({
         ? es
           ? " · opcional"
           : " · optional"
-        : es
-          ? " · toca una opción"
-          : " · tap one";
+        : phase === "done"
+          ? ""
+          : es
+            ? " · toca una opción"
+            : " · tap one";
+
+  /* ---------- SUCCESS ---------- */
+  if (phase === "done") {
+    return (
+      <div className="lca">
+        <div className="lca-progress" aria-hidden>
+          <span style={{ width: "100%" }} />
+        </div>
+        <div className="lca-scroll lca-scroll--done">
+          <div className="lca-done lca-enter" role="status">
+            <div className="lca-done-check" aria-hidden>
+              ✓
+            </div>
+            <p className="lca-done-eyebrow">
+              {es ? "Solicitud recibida" : "Request received"}
+            </p>
+            <h2 className="lca-done-h2">
+              {es
+                ? `Gracias, ${name.trim().split(/\s+/)[0]} — te contactamos en minutos.`
+                : `Thanks, ${name.trim().split(/\s+/)[0]} — we'll contact you in minutes.`}
+            </h2>
+            <p className="lca-done-lede">
+              {es
+                ? "Un miembro del equipo te llama o escribe pronto con disponibilidad y un precio claro. Sin tarifas ocultas."
+                : "A team member will call or text shortly with availability and a clear price. No hidden fees."}
+            </p>
+            <div className="lca-done-actions">
+              <a href={PHONE_TEL} className="fn-btn fn-btn-primary fn-btn-lg lca-full">
+                {es ? "Llamar ahora" : "Call now"} — {PHONE_DISPLAY}
+              </a>
+              <a href="/" className="fn-btn fn-btn-ghost-light lca-full lca-text-btn">
+                {es ? "Volver al inicio" : "Back to home"}
+                {redirectIn > 0 ? ` (${redirectIn})` : ""}
+              </a>
+            </div>
+            <p className="lca-done-fine">
+              {es
+                ? "Te llevamos al inicio en 3 segundos."
+                : "Taking you to the home page in 3 seconds."}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const showFooterPrimary =
+    phase === "capture" ||
+    phase === "fromZip" ||
+    phase === "toZip" ||
+    phase === "specials" ||
+    phase === "details";
+
+  const showFooterBack = phase !== "capture";
+  const showFooterSkip = phase === "specials" || phase === "details";
 
   return (
     <div className="lca">
       <div className="lca-progress" aria-hidden>
         <span style={{ width: progress }} />
       </div>
-      <p className="lca-step">
-        {es ? `Paso ${stepNum} de ${stepTotal}` : `Step ${stepNum} of ${stepTotal}`}
-        <span className="lca-step-hint">{stepHint}</span>
-      </p>
 
-      {/* 1. CONTACT */}
-      {phase === "capture" && (
-        <form
-          key={animKey}
-          className="lca-form lca-enter"
-          onSubmit={onCaptureContinue}
-          noValidate
-        >
-          <h2 className="lca-q">
-            {es ? "Cotización gratis." : "Get your free quote."}
-          </h2>
-          <p className="lca-help">
-            {es
-              ? "Nombre, teléfono y email primero — luego unas preguntas rápidas."
-              : "Name, phone, and email first — then a few quick questions about your move."}
-          </p>
+      <div className="lca-scroll">
+        <p className="lca-step">
+          {es ? `Paso ${stepNum} de ${stepTotal}` : `Step ${stepNum} of ${stepTotal}`}
+          <span className="lca-step-hint">{stepHint}</span>
+        </p>
 
-          <div className="lca-biz" aria-hidden={false}>
-            <div className="lca-biz-thumb">
-              <img src="/bull.svg" alt="" width={28} height={28} />
-            </div>
-            <div>
-              <strong>Toro Movers</strong>
-              <div className="lca-stars">
-                ★★★★★
-                <span>
-                  {GOOGLE_RATING} · {es ? "Florida Central" : "Central Florida"}
-                </span>
+        {/* 1. CONTACT */}
+        {phase === "capture" && (
+          <form
+            id="lca-form"
+            key={animKey}
+            className="lca-form lca-enter"
+            onSubmit={onCaptureContinue}
+            noValidate
+          >
+            <h2 className="lca-q">
+              {es ? "Cotización gratis." : "Get your free quote."}
+            </h2>
+            <p className="lca-help">
+              {es
+                ? "Nombre, teléfono y email primero — luego unas preguntas rápidas."
+                : "Name, phone, and email first — then a few quick questions about your move."}
+            </p>
+
+            <div className="lca-biz">
+              <div className="lca-biz-thumb">
+                <img src="/bull.svg" alt="" width={28} height={28} />
+              </div>
+              <div>
+                <strong>Toro Movers</strong>
+                <div className="lca-stars">
+                  ★★★★★
+                  <span>
+                    {GOOGLE_RATING} · {es ? "Florida Central" : "Central Florida"}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <input
-            className="hp-field"
-            type="text"
-            name="company"
-            tabIndex={-1}
-            autoComplete="off"
-            aria-hidden="true"
-            value={hp}
-            onChange={(e) => setHp(e.target.value)}
-          />
-          <label className="lca-field">
-            <span>{es ? "Nombre" : "Full name"}</span>
             <input
+              className="hp-field"
               type="text"
-              name="name"
-              autoComplete="name"
-              enterKeyHint="next"
-              autoFocus
-              value={name}
-              onChange={(e) => {
-                begin();
-                setName(e.target.value);
-              }}
-              placeholder={es ? "Tu nombre" : "Your name"}
-              required
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={hp}
+              onChange={(e) => setHp(e.target.value)}
             />
-          </label>
+            <label className="lca-field">
+              <span>{es ? "Nombre" : "Full name"}</span>
+              <input
+                type="text"
+                name="name"
+                autoComplete="name"
+                enterKeyHint="next"
+                autoFocus
+                value={name}
+                onChange={(e) => {
+                  begin();
+                  setName(e.target.value);
+                }}
+                onFocus={(e) =>
+                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
+                }
+                placeholder={es ? "Tu nombre" : "Your name"}
+                required
+              />
+            </label>
 
-          <label className="lca-field">
-            <span>{es ? "Teléfono móvil" : "Mobile phone"}</span>
-            <input
-              type="tel"
-              name="phone"
-              inputMode="tel"
-              autoComplete="tel"
-              enterKeyHint="next"
-              value={phone}
-              onChange={(e) => setPhone(formatPhone(e.target.value))}
-              placeholder={PHONE_DISPLAY}
-              required
-              aria-invalid={phone.length > 0 && !phoneOk}
-            />
-          </label>
+            <label className="lca-field">
+              <span>{es ? "Teléfono móvil" : "Mobile phone"}</span>
+              <input
+                type="tel"
+                name="phone"
+                inputMode="tel"
+                autoComplete="tel"
+                enterKeyHint="next"
+                value={phone}
+                onChange={(e) => setPhone(formatPhone(e.target.value))}
+                onFocus={(e) =>
+                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
+                }
+                placeholder={PHONE_DISPLAY}
+                required
+                aria-invalid={phone.length > 0 && !phoneOk}
+              />
+            </label>
 
-          <label className="lca-field">
-            <span>Email</span>
-            <input
-              type="email"
-              name="email"
-              inputMode="email"
-              autoComplete="email"
-              enterKeyHint="done"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
-              required
-              aria-invalid={email.length > 0 && !emailOkVal}
-            />
-          </label>
+            <label className="lca-field">
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                inputMode="email"
+                autoComplete="email"
+                enterKeyHint="done"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={(e) =>
+                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
+                }
+                placeholder="you@email.com"
+                required
+                aria-invalid={email.length > 0 && !emailOkVal}
+              />
+            </label>
 
-          <label className="lca-consent">
-            <input
-              type="checkbox"
-              checked={smsConsent}
-              onChange={(e) => setSmsConsent(e.target.checked)}
-            />
-            <span>
+            <label className="lca-consent">
+              <input
+                type="checkbox"
+                checked={smsConsent}
+                onChange={(e) => setSmsConsent(e.target.checked)}
+              />
+              <span>
+                {es
+                  ? `Acepto SMS y llamadas de Toro Movers al ${PHONE_DISPLAY}. STOP para salir.`
+                  : `I agree to texts & calls from Toro Movers at ${PHONE_DISPLAY}. Reply STOP to opt out.`}
+              </span>
+            </label>
+
+            {error && <p className="lca-err">{error}</p>}
+          </form>
+        )}
+
+        {/* 2. SERVICE */}
+        {phase === "service" && (
+          <div key={animKey} className="lca-form lca-enter">
+            <h2 className="lca-q">
+              {es ? "¿Qué necesitas?" : "What kind of help do you need?"}
+            </h2>
+            <p className="lca-help">
+              {es ? "Toca una opción para continuar." : "Tap one to continue."}
+            </p>
+            <div className="lca-options" role="radiogroup">
+              {(
+                [
+                  [
+                    "full-service",
+                    "Full-service",
+                    es
+                      ? "Camión + cuadrilla · carga, mudanza y colocación"
+                      : "Truck + crew · load, move & place",
+                  ],
+                  [
+                    "labor",
+                    es ? "Solo labor" : "Labor only",
+                    es
+                      ? "Tú traes el camión, U-Haul o POD"
+                      : "You have a truck, U-Haul, or POD",
+                  ],
+                  [
+                    "not-sure",
+                    es ? "No estoy seguro/a" : "Not sure yet",
+                    es ? "Te ayudamos a elegir" : "We'll help you pick the right option",
+                  ],
+                ] as const
+              ).map(([id, label, hint]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`lca-opt${service === id ? " on" : ""}`}
+                  aria-checked={service === id}
+                  disabled={advancing || sending}
+                  onClick={() => pickAndAdvance(() => setService(id), "fromZip")}
+                >
+                  <span className="lca-opt-label">
+                    {label}
+                    <span className="lca-opt-hint">{hint}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 3. FROM ZIP */}
+        {phase === "fromZip" && (
+          <form
+            id="lca-form"
+            key={animKey}
+            className="lca-form lca-enter"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (fromZip.length === 5) goTo("toZip");
+              else
+                setError(
+                  es ? "Ingrese un ZIP de 5 dígitos." : "Enter a 5-digit ZIP code.",
+                );
+            }}
+          >
+            <h2 className="lca-q">
+              {es ? "¿Desde qué ZIP?" : "Where are you moving from?"}
+            </h2>
+            <p className="lca-help">
               {es
-                ? `Acepto SMS y llamadas de Toro Movers al ${PHONE_DISPLAY}. STOP para salir.`
-                : `I agree to texts & calls from Toro Movers at ${PHONE_DISPLAY}. Reply STOP to opt out.`}
-            </span>
-          </label>
+                ? "Solo el código postal de 5 dígitos — cualquier ciudad está bien."
+                : "Just the 5-digit ZIP — any city is fine."}
+            </p>
+            <label className="lca-field">
+              <span>{es ? "ZIP de origen" : "Origin ZIP"}</span>
+              <input
+                className="lca-zip"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="postal-code"
+                maxLength={5}
+                autoFocus
+                value={fromZip}
+                onChange={(e) => {
+                  const z = e.target.value.replace(/\D/g, "").slice(0, 5);
+                  setFromZip(z);
+                  setError("");
+                  if (z.length === 5) {
+                    // Auto-advance feels snappy on mobile
+                    window.setTimeout(() => goTo("toZip"), 180);
+                  }
+                }}
+                onFocus={(e) =>
+                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
+                }
+                placeholder="32801"
+              />
+            </label>
+            {error && <p className="lca-err">{error}</p>}
+          </form>
+        )}
 
-          {error && <p className="lca-err">{error}</p>}
+        {/* 4. TO ZIP */}
+        {phase === "toZip" && (
+          <form
+            id="lca-form"
+            key={animKey}
+            className="lca-form lca-enter"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (toZip.length === 5) goTo("size");
+              else
+                setError(
+                  es ? "Ingrese un ZIP de 5 dígitos." : "Enter a 5-digit ZIP code.",
+                );
+            }}
+          >
+            <h2 className="lca-q">
+              {es ? "¿A qué ZIP?" : "Where are you moving to?"}
+            </h2>
+            <p className="lca-help">
+              {es
+                ? "Solo el código postal de 5 dígitos."
+                : "Just the 5-digit ZIP."}
+            </p>
+            <label className="lca-field">
+              <span>{es ? "ZIP de destino" : "Destination ZIP"}</span>
+              <input
+                className="lca-zip"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="postal-code"
+                maxLength={5}
+                autoFocus
+                value={toZip}
+                onChange={(e) => {
+                  const z = e.target.value.replace(/\D/g, "").slice(0, 5);
+                  setToZip(z);
+                  setError("");
+                  if (z.length === 5) {
+                    window.setTimeout(() => goTo("size"), 180);
+                  }
+                }}
+                onFocus={(e) =>
+                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
+                }
+                placeholder="34787"
+              />
+            </label>
+            {error && <p className="lca-err">{error}</p>}
+          </form>
+        )}
 
+        {/* 5. SIZE */}
+        {phase === "size" && (
+          <div key={animKey} className="lca-form lca-enter">
+            <h2 className="lca-q">
+              {es ? "¿Qué tamaño es?" : "How big is the move?"}
+            </h2>
+            <p className="lca-help">
+              {es ? "Toca una opción para continuar." : "Tap one to continue."}
+            </p>
+            <div className="lca-options" role="radiogroup">
+              {SIZE_OPTS.map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  className={`lca-opt${homeSize === o.id ? " on" : ""}`}
+                  aria-checked={homeSize === o.id}
+                  disabled={advancing || sending}
+                  onClick={() =>
+                    pickAndAdvance(() => setHomeSize(o.id), "specials")
+                  }
+                >
+                  <span className="lca-opt-label">
+                    {es ? o.labelEs : o.labelEn}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 6. SPECIALS (optional) */}
+        {phase === "specials" && (
+          <div key={animKey} className="lca-form lca-enter">
+            <h2 className="lca-q">
+              {es ? "¿Artículos especiales?" : "Any special items?"}
+            </h2>
+            <p className="lca-help">
+              {es
+                ? "Opcional — elige lo que aplique o salta."
+                : "Optional — select any that apply, or skip."}
+            </p>
+            <div className="lca-options" role="group">
+              {SPECIALS.map((o) => (
+                <button
+                  key={o.id}
+                  type="button"
+                  className={`lca-opt${specials.includes(o.id) ? " on" : ""}`}
+                  aria-checked={specials.includes(o.id)}
+                  onClick={() => toggleSpecial(o.id)}
+                >
+                  <span className="lca-opt-label">
+                    {es ? o.labelEs : o.labelEn}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 7. DETAILS (optional) */}
+        {phase === "details" && (
+          <div key={animKey} className="lca-form lca-enter">
+            <h2 className="lca-q">{es ? "¿Algo más?" : "Extra details"}</h2>
+            <p className="lca-help">
+              {es
+                ? "Opcional — códigos, estacionamiento, horarios…"
+                : "Optional — gate codes, parking, preferred time…"}
+            </p>
+            <label className="lca-field">
+              <span>{es ? "Notas" : "Notes"}</span>
+              <textarea
+                className="lca-textarea"
+                rows={3}
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
+                onFocus={(e) =>
+                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
+                }
+                placeholder={
+                  es
+                    ? "Códigos, escaleras, horario preferido…"
+                    : "Gate codes, stairs, preferred time…"
+                }
+              />
+            </label>
+          </div>
+        )}
+
+        {/* 8. WHEN → submit */}
+        {phase === "when" && (
+          <div key={animKey} className="lca-form lca-enter">
+            <h2 className="lca-q">
+              {es ? "¿Cuándo nos necesitas?" : "When do you need us?"}
+            </h2>
+            <p className="lca-help">
+              {es
+                ? "Última pregunta — te contactamos al instante."
+                : "Last question — we contact you right away."}
+            </p>
+            <div className="lca-options" role="radiogroup">
+              {WHEN_OPTS.map((w) => (
+                <button
+                  key={w.id}
+                  type="button"
+                  className={`lca-opt${whenId === w.id ? " on" : ""}${w.hot ? " lca-opt-hot" : ""}`}
+                  aria-checked={whenId === w.id}
+                  disabled={advancing || sending}
+                  onClick={() => {
+                    setWhenId(w.id);
+                    setAdvancing(true);
+                    window.setTimeout(() => {
+                      const svc =
+                        service || prefillService.current || "full-service";
+                      void submitFull(w.id, homeSize, svc as ServiceKind);
+                    }, ADVANCE_MS);
+                  }}
+                >
+                  <span className="lca-opt-label">
+                    {es ? w.labelEs : w.labelEn}
+                  </span>
+                </button>
+              ))}
+            </div>
+            {sending && (
+              <p className="lca-sending">{es ? "Enviando…" : "Sending…"}</p>
+            )}
+            {error && <p className="lca-err">{error}</p>}
+          </div>
+        )}
+      </div>
+
+      {/* Sticky thumb-zone footer */}
+      <div
+        className={`lca-footer${
+          phase === "service" || phase === "size" || phase === "when"
+            ? " lca-footer--tap"
+            : ""
+        }`}
+      >
+        {showFooterPrimary && phase === "capture" && (
           <button
             type="submit"
+            form="lca-form"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
             disabled={
               sending || !nameOk || !phoneOk || !emailOkVal || !smsConsent
@@ -579,359 +915,84 @@ export function LeadCaptureAgent({
                 ? "Guardando…"
                 : "Saving…"
               : es
-                ? "Continuar →"
-                : "Continue →"}
+                ? "Continuar"
+                : "Continue"}
           </button>
-
-          <a href={PHONE_TEL} className="lca-call-link">
-            {es ? "¿Prefieres llamar?" : "Prefer to call?"} {PHONE_DISPLAY}
-          </a>
-        </form>
-      )}
-
-      {/* 2. SERVICE */}
-      {phase === "service" && (
-        <div key={animKey} className="lca-form lca-enter lca-focus">
-          <h2 className="lca-q">
-            {es ? "¿Qué necesitas?" : "What kind of help do you need?"}
-          </h2>
-          <div
-            className="lca-options lca-options-focus lca-options-stack"
-            role="radiogroup"
-          >
-            {(
-              [
-                [
-                  "full-service",
-                  es ? "Full-service" : "Full-service",
-                  es ? "Camión + cuadrilla · carga, mudanza y colocación" : "Truck + crew · load, move & place",
-                ],
-                [
-                  "labor",
-                  es ? "Solo labor" : "Labor only",
-                  es ? "Tú traes el camión, U-Haul o POD" : "You have a truck, U-Haul, or POD",
-                ],
-                [
-                  "not-sure",
-                  es ? "No estoy seguro/a" : "Not sure yet",
-                  es ? "Te ayudamos a elegir" : "We'll help you pick the right option",
-                ],
-              ] as const
-            ).map(([id, label, hint]) => (
-              <button
-                key={id}
-                type="button"
-                className={`lca-opt lca-opt-focus lca-opt-wide${service === id ? " on" : ""}`}
-                aria-checked={service === id}
-                disabled={advancing || sending}
-                onClick={() =>
-                  pickAndAdvance(() => setService(id), "fromZip")
-                }
-              >
-                <span className="lca-opt-label">
-                  {label}
-                  <span className="lca-opt-hint">{hint}</span>
-                </span>
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => backFrom("service")}
-          >
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </div>
-      )}
-
-      {/* 3. FROM ZIP */}
-      {phase === "fromZip" && (
-        <form
-          key={animKey}
-          className="lca-form lca-enter lca-focus"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (fromZip.length === 5) goTo("toZip");
-            else
-              setError(
-                es ? "Ingrese un ZIP de 5 dígitos." : "Enter a 5-digit ZIP code.",
-              );
-          }}
-        >
-          <h2 className="lca-q">
-            {es ? "¿Desde qué ZIP?" : "Where are you moving from?"}
-          </h2>
-          <p className="lca-help">
-            {es ? "Solo el código postal de 5 dígitos." : "Just the 5-digit ZIP."}
-          </p>
-          <label className="lca-field">
-            <span>{es ? "ZIP de origen" : "Origin ZIP"}</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              autoComplete="postal-code"
-              maxLength={5}
-              autoFocus
-              value={fromZip}
-              onChange={(e) => {
-                setFromZip(e.target.value.replace(/\D/g, "").slice(0, 5));
-                setError("");
-              }}
-              placeholder="e.g. 32801"
-            />
-          </label>
-          {error && <p className="lca-err">{error}</p>}
+        )}
+        {showFooterPrimary && phase === "fromZip" && (
           <button
             type="submit"
+            form="lca-form"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
             disabled={fromZip.length !== 5}
           >
-            {es ? "Continuar →" : "Continue →"}
+            {es ? "Continuar" : "Continue"}
           </button>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => backFrom("fromZip")}
-          >
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </form>
-      )}
-
-      {/* 4. TO ZIP */}
-      {phase === "toZip" && (
-        <form
-          key={animKey}
-          className="lca-form lca-enter lca-focus"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (toZip.length === 5) goTo("size");
-            else
-              setError(
-                es ? "Ingrese un ZIP de 5 dígitos." : "Enter a 5-digit ZIP code.",
-              );
-          }}
-        >
-          <h2 className="lca-q">
-            {es ? "¿A qué ZIP?" : "Where are you moving to?"}
-          </h2>
-          <p className="lca-help">
-            {es ? "Solo el código postal de 5 dígitos." : "Just the 5-digit ZIP."}
-          </p>
-          <label className="lca-field">
-            <span>{es ? "ZIP de destino" : "Destination ZIP"}</span>
-            <input
-              type="text"
-              inputMode="numeric"
-              autoComplete="postal-code"
-              maxLength={5}
-              autoFocus
-              value={toZip}
-              onChange={(e) => {
-                setToZip(e.target.value.replace(/\D/g, "").slice(0, 5));
-                setError("");
-              }}
-              placeholder="e.g. 34787"
-            />
-          </label>
-          {error && <p className="lca-err">{error}</p>}
+        )}
+        {showFooterPrimary && phase === "toZip" && (
           <button
             type="submit"
+            form="lca-form"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
             disabled={toZip.length !== 5}
           >
-            {es ? "Continuar →" : "Continue →"}
+            {es ? "Continuar" : "Continue"}
           </button>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => backFrom("toZip")}
-          >
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </form>
-      )}
-
-      {/* 5. SIZE */}
-      {phase === "size" && (
-        <div key={animKey} className="lca-form lca-enter lca-focus">
-          <h2 className="lca-q">
-            {es ? "¿Qué tamaño es?" : "How big is the move?"}
-          </h2>
-          <div className="lca-options lca-options-focus" role="radiogroup">
-            {SIZE_OPTS.map((o) => (
-              <button
-                key={o.id}
-                type="button"
-                className={`lca-opt lca-opt-focus${homeSize === o.id ? " on" : ""}`}
-                aria-checked={homeSize === o.id}
-                disabled={advancing || sending}
-                onClick={() =>
-                  pickAndAdvance(() => setHomeSize(o.id), "specials")
-                }
-              >
-                <span className="lca-opt-label">{es ? o.labelEs : o.labelEn}</span>
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => backFrom("size")}
-          >
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </div>
-      )}
-
-      {/* 6. SPECIALS (optional) */}
-      {phase === "specials" && (
-        <div key={animKey} className="lca-form lca-enter lca-focus">
-          <h2 className="lca-q">
-            {es ? "¿Artículos especiales?" : "Any special items?"}
-          </h2>
-          <p className="lca-help">
-            {es
-              ? "Opcional — elige lo que aplique o continúa."
-              : "Optional — select any that apply, or continue."}
-          </p>
-          <div className="lca-options lca-options-focus" role="group">
-            {SPECIALS.map((o) => (
-              <button
-                key={o.id}
-                type="button"
-                className={`lca-opt lca-opt-focus${specials.includes(o.id) ? " on" : ""}`}
-                aria-checked={specials.includes(o.id)}
-                onClick={() => toggleSpecial(o.id)}
-              >
-                <span className="lca-opt-label">{es ? o.labelEs : o.labelEn}</span>
-              </button>
-            ))}
-          </div>
+        )}
+        {showFooterPrimary && phase === "specials" && (
           <button
             type="button"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
-            style={{ marginTop: 14 }}
             onClick={() => goTo("details")}
           >
-            {es ? "Continuar →" : "Continue →"}
+            {specials.length
+              ? es
+                ? "Continuar"
+                : "Continue"
+              : es
+                ? "Continuar"
+                : "Continue"}
           </button>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => goTo("details")}
-          >
-            {es ? "Saltar" : "Skip"}
-          </button>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => backFrom("specials")}
-          >
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </div>
-      )}
-
-      {/* 7. DETAILS (optional) */}
-      {phase === "details" && (
-        <div key={animKey} className="lca-form lca-enter lca-focus">
-          <h2 className="lca-q">
-            {es ? "¿Algo más?" : "Extra details"}
-          </h2>
-          <p className="lca-help">
-            {es
-              ? "Opcional — códigos, estacionamiento, horarios…"
-              : "Optional — gate codes, parking, preferred time…"}
-          </p>
-          <label className="lca-field">
-            <span>{es ? "Notas" : "Notes"}</span>
-            <textarea
-              className="lca-textarea"
-              rows={3}
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
-              placeholder={
-                es
-                  ? "Códigos, escaleras, horario preferido…"
-                  : "Gate codes, stairs, preferred time…"
-              }
-            />
-          </label>
+        )}
+        {showFooterPrimary && phase === "details" && (
           <button
             type="button"
             className="fn-btn fn-btn-primary fn-btn-lg lca-full"
             onClick={() => goTo("when")}
           >
-            {es ? "Continuar →" : "Continue →"}
+            {es ? "Continuar" : "Continue"}
           </button>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => goTo("when")}
-          >
-            {es ? "Saltar" : "Skip"}
-          </button>
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => backFrom("details")}
-          >
-            {es ? "← Atrás" : "← Back"}
-          </button>
-        </div>
-      )}
+        )}
 
-      {/* 8. WHEN → submit */}
-      {phase === "when" && (
-        <div key={animKey} className="lca-form lca-enter lca-focus">
-          <h2 className="lca-q">
-            {es ? "¿Cuándo nos necesitas?" : "When do you need us?"}
-          </h2>
-          <p className="lca-help">
-            {es
-              ? "Última pregunta — te contactamos al instante."
-              : "Last question — we contact you right away."}
-          </p>
-          <div className="lca-options lca-options-focus" role="radiogroup">
-            {WHEN_OPTS.map((w) => (
-              <button
-                key={w.id}
-                type="button"
-                className={`lca-opt lca-opt-focus${whenId === w.id ? " on" : ""}${w.hot ? " lca-opt-hot" : ""}${sending ? " lca-opt-busy" : ""}`}
-                aria-checked={whenId === w.id}
-                disabled={advancing || sending}
-                onClick={() => {
-                  setWhenId(w.id);
-                  setAdvancing(true);
-                  window.setTimeout(() => {
-                    const svc =
-                      service || prefillService.current || "full-service";
-                    void submitFull(w.id, homeSize, svc as ServiceKind);
-                  }, ADVANCE_MS);
-                }}
-              >
-                <span className="lca-opt-label">{es ? w.labelEs : w.labelEn}</span>
-              </button>
-            ))}
-          </div>
-          {sending && (
-            <p className="lca-help" style={{ marginTop: 14, textAlign: "center" }}>
-              {es ? "Enviando…" : "Sending…"}
-            </p>
+        <div className="lca-footer-row">
+          {showFooterBack && (
+            <button
+              type="button"
+              className="lca-back"
+              onClick={() => backFrom(phase as ActivePhase)}
+              disabled={sending || advancing}
+            >
+              {es ? "← Atrás" : "← Back"}
+            </button>
           )}
-          {error && <p className="lca-err">{error}</p>}
-          <button
-            type="button"
-            className="lca-back lca-back-solo"
-            onClick={() => backFrom("when")}
-            disabled={sending}
-          >
-            {es ? "← Atrás" : "← Back"}
-          </button>
+          {showFooterSkip && (
+            <button
+              type="button"
+              className="lca-back"
+              onClick={() =>
+                goTo(phase === "specials" ? "details" : "when")
+              }
+            >
+              {es ? "Saltar" : "Skip"}
+            </button>
+          )}
+          {phase === "capture" && (
+            <a href={PHONE_TEL} className="lca-call-link">
+              {es ? "Llamar" : "Call"} {PHONE_DISPLAY}
+            </a>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

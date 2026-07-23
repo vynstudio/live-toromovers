@@ -1,5 +1,5 @@
-/* Sales-funnel shell for /get-my-price — white mobile app, max 480px.
-   Ported from toro-sales-funnel for visual parity with the preview form. */
+/* Sales-funnel shell for /get-my-price — mobile-first white app.
+   Parity with toro-sales-funnel + stronger small-phone / iOS polish. */
 
 @font-face {
   font-family: "GC Commune";
@@ -21,12 +21,17 @@
   --bg: #ffffff;
   --panel: #f7f7f9;
   --ok: #0f9f6e;
+  --ok-soft: rgba(15, 159, 110, 0.12);
   --radius: 14px;
   --tap: 56px;
   --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-t: env(safe-area-inset-top, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
   --header-h: 56px;
+  --footer-h: 88px;
   --max: 480px;
+  --pad-x: 16px;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif;
   --display: "GC Commune", Georgia, "Times New Roman", serif;
@@ -42,18 +47,24 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  height: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100%;
+  min-height: 100dvh;
   background: var(--panel);
   color: var(--ink);
   font-family: var(--font);
   font-size: 16px;
   line-height: 1.4;
+  overflow-x: hidden;
+  /* iOS: avoid rubber-band showing gray gutters */
+  overscroll-behavior-y: none;
 }
 
 img {
@@ -66,6 +77,12 @@ input,
 textarea {
   font: inherit;
   color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
 }
 
 a {
@@ -82,9 +99,11 @@ a {
   pointer-events: none;
 }
 
-/* —— App shell —— */
+/* —— App shell (phone width) —— */
 .lca-page {
+  min-height: 100%;
   min-height: 100dvh;
+  min-height: 100svh;
   max-width: var(--max);
   margin: 0 auto;
   background: var(--bg);
@@ -92,23 +111,24 @@ a {
   display: flex;
   flex-direction: column;
   position: relative;
-  box-shadow: 0 0 0 1px var(--line);
+  padding-left: var(--safe-l);
+  padding-right: var(--safe-r);
 }
 
 .lca-top {
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   min-height: var(--header-h);
-  padding: 8px 16px;
-  padding-top: calc(8px + var(--safe-t));
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  padding: 8px var(--pad-x);
+  padding-top: max(8px, var(--safe-t));
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
 
@@ -117,10 +137,11 @@ a {
   align-items: center;
   gap: 8px;
   font-weight: 800;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-size: 14px;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--ink);
+  min-height: 44px;
 }
 
 .lca-brand-mark {
@@ -130,6 +151,7 @@ a {
   background: var(--red);
   display: grid;
   place-items: center;
+  flex-shrink: 0;
 }
 
 .lca-brand-mark img {
@@ -141,62 +163,54 @@ a {
   color: var(--red);
 }
 
-.lca-top-phone {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--red);
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-}
-
 .lca-top-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 1px;
+  gap: 0;
+  min-width: 0;
 }
 
 .lca-top-responds {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--muted);
   font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
-/* Progress */
-.lca-progress {
-  height: 3px;
-  background: var(--line);
-  overflow: hidden;
+.lca-top-phone {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--red);
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
-.lca-progress > span {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, var(--red), #e8334a);
-  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Main form area */
+/* Main */
 .lca-hero {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0;
   min-height: 0;
+  width: 100%;
 }
 
 .lca-hero-copy {
-  display: none; /* pure funnel — no long marketing copy above fold */
+  display: none;
 }
 
 .lca-card {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   background: var(--bg);
-  color: var(--ink);
-  padding: 18px 18px calc(28px + var(--safe-b));
+  padding: 0;
   border: 0;
-  border-radius: 0;
   box-shadow: none;
 }
 
@@ -204,48 +218,95 @@ a {
   display: none;
 }
 
+/* Agent root: column with sticky footer */
+.lca {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Full-bleed progress under header */
+.lca-progress {
+  height: 3px;
+  background: var(--line);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.lca-progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), #e8334a);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: width;
+}
+
+/* Scrollable step body */
+.lca-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 16px var(--pad-x) 12px;
+  /* room when keyboard opens + sticky footer */
+  padding-bottom: calc(12px + var(--footer-h) + var(--safe-b));
+}
+
+.lca-scroll.lca-scroll--done {
+  padding-bottom: calc(24px + var(--safe-b));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .lca-step {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--muted);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin: 0 0 14px;
+  margin: 0 0 12px;
+  line-height: 1.3;
 }
 
 .lca-step-hint {
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0;
-  color: var(--muted);
+  color: #8a8a92;
 }
 
 .lca-q {
   font-family: var(--display);
-  font-size: clamp(22px, 5.6vw, 28px);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  font-size: clamp(22px, 6.2vw, 28px);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
   margin: 0 0 8px;
   font-weight: 400;
   color: var(--ink);
+  text-wrap: balance;
 }
 
 .lca-help {
-  margin: 0 0 20px;
-  font-size: 14.5px;
+  margin: 0 0 18px;
+  font-size: 14px;
   color: var(--muted);
   font-weight: 500;
   line-height: 1.45;
 }
 
 .lca-form {
-  animation: lca-rise 0.28s ease both;
+  animation: lca-rise 0.26s ease both;
 }
 
 @keyframes lca-rise {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -254,22 +315,24 @@ a {
 }
 
 .lca-enter {
-  animation: lca-rise 0.28s ease both;
+  animation: lca-rise 0.26s ease both;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .lca-enter,
-  .lca-form {
+  .lca-form,
+  .lca-progress > span {
     animation: none;
+    transition: none;
   }
 }
 
-/* Trust card on contact */
+/* Trust card */
 .lca-biz {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px;
+  padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: 12px;
   margin-bottom: 18px;
@@ -277,8 +340,8 @@ a {
 }
 
 .lca-biz-thumb {
-  width: 48px;
-  height: 48px;
+  width: 46px;
+  height: 46px;
   border-radius: 10px;
   background: #fff;
   border: 1px solid var(--line);
@@ -289,22 +352,24 @@ a {
 }
 
 .lca-biz-thumb img {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
 }
 
 .lca-biz strong {
   display: block;
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 800;
+  line-height: 1.2;
 }
 
 .lca-biz .lca-stars {
   color: #f5a623;
-  font-size: 12.5px;
+  font-size: 12px;
   letter-spacing: 1px;
-  margin-top: 2px;
+  margin-top: 3px;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .lca-biz .lca-stars span {
@@ -312,6 +377,7 @@ a {
   font-weight: 600;
   letter-spacing: 0;
   margin-left: 4px;
+  font-size: 12px;
 }
 
 /* Fields */
@@ -327,10 +393,11 @@ a {
   top: -8px;
   background: #fff;
   padding: 0 6px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--muted);
   z-index: 1;
+  line-height: 1;
 }
 
 .lca-field input,
@@ -338,22 +405,40 @@ a {
 .lca-textarea {
   width: 100%;
   min-height: var(--tap);
-  padding: 14px 16px;
+  padding: 15px 16px;
   border: 1.5px solid var(--line);
   border-radius: 12px;
   background: #fff;
-  font-size: 16px;
+  font-size: 16px; /* iOS: prevent zoom */
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
   -webkit-appearance: none;
+  appearance: none;
   color: var(--ink);
+  border-radius: 12px;
+}
+
+.lca-field input::placeholder,
+.lca-textarea::placeholder {
+  color: #a8a8b0;
+}
+
+/* ZIP / numeric emphasis */
+.lca-field input[inputmode="numeric"],
+.lca-field input.lca-zip {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .lca-textarea {
-  min-height: 120px;
+  min-height: 112px;
   resize: vertical;
   line-height: 1.45;
   font-family: inherit;
+  padding-top: 16px;
 }
 
 .lca-field input:focus,
@@ -370,23 +455,29 @@ a {
 .lca-consent {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  margin: 4px 0 16px;
+  gap: 12px;
+  margin: 2px 0 8px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  background: var(--panel);
   font-size: 12.5px;
   color: var(--muted);
   line-height: 1.45;
   cursor: pointer;
+  /* expand hit target */
+  min-height: 52px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .lca-consent input {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   margin-top: 1px;
   accent-color: var(--red);
   flex-shrink: 0;
 }
 
-/* Option list (sales-funnel radio style) */
+/* Options list */
 .lca-options,
 .lca-options-focus,
 .lca-options-stack {
@@ -397,6 +488,8 @@ a {
   border-radius: var(--radius);
   overflow: hidden;
   background: #fff;
+  /* avoid iOS double-tap zoom on controls */
+  touch-action: manipulation;
 }
 
 .lca-opt,
@@ -409,13 +502,13 @@ a {
   gap: 12px;
   width: 100%;
   min-height: var(--tap);
-  padding: 14px 16px;
+  padding: 13px 14px;
   text-align: left;
   background: #fff;
   border: 0;
   border-bottom: 1px solid var(--line);
   border-radius: 0;
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 600;
   color: var(--ink-2);
   cursor: pointer;
@@ -424,6 +517,14 @@ a {
   touch-action: manipulation;
   box-shadow: none;
   transform: none !important;
+  user-select: none;
+}
+
+/* Multi-line options (service hints) need more height */
+.lca-opt:has(.lca-opt-hint) {
+  min-height: 64px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 .lca-opt:last-child {
@@ -434,22 +535,30 @@ a {
   background: var(--panel);
 }
 
+.lca-opt:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
 .lca-opt.on,
 .lca-opt[aria-checked="true"] {
   background: var(--red-soft);
   color: var(--ink);
-  border-color: transparent;
-  box-shadow: none;
 }
 
 .lca-opt-hot:not(.on) {
-  background: #fff;
-  border-color: transparent;
+  background: #fffafb;
+}
+
+.lca-opt-hot:not(.on) .lca-opt-label {
+  color: var(--ink);
 }
 
 .lca-opt-label {
   flex: 1;
   min-width: 0;
+  text-align: left;
+  line-height: 1.25;
 }
 
 .lca-opt-hint {
@@ -457,7 +566,8 @@ a {
   font-size: 12.5px;
   font-weight: 500;
   color: var(--muted);
-  margin-top: 2px;
+  margin-top: 3px;
+  line-height: 1.3;
 }
 
 /* Radio indicator */
@@ -468,38 +578,69 @@ a {
   border-radius: 50%;
   border: 2px solid #c5c5cc;
   flex-shrink: 0;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
 .lca-opt.on::after {
   border-color: var(--red);
   box-shadow: 0 0 0 3px var(--red-ring);
-  background: radial-gradient(circle, var(--red) 0 45%, transparent 48%);
+  background: radial-gradient(circle, var(--red) 0 42%, transparent 46%);
 }
 
-/* multi-select specials use checkbox look */
+/* multi-select = checkbox */
 .lca-options[role="group"] .lca-opt::after {
   border-radius: 6px;
   background: #fff;
+  box-shadow: none;
 }
 
 .lca-options[role="group"] .lca-opt.on::after {
-  background: var(--red);
+  background: var(--red)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 7.2L5.6 10.2 11.5 3.8' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 12px 12px no-repeat;
   border-color: var(--red);
   box-shadow: none;
-  /* checkmark via box-shadow inset */
-  box-shadow: inset 0 0 0 2px #fff;
 }
 
-/* Primary CTA */
+/* —— Sticky footer actions (thumb zone) —— */
+.lca-footer {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: var(--max);
+  z-index: 45;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+  padding: 10px var(--pad-x) calc(10px + var(--safe-b));
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* account for home indicator */
+}
+
+.lca-footer[hidden],
+.lca-footer.lca-footer--hide {
+  display: none !important;
+}
+
+/* Tap-only steps: compact footer (just back) */
+.lca-footer.lca-footer--tap {
+  padding-top: 6px;
+  padding-bottom: calc(6px + var(--safe-b));
+}
+
 .fn-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
-  min-height: 54px;
-  padding: 14px 22px;
+  min-height: 52px;
+  padding: 14px 20px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
@@ -510,15 +651,18 @@ a {
   line-height: 1;
   transition: background 0.15s, transform 0.12s, opacity 0.15s;
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .fn-btn-lg {
-  min-height: 54px;
+  min-height: 52px;
 }
 
 .fn-btn-primary {
   background: var(--red);
   color: #fff;
+  box-shadow: 0 6px 18px rgba(200, 16, 46, 0.28);
 }
 
 .fn-btn-primary:hover {
@@ -530,9 +674,10 @@ a {
 }
 
 .fn-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.42;
   cursor: default;
   transform: none;
+  box-shadow: none;
 }
 
 .fn-btn-ghost-light {
@@ -540,7 +685,8 @@ a {
   color: var(--muted);
   font-weight: 700;
   font-size: 15px;
-  min-height: 44px;
+  min-height: 42px;
+  box-shadow: none;
 }
 
 .fn-btn-ghost-light:hover {
@@ -550,58 +696,93 @@ a {
 
 .lca-full {
   width: 100%;
-  margin-top: 4px;
+}
+
+/* Secondary row: back / skip / call */
+.lca-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 40px;
 }
 
 .lca-back,
 .lca-back-solo {
-  display: block;
-  width: 100%;
-  text-align: center;
-  margin-top: 12px;
-  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  min-width: 72px;
+  padding: 8px 14px;
   background: none;
   border: none;
   color: var(--muted);
-  font: 700 15px var(--font);
+  font: 700 14.5px var(--font);
   cursor: pointer;
-  padding: 10px 4px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.lca-back:active,
+.lca-back-solo:active {
+  color: var(--ink);
+  background: var(--panel);
+  border-radius: 999px;
+}
+
+.lca-back:disabled {
+  opacity: 0.4;
+}
+
+.lca-call-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
 }
 
 .lca-err {
   color: var(--red);
   font-size: 13px;
   font-weight: 700;
-  margin: 10px 0 0;
+  margin: 8px 0 0;
+  line-height: 1.35;
 }
 
-.lca-call-link {
-  display: block;
+.lca-sending {
   text-align: center;
-  margin-top: 14px;
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--muted);
-  min-height: 44px;
-  line-height: 44px;
+  margin: 14px 0 0;
 }
 
 /* Success */
 .lca-done {
   text-align: center;
-  padding: 24px 4px 8px;
+  padding: 12px 4px 8px;
+  width: 100%;
 }
 
 .lca-done-check {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 14px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
   border-radius: 50%;
-  background: var(--ok);
-  color: #fff;
-  font-size: 28px;
+  background: var(--ok-soft);
+  border: 1.5px solid var(--ok);
+  color: var(--ok);
+  font-size: 30px;
+  font-weight: 700;
   display: grid;
   place-items: center;
+  line-height: 1;
 }
 
 .lca-done-eyebrow {
@@ -616,29 +797,35 @@ a {
 .lca-done-h2 {
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(22px, 5.5vw, 26px);
-  line-height: 1.2;
+  font-size: clamp(22px, 6vw, 28px);
+  line-height: 1.18;
   margin: 0 0 10px;
   color: var(--ink);
+  text-wrap: balance;
 }
 
 .lca-done-lede {
   font-size: 14.5px;
   line-height: 1.5;
   color: var(--muted);
-  margin: 0 0 20px;
+  margin: 0 auto 22px;
+  max-width: 34ch;
 }
 
 .lca-done-actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 360px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .lca-text-btn {
   background: var(--panel) !important;
   color: var(--ink) !important;
   border-radius: 999px;
+  box-shadow: none !important;
 }
 
 .lca-done-fine {
@@ -648,7 +835,7 @@ a {
   line-height: 1.45;
 }
 
-/* Hide dark-page extras when present */
+/* Hide legacy chrome */
 .lca-proof,
 .lca-why,
 .lca-bottom-cta,
@@ -657,14 +844,103 @@ a {
   display: none !important;
 }
 
-/* Desktop: keep centered phone-width shell */
+/* —— Small phones (iPhone SE / mini) —— */
+@media (max-width: 380px) {
+  :root {
+    --pad-x: 14px;
+    --tap: 52px;
+    --footer-h: 84px;
+  }
+
+  .lca-q {
+    font-size: 21px;
+  }
+
+  .lca-help {
+    font-size: 13.5px;
+    margin-bottom: 14px;
+  }
+
+  .lca-top-responds {
+    display: none; /* free space for phone number */
+  }
+
+  .lca-top-phone {
+    font-size: 13px;
+  }
+
+  .lca-biz {
+    padding: 10px 12px;
+    margin-bottom: 14px;
+  }
+
+  .lca-opt {
+    font-size: 15px;
+    padding: 12px 12px;
+  }
+
+  .lca-field input[inputmode="numeric"],
+  .lca-field input.lca-zip {
+    font-size: 20px;
+    letter-spacing: 0.14em;
+  }
+}
+
+/* —— Short viewports (landscape phones / keyboard open) —— */
+@media (max-height: 520px) {
+  .lca-scroll {
+    padding-top: 10px;
+    padding-bottom: calc(8px + var(--footer-h) + var(--safe-b));
+  }
+
+  .lca-biz {
+    display: none; /* reclaim space under keyboard / landscape */
+  }
+
+  .lca-q {
+    font-size: 20px;
+  }
+
+  .lca-help {
+    margin-bottom: 10px;
+  }
+
+  .fn-btn {
+    min-height: 48px;
+  }
+}
+
+/* —— Desktop polish —— */
 @media (min-width: 520px) {
   body {
-    background: #ececf0;
+    background: #e8e8ee;
   }
+
   .lca-page {
     min-height: 100dvh;
-    margin: 0 auto;
-    border-radius: 0;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.05);
+  }
+
+  .lca-footer {
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+
+  .lca-scroll {
+    padding: 22px 22px 16px;
+    padding-bottom: calc(16px + var(--footer-h));
+  }
+
+  .lca-q {
+    font-size: 28px;
+  }
+}
+
+/* When visual viewport is keyboard-shrunk, keep CTA visible via sticky scroll padding */
+@supports (height: 100dvh) {
+  .lca-page {
+    min-height: 100dvh;
   }
 }

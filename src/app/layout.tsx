@@ -15,6 +15,7 @@ export const viewport: Viewport = {
   themeColor: "#FFFFFF",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 /** Ultra-thin root shell. Site chrome / funnel chrome live in route-group layouts. */
