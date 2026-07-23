@@ -353,16 +353,16 @@ a {
   display: none;
 }
 
-/* Fixed card size — all placeholders identical */
+/* Fixed card frame — same size for every Google screenshot */
 .lca-g-card {
-  flex: 0 0 min(280px, 78vw);
-  width: min(280px, 78vw);
-  height: 158px;
+  flex: 0 0 min(300px, 86vw);
+  width: min(300px, 86vw);
+  height: 168px;
   margin: 0;
   border-radius: 14px;
   overflow: hidden;
-  scroll-snap-align: start;
-  background: var(--panel);
+  scroll-snap-align: center;
+  background: #fff;
   border: 1px solid var(--line);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.2s, border-color 0.2s;
@@ -376,9 +376,11 @@ a {
 .lca-g-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top left;
+  /* keep full review readable; letterbox if aspect differs */
+  object-fit: contain;
+  object-position: center top;
   display: block;
+  background: #fff;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
@@ -962,9 +964,9 @@ a {
   }
 
   .lca-g-card {
-    flex-basis: min(260px, 82vw);
-    width: min(260px, 82vw);
-    height: 146px;
+    flex-basis: min(280px, 88vw);
+    width: min(280px, 88vw);
+    height: 156px;
   }
 
   .lca-opt {

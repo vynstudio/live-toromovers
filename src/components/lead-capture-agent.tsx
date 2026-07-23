@@ -55,13 +55,11 @@ const SIZE_OPTS: { id: Exclude<HomeSize, "">; labelEn: string; labelEs: string }
   { id: "office", labelEn: "Office / storage", labelEs: "Oficina / bodega" },
 ];
 
-/** Uniform Google-review image cards (same size) — contact step only. */
+/** Real Google review screenshots — contact step only, fixed card frame. */
 const GOOGLE_REVIEW_SLIDES = [
-  { src: "/reviews/r1.svg", name: "Stael G." },
-  { src: "/reviews/r2.svg", name: "Olivia H." },
-  { src: "/reviews/r3.svg", name: "Kony C." },
-  { src: "/reviews/r4.svg", name: "Hector L." },
-  { src: "/reviews/r5.svg", name: "Giuseppe F. V." },
+  { src: "/reviews/hector-rene-baez.png", name: "Héctor René Báez" },
+  { src: "/reviews/olivia-hawley.png", name: "Olivia Hawley" },
+  { src: "/reviews/sophia-kemi.png", name: "Sophia Kemi" },
 ] as const;
 
 function formatPhone(raw: string) {
