@@ -343,8 +343,9 @@ a {
   width: 46px;
   height: 46px;
   border-radius: 10px;
-  background: #fff;
-  border: 1px solid var(--line);
+  /* Red badge — bull.svg is white-filled, so it needs a dark/red field */
+  background: var(--red);
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -354,6 +355,8 @@ a {
 .lca-biz-thumb img {
   width: 26px;
   height: 26px;
+  /* Force white bull on red (handles multi-color SVG fills) */
+  filter: brightness(0) invert(1);
 }
 
 .lca-biz strong {
