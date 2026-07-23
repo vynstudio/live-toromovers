@@ -8,7 +8,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
+import { PHONE_DISPLAY, PHONE_TEL, GOOGLE_RATING } from "@/lib/contact";
 import {
   HOME_SIZE_LABELS,
   SERVICE_LABELS,
@@ -193,36 +193,11 @@ export function LeadCaptureAgent({
     setPhase(next);
   }
 
-  const isQuestion = phase !== "capture" && phase !== "done";
-
+  // Pure mobile funnel — no dock/pin chrome (matches toro-sales-funnel).
   useEffect(() => {
     if (typeof document === "undefined") return;
-    const root = document.documentElement;
-    if (isQuestion) root.dataset.lcaDock = "1";
-    else delete root.dataset.lcaDock;
-    return () => {
-      delete root.dataset.lcaDock;
-    };
-  }, [isQuestion]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!isQuestion && phase !== "done") return;
-    const pinCard = () => {
-      const card = document.getElementById("get-price");
-      if (!card) return;
-      const stickyReserve = 80;
-      const rect = card.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const targetBottom = vh - stickyReserve;
-      const delta = rect.bottom - targetBottom;
-      if (Math.abs(delta) > 12) {
-        window.scrollBy({ top: delta, behavior: "smooth" });
-      }
-    };
-    const t = window.setTimeout(pinCard, 50);
-    return () => window.clearTimeout(t);
-  }, [phase, isQuestion, animKey]);
+    delete document.documentElement.dataset.lcaDock;
+  }, [phase]);
 
   function funnelOf(svc: ServiceKind | ""): "labor" | "full-service" {
     return svc === "labor" ? "labor" : "full-service";
@@ -476,7 +451,7 @@ export function LeadCaptureAgent({
           : " · tap one";
 
   return (
-    <div className={`lca${isQuestion ? " lca-docked-inner" : ""}`}>
+    <div className="lca">
       <div className="lca-progress" aria-hidden>
         <span style={{ width: progress }} />
       </div>
@@ -502,6 +477,21 @@ export function LeadCaptureAgent({
               : "Name, phone, and email first — then a few quick questions about your move."}
           </p>
 
+          <div className="lca-biz" aria-hidden={false}>
+            <div className="lca-biz-thumb">
+              <img src="/bull.svg" alt="" width={28} height={28} />
+            </div>
+            <div>
+              <strong>Toro Movers</strong>
+              <div className="lca-stars">
+                ★★★★★
+                <span>
+                  {GOOGLE_RATING} · {es ? "Florida Central" : "Central Florida"}
+                </span>
+              </div>
+            </div>
+          </div>
+
           <input
             className="hp-field"
             type="text"
@@ -512,7 +502,6 @@ export function LeadCaptureAgent({
             value={hp}
             onChange={(e) => setHp(e.target.value)}
           />
-
           <label className="lca-field">
             <span>{es ? "Nombre" : "Full name"}</span>
             <input
@@ -612,21 +601,37 @@ export function LeadCaptureAgent({
           >
             {(
               [
-                ["full-service", es ? "Full-service (camión + cuadrilla)" : "Full-service (truck + crew)"],
-                ["labor", es ? "Solo labor (tú traes el camión)" : "Labor-only (you have a truck)"],
-                ["not-sure", es ? "No estoy seguro/a" : "Not sure yet"],
+                [
+                  "full-service",
+                  es ? "Full-service" : "Full-service",
+                  es ? "Camión + cuadrilla · carga, mudanza y colocación" : "Truck + crew · load, move & place",
+                ],
+                [
+                  "labor",
+                  es ? "Solo labor" : "Labor only",
+                  es ? "Tú traes el camión, U-Haul o POD" : "You have a truck, U-Haul, or POD",
+                ],
+                [
+                  "not-sure",
+                  es ? "No estoy seguro/a" : "Not sure yet",
+                  es ? "Te ayudamos a elegir" : "We'll help you pick the right option",
+                ],
               ] as const
-            ).map(([id, label]) => (
+            ).map(([id, label, hint]) => (
               <button
                 key={id}
                 type="button"
                 className={`lca-opt lca-opt-focus lca-opt-wide${service === id ? " on" : ""}`}
+                aria-checked={service === id}
                 disabled={advancing || sending}
                 onClick={() =>
                   pickAndAdvance(() => setService(id), "fromZip")
                 }
               >
-                {label}
+                <span className="lca-opt-label">
+                  {label}
+                  <span className="lca-opt-hint">{hint}</span>
+                </span>
               </button>
             ))}
           </div>
@@ -760,12 +765,13 @@ export function LeadCaptureAgent({
                 key={o.id}
                 type="button"
                 className={`lca-opt lca-opt-focus${homeSize === o.id ? " on" : ""}`}
+                aria-checked={homeSize === o.id}
                 disabled={advancing || sending}
                 onClick={() =>
                   pickAndAdvance(() => setHomeSize(o.id), "specials")
                 }
               >
-                {es ? o.labelEs : o.labelEn}
+                <span className="lca-opt-label">{es ? o.labelEs : o.labelEn}</span>
               </button>
             ))}
           </div>
@@ -796,9 +802,10 @@ export function LeadCaptureAgent({
                 key={o.id}
                 type="button"
                 className={`lca-opt lca-opt-focus${specials.includes(o.id) ? " on" : ""}`}
+                aria-checked={specials.includes(o.id)}
                 onClick={() => toggleSpecial(o.id)}
               >
-                {es ? o.labelEs : o.labelEn}
+                <span className="lca-opt-label">{es ? o.labelEs : o.labelEn}</span>
               </button>
             ))}
           </div>
@@ -893,6 +900,7 @@ export function LeadCaptureAgent({
                 key={w.id}
                 type="button"
                 className={`lca-opt lca-opt-focus${whenId === w.id ? " on" : ""}${w.hot ? " lca-opt-hot" : ""}${sending ? " lca-opt-busy" : ""}`}
+                aria-checked={whenId === w.id}
                 disabled={advancing || sending}
                 onClick={() => {
                   setWhenId(w.id);
@@ -904,7 +912,7 @@ export function LeadCaptureAgent({
                   }, ADVANCE_MS);
                 }}
               >
-                {es ? w.labelEs : w.labelEn}
+                <span className="lca-opt-label">{es ? w.labelEs : w.labelEn}</span>
               </button>
             ))}
           </div>
