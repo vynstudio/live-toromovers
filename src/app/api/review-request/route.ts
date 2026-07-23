@@ -117,7 +117,7 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: anyOk, ...out });
 }
 
-/* ---- OpenPhone SMS (mirrors /api/ad-funnel) ---- */
+/* ---- OpenPhone SMS ---- */
 async function openphoneSms(phone: string, content: string): Promise<boolean> {
   const key = process.env.OPENPHONE_API_KEY;
   const from = process.env.OPENPHONE_FROM_NUMBER;
@@ -134,7 +134,7 @@ async function openphoneSms(phone: string, content: string): Promise<boolean> {
   }
 }
 
-/* ---- Resend email (mirrors /api/ad-funnel) ---- */
+/* ---- Resend email ---- */
 async function resendEmail(
   email: string,
   msg: { subject: string; html: string },

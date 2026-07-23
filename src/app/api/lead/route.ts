@@ -6,8 +6,8 @@ import { NextResponse } from "next/server";
 // Any off-web source (a ChatGPT custom-GPT Action, n8n, Zapier, a chatbot,
 // manual quick-add, Instagram/WhatsApp automations, GBP, etc.) POSTs a lead
 // here and it lands in HubSpot "Mudanzas" (contact + deal) + a Telegram alert,
-// tagged by `source`. This complements the web forms (/api/ad-funnel,
-// /api/booking) so leads from non-form channels stop being manual.
+// tagged by `source`. Complements web forms (/api/crm/lead) so leads from
+// non-form channels (call, SMS, manual) stop being manual.
 //
 // Auth: requires header `x-lead-secret` === env LEAD_INTAKE_SECRET. If the env
 // var is unset the endpoint is inert (503) — it can't be abused until you

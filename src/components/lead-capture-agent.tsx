@@ -825,16 +825,3 @@ export function LeadCaptureAgent({
   );
 }
 
-export function LeadCaptureSticky({ lang = "en" }: { lang?: "en" | "es" }) {
-  const es = lang === "es";
-  return (
-    <div className="lca-sticky">
-      <a href={PHONE_TEL} className="lca-sticky-call">
-        {es ? "Llamar" : "Call"}
-      </a>
-      <a href="#get-price" className="lca-sticky-quote">
-        {es ? "Cotizar" : "Get my quote"}
-      </a>
-    </div>
-  );
-}

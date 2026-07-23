@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
 
   // Spam filter: honeypot filled, or submitted implausibly fast (bots) →
-  // pretend success without notifying anyone. Mirrors /api/booking.
+  // pretend success without notifying anyone (honeypot / spam).
   const hp = typeof body?.hp === "string" ? body.hp.trim() : "";
   const elapsedMs = typeof body?.elapsedMs === "number" ? body.elapsedMs : Infinity;
   if (hp !== "" || elapsedMs < 1500) {

@@ -58,7 +58,7 @@ export const LeadMagnetSchema = z.object({
   lang: z.enum(["en", "es"]).optional(),
   // Shared id so the browser Pixel Lead and the server CAPI Lead deduplicate.
   eventId: z.string().max(100).optional(),
-  // Anti-spam (mirrors /api/booking): honeypot + time-to-submit.
+  // Anti-spam: honeypot + time-to-submit.
   hp: z.string().optional(),
   elapsedMs: z.number().optional(),
 });

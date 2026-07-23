@@ -1,4 +1,4 @@
-// Phone-verification helpers — used by /api/verify/{send,check} and /api/booking.
+// Phone helpers — normalizePhone used by CRM / HubSpot / OpenPhone webhooks.
 // Stateless: the code (hashed) lives in a signed cookie, so it works in
 // Netlify's stateless functions without a database.
 
