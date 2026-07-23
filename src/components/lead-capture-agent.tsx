@@ -3,7 +3,7 @@
 /**
  * Get-my-price sales funnel — mirrors toro-sales-funnel.
  * Contact first (name + phone) → soft lead → service → ZIPs → size
- * → optional specials/details → when → full lead.
+ * → when → full lead.
  * NEVER shows rates or hour estimates — owner quotes on the call.
  */
 
@@ -24,8 +24,6 @@ type Phase =
   | "fromZip"
   | "toZip"
   | "size"
-  | "specials"
-  | "details"
   | "when"
   | "done";
 
@@ -38,22 +36,10 @@ const PHASE_ORDER: ActivePhase[] = [
   "fromZip",
   "toZip",
   "size",
-  "specials",
-  "details",
   "when",
 ];
 
 const ADVANCE_MS = 200;
-
-const SPECIALS = [
-  { id: "art", labelEn: "Fine art or antiques", labelEs: "Arte o antigüedades" },
-  { id: "theater", labelEn: "Home theater", labelEs: "Cine en casa" },
-  { id: "appliances", labelEn: "Large appliances", labelEs: "Electrodomésticos" },
-  { id: "piano", labelEn: "Piano", labelEs: "Piano" },
-  { id: "pool-table", labelEn: "Pool table", labelEs: "Mesa de billar" },
-  { id: "vehicle", labelEn: "Vehicle", labelEs: "Vehículo" },
-  { id: "other", labelEn: "Other", labelEs: "Otro" },
-] as const;
 
 const WHEN_OPTS = [
   { id: "asap", labelEn: "As soon as possible", labelEs: "Lo antes posible", hot: true },
@@ -124,8 +110,6 @@ export function LeadCaptureAgent({
   const [fromZip, setFromZip] = useState("");
   const [toZip, setToZip] = useState("");
   const [homeSize, setHomeSize] = useState<HomeSize>("");
-  const [specials, setSpecials] = useState<string[]>([]);
-  const [details, setDetails] = useState("");
   const [whenId, setWhenId] = useState("");
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
@@ -310,9 +294,6 @@ export function LeadCaptureAgent({
             : "";
         const whenLbl =
           WHEN_OPTS.find((w) => w.id === when)?.labelEn || when || "";
-        const specialsLabel = specials
-          .map((id) => SPECIALS.find((s) => s.id === id)?.labelEn || id)
-          .join(", ");
 
         await postLead({
           name: name.trim(),
@@ -340,8 +321,6 @@ export function LeadCaptureAgent({
             toZip && `To ZIP: ${toZip}`,
             sizeLabel && `Size: ${sizeLabel}`,
             whenLbl && `When: ${whenLbl}`,
-            specialsLabel && `Specials: ${specialsLabel}`,
-            details.trim() && `Notes: ${details.trim()}`,
             `event_id=${eventId}`,
           ]
             .filter(Boolean)
@@ -371,7 +350,7 @@ export function LeadCaptureAgent({
         setAdvancing(false);
       }
     },
-    [name, phone, fromZip, toZip, specials, details, es, smsConsent],
+    [name, phone, fromZip, toZip, es, smsConsent],
   );
 
   function pickAndAdvance(apply: () => void, next: ActivePhase | "done" | "finish") {
@@ -442,26 +421,16 @@ export function LeadCaptureAgent({
     goTo(prev);
   }
 
-  function toggleSpecial(id: string) {
-    setSpecials((cur) =>
-      cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id],
-    );
-  }
-
   const stepHint =
     phase === "capture"
       ? es
         ? " · contacto"
         : " · contact"
-      : phase === "specials" || phase === "details"
-        ? es
-          ? " · opcional"
-          : " · optional"
-        : phase === "done"
-          ? ""
-          : es
-            ? " · toca una opción"
-            : " · tap one";
+      : phase === "done"
+        ? ""
+        : es
+          ? " · toca una opción"
+          : " · tap one";
 
   /* ---------- SUCCESS ---------- */
   if (phase === "done") {
@@ -509,14 +478,9 @@ export function LeadCaptureAgent({
   }
 
   const showFooterPrimary =
-    phase === "capture" ||
-    phase === "fromZip" ||
-    phase === "toZip" ||
-    phase === "specials" ||
-    phase === "details";
+    phase === "capture" || phase === "fromZip" || phase === "toZip";
 
   const showFooterBack = phase !== "capture";
-  const showFooterSkip = phase === "specials" || phase === "details";
 
   return (
     <div className="lca">
@@ -846,7 +810,7 @@ export function LeadCaptureAgent({
                   aria-checked={homeSize === o.id}
                   disabled={advancing || sending}
                   onClick={() =>
-                    pickAndAdvance(() => setHomeSize(o.id), "specials")
+                    pickAndAdvance(() => setHomeSize(o.id), "when")
                   }
                 >
                   <span className="lca-opt-label">
@@ -858,65 +822,7 @@ export function LeadCaptureAgent({
           </div>
         )}
 
-        {/* 6. SPECIALS (optional) */}
-        {phase === "specials" && (
-          <div key={animKey} className="lca-form lca-enter">
-            <h2 className="lca-q">
-              {es ? "¿Artículos especiales?" : "Any special items?"}
-            </h2>
-            <p className="lca-help">
-              {es
-                ? "Opcional — elige lo que aplique o salta."
-                : "Optional — select any that apply, or skip."}
-            </p>
-            <div className="lca-options" role="group">
-              {SPECIALS.map((o) => (
-                <button
-                  key={o.id}
-                  type="button"
-                  className={`lca-opt${specials.includes(o.id) ? " on" : ""}`}
-                  aria-checked={specials.includes(o.id)}
-                  onClick={() => toggleSpecial(o.id)}
-                >
-                  <span className="lca-opt-label">
-                    {es ? o.labelEs : o.labelEn}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 7. DETAILS (optional) */}
-        {phase === "details" && (
-          <div key={animKey} className="lca-form lca-enter">
-            <h2 className="lca-q">{es ? "¿Algo más?" : "Extra details"}</h2>
-            <p className="lca-help">
-              {es
-                ? "Opcional — códigos, estacionamiento, horarios…"
-                : "Optional — gate codes, parking, preferred time…"}
-            </p>
-            <label className="lca-field">
-              <span>{es ? "Notas" : "Notes"}</span>
-              <textarea
-                className="lca-textarea"
-                rows={3}
-                value={details}
-                onChange={(e) => setDetails(e.target.value)}
-                onFocus={(e) =>
-                  e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
-                }
-                placeholder={
-                  es
-                    ? "Códigos, escaleras, horario preferido…"
-                    : "Gate codes, stairs, preferred time…"
-                }
-              />
-            </label>
-          </div>
-        )}
-
-        {/* 8. WHEN → submit */}
+        {/* 6. WHEN → submit */}
         {phase === "when" && (
           <div key={animKey} className="lca-form lca-enter">
             <h2 className="lca-q">
@@ -1003,30 +909,6 @@ export function LeadCaptureAgent({
             {es ? "Continuar" : "Continue"}
           </button>
         )}
-        {showFooterPrimary && phase === "specials" && (
-          <button
-            type="button"
-            className="fn-btn fn-btn-primary fn-btn-lg lca-full"
-            onClick={() => goTo("details")}
-          >
-            {specials.length
-              ? es
-                ? "Continuar"
-                : "Continue"
-              : es
-                ? "Continuar"
-                : "Continue"}
-          </button>
-        )}
-        {showFooterPrimary && phase === "details" && (
-          <button
-            type="button"
-            className="fn-btn fn-btn-primary fn-btn-lg lca-full"
-            onClick={() => goTo("when")}
-          >
-            {es ? "Continuar" : "Continue"}
-          </button>
-        )}
 
         <div className="lca-footer-row">
           {showFooterBack && (
@@ -1037,17 +919,6 @@ export function LeadCaptureAgent({
               disabled={sending || advancing}
             >
               {es ? "← Atrás" : "← Back"}
-            </button>
-          )}
-          {showFooterSkip && (
-            <button
-              type="button"
-              className="lca-back"
-              onClick={() =>
-                goTo(phase === "specials" ? "details" : "when")
-              }
-            >
-              {es ? "Saltar" : "Skip"}
             </button>
           )}
           {phase === "capture" && (
