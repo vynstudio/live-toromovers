@@ -11,8 +11,6 @@ import {
   upsertLeadToHubspot,
 } from "@/lib/hubspot";
 import {
-  sendEmail,
-  sendSms,
   sendTelegram,
   sendTeamEmail,
   hsSearchContactByPhone,
@@ -21,7 +19,10 @@ import {
   hsGetDealIdsForContact,
   hsPatchContact,
 } from "./providers";
-import { buildSequence } from "./sequences";
+import {
+  delayedStepsForN8n,
+  runInstantStageAutomation,
+} from "./run-stage-automation";
 import type { ChannelResult, CrmLead, Funnel } from "./types";
 
 export type IntakeResult = {
@@ -79,12 +80,6 @@ function summarize(lead: CrmLead): string {
   ]
     .filter(Boolean)
     .join("\n");
-}
-
-function instantSequenceKey(lead: CrmLead): "call_instant" | "agent_instant" | "followup_1h" {
-  if (lead.source === "meta_call") return "call_instant";
-  if (isAgentLead(lead)) return "agent_instant";
-  return "followup_1h";
 }
 
 /** Phone-only leads (Meta Call Now) — HubSpot without email. */
@@ -188,48 +183,29 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
   );
   channels.push(team);
 
-  // 4) Customer instant touch (email + SMS when consented / call funnel)
-  const seqKey = instantSequenceKey(lead);
-  const wantsCustomerComms =
+  // 4) Instant New Lead stage SMS/email (multi-step plan — step 0 only here)
+  const consentSms =
+    lead.consentSms === true ||
     lead.source === "meta_call" ||
-    lead.source === "manual" ||
-    lead.consentEmail !== false;
-  if (wantsCustomerComms && email) {
-    const seq = buildSequence(seqKey, {
-      firstName: lead.firstName,
-      lang: lead.lang,
-      funnel: lead.funnel,
+    lead.funnel === "call";
+  const stageSends = await runInstantStageAutomation({
+    stage: "newLead",
+    firstName: lead.firstName,
+    email,
+    phone: phone || undefined,
+    lang: lead.lang,
+    consentSms,
+    consentEmail: lead.consentEmail !== false,
+  });
+  for (const s of stageSends) {
+    channels.push({
+      ok: s.ok,
+      channel: s.channel === "sms" ? "openphone" : "resend",
+      detail: `${s.stepId}: ${s.detail || (s.ok ? "sent" : "fail")}`,
     });
-    if (seq.email) {
-      channels.push(
-        await sendEmail({
-          to: email,
-          subject: seq.email.subject,
-          html: seq.email.html,
-          text: seq.email.text,
-          replyTo: process.env.RESEND_FROM_EMAIL || "hello@toromovers.net",
-        }),
-      );
-    }
   }
 
-  const wantsSms =
-    Boolean(phone) &&
-    (lead.consentSms === true ||
-      lead.source === "meta_call" ||
-      lead.funnel === "call");
-  if (wantsSms && phone) {
-    const seq = buildSequence(seqKey, {
-      firstName: lead.firstName,
-      lang: lead.lang,
-      funnel: lead.funnel,
-    });
-    if (seq.sms) {
-      channels.push(await sendSms(phone, seq.sms));
-    }
-  }
-
-  // 5) n8n drip (optional)
+  // 5) n8n — delayed New Lead follow-ups (1h / 24h / 72h)
   const n8nUrl = process.env.N8N_FUNNEL_WEBHOOK_URL || process.env.N8N_CRM_WEBHOOK_URL;
   if (n8nUrl) {
     try {
@@ -244,6 +220,7 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
         },
         body: JSON.stringify({
           event: "crm_lead",
+          stage: "newLead",
           funnel: lead.funnel,
           source: lead.source,
           firstName: lead.firstName,
@@ -254,11 +231,12 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
           moveDate: lead.moveDate,
           serviceType: lead.serviceType,
           lang: lead.lang || "en",
-          consentSms: lead.consentSms,
-          consentEmail: lead.consentEmail,
+          consentSms: consentSms,
+          consentEmail: lead.consentEmail !== false,
           utm: lead.utm,
           landingPage: lead.landingPage,
           note: lead.note,
+          delayedSteps: delayedStepsForN8n("newLead"),
         }),
         signal: ctrl.signal,
       });
@@ -266,7 +244,7 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
       channels.push({
         ok: res.ok,
         channel: "n8n",
-        detail: res.ok ? "queued" : `HTTP ${res.status}`,
+        detail: res.ok ? "queued delayed steps" : `HTTP ${res.status}`,
       });
     } catch {
       channels.push({ ok: false, channel: "n8n", detail: "timeout/error" });

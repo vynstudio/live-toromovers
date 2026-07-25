@@ -52,6 +52,11 @@ export async function POST(req: Request) {
     phone?: string;
     stage?: string;
     notifyTelegram?: boolean;
+    firstName?: string;
+    lang?: "en" | "es";
+    consentSms?: boolean;
+    consentEmail?: boolean;
+    skipAutomations?: boolean;
   } | null;
   if (!body?.stage || (!body.email && !body.phone)) {
     return NextResponse.json(
@@ -65,7 +70,46 @@ export async function POST(req: Request) {
     phone: body.phone,
     stage: body.stage as StageKey,
     notifyTelegram: body.notifyTelegram !== false,
+    firstName: body.firstName,
+    lang: body.lang,
+    consentSms: body.consentSms,
+    consentEmail: body.consentEmail,
+    skipAutomations: body.skipAutomations,
   });
+
+  // Optional: push delayed steps to n8n for this stage change
+  if (result.ok && result.delayedSteps?.length) {
+    const n8nUrl =
+      process.env.N8N_STAGE_WEBHOOK_URL ||
+      process.env.N8N_FUNNEL_WEBHOOK_URL ||
+      process.env.N8N_CRM_WEBHOOK_URL;
+    if (n8nUrl) {
+      try {
+        const secret = process.env.N8N_WEBHOOK_SECRET;
+        await fetch(n8nUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(secret ? { "x-toro-secret": secret } : {}),
+          },
+          body: JSON.stringify({
+            event: "stage_changed",
+            stage: result.stage,
+            email: body.email,
+            phone: body.phone,
+            firstName: body.firstName || "there",
+            lang: body.lang || "en",
+            consentSms: body.consentSms,
+            consentEmail: body.consentEmail,
+            delayedSteps: result.delayedSteps,
+          }),
+          signal: AbortSignal.timeout(2500),
+        });
+      } catch {
+        /* n8n optional */
+      }
+    }
+  }
 
   return NextResponse.json(result, { status: result.ok ? 200 : 404 });
 }

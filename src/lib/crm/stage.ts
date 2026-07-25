@@ -1,6 +1,7 @@
 /**
  * Advance HubSpot deal stage by email or phone.
  * Used by Telegram buttons (via n8n or direct), OpenPhone inbound, manual tools.
+ * On success, fires instant stage SMS/email and returns delayed steps for n8n.
  */
 
 import { HS_PIPELINE_ID, HS_STAGE } from "@/lib/hubspot";
@@ -12,6 +13,11 @@ import {
   hsSearchContactByPhone,
   sendTelegram,
 } from "./providers";
+import {
+  delayedStepsForN8n,
+  runInstantStageAutomation,
+  type StepResult,
+} from "./run-stage-automation";
 import type { StageKey } from "./types";
 
 // Short codes used in Telegram URL buttons (see hubspot.ts telegramStageKeyboard)
@@ -43,6 +49,9 @@ export type AdvanceResult = {
   contactId?: string;
   dealIds?: string[];
   error?: string;
+  automations?: StepResult[];
+  /** n8n should schedule these after stage change */
+  delayedSteps?: { id: string; delayMinutes: number; channel: string }[];
 };
 
 export async function advanceStage(opts: {
@@ -51,6 +60,13 @@ export async function advanceStage(opts: {
   stage: StageKey | string; // full key or short code
   notifyTelegram?: boolean;
   label?: string;
+  /** Customer first name for SMS copy (defaults to "there") */
+  firstName?: string;
+  lang?: "en" | "es";
+  consentSms?: boolean;
+  consentEmail?: boolean;
+  /** Skip customer SMS/email (stage-only HubSpot update) */
+  skipAutomations?: boolean;
 }): Promise<AdvanceResult> {
   if (!process.env.HUBSPOT_TOKEN) {
     return { ok: false, error: "HUBSPOT_TOKEN missing" };
@@ -107,11 +123,41 @@ export async function advanceStage(opts: {
     );
   }
 
+  let automations: StepResult[] = [];
+  if (any && !opts.skipAutomations) {
+    automations = await runInstantStageAutomation({
+      stage: stageKey,
+      firstName: opts.firstName || "there",
+      email: opts.email,
+      phone: opts.phone,
+      lang: opts.lang,
+      consentSms: opts.consentSms,
+      consentEmail: opts.consentEmail,
+    });
+    const smsOk = automations.filter((a) => a.channel === "sms" && a.ok).length;
+    const smsFail = automations.filter(
+      (a) => a.channel === "sms" && !a.ok,
+    ).length;
+    if (automations.length) {
+      await sendTelegram(
+        `📲 Stage SMS ${stageKey}: ${smsOk} sent · ${smsFail} skipped/fail\n${opts.email || opts.phone || ""}`,
+      );
+    }
+  }
+
+  const delayed = delayedStepsForN8n(stageKey).map((s) => ({
+    id: s.id,
+    delayMinutes: s.delayMinutes,
+    channel: s.channel,
+  }));
+
   return {
     ok: any,
     stage: stageKey,
     stageId,
     contactId,
     dealIds,
+    automations,
+    delayedSteps: delayed,
   };
 }

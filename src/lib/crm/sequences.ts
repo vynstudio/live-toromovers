@@ -10,7 +10,8 @@ const PHONE_TEL = "+16896002720";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net";
 const QUOTE = `${SITE}/get-my-price`;
 const REVIEW =
-  process.env.GOOGLE_REVIEW_URL || "https://g.page/r/CYAKurQHh5TvEAI/review";
+  process.env.GOOGLE_REVIEW_URL ||
+  "https://g.page/r/CYAKurQHh5TvEAI/review";
 
 export type SequenceMessage = {
   email?: { subject: string; html: string; text: string };
