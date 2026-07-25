@@ -15,7 +15,13 @@ const REVIEW =
   process.env.GOOGLE_REVIEW_URL ||
   "https://g.page/r/CYAKurQHh5TvEAI/review";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net";
-const QUOTE = `${SITE}/get-my-price`;
+
+/** Canonical online book / price funnel (all CTAs → /get-my-price). */
+function bookUrl(opts: { stepId: string; lang?: "en" | "es" }): string {
+  const path = opts.lang === "es" ? "/es/get-my-price" : "/get-my-price";
+  // src=sms-* so Meta/GA can attribute SMS → funnel (no secrets in URL)
+  return `${SITE}${path}?src=sms&step=${encodeURIComponent(opts.stepId)}`;
+}
 
 export type StageSmsStep = {
   /** Unique id for this step within the stage (for n8n + logging) */
@@ -149,148 +155,151 @@ export function buildStageStepCopy(
 ): StageSmsCopy {
   const name = opts.firstName || "there";
   const es = opts.lang === "es";
+  const BOOK = bookUrl({ stepId, lang: opts.lang });
 
   switch (stepId) {
+    // ── Pre-book stages: always push online book link ─────────────────
     case "new_0":
       return {
         sms: es
-          ? `Hola ${name}, Toro Movers — recibimos tu solicitud. Te llamamos del ${PHONE_DISPLAY}. Responde STOP para salir.`
-          : `Hi ${name}, Toro Movers — we got your request. We'll call from ${PHONE_DISPLAY}. Reply STOP to opt out.`,
+          ? `Hola ${name}, Toro Movers — recibimos tu solicitud. Reserva online: ${BOOK} o llama ${PHONE_DISPLAY}. STOP para salir.`
+          : `Hi ${name}, Toro Movers — we got your request. Book online: ${BOOK} or call ${PHONE_DISPLAY}. Reply STOP to opt out.`,
         email: {
           subject: es
             ? "Toro Movers — recibimos tu solicitud"
             : "Toro Movers — we got your request",
           text: es
-            ? `Hola ${name}, recibimos tu solicitud de mudanza. Te contactamos pronto al ${PHONE_DISPLAY}.`
-            : `Hi ${name}, we got your move request. A team member will contact you shortly at ${PHONE_DISPLAY}.`,
+            ? `Hola ${name}, recibimos tu solicitud. Reserva o completa tu cotización aquí: ${BOOK}\n\nO llámanos: ${PHONE_DISPLAY}`
+            : `Hi ${name}, we got your move request. Book or finish your quote online: ${BOOK}\n\nOr call: ${PHONE_DISPLAY}`,
         },
       };
 
     case "new_1h":
       return {
         sms: es
-          ? `Hola ${name}, Toro Movers. ¿Aún necesitas mudanza? Responde con fecha o llama ${PHONE_DISPLAY}. STOP para salir.`
-          : `Hi ${name}, Toro Movers — still need movers? Reply with your date or call ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `Hola ${name}, Toro — ¿aún necesitas mudanza? Reserva en 2 min: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `Hi ${name}, Toro — still need movers? Book in 2 min: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "¿Sigues planeando tu mudanza?" : "Still planning your move?",
           text: es
-            ? `${name}, ¿sigues con la mudanza? Llama ${PHONE_DISPLAY} o cotiza: ${QUOTE}`
-            : `${name}, still moving? Call ${PHONE_DISPLAY} or quote: ${QUOTE}`,
+            ? `${name}, ¿sigues con la mudanza? Reserva online: ${BOOK}\n\nO llama ${PHONE_DISPLAY}`
+            : `${name}, still moving? Book online: ${BOOK}\n\nOr call ${PHONE_DISPLAY}`,
         },
       };
 
     case "new_24h":
       return {
         sms: es
-          ? `${name}, Toro — camión + cuadrilla, precio claro. ¿Fecha? ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, Toro — truck + crew, up-front pricing. What's your move date? ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, Toro — camión + cuadrilla, precio claro. Agenda aquí: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, Toro — truck + crew, up-front pricing. Book here: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
-          subject: es ? "Camión + cuadrilla incluidos" : "Truck + crew included",
+          subject: es ? "Camión + cuadrilla — reserva online" : "Truck + crew — book online",
           text: es
-            ? `Full-service Toro: camión + cuadrilla. ${PHONE_DISPLAY}`
-            : `Full-service Toro: truck + crew. ${PHONE_DISPLAY}`,
+            ? `Full-service Toro: camión + cuadrilla. Reserva: ${BOOK}\n\n${PHONE_DISPLAY}`
+            : `Full-service Toro: truck + crew. Book: ${BOOK}\n\n${PHONE_DISPLAY}`,
         },
       };
 
     case "new_72h":
       return {
         sms: es
-          ? `${name}, última nota Toro: ¿agendamos? ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, last note from Toro — ready to lock a date? ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, última nota Toro: reserva tu fecha online ${BOOK} o ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, last note from Toro — lock your date online ${BOOK} or ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "¿Cerramos la fecha?" : "Ready to lock a date?",
           text: es
-            ? `Toro Movers — ¿agendamos? ${PHONE_DISPLAY}`
-            : `Toro Movers — lock a date? ${PHONE_DISPLAY}`,
+            ? `Toro Movers — agenda ahora: ${BOOK}\n\n${PHONE_DISPLAY}`
+            : `Toro Movers — book now: ${BOOK}\n\n${PHONE_DISPLAY}`,
         },
       };
 
     case "attempt_0":
       return {
         sms: es
-          ? `Hola ${name}, Toro Movers intentó llamarte. ¿Cuándo te acomoda? ${PHONE_DISPLAY}. STOP para salir.`
-          : `Hi ${name}, Toro Movers tried to reach you. When's a good time? ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `Hola ${name}, Toro intentó llamarte. Reserva online cuando quieras: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `Hi ${name}, Toro tried to reach you. Book online anytime: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "Intentamos contactarte" : "We tried to reach you",
           text: es
-            ? `${name}, intentamos llamarte. Responde o llama ${PHONE_DISPLAY}.`
-            : `${name}, we tried calling. Reply or call ${PHONE_DISPLAY}.`,
+            ? `${name}, intentamos llamarte. Reserva aquí: ${BOOK}\n\nO llama ${PHONE_DISPLAY}.`
+            : `${name}, we tried calling. Book here: ${BOOK}\n\nOr call ${PHONE_DISPLAY}.`,
         },
       };
 
     case "attempt_4h":
       return {
         sms: es
-          ? `${name}, Toro de nuevo — ¿te llamamos en 30 min? Responde SÍ o una hora. ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, Toro again — call you in 30 min? Reply YES or a time. ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, Toro de nuevo — agenda online sin esperar: ${BOOK} · o responde SÍ y te llamamos. STOP para salir.`
+          : `${name}, Toro again — book online now: ${BOOK} · or reply YES and we'll call. STOP to opt out.`,
       };
 
     case "attempt_24h":
       return {
         sms: es
-          ? `${name}, Toro Movers sigue disponible para tu mudanza. ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, Toro Movers is still available for your move. ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, Toro sigue disponible. Reserva tu mudanza: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, Toro is still available. Book your move: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
-          subject: es ? "Seguimos aquí" : "We're still here",
+          subject: es ? "Seguimos aquí — reserva online" : "We're still here — book online",
           text: es
-            ? `${name}, cuando quieras agendar: ${PHONE_DISPLAY}`
-            : `${name}, when you're ready to book: ${PHONE_DISPLAY}`,
+            ? `${name}, cuando quieras agendar: ${BOOK}\n\n${PHONE_DISPLAY}`
+            : `${name}, when you're ready to book: ${BOOK}\n\n${PHONE_DISPLAY}`,
         },
       };
 
     case "contacted_0":
       return {
         sms: es
-          ? `Gracias por hablar con Toro, ${name}. Próximo paso: cotización. Dudas: ${PHONE_DISPLAY}. STOP para salir.`
-          : `Thanks for chatting with Toro, ${name}. Next: your estimate. Questions: ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `Gracias por hablar con Toro, ${name}. Completa / reserva online: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `Thanks for chatting with Toro, ${name}. Finish / book online: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "Gracias por conversar — Toro" : "Thanks for chatting — Toro",
           text: es
-            ? `${name}, gracias. Te enviamos cotización pronto. ${PHONE_DISPLAY}`
-            : `${name}, thanks. We'll send your estimate soon. ${PHONE_DISPLAY}`,
+            ? `${name}, gracias. Siguiente paso — reserva online: ${BOOK}\n\n${PHONE_DISPLAY}`
+            : `${name}, thanks. Next step — book online: ${BOOK}\n\n${PHONE_DISPLAY}`,
         },
       };
 
     case "contacted_24h":
       return {
         sms: es
-          ? `${name}, ¿recibiste todo lo que necesitabas de Toro? Responde o llama ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, did you get everything you need from Toro? Reply or call ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, ¿listo para agendar con Toro? ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, ready to book with Toro? ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
       };
 
     case "quote_0":
       return {
         sms: es
-          ? `${name}, tu cotización Toro está lista. ¿La revisamos? ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, your Toro estimate is ready. Want to review it? ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, tu cotización Toro está lista. Reserva online: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, your Toro estimate is ready. Book online: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
-          subject: es ? "Tu cotización Toro" : "Your Toro estimate",
+          subject: es ? "Tu cotización Toro — reserva online" : "Your Toro estimate — book online",
           text: es
-            ? `${name}, cotización lista. Llama ${PHONE_DISPLAY} o: ${QUOTE}`
-            : `${name}, estimate ready. Call ${PHONE_DISPLAY} or: ${QUOTE}`,
+            ? `${name}, cotización lista. Reserva aquí: ${BOOK}\n\nO llama ${PHONE_DISPLAY}`
+            : `${name}, estimate ready. Book here: ${BOOK}\n\nOr call ${PHONE_DISPLAY}`,
         },
       };
 
     case "quote_24h":
       return {
         sms: es
-          ? `${name}, Toro — ¿dudas de la cotización? Responde y te ayudamos. ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, Toro — questions on the estimate? Reply and we'll help. ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, Toro — ¿dudas de la cotización? Reserva cuando quieras: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, Toro — questions on the estimate? Book when ready: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "¿Dudas de la cotización?" : "Questions about your estimate?",
           text: es
-            ? `${name}, estamos para ayudarte. ${PHONE_DISPLAY}`
-            : `${name}, we're here to help. ${PHONE_DISPLAY}`,
+            ? `${name}, estamos para ayudarte. Reserva: ${BOOK}\n\n${PHONE_DISPLAY}`
+            : `${name}, we're here to help. Book: ${BOOK}\n\n${PHONE_DISPLAY}`,
         },
       };
 
     case "quote_48h":
       return {
         sms: es
-          ? `${name}, fechas se llenan. ¿Reservamos con Toro? ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, dates fill up — ready to book with Toro? ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, fechas se llenan. Reserva con Toro ahora: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, dates fill up — book with Toro now: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
       };
 
+    // ── Post-book: no funnel CTA ───────────────────────────────────────
     case "booked_0":
       return {
         sms: es
@@ -340,8 +349,8 @@ export function buildStageStepCopy(
     default:
       return {
         sms: es
-          ? `Hola ${name}, Toro Movers ${PHONE_DISPLAY}. STOP para salir.`
-          : `Hi ${name}, Toro Movers ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `Hola ${name}, Toro Movers — reserva: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `Hi ${name}, Toro Movers — book: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
       };
   }
 }

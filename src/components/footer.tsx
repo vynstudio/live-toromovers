@@ -54,6 +54,9 @@ export function Footer() {
             <Link href="/central-florida-movers">
               {lang === "es" ? "Florida Central" : "Central Florida movers"}
             </Link>
+            <Link href="/service-areas">
+              {lang === "es" ? "Áreas de servicio" : "Service areas"}
+            </Link>
             <Link href="/full-service-moving">
               {lang === "es" ? "Mudanza completa" : "Full-service moving"}
             </Link>
@@ -71,10 +74,10 @@ export function Footer() {
 
           <div className="footer-col">
             <h4>{lang === "es" ? "Navegación" : "Menu"}</h4>
-            <a href="#services">{t.nav.services}</a>
-            <a href="#process">{t.nav.process}</a>
-            <a href="#reviews">{t.nav.reviews}</a>
-            <a href="#faq">{t.nav.faq}</a>
+            <a href="/#services">{t.nav.services}</a>
+            <a href="/service-areas">{t.nav.areas}</a>
+            <a href="/#reviews">{t.nav.reviews}</a>
+            <a href="/#faq">{t.nav.faq}</a>
           </div>
         </div>
 

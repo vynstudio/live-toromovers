@@ -115,6 +115,7 @@ type ContentShape = {
     services: string;
     process: string;
     areas: string;
+    pricing: string;
     reviews: string;
     faq: string;
     callNow: string;
@@ -232,23 +233,24 @@ export const content: { en: ContentShape; es: ContentShape } = {
     nav: {
       services: "Services",
       process: "How it works",
-      areas: "Areas",
+      areas: "Service Areas",
+      pricing: "Pricing",
       reviews: "Reviews",
       faq: "FAQ",
       callNow: "Call now",
-      quote: "Free quote",
+      quote: "Get Quote",
       textUs: "Text us",
     },
     hero: {
       badge: "4.9★ on Google · Family-owned · Central Florida",
-      h1Line1: "Central Florida movers.",
-      h1Line2: "",
-      h1Line3: "No hidden fees.",
+      h1Line1: "Trusted Orlando &",
+      h1Line2: "Central Florida Movers",
+      h1Line3: "",
       lede:
-        "Our bilingual, family-owned crew serves Orlando and Central Florida with honest hourly pricing for apartment, home, and office moves.",
-      ctaPrimary: "Get free quote",
-      ctaSecondary: "Call now · (689) 600-2720",
-      note: "Up-front hourly pricing · from a 2-hour minimum · Bilingual crew · Same-week dates",
+        "Family-owned movers serving Orlando and Central Florida with upfront hourly pricing, bilingual crews, and no hidden fees.",
+      ctaPrimary: "Get my price",
+      ctaSecondary: "Call (689) 600-2720",
+      note: "4.9-star Google-rated · No fuel surcharges · No stair fees · Same-week availability",
     },
     trust: [
       "4.9★ on Google",
@@ -442,23 +444,24 @@ export const content: { en: ContentShape; es: ContentShape } = {
     nav: {
       services: "Servicios",
       process: "Cómo funciona",
-      areas: "Áreas",
+      areas: "Áreas de servicio",
+      pricing: "Precios",
       reviews: "Reseñas",
       faq: "Preguntas",
       callNow: "Llamar",
-      quote: "Cotización gratis",
+      quote: "Cotización",
       textUs: "Escríbenos",
     },
     hero: {
       badge: "4.9★ en Google · Familiares · Florida Central",
-      h1Line1: "Mudanceros de",
-      h1Line2: "Florida Central.",
-      h1Line3: "Sin tarifas ocultas.",
+      h1Line1: "Mudanceros de confianza en",
+      h1Line2: "Orlando y Florida Central",
+      h1Line3: "",
       lede:
-        "Compañía de mudanzas familiar sirviendo a Orlando, Kissimmee, Lake Nona, Winter Garden, Clermont y 30+ ciudades de Florida Central. Carga, descarga y mudanzas completas con nuestro camión. Cotización en 60 segundos — sin tarifas ocultas.",
-      ctaPrimary: "Cotización gratis",
-      ctaSecondary: "Llamar · (689) 600-2720",
-      note: "Precios claros por hora · desde un mínimo de 2 horas · Cuadrilla bilingüe · Fechas esta semana",
+        "Compañía familiar de mudanzas en Orlando y Florida Central con precios por hora claros, cuadrilla bilingüe y sin tarifas ocultas.",
+      ctaPrimary: "Ver mi precio",
+      ctaSecondary: "Llamar (689) 600-2720",
+      note: "4.9★ en Google · Sin recargos de combustible · Sin tarifas de escaleras · Disponibilidad esta semana",
     },
     trust: [
       "4.9★ en Google",

@@ -15,8 +15,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // they don't compete in organic search.
   const pages = [
     { url: BASE, priority: 1.0, changeFrequency: "weekly" as const },
-    // Regional hub — main Central Florida landing page.
+    // Regional hubs — authority pages into the city cluster.
     { url: `${BASE}/central-florida-movers`, priority: 0.9 as const, changeFrequency: "monthly" as const },
+    { url: `${BASE}/service-areas`, priority: 0.9 as const, changeFrequency: "monthly" as const },
     { url: `${BASE}/blog`, priority: 0.6 as const, changeFrequency: "weekly" as const },
     // /checklist is intentionally noindex (conversion content) — keep it OUT of
     // the sitemap so GSC doesn't report "Submitted URL marked noindex".

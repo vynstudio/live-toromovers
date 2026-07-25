@@ -37,14 +37,16 @@ const SITE_URL =
 
 export const metadata: Metadata = {
   title: {
-    default: "Toro Movers — Full-Service Orlando Movers · 4.9★",
+    default:
+      "Trusted Orlando & Central Florida Movers · 4.9★ | Toro Movers",
     template: "%s | Toro Movers",
   },
   description:
-    "Full-service Orlando movers — truck, crew & careful placement. Up-front pricing, no hidden fees. Labor-only if you have a truck. Quote in 60s.",
+    "Trusted Orlando & Central Florida movers — family-owned crew, upfront hourly pricing, bilingual crews, no hidden fees. Apartment, home & office moves. Quote in 60s.",
   keywords: [
     "Orlando movers",
     "Central Florida movers",
+    "trusted movers Orlando",
     "full service movers Orlando",
     "moving company Orlando",
     "Orlando moving company",
@@ -71,23 +73,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: BUSINESS_NAME,
-    title: "Toro Movers — Full-Service Movers Orlando · 4.9★",
+    title: "Trusted Orlando & Central Florida Movers · 4.9★ | Toro Movers",
     description:
-      "Full-service Central Florida movers with truck & crew. Up-front pricing. Labor-only when you already have a truck. Quote in 60s.",
+      "Family-owned Orlando movers with truck & crew. Upfront hourly pricing, no hidden fees. Serving Central Florida. Quote in 60s.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Toro Movers — Full-service movers across Central Florida · 4.9★",
+        alt: "Trusted Orlando & Central Florida movers — Toro Movers · 4.9★",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Toro Movers — Full-Service Orlando Movers",
+    title: "Trusted Orlando & Central Florida Movers | Toro Movers",
     description:
-      "Full-service moves with truck & crew. Labor-only secondary. 4.9★ Google. Quote in 60s.",
+      "Family-owned Orlando movers. Upfront hourly pricing, no hidden fees. 4.9★ on Google. Quote in 60s.",
     images: ["/opengraph-image"],
   },
   robots: {

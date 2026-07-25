@@ -236,10 +236,128 @@ export const LOADING_UNLOADING: ServiceData = {
   serviceType: "Loading and unloading labor service",
 };
 
+export const FULL_SERVICE_MOVING: ServiceData = {
+  slug: "full-service-moving",
+  href: "/full-service-moving",
+  name: "Full-service moving",
+  navLabel: "Full-service moving",
+  metadata: {
+    title: "Full-Service Movers Orlando",
+    description:
+      "Full-service movers in Central Florida — truck, crew, loading, transport & placement. Up-front pricing, bilingual crew. Quote in 60s.",
+  },
+  h1: "Full-Service Movers in Central Florida",
+  subline:
+    "Truck, crew, loading, transport, and careful placement — door to door with upfront hourly pricing and no hidden fees.",
+  intro: {
+    h2: "Everything handled. You just open the door.",
+    lead: "Full-service is our primary move: Toro brings the truck, the bilingual crew, furniture protection, loading, local transport, unloading, and placement. Beds and tables go back together, floors stay protected, and the same people who quote you show up on the day. Local Central Florida only — that is how we keep same-week scheduling and honest hourly rates.",
+  },
+  points: [
+    {
+      h3: "Furniture protection included",
+      body: "Blankets, shrink wrap, and careful loading so pieces arrive the way they left — no extra material fees on the bill.",
+    },
+    {
+      h3: "Door to door",
+      body: "An experienced local crew loads, drives, protects, and unloads. You do not lift a thing from origin to destination.",
+    },
+    {
+      h3: "Set up & reassembled",
+      body: "Furniture placed where you want it, with beds and tables put back together so the new place feels livable on day one.",
+    },
+    {
+      h3: "Upfront hourly pricing",
+      body: "Crew size and truck agreed before we start. No fuel surcharges, no stair fees — the clock stops when the job ends.",
+    },
+  ],
+  faqs: [
+    {
+      q: "What does full-service moving include?",
+      a: "Truck, crew, furniture protection, loading, transport, unloading, placement, and disassembly/reassembly as needed. Same crew that quotes shows up on the day.",
+    },
+    {
+      q: "Do you only move locally?",
+      a: "Yes. Toro Movers is a local Central Florida moving company serving the Orlando metro. We don't do long-distance — staying local lets us schedule fast and price honestly by the hour.",
+    },
+    {
+      q: "How is a full-service move priced?",
+      a: "Up front, by the hour — a two-mover crew and our truck (up to 26 ft) with a four-hour minimum, and you can add movers for larger homes. Shrink wrap, furniture blankets, and assembly/disassembly are included; no fuel surcharge, no stair fee. For long-distance moves a per-mile charge applies beyond 100 miles. Send your details and you'll get your exact price in about 60 seconds — confirmed before we start, no surprise add-ons.",
+    },
+    {
+      q: "How do you protect furniture on the truck?",
+      a: "We pad and secure furniture with moving blankets and careful loading so pieces stay protected door to door.",
+    },
+  ],
+  serviceType: "Full-service local moving",
+};
+
+export const LABOR_ONLY_MOVING: ServiceData = {
+  slug: "labor-only-moving",
+  href: "/labor-only-moving",
+  name: "Labor-only moving",
+  navLabel: "Labor-only moving",
+  metadata: {
+    title: "Labor-Only Movers Orlando",
+    description:
+      "Labor-only movers in Orlando — load/unload U-Haul, PODS & trucks by the hour. Secondary to our full-service moves. Family-owned. Quote today.",
+  },
+  h1: "Labor-Only Movers in Orlando & Central Florida",
+  subline:
+    "Already have a U-Haul, POD, or rental truck? Hire our crew for loading, unloading, and stair help — by the hour, no truck fee.",
+  intro: {
+    h2: "You keep the truck. We bring the muscle.",
+    lead: "Labor-only is for when you already have the truck, POD, or container — Toro provides the careful bilingual crew. We load tight so nothing shifts, unload and place, and handle stairs and heavy items. Same family-owned Central Florida team as full-service, billed by the hour with a two-hour minimum and no surprise add-ons.",
+  },
+  points: [
+    {
+      h3: "By the hour, up front",
+      body: "Honest hourly pricing quoted before we start. No fuel surcharge, no stair fee, no surprise line items.",
+    },
+    {
+      h3: "Just the muscle",
+      body: "Already have a truck or POD? We bring the crew, the care, and the Tetris skills to pack it right.",
+    },
+    {
+      h3: "U-Haul, PODS & storage",
+      body: "Loading and unloading help for rentals, pods, and storage units across Orlando and the surrounding metro.",
+    },
+    {
+      h3: "Fast to book",
+      body: "Local Central Florida crews mean we can often fit you in this week — call or request a quote online.",
+    },
+  ],
+  faqs: [
+    {
+      q: "What is labor-only moving?",
+      a: "You provide the truck, POD, or storage unit — we provide the crew. Toro Movers loads, unloads, and carefully handles your belongings by the hour, including stairs and heavy items.",
+    },
+    {
+      q: "Can you help load or unload a U-Haul, PODS, or rental truck in Orlando?",
+      a: "Yes — loading and unloading a U-Haul, PODS, rental truck, or storage container is exactly what labor-only moving is. You keep the truck; we load it tight so nothing shifts on the road, or unload and carry everything in. Billed by the hour, two-hour minimum, across Orlando and Central Florida.",
+    },
+    {
+      q: "How much does labor-only cost?",
+      a: "Labor-only is billed up front by the hour — a two-mover crew with a two-hour minimum, and you can add movers for bigger jobs. Shrink wrap, furniture blankets, and assembly/disassembly are included; no fuel surcharge, no stair fee. Send your move details and you'll get your exact rate in about 60 seconds — confirmed before we start, with no surprise line items.",
+    },
+    {
+      q: "Do you only work in Central Florida?",
+      a: "Yes. We're a local Central Florida moving company based in the Orlando metro and we keep it local — that's what lets us schedule fast and price honestly.",
+    },
+    {
+      q: "Can you help on short notice?",
+      a: "Often, yes. Call us to check availability for your date and we'll tell you right away what we can do.",
+    },
+  ],
+  serviceType: "Labor-only moving help",
+};
+
 export const SERVICES: ServiceData[] = [
   APARTMENT_MOVERS,
   RESIDENTIAL_MOVERS,
   COMMERCIAL_MOVERS,
+  FULL_SERVICE_MOVING,
+  LABOR_ONLY_MOVING,
   LOADING_UNLOADING,
 ];
 

@@ -112,10 +112,17 @@ export default function Page() {
               homes, offices, and loading help, all at up-front hourly
               pricing with no hidden fees.
             </p>
+            <p className="city-subline" style={{ marginTop: 12 }}>
+              Full city list and coverage map:{" "}
+              <Link href="/service-areas">Central Florida moving service areas</Link>.
+            </p>
             <div className="city-hero-cta">
               <a href="/get-my-price" data-open-quote data-source="page-cta" className="btn btn-primary">
                 Get my free estimate
                 <span className="arrow" aria-hidden />
+              </a>
+              <a href="/service-areas" className="btn btn-outline">
+                View all service areas
               </a>
             </div>
             <div className="city-hero-meta">

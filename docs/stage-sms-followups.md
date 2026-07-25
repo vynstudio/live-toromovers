@@ -3,7 +3,12 @@
 **Stack:** HubSpot Mudanzas · OpenPhone/Quo SMS · Resend email · Telegram · n8n (delays)  
 **Pipeline CRM** (`crm.toromovers.net`) is on hold — this doc is the **main site** automation.
 
-Review link: `https://g.page/r/CYAKurQHh5TvEAI/review`
+Review link: `https://g.page/r/CYAKurQHh5TvEAI/review`  
+**Book online (pre-book stages):** `https://toromovers.net/get-my-price?src=sms&step=<stepId>`  
+(Spanish: `/es/get-my-price?src=sms&step=…`)
+
+Pre-book SMS/email (New Lead → Quote Sent) always include the book link.  
+Booked / Move Done / Review stages do **not** re-push the funnel.
 
 ---
 

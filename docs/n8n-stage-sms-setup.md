@@ -37,10 +37,10 @@ On the n8n Railway service, ensure:
 
 ```bash
 WEBHOOK_URL=https://n8n-production-d3d0.up.railway.app/
-N8N_WEBHOOK_SECRET=<same as Netlify N8N_WEBHOOK_SECRET>
-LEAD_INTAKE_SECRET=<same as Netlify LEAD_INTAKE_SECRET>   # optional; site accepts x-toro-secret too
 GENERIC_TIMEZONE=America/New_York
 ```
+
+**Do not rely on `$env.N8N_WEBHOOK_SECRET` inside Code/HTTP nodes** — this host blocks env access in expressions (`access to env vars denied`). The stage drip workflow forwards the inbound `x-toro-secret` header from Netlify → n8n → `/api/crm/sequences/stage-run` instead.
 
 Wait nodes need **queue mode or a persistent DB** (you already use Postgres on Railway — good).
 

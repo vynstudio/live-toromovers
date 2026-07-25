@@ -25,6 +25,11 @@ export const MOVES_DONE = "100+";
 // Update if the real count changes.
 export const REVIEW_COUNT = "36";
 
+// Public Google Maps short link — "See all reviews" on the homepage (and anywhere
+// we send visitors to read the full GBP review list).
+export const GOOGLE_MAPS_REVIEWS_URL =
+  "https://maps.app.goo.gl/4VLksGpLoVTYXv3k7";
+
 // schema.org `sameAs` — profile URLs that unambiguously identify Toro Movers,
 // so Google reconciles this site with the same business entity across the web
 // (strengthens the local/citation signal). Only add REAL, resolvable profile

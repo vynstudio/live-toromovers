@@ -2,6 +2,8 @@
 // pages. Data-driven (one shared <GuidePage> template). Buyer-first, genuinely
 // useful, local. No price figures, no long-distance claims.
 
+import { AEO_GUIDES } from "./guides-aeo";
+
 // Rich-section primitives — all optional and additive. Plain text-only guides
 // ignore them; the data-heavier posts (e.g. hidden fees) opt in.
 export interface GuideFee {
@@ -361,16 +363,70 @@ export const MOVING_COST: GuideData = {
   slug: "how-much-does-a-local-move-cost-orlando",
   href: "/blog/how-much-does-a-local-move-cost-orlando",
   metadata: {
-    title: "How Much Does a Local Move Cost in Orlando?",
+    title: "How Much Does a Local Move Cost in Orlando? (2026)",
     description:
-      "How much does a local move cost in Orlando? How hourly moving pricing works, what raises or lowers the bill, and how to get an honest up-front estimate.",
+      "2026 Orlando moving cost chart by home size — crew size, hours, hourly rates, and average totals. How hourly pricing works and how to get an up-front estimate.",
   },
   h1: "How Much Does a Local Move Cost in Orlando?",
   intro:
-    "It's the first question everyone asks — and the honest answer is \"it depends on your move.\" Here's exactly what drives the cost of a local move in Orlando, what you can do to keep it down, and how to get an estimate you can trust before the day.",
-  datePublished: "2026-06-09",
-  readMins: 5,
+    "It's the first question everyone asks — and the honest answer is \"it depends on your move.\" Below is a 2026 market cost chart for Central Florida local moves by home size, plus what drives the bill and how to get an estimate you can trust before the day.",
+  datePublished: "2026-07-25",
+  readMins: 7,
   sections: [
+    {
+      h2: "Average local moving costs in Orlando (2026)",
+      blocks: [
+        {
+          kind: "p",
+          text: "These are market averages for a typical local move in the Orlando / Central Florida area in 2026 — useful for budgeting, not a quote. Your total depends on how packed you are, stairs or elevators, parking distance, and drive time between addresses. Toro Movers bills by the hour with the crew size and rate agreed up front; you only pay for time used (after the minimum).",
+        },
+        {
+          kind: "table",
+          table: {
+            caption:
+              "2026 Orlando-area market averages by home size. Hourly rates are for the full crew. Totals are directional — not a fixed bid.",
+            headers: [
+              "Home Size",
+              "Crew Size",
+              "Est. Hours",
+              "Avg. Hourly Rate (Crew)",
+              "Avg. Total Cost (2026)",
+            ],
+            rows: [
+              ["Studio", "2 movers", "2–3 hrs", "$100–$150/hr", "$340"],
+              ["1 bedroom", "2 movers", "3–4 hrs", "$100–$150/hr", "$460"],
+              ["2 bedroom", "3 movers", "4–6 hrs", "$150–$270/hr", "$725"],
+              ["3 bedroom", "3–4 movers", "6–8 hrs", "$180–$320/hr", "$1,625"],
+              ["4 bedroom", "4 movers", "7–10 hrs", "$200–$400/hr", "$1,860"],
+              ["5+ bedroom", "4–5 movers", "9–12 hrs", "$250–$500/hr", "$2,850"],
+            ],
+          },
+        },
+        {
+          kind: "p",
+          text: "How to read the table: average total is a midpoint-style figure for a normal local move with typical access — not the low end of the rate band × high end of hours. A light 2-bedroom with easy parking can land under the average; a packed 2-bedroom with stairs and a long carry can land over it.",
+        },
+        {
+          kind: "ul",
+          items: [
+            "Studio / 1-bedroom: usually 2 movers; most apartments finish in a half day.",
+            "2-bedroom: often worth a third mover so the clock stops sooner.",
+            "3-bedroom and up: plan a full day and a larger crew; garages and outdoor items add volume.",
+            "Weekend and end-of-month dates book first — mid-month weekdays are usually easier to schedule.",
+          ],
+        },
+        {
+          kind: "note",
+          note: {
+            before:
+              "Want your real number — not a market average? ",
+            linkText: "Get a free estimate online",
+            href: "/get-my-price",
+            after: " in about 60 seconds. Rate and crew size are locked before move day.",
+          },
+        },
+      ],
+    },
     {
       h2: "How local moving pricing works",
       body: [
@@ -427,6 +483,18 @@ export const MOVING_COST: GuideData = {
   ],
   faqs: [
     {
+      q: "How much does a local move cost in Orlando in 2026?",
+      a: "Market averages for a typical local Orlando-area move run roughly $340 for a studio, $460 for a 1-bedroom, $725 for a 2-bedroom, $1,625 for a 3-bedroom, $1,860 for a 4-bedroom, and about $2,850 for 5+ bedrooms — depending on crew size, hours, access, and packing. These are budgeting ranges, not fixed quotes. Toro Movers bills by the hour with rate and crew agreed up front.",
+    },
+    {
+      q: "How much does a 2-bedroom move cost in Orlando?",
+      a: "A typical 2-bedroom local move in Orlando averages around $725 in 2026 market data, usually with a 3-mover crew over 4–6 hours at roughly $150–$270 per hour for the crew. Stairs, elevators, packing status, and drive time can push the total lower or higher.",
+    },
+    {
+      q: "How much does a 3-bedroom house move cost in Orlando?",
+      a: "A typical 3-bedroom local move averages around $1,625 in 2026 market data (often 3–4 movers, 6–8 hours, roughly $180–$320 per hour for the crew). Full houses with garages and outdoor items often run longer than a lightly furnished home of the same bedroom count.",
+    },
+    {
       q: "Do Orlando movers charge by the hour or a flat rate?",
       a: "We charge by the hour, with the rate and crew size agreed up front — no per-mile fee, no fuel surcharge, no padded hours. You pay for the time the move actually takes, which is usually fairer than a flat quote that's padded for the worst case.",
     },
@@ -443,6 +511,14 @@ export const MOVING_COST: GuideData = {
       a: "Declutter before packing, be fully packed and labeled when the crew arrives, and book a mid-month weekday with an early start. Since it's hourly, anything that saves time directly lowers the bill.",
     },
   ],
+  cta: {
+    heading: "Get your exact Orlando move price",
+    body: [
+      "Market averages help you budget. Your free estimate locks crew size and hourly rate for your addresses, access, and home size — before move day.",
+    ],
+    linkText: "Get my free estimate",
+    href: "/get-my-price",
+  },
 };
 
 export const HIDDEN_FEES: GuideData = {
@@ -1099,4 +1175,12 @@ export const GUIDES: GuideData[] = [
   ORLANDO_MOVE_PREP,
   APARTMENT_CHECKLIST,
   BEST_TIME_TO_MOVE,
+  ...AEO_GUIDES,
 ];
+
+export {
+  CHOOSE_MOVER,
+  FURNITURE_DISASSEMBLY,
+  TIPPING_MOVERS,
+  MOVING_STORAGE,
+} from "./guides-aeo";

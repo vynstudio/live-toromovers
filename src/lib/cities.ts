@@ -39,17 +39,16 @@ export const ORLANDO: CityData = {
   name: "Orlando",
   navLabel: "Orlando movers",
   metadata: {
-    // Base only — the root layout template appends " · Toro Movers".
-    title: "Orlando, FL Movers — Moving Company",
+    title: "Orlando Movers | Family-Owned, No Hidden Fees",
     description:
-      "Family-owned Orlando movers — downtown, Lake Nona, Dr. Phillips & nearby. Bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
+      "Family-owned Orlando movers — apartments, homes & offices with transparent hourly pricing. 4.9★ on Google, bilingual crew, no fuel or stair fees.",
   },
-  h1: "Orlando Movers — Toro Movers",
+  h1: "Orlando Movers — Family-Owned, No Hidden Fees",
   subline:
-    "Family-owned movers serving downtown Orlando, Lake Nona, Dr. Phillips, MetroWest, Baldwin Park, and the surrounding Orange County area. Honest, up-front pricing.",
+    "Apartment, home, and office moves with transparent hourly pricing. 4.9★ on Google, fully insured bilingual crew.",
   about: {
     h2: "Orlando movers built for the city.",
-    lead: "Toro Movers handles apartment, home, and commercial moves throughout Orlando and Orange County. From downtown high-rises to single-family homes in Baldwin Park, the process stays the same: phone estimate, scheduled crew, no surprises.",
+    lead: "Toro Movers is a family-owned Central Florida moving company handling apartment, home, and commercial moves throughout Orlando and Orange County. From downtown high-rises to single-family homes in Baldwin Park and Lake Nona townhomes, the process stays the same: phone estimate, scheduled crew, upfront hourly pricing, and no surprises.",
   },
   neighborhoods: [
     "Downtown Orlando",
@@ -88,17 +87,19 @@ export const LAKE_MARY: CityData = {
   href: "/lake-mary-movers",
   name: "Lake Mary",
   navLabel: "Lake Mary movers",
+  // Full long-form page lives at src/app/(site)/lake-mary-movers/page.tsx
+  // (not the thin CityPage template). Keep metadata/h1 aligned for sitemap/grids.
   metadata: {
-    title: "Lake Mary, FL Movers — Moving Company",
+    title: "Lake Mary Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Lake Mary movers — Heathrow, Markham Woods, Timacuan & Seminole County. Bilingual, up-front hourly pricing, no hidden fees.",
+      "Need movers in Lake Mary, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
-  h1: "Lake Mary Movers — Toro Movers",
+  h1: "Lake Mary Movers",
   subline:
-    "Family-owned movers serving Lake Mary, Heathrow, Markham Woods, Timacuan, and the surrounding Seminole County area. Honest, up-front pricing.",
+    "Professional household, office, and planned relocation moving help in Lake Mary, FL, with upfront hourly pricing and no hidden fees.",
   about: {
-    h2: "Lake Mary movers, careful with the details.",
-    lead: "Toro Movers handles apartment, home, and commercial moves throughout Lake Mary and Seminole County. Residential moves in HOA communities, gated neighborhoods, and high-end homes all run on the same process: phone estimate, scheduled crew, no surprises.",
+    h2: "Lake Mary movers built for household and planned relocations",
+    lead: "Toro Movers is a family-owned Central Florida crew serving Lake Mary, Heathrow, Markham Woods, office parks, and nearby Seminole County — homes, townhomes, office moves, and full-service with upfront hourly pricing.",
   },
   neighborhoods: [
     "Heathrow",
@@ -111,22 +112,22 @@ export const LAKE_MARY: CityData = {
     "Country Club Oaks",
   ],
   uniqueAngle: {
-    eyebrow: "HOA & gated communities",
-    h2: "Built for HOA neighborhoods.",
-    body: "Many Lake Mary communities require advance notice and specific arrival windows for moving trucks. Toro Movers coordinates with property management or HOA offices directly — so move-in day doesn’t get held up at the gate.",
+    eyebrow: "timing, access, parking",
+    h2: "Moving in Lake Mary comes down to timing, access, and parking",
+    body: "I-4 corridor traffic, HOA and gated arrival windows, townhome parking, and office-park access shape every Lake Mary job. Toro plans around the rules you share and quotes by the hour — no fuel, stair, or material surprise fees.",
   },
   faqs: [
     {
-      q: "Do you coordinate with my Lake Mary HOA or property manager?",
-      a: "Yes. Many Lake Mary and Heathrow communities require advance notice and a set arrival window — we coordinate with your HOA or property management and show up inside the window so move-in day isn't held up at the gate.",
+      q: "How much do movers cost in Lake Mary, FL?",
+      a: "Costs depend on crew size, home size, access, and hours. Toro uses upfront hourly pricing with no fuel surcharges, stair fees, or material fees.",
     },
     {
-      q: "Do you move in gated communities like Heathrow or Markham Woods?",
-      a: "Regularly. We coordinate guard-gate check-ins and HOA arrival windows directly so move-in day doesn't get held up at the gate.",
+      q: "Do you move homes and townhomes in Lake Mary?",
+      a: "Yes. Single-family homes and townhomes are a core job type across Lake Mary, Heathrow, and nearby Seminole County streets.",
     },
     {
       q: "How far in advance should I book a Lake Mary move?",
-      a: "Sooner is better for gated communities that require advance notice, but we keep same-week availability across Seminole County. Call with your date and we'll tell you honestly what's open.",
+      a: "Book one to two weeks ahead when you can, especially for weekends and HOA or gated windows. Same-week is often available — call (689) 600-2720.",
     },
   ],
   schema: { lat: 28.7589, lng: -81.3178 },
@@ -138,16 +139,16 @@ export const WINTER_PARK: CityData = {
   name: "Winter Park",
   navLabel: "Winter Park movers",
   metadata: {
-    title: "Winter Park, FL Movers — Moving Company",
+    title: "Winter Park Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Winter Park movers — Park Ave, Aloma & historic neighborhoods. Careful with high-value homes, up-front hourly pricing. Free estimate.",
+      "Need movers in Winter Park, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing and no hidden fees.",
   },
-  h1: "Winter Park Movers — Toro Movers",
+  h1: "Winter Park Movers",
   subline:
-    "Family-owned movers serving Winter Park, including Park Avenue, Aloma, and the surrounding historic and luxury residential areas. Honest, up-front pricing.",
+    "Local, apartment, and full-service moving help in Winter Park, FL, with upfront hourly pricing and no hidden fees.",
   about: {
-    h2: "Winter Park movers, careful with what matters.",
-    lead: "Toro Movers handles moves throughout Winter Park — from historic homes near Park Avenue to modern apartments and luxury residential. Older homes with narrow staircases, brick driveways, and antique furniture get the same careful process: phone estimate, scheduled crew, no surprises.",
+    h2: "Winter Park movers built for local moves",
+    lead: "Toro Movers handles moves throughout Winter Park — older homes near Park Avenue, apartments around Rollins College, Aloma corridor rentals, and short hops into Orlando, Maitland, Fern Park, and Baldwin Park. Careful furniture handling, clear hourly pricing, no surprises.",
   },
   neighborhoods: [
     "Park Avenue",
@@ -160,22 +161,38 @@ export const WINTER_PARK: CityData = {
     "Comstock",
   ],
   uniqueAngle: {
-    eyebrow: "historic & high-value homes",
-    h2: "Built for Winter Park homes.",
-    body: "Winter Park has more historic homes per capita than most Florida cities. Hardwood floors, original moldings, narrow doorways, and antique furniture require slower, more deliberate handling. Toro Movers crews are trained for high-value residential — and we always bring extra blankets, floor protection, and door-jamb padding for older homes.",
+    eyebrow: "careful handling · older homes · apartments",
+    h2: "Built for Winter Park homes and streets.",
+    body: "Winter Park moves often mean narrow streets, older homes with tight staircases, and apartment elevators near campus. Toro plans truck access, pads floors and doorways, and handles furniture deliberately — professional local service without fake luxury claims.",
   },
   faqs: [
     {
-      q: "Are you careful with antiques and historic Winter Park homes?",
-      a: "Yes — Winter Park has more historic homes than most Florida cities, with hardwood floors, original moldings, and narrow doorways. We bring extra blankets, floor protection, and door-jamb padding and handle antique and high-value pieces deliberately.",
+      q: "How much do movers cost in Winter Park, FL?",
+      a: "Winter Park moving cost depends on crew size, home or apartment size, access (narrow streets, stairs, elevators, long carries), packing readiness, and how long the job takes. Toro Movers uses upfront hourly pricing with no fuel surcharges, stair fees, or material fees.",
     },
     {
-      q: "Can you handle tight parking near Park Avenue?",
-      a: "We plan truck access ahead of time for Park Avenue and the older Olde Winter Park streets, where parking and driveways are tight, so loading doesn't hold up the move.",
+      q: "Do you move apartments in Winter Park?",
+      a: "Yes. Apartment and condo moves are common near Rollins College, along Aloma, and in newer mixed-use pockets. We plan around elevator windows, loading zones, and property-manager rules.",
     },
     {
-      q: "Do you move both homes and apartments in Winter Park?",
-      a: "Yes — from historic homes near Park Avenue to modern apartments and luxury residential, all on the same up-front hourly pricing.",
+      q: "Do you charge extra for stairs or elevators?",
+      a: "No separate stair or elevator fee. Toro bills by the hour, so a walk-up, slow elevator, or long carry simply adds time on the clock. Furniture blankets, shrink wrap, and basic assembly/disassembly are included.",
+    },
+    {
+      q: "Can you move me from Winter Park to Orlando?",
+      a: "Yes. Local moves between Winter Park and Orlando (and nearby cities like Maitland, Fern Park, Altamonte Springs, and Baldwin Park) are a regular part of our week. Same upfront hourly pricing across Central Florida.",
+    },
+    {
+      q: "Do you offer labor-only moving help in Winter Park?",
+      a: "Yes. If you already have a U-Haul, POD, rental truck, or storage container, Toro provides labor-only loading and unloading help by the hour — same background-checked, bilingual crew and included protection materials.",
+    },
+    {
+      q: "How do you handle older Winter Park homes and tight streets?",
+      a: "Many Winter Park streets near Park Avenue and older residential blocks are narrow, with limited driveway depth. We plan truck placement and carries ahead of time, pad floors and doorways, and move furniture deliberately through tight turns.",
+    },
+    {
+      q: "What makes Toro Movers different from franchise moving companies?",
+      a: "Toro is a family-owned Central Florida moving company — not a national call center. You get a local crew, clear hourly pricing, bilingual support (Hablamos español), and no franchise-style surprise fees.",
     },
   ],
   schema: { lat: 28.5999, lng: -81.3392 },
@@ -191,9 +208,9 @@ export const KISSIMMEE: CityData = {
   name: "Kissimmee",
   navLabel: "Kissimmee movers",
   metadata: {
-    title: "Kissimmee, FL Movers — Moving Company",
+    title: "Kissimmee Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned movers in Kissimmee, FL — Celebration, Poinciana, Buenaventura Lakes & Osceola County. Bilingual, up-front hourly pricing, no hidden fees.",
+      "Need movers in Kissimmee, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
   h1: "Kissimmee Movers — Toro Movers",
   subline:
@@ -240,9 +257,9 @@ export const SANFORD: CityData = {
   name: "Sanford",
   navLabel: "Sanford movers",
   metadata: {
-    title: "Sanford, FL Movers — Moving Company",
+    title: "Sanford Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned movers in Sanford, FL — Historic Downtown, Lake Monroe, Mayfair & Seminole County. Bilingual, up-front hourly pricing. Free estimate.",
+      "Need movers in Sanford, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
   h1: "Sanford Movers — Toro Movers",
   subline:
@@ -288,17 +305,19 @@ export const CLERMONT: CityData = {
   href: "/clermont-movers",
   name: "Clermont",
   navLabel: "Clermont movers",
+  // Full long-form page lives at src/app/(site)/clermont-movers/page.tsx
+  // (not the thin CityPage template). Keep metadata/h1 aligned for sitemap/grids.
   metadata: {
-    title: "Clermont, FL Movers — Moving Company",
+    title: "Clermont Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Clermont movers — Kings Ridge, Legends, Summit Greens & Lake County. Bilingual, up-front hourly pricing. Free estimate.",
+      "Need movers in Clermont, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
-  h1: "Clermont Movers — Toro Movers",
+  h1: "Clermont Movers",
   subline:
-    "Family-owned movers serving Clermont, including Kings Ridge, Legends, Summit Greens, Lost Lake, and the surrounding Lake County area. Honest, up-front pricing.",
+    "Local, apartment, and full-service moving help in Clermont, FL, with upfront hourly pricing and no hidden fees.",
   about: {
-    h2: "Clermont movers built for the hills.",
-    lead: "Toro Movers handles apartment, home, and 55+ community moves throughout Clermont and Lake County. From master-planned neighborhoods off Hartwood Marsh to established homes near the chain of lakes, the process stays the same: phone estimate, scheduled crew, no surprises.",
+    h2: "Clermont movers built for local moves",
+    lead: "Toro Movers is a family-owned Central Florida crew serving Clermont, Minneola, Groveland, and Lake County — larger homes, gated communities, apartments, storage moves, and full-service with upfront hourly pricing.",
   },
   neighborhoods: [
     "Kings Ridge",
@@ -386,18 +405,21 @@ export const WINTER_GARDEN: CityData = {
   href: "/winter-garden-movers",
   name: "Winter Garden",
   navLabel: "Winter Garden movers",
+  // Full long-form page lives at src/app/(site)/winter-garden-movers/page.tsx
+  // (not the thin CityPage template). Keep metadata/h1 aligned for sitemap/grids.
   metadata: {
-    title: "Winter Garden, FL Movers — Moving Company",
+    title: "Winter Garden Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Winter Garden movers — Historic Downtown, Independence, Horizon West & west Orange County. Bilingual, up-front hourly pricing.",
+      "Need movers in Winter Garden, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
-  h1: "Winter Garden Movers — Toro Movers",
+  h1: "Winter Garden Movers",
   subline:
-    "Family-owned movers serving Winter Garden, including Historic Downtown, Independence, the Hamlin / Horizon West area, and west Orange County. Honest, up-front pricing.",
+    "Local, family, and new-build moving help in Winter Garden, FL, with upfront hourly pricing and no hidden fees.",
   about: {
-    h2: "Winter Garden movers, growth and charm.",
-    lead: "Toro Movers handles apartment, home, and new-construction moves throughout Winter Garden and west Orange County. From historic homes near Plant Street to brand-new builds in Horizon West, the process stays the same: phone estimate, scheduled crew, no surprises.",
+    h2: "Winter Garden movers built for local moves",
+    lead: "Toro Movers is a family-owned Central Florida crew serving Winter Garden, Horizon West, Hamlin, and west Orange County — new-build communities, family homes, storage-to-home, and full-service with upfront hourly pricing.",
   },
+
   neighborhoods: [
     "Historic Downtown / Plant Street",
     "Independence",
@@ -435,45 +457,63 @@ export const ALTAMONTE_SPRINGS: CityData = {
   href: "/altamonte-springs-movers",
   name: "Altamonte Springs",
   navLabel: "Altamonte Springs movers",
+  // Full long-form page lives at src/app/(site)/altamonte-springs-movers/page.tsx
+  // (not the thin CityPage template). Keep metadata/h1 aligned for sitemap/grids.
   metadata: {
-    title: "Altamonte Springs, FL Movers — Moving Company",
+    title: "Altamonte Springs Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned movers in Altamonte Springs, FL — Cranes Roost, Uptown, Sanlando & Seminole County apartments & condos. Up-front hourly pricing.",
+      "Need movers in Altamonte Springs, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing and no hidden fees.",
   },
-  h1: "Altamonte Springs Movers — Toro Movers",
+  h1: "Altamonte Springs Movers",
   subline:
-    "Family-owned movers serving Altamonte Springs, including Uptown Altamonte, Cranes Roost, Sanlando Springs, and the surrounding Seminole County area. Honest, up-front pricing.",
+    "Local, apartment, and full-service moving help in Altamonte Springs, FL, with upfront hourly pricing and no hidden fees.",
   about: {
-    h2: "Altamonte movers for apartments & condos.",
-    lead: "Toro Movers handles apartment, condo, and home moves throughout Altamonte Springs and south Seminole County. From third-floor walk-ups near Uptown to condos by Cranes Roost, the process stays the same: phone estimate, scheduled crew, no surprises.",
+    h2: "Altamonte Springs movers built for local moves",
+    lead: "Toro Movers is a family-owned Central Florida crew serving Altamonte Springs, Uptown Altamonte, Cranes Roost, and nearby Seminole County — apartments, homes, labor-only, and full-service with upfront hourly pricing.",
   },
   neighborhoods: [
     "Uptown Altamonte",
     "Cranes Roost",
+    "Forest City",
+    "Fern Park",
     "Sanlando Springs",
     "Spring Oaks",
     "Lake Lotus",
     "The Springs",
-    "Montgomery Club",
-    "Bear Lake",
   ],
   uniqueAngle: {
-    eyebrow: "apartment & condo moves",
-    h2: "Built for Altamonte apartments.",
-    body: "Altamonte Springs is dense with apartment and condo communities, which means stairs, elevators, narrow breezeways, and strict complex move-in windows. Toro Movers' hourly crews are built for exactly this — labor-only or labor-plus-truck, careful on walk-ups and tight turns, and quoted up front by the hour so a third-floor unit never turns into a surprise bill.",
+    eyebrow: "timing, access, parking",
+    h2: "Moving in Altamonte Springs comes down to timing, access, and parking",
+    body: "SR 436 and I-4 traffic, apartment elevator windows, long carries, and loading zones shape every Altamonte job. Toro plans for complex rules and quotes by the hour — no fuel, stair, or material surprise fees.",
   },
   faqs: [
     {
-      q: "Do you charge extra for stairs or a third-floor Altamonte apartment?",
-      a: "No separate stair fee — we bill by the hour, so a higher floor or walk-up simply takes a little longer, and we tell you up front how that affects the estimate.",
+      q: "How much do movers cost in Altamonte Springs, FL?",
+      a: "Costs depend on crew size, home size, access, and hours. Toro uses upfront hourly pricing with no fuel surcharges, stair fees, or material fees.",
     },
     {
-      q: "Can you work with apartment-complex move-in windows near Uptown or Cranes Roost?",
-      a: "Yes. Altamonte is dense with apartment and condo communities — we reserve elevators where needed and work within your complex's move-in window.",
+      q: "Do you move apartments in Altamonte Springs?",
+      a: "Yes — elevators, walk-ups, loading zones, and move-in windows around Uptown and Cranes Roost are regular work for our crew.",
     },
     {
-      q: "Do you do labor-only loading if I have my own truck or POD?",
-      a: "Yes — labor-only loading and unloading by the hour is one of our most-requested options in Altamonte's apartment communities.",
+      q: "Do you charge extra for stairs or elevators?",
+      a: "No separate stair or elevator fee. We bill by the hour; materials and basic assembly/disassembly are included.",
+    },
+    {
+      q: "Can you move me from Altamonte Springs to Orlando?",
+      a: "Yes. Local moves between Altamonte Springs and Orlando and nearby cities are a core part of our service area.",
+    },
+    {
+      q: "Do you offer labor-only moving help in Altamonte Springs?",
+      a: "Yes — load or unload a U-Haul, POD, or rental truck by the hour with the same bilingual, background-checked crew.",
+    },
+    {
+      q: "How far in advance should I book movers in Altamonte Springs?",
+      a: "One to two weeks is ideal; same-week dates are often available. Call (689) 600-2720 or request an estimate online.",
+    },
+    {
+      q: "What makes Toro Movers different from franchise moving companies?",
+      a: "Family-owned Central Florida company, local crew, clear hourly pricing, no call-center handoff, bilingual support.",
     },
   ],
   schema: { lat: 28.6611, lng: -81.3656 },
@@ -485,9 +525,9 @@ export const APOPKA: CityData = {
   name: "Apopka",
   navLabel: "Apopka movers",
   metadata: {
-    title: "Apopka, FL Movers — Moving Company",
+    title: "Apopka Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Apopka movers — Errol Estates, Rock Springs Ridge, Wekiva & north Orange County. Bilingual, up-front hourly pricing, no hidden fees.",
+      "Need movers in Apopka, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
   h1: "Apopka Movers — Toro Movers",
   subline:
@@ -533,17 +573,19 @@ export const ST_CLOUD: CityData = {
   href: "/st-cloud-movers",
   name: "St. Cloud",
   navLabel: "St. Cloud movers",
+  // Full long-form page lives at src/app/(site)/st-cloud-movers/page.tsx
+  // (not the thin CityPage template). Keep metadata/h1 aligned for sitemap/grids.
   metadata: {
-    title: "St. Cloud, FL Movers — Moving Company",
+    title: "St. Cloud Movers | Local Moving Company | Toro Movers",
     description:
-      "Looking for a moving company in St. Cloud, FL? Toro Movers — family-owned, serving Narcoossee, Anthem Park, Lakeshore & Osceola County. Bilingual crews, up-front hourly pricing, no hidden fees.",
+      "Need movers in St. Cloud, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
-  h1: "St. Cloud Movers — Toro Movers",
+  h1: "St. Cloud Movers",
   subline:
-    "Family-owned movers serving St. Cloud, including the Narcoossee corridor, Anthem Park, Lakeshore, and the surrounding Osceola County area. Bilingual crews, honest, up-front pricing.",
+    "Local, residential, and full-service moving help in St. Cloud, FL, with upfront hourly pricing and no hidden fees.",
   about: {
-    h2: "St. Cloud movers for new homes.",
-    lead: "Toro Movers handles apartment, home, and new-construction moves throughout St. Cloud and south Osceola County. From brand-new builds near Narcoossee and Lake Nona to established homes by East Lake Toho, the process stays the same: phone estimate, scheduled crew, no surprises. Hablamos español.",
+    h2: "St. Cloud movers built for local and residential moves",
+    lead: "Toro Movers is a family-owned Central Florida crew serving St. Cloud, Narcoossee, Anthem Park, Lakeshore, and nearby Osceola County — family homes, apartments, labor-only, and full-service with upfront hourly pricing.",
   },
   neighborhoods: [
     "Narcoossee",
@@ -556,22 +598,38 @@ export const ST_CLOUD: CityData = {
     "Center Lake",
   ],
   uniqueAngle: {
-    eyebrow: "new construction & fast growth",
-    h2: "Built for fast-growing St. Cloud.",
-    body: "St. Cloud is one of the fastest-growing spots south of Lake Nona, so a lot of moves here are first-day move-ins to brand-new homes — builder schedules, fresh floors, and new-community streets that aren't on older maps yet. Toro Movers coordinates builder and HOA timing, protects new finishes, and gets you in without the surprises.",
+    eyebrow: "timing, access, parking",
+    h2: "Moving in St. Cloud comes down to timing, access, and parking",
+    body: "Narcoossee corridor traffic, HOA and new-community access, long driveway carries, and family-home closings shape every St. Cloud job. Toro plans for real logistics and quotes by the hour — no fuel, stair, or material surprise fees.",
   },
   faqs: [
     {
-      q: "Can you do a first-day move-in to a new St. Cloud build near Narcoossee?",
-      a: "Yes. St. Cloud is one of the fastest-growing areas south of Lake Nona, so first-day move-ins to brand-new homes are routine — we coordinate builder and HOA timing and protect new finishes.",
+      q: "How much do movers cost in St. Cloud, FL?",
+      a: "Costs depend on crew size, home size, access, and hours. Toro uses upfront hourly pricing with no fuel surcharges, stair fees, or material fees.",
     },
     {
-      q: "¿Hablan español en St. Cloud?",
-      a: "Sí — our St. Cloud crews are bilingual (English / Spanish) and can quote and run the move in either language.",
+      q: "Do you move apartments and family homes in St. Cloud?",
+      a: "Yes — residential homes, townhomes, apartments, and condos around Narcoossee, Anthem Park, and Lakeshore are regular work for our crew.",
     },
     {
-      q: "St. Cloud is south of the metro — is there a travel charge?",
-      a: "We bill by the hour and quote the drive honestly up front. There's no per-mile fee or fuel surcharge across Osceola County.",
+      q: "Do you charge extra for stairs or elevators?",
+      a: "No separate stair or elevator fee. We bill by the hour; materials and basic assembly/disassembly are included.",
+    },
+    {
+      q: "Can you move me from St. Cloud to Orlando, Kissimmee, or Lake Nona?",
+      a: "Yes. Local moves between St. Cloud and Orlando, Kissimmee, Lake Nona, and nearby cities are a core part of our service area.",
+    },
+    {
+      q: "Do you offer labor-only moving help in St. Cloud?",
+      a: "Yes — load or unload a U-Haul, POD, or rental truck by the hour with the same bilingual, background-checked crew.",
+    },
+    {
+      q: "How far in advance should I book movers in St. Cloud?",
+      a: "One to two weeks is ideal; same-week dates are often available. Call (689) 600-2720 or request an estimate online.",
+    },
+    {
+      q: "What makes Toro Movers different from franchise moving companies?",
+      a: "Family-owned Central Florida company, local crew, clear hourly pricing, no call-center handoff, bilingual support.",
     },
   ],
   references: [
@@ -587,9 +645,9 @@ export const WINDERMERE: CityData = {
   name: "Windermere",
   navLabel: "Windermere movers",
   metadata: {
-    title: "Windermere, FL Movers — Moving Company",
+    title: "Windermere Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Windermere movers — Isleworth, Keene's Pointe, Butler Bay & the Butler Chain. Careful with high-value homes. Free estimate.",
+      "Need movers in Windermere, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
   h1: "Windermere Movers — Toro Movers",
   subline:
@@ -636,9 +694,9 @@ export const MAITLAND: CityData = {
   name: "Maitland",
   navLabel: "Maitland movers",
   metadata: {
-    title: "Maitland, FL Movers — Moving Company",
+    title: "Maitland Movers | Local Moving Company | Toro Movers",
     description:
-      "Moving company in Maitland, FL — Toro Movers. Family-owned, serving Dommerich, Lake Maitland, Maitland Center & the Orange/Seminole line. Bilingual, up-front hourly pricing, no hidden fees.",
+      "Need movers in Maitland, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
   h1: "Maitland Movers — Toro Movers",
   subline:
@@ -685,9 +743,9 @@ export const DAVENPORT: CityData = {
   name: "Davenport",
   navLabel: "Davenport movers",
   metadata: {
-    title: "Davenport, FL Movers — Moving Company",
+    title: "Davenport Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Davenport movers — ChampionsGate, Providence, Ridgewood Lakes & the Four Corners area. Bilingual, up-front hourly pricing.",
+      "Need movers in Davenport, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
   h1: "Davenport Movers — Toro Movers",
   subline:
@@ -782,17 +840,19 @@ export const WINTER_HAVEN: CityData = {
   href: "/winter-haven-movers",
   name: "Winter Haven",
   navLabel: "Winter Haven movers",
+  // Full long-form page lives at src/app/(site)/winter-haven-movers/page.tsx
+  // (not the thin CityPage template). Keep metadata/h1 aligned for sitemap/grids.
   metadata: {
-    title: "Winter Haven, FL Movers — Moving Company",
+    title: "Winter Haven Movers | Local Moving Company | Toro Movers",
     description:
-      "Family-owned Winter Haven movers serving Polk County — apartment, home, and labor-only moves. Bilingual, up-front hourly pricing, no hidden fees. Free estimate.",
+      "Need movers in Winter Haven, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
-  h1: "Winter Haven Movers — Toro Movers",
+  h1: "Winter Haven Movers",
   subline:
-    "Family-owned movers serving Winter Haven and Polk County — the Chain of Lakes, Florence Villa, Eloise, Inwood, and the Cypress Gardens area. Honest, up-front hourly pricing.",
+    "Local, apartment, and full-service moving help in Winter Haven, FL, with upfront hourly pricing and no hidden fees.",
   about: {
-    h2: "Winter Haven movers for the Chain of Lakes.",
-    lead: "Toro Movers handles apartment, home, and labor-only moves across Winter Haven and Polk County — from lakefront homes near the Chain of Lakes to apartments near the Cypress Gardens area. Phone estimate, scheduled crew, hourly pricing, no surprises.",
+    h2: "Winter Haven movers built for local moves",
+    lead: "Toro Movers is a family-owned Central Florida crew serving Winter Haven and Polk County — family homes, apartments, storage moves, and regional hops to Lakeland, Davenport, and the Orlando area with upfront hourly pricing.",
   },
   neighborhoods: [
     "Chain of Lakes",
@@ -805,22 +865,22 @@ export const WINTER_HAVEN: CityData = {
     "Lucerne Park",
   ],
   uniqueAngle: {
-    eyebrow: "lakefront access",
-    h2: "Built for lakefront moves.",
-    body: "Winter Haven's Chain of Lakes means narrow lakefront drives, docks, and tight access at many homes. Toro Movers crews pad-wrap furniture and plan the carry so lakefront and Cypress Gardens-area moves go smoothly — billed by the hour, quoted honestly up front.",
+    eyebrow: "timing, access, parking",
+    h2: "Moving in Winter Haven comes down to timing, access, and parking",
+    body: "Polk County regional hops, family home access, storage loads, and apartment loading windows shape Winter Haven jobs. Toro plans for real driveway and complex rules and quotes by the hour — no fuel, stair, or material surprise fees.",
   },
   faqs: [
     {
-      q: "Do you serve all of Polk County?",
-      a: "Yes — Winter Haven, Lakeland, Bartow, Auburndale, Haines City, Lake Wales, and the surrounding Polk County area, plus moves between Polk and the Orlando metro.",
+      q: "How much do movers cost in Winter Haven, FL?",
+      a: "Costs depend on crew size, home size, access, and hours. Toro uses upfront hourly pricing with no fuel surcharges, stair fees, or material fees.",
     },
     {
-      q: "How is a Winter Haven move priced?",
-      a: "By the hour, with the crew size and rate agreed before the day — no per-mile charge, no fuel surcharge, no hidden fees. You only pay for the time the move actually takes.",
+      q: "Do you move apartments and family homes in Winter Haven?",
+      a: "Yes — apartments, townhomes, and single-family homes across Winter Haven and nearby Polk County are regular work for our crew.",
     },
     {
-      q: "Can you do labor-only — load or unload my U-Haul or POD?",
-      a: "Yes. If you already have a truck, U-Haul, or POD, we provide the crew to load and/or unload — or we bring the truck for a full-service move. Your choice.",
+      q: "Can you move me from Winter Haven to Lakeland, Davenport, or Orlando?",
+      a: "Yes. Local and regional moves between Winter Haven, Lakeland, Davenport, Kissimmee, and the Orlando metro use the same upfront hourly pricing.",
     },
   ],
   schema: { lat: 28.0222, lng: -81.7329 },
@@ -831,10 +891,11 @@ export const FERN_PARK: CityData = {
   href: "/fern-park-movers",
   name: "Fern Park",
   navLabel: "Fern Park movers",
+  // Full long-form page lives at src/app/(site)/fern-park-movers/page.tsx
   metadata: {
-    title: "Fern Park, FL Movers — Moving Company",
+    title: "Fern Park Movers | Local Moving Company | Toro Movers",
     description:
-      "Moving company in Fern Park, FL — Toro Movers. Family-owned, serving Fern Park, English Estates & the US-17-92 corridor in Seminole County. Bilingual, up-front hourly pricing, no hidden fees.",
+      "Need movers in Fern Park, FL? Toro Movers handles local moves, apartments, packing, and labor-only moving with upfront hourly pricing.",
   },
   h1: "Fern Park Movers — Toro Movers",
   subline:

@@ -76,18 +76,19 @@ export function ServicePage({ service }: { service: ServiceData }) {
               <a
                 href="/get-my-price"
                 data-open-quote
-                data-source="service-hero"
+                data-source={`service-hero-${service.slug}`}
                 className="btn btn-primary"
               >
                 Get my free estimate
                 <span className="arrow" aria-hidden />
               </a>
+              <a href={PHONE_TEL} className="btn btn-outline">
+                Call {PHONE_DISPLAY}
+              </a>
             </div>
             <div className="city-hero-meta">
               <span className="city-stars" aria-hidden>★★★★★</span>
-              <span>{GOOGLE_RATING} on Google</span>
-              <span className="sep">·</span>
-              <a href={PHONE_TEL} className="city-phone">{PHONE_DISPLAY}</a>
+              <span>{GOOGLE_RATING} on Google · Family-owned · No hidden fees</span>
             </div>
           </div>
         </section>

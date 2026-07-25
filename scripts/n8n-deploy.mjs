@@ -1,8 +1,9 @@
-// Imports + activates the two funnel workflows into n8n via the public API.
+// Imports + activates Toro n8n workflows via the public API.
 // Idempotent: if a workflow with the same name exists, it updates it instead of
-// duplicating. Reads creds from .env.wire (gitignored).
+// duplicating. Reads creds from .env.wire (gitignored) and/or process env.
 //
-//   node scripts/n8n-deploy.mjs
+//   N8N_API_KEY=... node scripts/n8n-deploy.mjs
+//   N8N_API_KEY=... node scripts/n8n-deploy.mjs --only stage
 //
 // Prints the production webhook URLs to wire into Netlify.
 
@@ -15,18 +16,43 @@ const root = resolve(__dirname, "..");
 
 // load .env.wire
 const env = {};
-for (const line of readFileSync(resolve(root, ".env.wire"), "utf8").split("\n")) {
-  const m = line.match(/^([A-Z0-9_]+)=(.*)$/);
-  if (m) env[m[1]] = m[2];
+try {
+  for (const line of readFileSync(resolve(root, ".env.wire"), "utf8").split("\n")) {
+    const m = line.match(/^([A-Z0-9_]+)=(.*)$/);
+    if (m) env[m[1]] = m[2];
+  }
+} catch {
+  /* optional */
 }
-const BASE = env.N8N_BASE_URL.replace(/\/$/, "");
-const KEY = env.N8N_API_KEY;
+const BASE = (
+  process.env.N8N_BASE_URL ||
+  env.N8N_BASE_URL ||
+  "https://n8n-production-d3d0.up.railway.app"
+).replace(/\/$/, "");
+const KEY = process.env.N8N_API_KEY || env.N8N_API_KEY;
+if (!KEY) {
+  console.error(
+    "Missing N8N_API_KEY. Create one in n8n → Settings → API, then:\n" +
+      "  N8N_API_KEY=... node scripts/n8n-deploy.mjs --only stage"
+  );
+  process.exit(1);
+}
 const H = { "X-N8N-API-KEY": KEY, "Content-Type": "application/json" };
 
-const FILES = [
-  "docs/n8n-funnel.workflow.json",
-  "docs/n8n-checklist-funnel.workflow.json",
-];
+const ALL_FILES = {
+  funnel: "docs/n8n-funnel.workflow.json",
+  checklist: "docs/n8n-checklist-funnel.workflow.json",
+  stage: "docs/n8n-stage-sms-drip.workflow.json",
+};
+const onlyArg = process.argv.find((a) => a === "--only");
+const onlyName = onlyArg ? process.argv[process.argv.indexOf("--only") + 1] : null;
+const FILES = onlyName
+  ? [ALL_FILES[onlyName]].filter(Boolean)
+  : Object.values(ALL_FILES);
+if (!FILES.length) {
+  console.error(`Unknown --only target. Use: funnel | checklist | stage`);
+  process.exit(1);
+}
 
 // Only these top-level fields are accepted by POST/PUT /workflows.
 function clean(raw) {

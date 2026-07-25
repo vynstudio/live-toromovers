@@ -78,6 +78,30 @@ const RELATED_BY_SLUG: Record<string, RelatedLink[]> = {
     { href: "/blog/full-service-vs-labor-only-orlando", name: "Full-service vs. labor-only", desc: "Compare the two options and costs." },
     { href: "/blog/what-youre-paying-for-orlando-movers", name: "What you're paying for", desc: "Orlando moving rates, explained." },
   ],
+  "how-to-choose-a-moving-company-orlando": [
+    { href: "/blog/hidden-moving-fees-orlando", name: "Hidden moving fees", desc: "Fees shady movers add — and how to avoid them." },
+    { href: "/blog/how-much-does-a-local-move-cost-orlando", name: "Local move costs", desc: "2026 Orlando averages by home size." },
+    { href: "/orlando-movers", name: "Orlando movers", desc: "Family-owned crew, up-front hourly pricing." },
+    { href: "/get-my-price", name: "Get my price", desc: "Written estimate in about 60 seconds." },
+  ],
+  "furniture-disassembly-protection-movers-orlando": [
+    { href: "/full-service-moving", name: "Full-service moving", desc: "Truck, crew, load & place — carefully." },
+    { href: "/blog/how-to-prepare-for-a-local-move-in-orlando", name: "Prepare for move day", desc: "What to do before the crew arrives." },
+    { href: "/apartment-movers-orlando-fl", name: "Apartment movers", desc: "Stairs, elevators, tight turns." },
+    { href: "/blog/what-youre-paying-for-orlando-movers", name: "What's in the rate", desc: "Pads, wrap, assembly included." },
+  ],
+  "tipping-movers-orlando": [
+    { href: "/blog/how-to-choose-a-moving-company-orlando", name: "How to choose a mover", desc: "Questions to ask before you book." },
+    { href: "/blog/how-much-does-a-local-move-cost-orlando", name: "Move cost guide", desc: "Budget the job before tip math." },
+    { href: "/orlando-movers", name: "Orlando movers", desc: "Transparent hourly pricing first." },
+    { href: "/get-my-price", name: "Get my price", desc: "Lock rate and crew size up front." },
+  ],
+  "moving-into-storage-orlando": [
+    { href: "/labor-only-moving", name: "Labor-only moving", desc: "Load PODS or a unit by the hour." },
+    { href: "/loading-unloading", name: "Loading & unloading", desc: "Containers and trucks packed tight." },
+    { href: "/blog/labor-only-moving-orlando", name: "Labor-only guide", desc: "When you keep the truck or container." },
+    { href: "/blog/full-service-vs-labor-only-orlando", name: "Full-service vs labor-only", desc: "Which setup fits a storage move." },
+  ],
 };
 
 export function GuidePage({ guide }: { guide: GuideData }) {
