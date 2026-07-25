@@ -81,8 +81,8 @@ export async function POST(req: Request) {
   if (result.ok && result.delayedSteps?.length) {
     const n8nUrl =
       process.env.N8N_STAGE_WEBHOOK_URL ||
-      process.env.N8N_FUNNEL_WEBHOOK_URL ||
-      process.env.N8N_CRM_WEBHOOK_URL;
+      process.env.N8N_CRM_WEBHOOK_URL ||
+      process.env.N8N_FUNNEL_WEBHOOK_URL;
     if (n8nUrl) {
       try {
         const secret = process.env.N8N_WEBHOOK_SECRET;

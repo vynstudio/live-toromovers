@@ -206,7 +206,11 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
   }
 
   // 5) n8n — delayed New Lead follow-ups (1h / 24h / 72h)
-  const n8nUrl = process.env.N8N_FUNNEL_WEBHOOK_URL || process.env.N8N_CRM_WEBHOOK_URL;
+  // Prefer dedicated CRM/stage drip webhook over the labor/full-service funnel drip
+  const n8nUrl =
+    process.env.N8N_CRM_WEBHOOK_URL ||
+    process.env.N8N_STAGE_WEBHOOK_URL ||
+    process.env.N8N_FUNNEL_WEBHOOK_URL;
   if (n8nUrl) {
     try {
       const secret = process.env.N8N_WEBHOOK_SECRET;
