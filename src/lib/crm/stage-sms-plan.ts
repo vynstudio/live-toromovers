@@ -160,17 +160,19 @@ export function buildStageStepCopy(
   switch (stepId) {
     // ── Pre-book stages: always push online book link ─────────────────
     case "new_0":
+      // Confirmation only — no funnel links. Lead already completed the form;
+      // a book URL sends them back through /get-my-price and duplicates intake.
       return {
         sms: es
-          ? `Hola ${name}, Toro Movers — recibimos tu solicitud. Reserva online: ${BOOK} o llama ${PHONE_DISPLAY}. STOP para salir.`
-          : `Hi ${name}, Toro Movers — we got your request. Book online: ${BOOK} or call ${PHONE_DISPLAY}. Reply STOP to opt out.`,
+          ? `Hola ${name}, Toro Movers — recibimos tu solicitud. Te contactamos pronto. Llama o escribe al ${PHONE_DISPLAY}. Responde STOP para salir.`
+          : `Hi ${name}, Toro Movers — we got your request. We'll be in touch shortly. Call or text ${PHONE_DISPLAY}. Reply STOP to opt out.`,
         email: {
           subject: es
             ? "Toro Movers — recibimos tu solicitud"
             : "Toro Movers — we got your request",
           text: es
-            ? `Hola ${name}, recibimos tu solicitud. Reserva o completa tu cotización aquí: ${BOOK}\n\nO llámanos: ${PHONE_DISPLAY}`
-            : `Hi ${name}, we got your move request. Book or finish your quote online: ${BOOK}\n\nOr call: ${PHONE_DISPLAY}`,
+            ? `Hola ${name}, recibimos tu solicitud de mudanza. Un miembro del equipo te contacta pronto.\n\nPreguntas: ${PHONE_DISPLAY}`
+            : `Hi ${name}, we got your move request. A team member will contact you shortly.\n\nQuestions: ${PHONE_DISPLAY}`,
         },
       };
 
