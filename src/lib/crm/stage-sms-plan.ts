@@ -158,10 +158,10 @@ export function buildStageStepCopy(
   const BOOK = bookUrl({ stepId, lang: opts.lang });
 
   switch (stepId) {
-    // ── Pre-book stages: always push online book link ─────────────────
+    // ── New Lead: confirmation / call-back only — NO funnel links.
+    // Lead already finished the form; a book URL reopens /get-my-price and
+    // causes duplicate intakes.
     case "new_0":
-      // Confirmation only — no funnel links. Lead already completed the form;
-      // a book URL sends them back through /get-my-price and duplicates intake.
       return {
         sms: es
           ? `Hola ${name}, Toro Movers — recibimos tu solicitud. Te contactamos pronto. Llama o escribe al ${PHONE_DISPLAY}. Responde STOP para salir.`
@@ -179,41 +179,43 @@ export function buildStageStepCopy(
     case "new_1h":
       return {
         sms: es
-          ? `Hola ${name}, Toro — ¿aún necesitas mudanza? Reserva en 2 min: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
-          : `Hi ${name}, Toro — still need movers? Book in 2 min: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `Hola ${name}, Toro — ¿aún necesitas mudanza? Responde con tu fecha o llama ${PHONE_DISPLAY}. STOP para salir.`
+          : `Hi ${name}, Toro — still need movers? Reply with your move date or call ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "¿Sigues planeando tu mudanza?" : "Still planning your move?",
           text: es
-            ? `${name}, ¿sigues con la mudanza? Reserva online: ${BOOK}\n\nO llama ${PHONE_DISPLAY}`
-            : `${name}, still moving? Book online: ${BOOK}\n\nOr call ${PHONE_DISPLAY}`,
+            ? `${name}, ¿sigues con la mudanza? Responde este correo o llama ${PHONE_DISPLAY}`
+            : `${name}, still moving? Reply to this email or call ${PHONE_DISPLAY}`,
         },
       };
 
     case "new_24h":
       return {
         sms: es
-          ? `${name}, Toro — camión + cuadrilla, precio claro. Agenda aquí: ${BOOK} · ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, Toro — truck + crew, up-front pricing. Book here: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, Toro — camión + cuadrilla, precio claro. ¿Fecha de mudanza? ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, Toro — truck + crew, up-front pricing. What's your move date? ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
-          subject: es ? "Camión + cuadrilla — reserva online" : "Truck + crew — book online",
+          subject: es ? "Camión + cuadrilla — Toro" : "Truck + crew — Toro",
           text: es
-            ? `Full-service Toro: camión + cuadrilla. Reserva: ${BOOK}\n\n${PHONE_DISPLAY}`
-            : `Full-service Toro: truck + crew. Book: ${BOOK}\n\n${PHONE_DISPLAY}`,
+            ? `Full-service Toro: camión + cuadrilla. Llama ${PHONE_DISPLAY}`
+            : `Full-service Toro: truck + crew. Call ${PHONE_DISPLAY}`,
         },
       };
 
     case "new_72h":
       return {
         sms: es
-          ? `${name}, última nota Toro: reserva tu fecha online ${BOOK} o ${PHONE_DISPLAY}. STOP para salir.`
-          : `${name}, last note from Toro — lock your date online ${BOOK} or ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `${name}, última nota Toro: ¿agendamos tu mudanza? ${PHONE_DISPLAY}. STOP para salir.`
+          : `${name}, last note from Toro — ready to lock a date? ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "¿Cerramos la fecha?" : "Ready to lock a date?",
           text: es
-            ? `Toro Movers — agenda ahora: ${BOOK}\n\n${PHONE_DISPLAY}`
-            : `Toro Movers — book now: ${BOOK}\n\n${PHONE_DISPLAY}`,
+            ? `Toro Movers — ¿agendamos? ${PHONE_DISPLAY}`
+            : `Toro Movers — lock a date? ${PHONE_DISPLAY}`,
         },
       };
+
+    // ── Other pre-book stages: may still include online book CTA ─────
 
     case "attempt_0":
       return {

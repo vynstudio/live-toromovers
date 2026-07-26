@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
 import {
   STAGE_SMS_PLANS,
+  buildStageStepCopy,
   stageSmsPlanSummary,
 } from "@/lib/crm/stage-sms-plan";
 
 /**
  * GET — public-ish plan for ops (optional secret).
  * Returns SMS counts and delays per HubSpot stage.
+ * ?preview=1 includes sample SMS copy (for deploy verification).
  */
-export async function GET() {
+export async function GET(req: Request) {
+  const preview = new URL(req.url).searchParams.get("preview") === "1";
   return NextResponse.json({
     reviewUrl:
       process.env.GOOGLE_REVIEW_URL ||
@@ -28,6 +31,12 @@ export async function GET() {
               ? `${s.delayMinutes}m`
               : `${s.delayMinutes / 60}h`,
         channel: s.channel,
+        ...(preview
+          ? {
+              smsPreview: buildStageStepCopy(s.id, { firstName: "ALICIA" })
+                .sms,
+            }
+          : {}),
       })),
     })),
   });
