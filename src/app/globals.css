@@ -90,10 +90,19 @@ nav.top {
   background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(12px) saturate(1.2);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.3s, padding 0.3s;
+  transition: border-color 0.3s, padding 0.3s, transform 0.28s ease, opacity 0.28s ease;
   min-height: 56px;
+  will-change: transform;
 }
 nav.top.scrolled { border-bottom-color: var(--line); padding: 8px 20px; }
+/* Mobile: bar slides away on scroll; sticky Call/Quote appears at bottom */
+@media (max-width: 979px) {
+  nav.top.nav-away:not(.menu-open) {
+    transform: translateY(-110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
 @media (min-width: 980px) {
   nav.top { padding: 10px 28px; min-height: 60px; }
   nav.top.scrolled { padding: 8px 28px; min-height: 56px; }
@@ -362,16 +371,26 @@ nav.top .btn-primary .arrow { width: 12px; height: 12px; }
 .lang-pill:hover:not(.active) { color: var(--ink); }
 .lang-dot { color: var(--line-strong); font-size: 9px; }
 
-/* STICKY MOBILE CTA */
+/* STICKY MOBILE CTA — Call now + Get Quote (appears after scroll; nav hides) */
 .sticky-cta {
   position: fixed; bottom: 0; left: 0; right: 0;
   z-index: 40;
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  display: grid; grid-template-columns: 1fr 1.15fr;
   gap: 1px;
   background: var(--line);
   border-top: 1px solid var(--line);
   box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.05);
   padding-bottom: env(safe-area-inset-bottom, 0);
+  transform: translateY(110%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.28s ease, opacity 0.28s ease;
+  will-change: transform;
+}
+.sticky-cta.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 @media (min-width: 980px) { .sticky-cta { display: none; } }
 .sticky-cta a, .sticky-cta button {
@@ -382,7 +401,6 @@ nav.top .btn-primary .arrow { width: 12px; height: 12px; }
   text-decoration: none; color: var(--ink); min-height: 56px;
 }
 .sticky-cta .call-cta { color: var(--red); }
-.sticky-cta .text-cta { color: var(--navy); }
 .sticky-cta .quote-cta { background: var(--navy); color: #fff; }
 .sticky-cta .quote-cta:active { background: var(--red); }
 

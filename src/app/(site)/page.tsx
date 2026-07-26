@@ -9,7 +9,6 @@ import { FeatureQuote } from "@/components/feature-quote";
 import { Faq } from "@/components/faq";
 import { ClosingCta } from "@/components/closing-cta";
 import { Footer } from "@/components/footer";
-import { StickyCta } from "@/components/sticky-cta";
 import { content, REVIEWS } from "@/lib/content";
 import { GOOGLE_RATING, REVIEW_COUNT, BUSINESS_NAME } from "@/lib/contact";
 
@@ -73,7 +72,6 @@ export default function Home() {
       <Faq />
       <ClosingCta />
       <Footer />
-      <StickyCta />
     </>
   );
 }

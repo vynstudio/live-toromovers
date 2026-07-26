@@ -29,18 +29,35 @@ const AREA_LINKS = [
   { href: "/service-areas", labelEn: "View All Areas", labelEs: "Ver todas las áreas" },
 ] as const;
 
+const NAV_COMPACT_PX = 16;
+/** Mobile: hide nav bar past this scroll; sticky Call/Quote bar takes over. */
+const NAV_AWAY_PX = 72;
+
 export function Nav() {
   const { t, lang } = useLang();
   const es = lang === "es";
   const [scrolled, setScrolled] = useState(false);
+  const [navAway, setNavAway] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState<"services" | "areas" | null>(null);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 16);
+    const handler = () => {
+      const y = window.scrollY;
+      setScrolled(y > NAV_COMPACT_PX);
+      // Only hide on narrow screens; desktop keeps fixed nav
+      const mobile =
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(max-width: 979px)").matches;
+      setNavAway(mobile && y > NAV_AWAY_PX);
+    };
     handler();
     window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
+    window.addEventListener("resize", handler, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handler);
+      window.removeEventListener("resize", handler);
+    };
   }, []);
 
   useEffect(() => {
@@ -61,9 +78,12 @@ export function Nav() {
     setMobileOpen(null);
   };
 
+  // Keep nav visible while the mobile menu is open
+  const hideNav = navAway && !menuOpen;
+
   return (
     <nav
-      className={`top${scrolled ? " scrolled" : ""}${menuOpen ? " menu-open" : ""}`}
+      className={`top${scrolled ? " scrolled" : ""}${menuOpen ? " menu-open" : ""}${hideNav ? " nav-away" : ""}`}
     >
       <a
         href="/"

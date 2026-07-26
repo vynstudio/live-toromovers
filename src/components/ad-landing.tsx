@@ -8,7 +8,7 @@ import { FeatureQuote } from "./feature-quote";
 import { Faq } from "./faq";
 import { ClosingCta } from "./closing-cta";
 import { Footer } from "./footer";
-import { StickyCta } from "./sticky-cta";
+
 import { AdQuoteStart } from "./ad-quote-start";
 import { PHONE_DISPLAY, PHONE_TEL, GOOGLE_RATING } from "@/lib/contact";
 
@@ -81,7 +81,7 @@ export function AdLanding() {
       <Faq />
       <ClosingCta />
       <Footer />
-      <StickyCta />
+
     </>
   );
 }

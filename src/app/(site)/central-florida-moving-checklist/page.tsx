@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadMagnetForm } from "@/components/lead-magnet-form";
 import { PdfDownloadButton } from "@/components/checklist-tracking";
-import { StickyCta } from "@/components/sticky-cta";
+
 import {
   PHONE_DISPLAY,
   PHONE_TEL,
@@ -257,7 +257,7 @@ export default function ChecklistLandingPage() {
         </p>
       </section>
 
-      <StickyCta />
+
     </main>
   );
 }

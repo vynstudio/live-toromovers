@@ -2,9 +2,9 @@
 
 /**
  * Get-my-price sales funnel — mirrors toro-sales-funnel.
- * Contact first (name + phone) → soft lead → service → ZIPs → size
- * → when → full lead.
- * NEVER shows rates or hour estimates — owner quotes on the call.
+ * 1) Name + phone → SAVE soft lead immediately (capture)
+ * 2) Qualify: service → ZIPs → size → when → full lead update
+ * Compact mobile-first steps; never show rates on-site.
  */
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
@@ -107,6 +107,8 @@ export function LeadCaptureAgent({
   const [animKey, setAnimKey] = useState(0);
   const [advancing, setAdvancing] = useState(false);
   const [redirectIn, setRedirectIn] = useState(0);
+  /** Soft lead landed in CRM after name+phone (qualify steps follow). */
+  const [captured, setCaptured] = useState(false);
   const startRef = useRef(Date.now());
   const eventIdRef = useRef(newEventId());
   const softSentRef = useRef(false);
@@ -191,29 +193,37 @@ export function LeadCaptureAgent({
   }
 
   async function sendSoftLead() {
-    if (softSentRef.current) return;
+    if (softSentRef.current) return true;
     softSentRef.current = true;
     const eventId = eventIdRef.current;
-    await postLead({
-      name: name.trim(),
-      phone: digits(phone),
-      funnel: funnelOf(service || prefillService.current),
-      source: "get-my-price",
-      serviceType: "Pending qualify",
-      note: "Soft capture (contact first · name + phone) — still qualifying",
-      lang: es ? "es" : "en",
-      consentSms: smsConsent,
-      consentEmail: false,
-      landingPage:
-        typeof window !== "undefined" ? window.location.pathname : "/get-my-price",
-      utm: getAttribution(),
-      source_detail: getAttributionSummary() || undefined,
-      hp: "",
-      elapsedMs: Math.max(Date.now() - startRef.current, 0),
-      eventId,
-    });
-    trackLead(eventId);
-    trackFormSubmit("agent_soft_capture");
+    try {
+      await postLead({
+        name: name.trim(),
+        phone: digits(phone),
+        funnel: funnelOf(service || prefillService.current),
+        source: "get-my-price",
+        serviceType: "Pending qualify",
+        note: "Soft capture (contact first · name + phone) — still qualifying",
+        lang: es ? "es" : "en",
+        consentSms: smsConsent,
+        consentEmail: false,
+        landingPage:
+          typeof window !== "undefined" ? window.location.pathname : "/get-my-price",
+        utm: getAttribution(),
+        source_detail: getAttributionSummary() || undefined,
+        hp: "",
+        elapsedMs: Math.max(Date.now() - startRef.current, 0),
+        eventId,
+      });
+      trackLead(eventId);
+      trackFormSubmit("agent_soft_capture");
+      setCaptured(true);
+      return true;
+    } catch {
+      softSentRef.current = false;
+      setCaptured(false);
+      return false;
+    }
   }
 
   const submitFull = useCallback(
@@ -333,14 +343,16 @@ export function LeadCaptureAgent({
     }
     setSending(true);
     try {
+      // Minimum hold so bots fail speed trap + user sees "Saving…"
       const wait = 800 - (Date.now() - startRef.current);
       if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+      // Capture first — always advance to qualify even if CRM is slow/down
+      // (softSentRef only stays true on success so we can retry on full submit path)
       await sendSoftLead();
-    } catch {
-      softSentRef.current = false;
     } finally {
       setSending(false);
     }
+    // Qualify next: service (or skip if prefilled) → zips → size → when
     goTo(prefillService.current ? "fromZip" : "service");
   }
 
@@ -443,8 +455,8 @@ export function LeadCaptureAgent({
             </h2>
             <p className="lca-help">
               {es
-                ? "Nombre y teléfono primero — luego unas preguntas rápidas."
-                : "Name and phone first — then a few quick questions about your move."}
+                ? "Nombre y teléfono primero — guardamos su contacto, luego unas preguntas rápidas."
+                : "Name and phone first — we save your contact, then a few quick questions."}
             </p>
 
             <div className="lca-biz">
@@ -529,9 +541,16 @@ export function LeadCaptureAgent({
           </form>
         )}
 
-        {/* 2. SERVICE */}
+        {/* 2. SERVICE (qualify — contact already saved) */}
         {phase === "service" && (
           <div key={animKey} className="lca-form lca-enter">
+            {captured && (
+              <p className="lca-saved" role="status">
+                {es
+                  ? "✓ Contacto guardado — unas preguntas más"
+                  : "✓ Contact saved — a few more questions"}
+              </p>
+            )}
             <h2 className="lca-q">
               {es ? "¿Qué necesitas?" : "What kind of help do you need?"}
             </h2>
@@ -595,6 +614,13 @@ export function LeadCaptureAgent({
                 );
             }}
           >
+            {captured && (
+              <p className="lca-saved" role="status">
+                {es
+                  ? "✓ Contacto guardado — unas preguntas más"
+                  : "✓ Contact saved — a few more questions"}
+              </p>
+            )}
             <h2 className="lca-q">
               {es ? "¿Desde qué ZIP?" : "Where are you moving from?"}
             </h2>
@@ -778,8 +804,8 @@ export function LeadCaptureAgent({
                 ? "Guardando…"
                 : "Saving…"
               : es
-                ? "Continuar"
-                : "Continue"}
+                ? "Guardar y continuar"
+                : "Save & continue"}
           </button>
         )}
         {showFooterPrimary && phase === "fromZip" && (
