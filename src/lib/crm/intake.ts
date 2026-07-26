@@ -12,7 +12,6 @@ import {
 } from "@/lib/hubspot";
 import {
   sendTelegram,
-  sendTeamEmail,
   hsSearchContactByPhone,
   hsCreateContact,
   hsCreateDeal,
@@ -166,24 +165,14 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
     });
   }
 
-  // 2) Telegram (with stage keyboard when email known)
+  // 2) Internal alert — Telegram only (no team email)
   const tg = await sendTelegram(
     text,
     telegramStageKeyboard(email),
   );
   channels.push(tg);
 
-  // 3) Team email
-  const team = await sendTeamEmail(
-    `${lead.funnel} lead: ${lead.firstName}${lead.city ? ` · ${lead.city}` : ""}`,
-    `<pre style="white-space:pre-wrap;font:13px/1.5 ui-monospace,Menlo,monospace">${text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")}</pre>`,
-    text,
-  );
-  channels.push(team);
-
-  // 4) Instant New Lead stage SMS/email (multi-step plan — step 0 only here)
+  // 3) Client SMS + email (confirmation / stage plan — step 0 only here)
   const consentSms =
     lead.consentSms === true ||
     lead.source === "meta_call" ||
@@ -205,7 +194,7 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
     });
   }
 
-  // 5) n8n — delayed New Lead follow-ups (1h / 24h / 72h)
+  // 4) n8n — delayed New Lead follow-ups (1h / 24h / 72h)
   // Prefer dedicated CRM/stage drip webhook over the labor/full-service funnel drip
   const n8nUrl =
     process.env.N8N_CRM_WEBHOOK_URL ||

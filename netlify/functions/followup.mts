@@ -155,7 +155,7 @@ async function sendSms(phone: string, body: string): Promise<boolean> {
 
 async function sendEmail(to: string, touchId: number, firstName: string, lang: Lang): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
+  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.com";
   if (!apiKey) {
     console.error("[followup] RESEND_API_KEY missing — email skipped");
     return false;

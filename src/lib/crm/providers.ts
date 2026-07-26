@@ -23,7 +23,8 @@ export async function sendEmail(opts: {
   fromName?: string;
 }): Promise<ChannelResult> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
+  // Client-facing from address (must be verified in Resend)
+  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.com";
   if (!apiKey) {
     return { ok: false, channel: "resend", detail: "RESEND_API_KEY missing" };
   }
@@ -55,12 +56,13 @@ export async function sendEmail(opts: {
   }
 }
 
+/** @deprecated Prefer Telegram for internal alerts. Kept for rare ops use. */
 export async function sendTeamEmail(subject: string, html: string, text: string) {
   const to =
     process.env.LEAD_NOTIFICATION_EMAIL ||
     process.env.BOOKING_NOTIFICATION_EMAIL ||
     process.env.RESEND_FROM_EMAIL ||
-    "hello@toromovers.net";
+    "hello@toromovers.com";
   return sendEmail({ to, subject, html, text });
 }
 
