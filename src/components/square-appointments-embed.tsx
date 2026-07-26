@@ -1,18 +1,23 @@
 "use client";
 
 /**
- * Official Square Appointments buyer widget.
- * Embed code from Square Dashboard → Appointments → Online booking → Embed.
+ * Official Square Appointments booking UI.
  *
- * Script injects the calendar UI next to itself; we mount it in a dedicated
- * container so Next.js App Router doesn't strip the node.
+ * Do NOT inject Square’s embed .js dynamically with async — their script
+ * relies on document.currentScript / static parent placement and fails under
+ * Next.js client mount (blank widget). Use the same iframe URL the official
+ * embed would create, plus a full-page fallback button.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 
-/** Toro Movers Square Appointments widget (production location). */
-export const SQUARE_APPOINTMENTS_WIDGET_SRC =
-  "https://square.site/appointments/buyer/widget/81n62yjpmpqdfr/L5D6N73XD7ADG.js";
+/** Widget iframe (what the official embed script inserts). */
+export const SQUARE_APPOINTMENTS_IFRAME_SRC =
+  "https://app.squareup.com/appointments/buyer/widget/81n62yjpmpqdfr/L5D6N73XD7ADG";
+
+/** Full booking flow (new tab / mobile fallback). */
+export const SQUARE_APPOINTMENTS_BOOK_URL =
+  "https://book.squareup.com/appointments/81n62yjpmpqdfr/location/L5D6N73XD7ADG/services";
 
 type Props = {
   lang?: "en" | "es";
@@ -20,29 +25,7 @@ type Props = {
 };
 
 export function SquareAppointmentsEmbed({ lang = "en", className }: Props) {
-  const mountRef = useRef<HTMLDivElement>(null);
-  const [failed, setFailed] = useState(false);
   const es = lang === "es";
-
-  useEffect(() => {
-    const el = mountRef.current;
-    if (!el) return;
-
-    // Clear previous inject (Strict Mode remount / navigation back)
-    el.innerHTML = "";
-    setFailed(false);
-
-    const script = document.createElement("script");
-    script.src = SQUARE_APPOINTMENTS_WIDGET_SRC;
-    script.async = true;
-    script.onerror = () => setFailed(true);
-    el.appendChild(script);
-
-    return () => {
-      // Remove script + anything Square injected under this mount
-      el.innerHTML = "";
-    };
-  }, []);
 
   return (
     <div className={className ? `sq-appt ${className}` : "sq-appt"}>
@@ -57,27 +40,50 @@ export function SquareAppointmentsEmbed({ lang = "en", className }: Props) {
         </p>
       </div>
 
+      <div className="sq-appt-actions">
+        <a
+          href={SQUARE_APPOINTMENTS_BOOK_URL}
+          className="fn-btn fn-btn-primary fn-btn-lg lca-full"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {es ? "Abrir reserva segura →" : "Open secure booking →"}
+        </a>
+        <p className="sq-appt-or">
+          {es ? "O reserve aquí abajo" : "Or book in the calendar below"}
+        </p>
+      </div>
+
       <div
-        ref={mountRef}
         className="sq-appt-widget"
         id="square-appointments-widget"
         aria-label={es ? "Calendario de citas Square" : "Square booking calendar"}
-      />
+      >
+        <iframe
+          title={es ? "Reserva Square — Toro Movers" : "Square booking — Toro Movers"}
+          src={SQUARE_APPOINTMENTS_IFRAME_SRC}
+          className="sq-appt-iframe"
+          // payment: Apple Pay / Google Pay inside Square
+          allow="payment *"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+      </div>
 
-      {failed && (
-        <p className="sq-appt-fallback" role="alert">
-          {es
-            ? "No se pudo cargar el calendario. Abra el enlace de reserva o llámenos."
-            : "Couldn't load the calendar. Open the booking link or call us."}{" "}
-          <a
-            href="https://square.site/appointments/buyer/widget/81n62yjpmpqdfr/L5D6N73XD7ADG"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {es ? "Abrir reserva Square" : "Open Square booking"}
-          </a>
-        </p>
-      )}
+      <p className="sq-appt-fallback">
+        {es ? "¿Problemas para ver el calendario?" : "Calendar not loading?"}{" "}
+        <a
+          href={SQUARE_APPOINTMENTS_BOOK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {es ? "Abrir en Square" : "Open on Square"}
+        </a>
+        {" · "}
+        <a href={PHONE_TEL}>
+          {es ? "Llamar" : "Call"} {PHONE_DISPLAY}
+        </a>
+      </p>
     </div>
   );
 }

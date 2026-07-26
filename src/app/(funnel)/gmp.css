@@ -994,16 +994,36 @@ a {
   line-height: 1.45;
 }
 
-.sq-appt-widget {
-  min-height: 480px;
-  width: 100%;
-  /* Square injects iframe / root here */
+.sq-appt-actions {
+  margin: 0 0 16px;
 }
 
-.sq-appt-widget iframe,
-.sq-appt-widget > div {
-  max-width: 100% !important;
-  width: 100% !important;
+.sq-appt-or {
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sq-appt-widget {
+  min-height: 640px;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fafafa;
+}
+
+.sq-appt-iframe {
+  display: block;
+  width: 100%;
+  min-height: 640px;
+  height: min(75vh, 820px);
+  border: 0;
+  background: #fff;
 }
 
 .sq-appt-fallback {
@@ -1011,6 +1031,7 @@ a {
   font-size: 14px;
   color: var(--muted);
   line-height: 1.45;
+  text-align: center;
 }
 
 .sq-appt-fallback a {
