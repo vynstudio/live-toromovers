@@ -994,40 +994,54 @@ a {
   line-height: 1.45;
 }
 
+.sq-appt-services {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sq-appt-service {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+.sq-appt-service strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sq-appt-service span {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
 .sq-appt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 0 0 16px;
 }
 
-.sq-appt-or {
-  margin: 12px 0 0;
-  text-align: center;
+.sq-appt-fine {
+  margin: 0 0 12px;
   font-size: 12px;
-  font-weight: 600;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.sq-appt-widget {
-  min-height: 640px;
-  width: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background: #fafafa;
-}
-
-.sq-appt-iframe {
-  display: block;
-  width: 100%;
-  min-height: 640px;
-  height: min(75vh, 820px);
-  border: 0;
-  background: #fff;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .sq-appt-fallback {
-  margin-top: 16px;
+  margin-top: 8px;
   font-size: 14px;
   color: var(--muted);
   line-height: 1.45;
@@ -1035,8 +1049,15 @@ a {
 }
 
 .sq-appt-fallback a {
-  color: var(--red);
+  color: var(--ink);
   font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Book page card: no huge empty iframe box */
+.sq-book-card {
+  min-height: auto !important;
 }
 
 .sq-book-alt {

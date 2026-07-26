@@ -1,21 +1,16 @@
 "use client";
 
 /**
- * Official Square Appointments booking UI.
+ * Square Appointments booking entry for Toro Movers.
  *
- * Do NOT inject Square’s embed .js dynamically with async — their script
- * relies on document.currentScript / static parent placement and fails under
- * Next.js client mount (blank widget). Use the same iframe URL the official
- * embed would create, plus a full-page fallback button.
+ * Official embed script fails under Next.js; iframe often shows only the logo
+ * (SPA blank) because of third‑party cookie / frame restrictions. Full-page
+ * Square booking is the reliable path for real services + payments.
  */
 
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 
-/** Widget iframe (what the official embed script inserts). */
-export const SQUARE_APPOINTMENTS_IFRAME_SRC =
-  "https://app.squareup.com/appointments/buyer/widget/81n62yjpmpqdfr/L5D6N73XD7ADG";
-
-/** Full booking flow (new tab / mobile fallback). */
+/** Full Square booking flow (services → date → pay). */
 export const SQUARE_APPOINTMENTS_BOOK_URL =
   "https://book.squareup.com/appointments/81n62yjpmpqdfr/location/L5D6N73XD7ADG/services";
 
@@ -23,6 +18,21 @@ type Props = {
   lang?: "en" | "es";
   className?: string;
 };
+
+const SERVICES = [
+  {
+    en: "Labor — 1 mover",
+    es: "Labor — 1 mudancero",
+    hintEn: "You have the truck · billed as set in Square",
+    hintEs: "Tú traes el camión · según precio en Square",
+  },
+  {
+    en: "Labor — 2 movers",
+    es: "Labor — 2 mudanceros",
+    hintEn: "Faster load/unload · set price in Square",
+    hintEs: "Carga más rápida · precio en Square",
+  },
+] as const;
 
 export function SquareAppointmentsEmbed({ lang = "en", className }: Props) {
   const es = lang === "es";
@@ -35,53 +45,42 @@ export function SquareAppointmentsEmbed({ lang = "en", className }: Props) {
         </h1>
         <p className="sq-appt-lede">
           {es
-            ? "Elija servicio, fecha y pague el depósito de forma segura con Square."
-            : "Pick a service and date, then pay your deposit securely with Square."}
+            ? "Se abre la reserva segura de Square: elija servicio, fecha y pague el depósito. Su pago va directo a Toro Movers."
+            : "Opens secure Square booking: pick a service, choose a date, and pay. Payment goes straight to Toro Movers."}
         </p>
       </div>
+
+      <ul className="sq-appt-services" aria-label={es ? "Servicios" : "Services"}>
+        {SERVICES.map((s) => (
+          <li key={s.en} className="sq-appt-service">
+            <strong>{es ? s.es : s.en}</strong>
+            <span>{es ? s.hintEs : s.hintEn}</span>
+          </li>
+        ))}
+      </ul>
 
       <div className="sq-appt-actions">
         <a
           href={SQUARE_APPOINTMENTS_BOOK_URL}
           className="fn-btn fn-btn-primary fn-btn-lg lca-full"
-          target="_blank"
-          rel="noopener noreferrer"
+          // Same tab = best mobile conversion; Square is the checkout host
         >
-          {es ? "Abrir reserva segura →" : "Open secure booking →"}
+          {es ? "Continuar a Square →" : "Continue to Square →"}
         </a>
-        <p className="sq-appt-or">
-          {es ? "O reserve aquí abajo" : "Or book in the calendar below"}
-        </p>
+        <a href={PHONE_TEL} className="fn-btn fn-btn-ghost-light lca-full">
+          {es ? "Prefiero llamar" : "Prefer to call"} — {PHONE_DISPLAY}
+        </a>
       </div>
 
-      <div
-        className="sq-appt-widget"
-        id="square-appointments-widget"
-        aria-label={es ? "Calendario de citas Square" : "Square booking calendar"}
-      >
-        <iframe
-          title={es ? "Reserva Square — Toro Movers" : "Square booking — Toro Movers"}
-          src={SQUARE_APPOINTMENTS_IFRAME_SRC}
-          className="sq-appt-iframe"
-          // payment: Apple Pay / Google Pay inside Square
-          allow="payment *"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-      </div>
+      <p className="sq-appt-fine">
+        {es
+          ? "Powered by Square · tarjeta segura · se aplica al total si es depósito"
+          : "Powered by Square · secure card checkout · deposit applies to your move when set in Square"}
+      </p>
 
       <p className="sq-appt-fallback">
-        {es ? "¿Problemas para ver el calendario?" : "Calendar not loading?"}{" "}
-        <a
-          href={SQUARE_APPOINTMENTS_BOOK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {es ? "Abrir en Square" : "Open on Square"}
-        </a>
-        {" · "}
-        <a href={PHONE_TEL}>
-          {es ? "Llamar" : "Call"} {PHONE_DISPLAY}
+        <a href="/get-my-price">
+          {es ? "Solo quiero una cotización gratis" : "I only want a free quote"}
         </a>
       </p>
     </div>
