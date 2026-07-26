@@ -27,6 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/labor-only-moving`, priority: 0.9 as const, changeFrequency: "monthly" as const },
     // Full-service funnel LP — indexable, high-intent "full service movers" terms.
     { url: `${BASE}/full-service-moving`, priority: 0.9 as const, changeFrequency: "monthly" as const },
+    // Deposit + schedule booking (Square Checkout).
+    { url: `${BASE}/book`, priority: 0.85 as const, changeFrequency: "weekly" as const },
     // Geo-exact apartment LP — targets the "apartment movers orlando fl" cluster
     // (480/mo, low competition). Richer than the generic /apartment-movers
     // service page; consider consolidating the two (301) to avoid overlap.

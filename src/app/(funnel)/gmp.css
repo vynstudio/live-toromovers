@@ -947,3 +947,88 @@ a {
     min-height: 100dvh;
   }
 }
+
+/* —— Square Appointments embed (/book) —— */
+.sq-book-page .lca-hero.sq-book-hero {
+  padding-bottom: calc(24px + var(--safe-b));
+}
+
+.sq-book-card {
+  /* Widget needs height; don't force funnel sticky footer layout */
+  min-height: min(70vh, 720px);
+  padding: 20px 16px 28px;
+  overflow: visible;
+}
+
+.sq-appt-intro {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.sq-appt-title {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.sq-appt-lede {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.sq-appt-widget {
+  min-height: 480px;
+  width: 100%;
+  /* Square injects iframe / root here */
+}
+
+.sq-appt-widget iframe,
+.sq-appt-widget > div {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.sq-appt-fallback {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.sq-appt-fallback a {
+  color: var(--red);
+  font-weight: 600;
+}
+
+.sq-book-alt {
+  margin: 16px auto 0;
+  max-width: var(--max);
+  padding: 0 var(--pad-x);
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.sq-book-alt a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (min-width: 520px) {
+  .sq-book-card {
+    padding: 28px 22px 36px;
+  }
+
+  .sq-appt-title {
+    font-size: 30px;
+  }
+}

@@ -7,11 +7,20 @@ import { FaqSection } from "./faq-section";
 import { otherServices, type ServiceData } from "@/lib/services";
 import { CITIES } from "@/lib/cities";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME, GOOGLE_RATING } from "@/lib/contact";
+import { BOOK_PATH } from "@/lib/open-quote";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 
+/** High-intent LPs that should surface deposit booking next to quote. */
+const BOOK_DEPOSIT_SLUGS = new Set(["labor-only-moving", "full-service-moving"]);
+
 export function ServicePage({ service }: { service: ServiceData }) {
   const others = otherServices(service.slug);
+  const showBookDeposit = BOOK_DEPOSIT_SLUGS.has(service.slug);
+  const bookHref =
+    service.slug === "labor-only-moving"
+      ? `${BOOK_PATH}?service=labor`
+      : BOOK_PATH;
   // Outbound authoritative citation(s), woven inline below. Falls back to the
   // FMCSA mover-rights guide so every service page carries an external link.
   const refs = service.references?.length
@@ -82,13 +91,33 @@ export function ServicePage({ service }: { service: ServiceData }) {
                 Get my free estimate
                 <span className="arrow" aria-hidden />
               </a>
-              <a href={PHONE_TEL} className="btn btn-outline">
-                Call {PHONE_DISPLAY}
-              </a>
+              {showBookDeposit ? (
+                <Link
+                  href={bookHref}
+                  className="btn btn-outline"
+                  data-source={`service-book-${service.slug}`}
+                >
+                  Book &amp; pay deposit
+                </Link>
+              ) : (
+                <a href={PHONE_TEL} className="btn btn-outline">
+                  Call {PHONE_DISPLAY}
+                </a>
+              )}
             </div>
             <div className="city-hero-meta">
               <span className="city-stars" aria-hidden>★★★★★</span>
-              <span>{GOOGLE_RATING} on Google · Family-owned · No hidden fees</span>
+              <span>
+                {GOOGLE_RATING} on Google · Family-owned · No hidden fees
+                {showBookDeposit ? (
+                  <>
+                    {" · "}
+                    <a href={PHONE_TEL} style={{ color: "inherit", fontWeight: 600 }}>
+                      Call {PHONE_DISPLAY}
+                    </a>
+                  </>
+                ) : null}
+              </span>
             </div>
           </div>
         </section>
@@ -201,6 +230,36 @@ export function ServicePage({ service }: { service: ServiceData }) {
             </p>
           </div>
         </section>
+
+        {showBookDeposit && (
+          <section className="block closing" aria-label="Book with deposit">
+            <div className="block-inner">
+              <div className="block-eyebrow reveal">ready to lock a date?</div>
+              <h2 className="block-h2 reveal reveal-d1">
+                Book online &amp; <em>pay your deposit</em>
+              </h2>
+              <p className="block-sub reveal reveal-d2">
+                Pick a start window in our Square calendar. Your deposit holds the
+                date and applies to your move total. Prefer to talk price first?
+                Get a free estimate instead.
+              </p>
+              <div className="closing-cta-row reveal reveal-d3">
+                <Link href={bookHref} className="btn btn-primary">
+                  Book &amp; pay deposit
+                  <span className="arrow" aria-hidden />
+                </Link>
+                <a
+                  href="/get-my-price"
+                  data-open-quote
+                  data-source={`service-closing-quote-${service.slug}`}
+                  className="btn btn-outline"
+                >
+                  Get free estimate
+                </a>
+              </div>
+            </div>
+          </section>
+        )}
 
         <ClosingCta />
         <Footer />
