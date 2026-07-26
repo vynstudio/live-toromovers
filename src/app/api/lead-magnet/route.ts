@@ -97,7 +97,7 @@ async function sendCustomerChecklistEmail(
   moveLabel: string,
 ): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.com";
+  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
   if (!apiKey || !lead.email) {
     if (!apiKey) console.error("[lead-magnet] RESEND_API_KEY missing — customer email skipped");
     return false;
@@ -176,7 +176,7 @@ async function sendTeamAlertEmail(
   text: string,
 ): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.com";
+  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
   const to =
     process.env.LEAD_NOTIFICATION_EMAIL ||
     process.env.BOOKING_NOTIFICATION_EMAIL ||

@@ -104,7 +104,7 @@ export async function runStageStep(
         subject: copy.email.subject,
         text: copy.email.text,
         html: copy.email.text.replace(/\n/g, "<br/>"),
-        replyTo: process.env.RESEND_FROM_EMAIL || "hello@toromovers.com",
+        replyTo: process.env.RESEND_FROM_EMAIL || "hello@toromovers.net",
       });
       results.push({
         stepId: step.id,

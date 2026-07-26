@@ -110,7 +110,7 @@ export async function POST(req: Request) {
 
 async function sendEmail(body: IntakePayload, text: string): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.com";
+  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
   const to =
     process.env.BOOKING_NOTIFICATION_EMAIL ||
     process.env.LEAD_NOTIFICATION_EMAIL ||

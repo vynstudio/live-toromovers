@@ -24,7 +24,7 @@ export async function sendEmail(opts: {
 }): Promise<ChannelResult> {
   const apiKey = process.env.RESEND_API_KEY;
   // Client-facing from address (must be verified in Resend)
-  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.com";
+  const from = process.env.RESEND_FROM_EMAIL || "hello@toromovers.net";
   if (!apiKey) {
     return { ok: false, channel: "resend", detail: "RESEND_API_KEY missing" };
   }
@@ -62,7 +62,7 @@ export async function sendTeamEmail(subject: string, html: string, text: string)
     process.env.LEAD_NOTIFICATION_EMAIL ||
     process.env.BOOKING_NOTIFICATION_EMAIL ||
     process.env.RESEND_FROM_EMAIL ||
-    "hello@toromovers.com";
+    "hello@toromovers.net";
   return sendEmail({ to, subject, html, text });
 }
 
