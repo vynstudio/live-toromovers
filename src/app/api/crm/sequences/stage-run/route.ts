@@ -22,8 +22,9 @@ import type { StageKey } from "@/lib/crm/types";
  * }
  */
 export async function POST(req: Request) {
-  // Stop all delayed SMS/email immediately — even if n8n is still firing.
-  if (followupAutomationDisabled()) {
+  // Always refuse — n8n / HubSpot stage drips are dead until redesign.
+  // (Auth intentionally skipped so any leftover Wait node gets a clean no-op.)
+  if (followupAutomationDisabled() || process.env.N8N_ENABLED !== "1") {
     return NextResponse.json({
       ok: false,
       disabled: true,

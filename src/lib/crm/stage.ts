@@ -13,11 +13,7 @@ import {
   hsSearchContactByPhone,
   sendTelegram,
 } from "./providers";
-import {
-  delayedStepsForN8n,
-  runInstantStageAutomation,
-  type StepResult,
-} from "./run-stage-automation";
+import type { StepResult } from "./run-stage-automation";
 import type { StageKey } from "./types";
 
 // Short codes used in Telegram URL buttons (see hubspot.ts telegramStageKeyboard)
@@ -68,6 +64,13 @@ export async function advanceStage(opts: {
   /** Skip customer SMS/email (stage-only HubSpot update) */
   skipAutomations?: boolean;
 }): Promise<AdvanceResult> {
+  // Hard stop: no HubSpot stage automation until redesign
+  const { hubspotSyncDisabled, hubspotDisabledReason } = await import(
+    "./automation-kill"
+  );
+  if (hubspotSyncDisabled()) {
+    return { ok: false, error: hubspotDisabledReason() };
+  }
   if (!process.env.HUBSPOT_TOKEN) {
     return { ok: false, error: "HUBSPOT_TOKEN missing" };
   }
@@ -123,33 +126,10 @@ export async function advanceStage(opts: {
     );
   }
 
-  let automations: StepResult[] = [];
-  if (any && !opts.skipAutomations) {
-    automations = await runInstantStageAutomation({
-      stage: stageKey,
-      firstName: opts.firstName || "there",
-      email: opts.email,
-      phone: opts.phone,
-      lang: opts.lang,
-      consentSms: opts.consentSms,
-      consentEmail: opts.consentEmail,
-    });
-    const smsOk = automations.filter((a) => a.channel === "sms" && a.ok).length;
-    const smsFail = automations.filter(
-      (a) => a.channel === "sms" && !a.ok,
-    ).length;
-    if (automations.length) {
-      await sendTelegram(
-        `📲 Stage SMS ${stageKey}: ${smsOk} sent · ${smsFail} skipped/fail\n${opts.email || opts.phone || ""}`,
-      );
-    }
-  }
-
-  const delayed = delayedStepsForN8n(stageKey).map((s) => ({
-    id: s.id,
-    delayMinutes: s.delayMinutes,
-    channel: s.channel,
-  }));
+  // Stage SMS + n8n delayed steps: HARD OFF (only quote-received SMS on intake)
+  const automations: StepResult[] = [];
+  const delayed: { id: string; delayMinutes: number; channel: string }[] = [];
+  void opts.skipAutomations;
 
   return {
     ok: any,

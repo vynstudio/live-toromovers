@@ -59,14 +59,17 @@ export async function POST(req: Request) {
     `Magnet: Central Florida Moving Checklist`,
   ].join("\n");
 
+  // Automation kill: no HubSpot, no n8n drip, no checklist SMS (only email PDF + Telegram)
+  void wantsSms;
+  void sendChecklistSms;
+  void upsertHubspotContact;
+  void postToN8n;
+
   const results = await Promise.allSettled([
     sendCustomerChecklistEmail(lead, moveLabel),
     sendTeamAlertEmail(lead, moveLabel, text),
-    sendTelegram(text, lead.email),
-    wantsSms ? sendChecklistSms(normalizePhone(phone), lead.firstName) : Promise.resolve(false),
+    sendTelegram(text), // no stage keyboard — avoids HubSpot stage SMS chain
     sendMetaCapi(lead, phone, eventId, req),
-    upsertHubspotContact(lead, phone, moveLabel, text),
-    postToN8n(lead, phone, moveLabel),
   ]);
 
   const ok = (i: number) =>
@@ -81,10 +84,11 @@ export async function POST(req: Request) {
   return NextResponse.json({
     ok: true,
     customerEmailed,
-    smsSent: ok(3),
-    capi: ok(4),
-    crmed: ok(5),
-    drip: ok(6),
+    smsSent: false,
+    capi: ok(3),
+    crmed: false,
+    drip: false,
+    automation: "killed",
   });
 }
 

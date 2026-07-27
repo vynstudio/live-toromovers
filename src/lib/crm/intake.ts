@@ -1,13 +1,20 @@
 /**
- * Unified CRM intake — every lead channel lands here.
- * HubSpot contact + deal · Telegram · Resend · OpenPhone · optional n8n.
+ * Unified lead intake.
+ *
+ * LIVE (until redesign):
+ *  - Telegram alert to the team
+ *  - ONE Quo SMS: "we got your quote, we'll contact soon"
+ *
+ * KILLED:
+ *  - HubSpot contact/deal sync (unless HUBSPOT_SYNC=1)
+ *  - n8n webhooks (unless N8N_ENABLED=1)
+ *  - Multi-step stage SMS/email plans
  */
 
 import { normalizePhone } from "@/lib/verify";
 import {
   HS_PIPELINE_ID,
   HS_STAGE,
-  telegramStageKeyboard,
   upsertLeadToHubspot,
 } from "@/lib/hubspot";
 import {
@@ -19,13 +26,12 @@ import {
   hsPatchContact,
 } from "./providers";
 import {
-  followupAutomationDisabled,
-  followupDisabledReason,
+  hubspotDisabledReason,
+  hubspotSyncDisabled,
+  n8nDisabled,
+  n8nDisabledReason,
 } from "./automation-kill";
-import {
-  delayedStepsForN8n,
-  runInstantStageAutomation,
-} from "./run-stage-automation";
+import { sendQuoteReceivedConfirmation } from "./quote-confirmation";
 import type { ChannelResult, CrmLead, Funnel } from "./types";
 
 export type IntakeResult = {
@@ -128,9 +134,15 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
   const phone = lead.phone ? normalizePhone(lead.phone) : "";
   const email = lead.email?.trim().toLowerCase();
 
-  // 1) HubSpot
+  // 1) HubSpot — OFF until redesign
   let contactId: string | null = null;
-  if (email) {
+  if (hubspotSyncDisabled()) {
+    channels.push({
+      ok: false,
+      channel: "hubspot",
+      detail: hubspotDisabledReason(),
+    });
+  } else if (email) {
     const ok = await upsertLeadToHubspot({
       email,
       firstName: lead.firstName,
@@ -169,98 +181,39 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
     });
   }
 
-  // 2) Internal alert — Telegram only (no team email)
-  const tg = await sendTelegram(
-    text,
-    telegramStageKeyboard(email),
-  );
+  // 2) Team alert — Telegram only (NO stage buttons → those drove HubSpot + SMS chains)
+  const tg = await sendTelegram(text);
   channels.push(tg);
 
-  // 3) Client SMS + email (stage plan) — KILLED while followup kill switch is on
-  const consentSms =
-    lead.consentSms === true ||
-    lead.source === "meta_call" ||
-    lead.funnel === "call";
-  if (followupAutomationDisabled()) {
+  // 3) Client: ONE confirmation SMS via Quo only (no email drip, no stage plan)
+  // Soft capture (name+phone mid-funnel) must NOT text — full submit will.
+  const isSoftCapture = /soft capture|pending qualify|still qualifying/i.test(
+    `${lead.note || ""} ${lead.serviceType || ""}`,
+  );
+  if (isSoftCapture) {
     channels.push({
-      ok: false,
+      ok: true,
       channel: "openphone",
-      detail: followupDisabledReason(),
+      detail: "skipped_soft_capture_no_sms",
     });
   } else {
-    const stageSends = await runInstantStageAutomation({
-      stage: "newLead",
+    const confirm = await sendQuoteReceivedConfirmation({
       firstName: lead.firstName,
-      email,
       phone: phone || undefined,
       lang: lead.lang,
-      consentSms,
-      consentEmail: lead.consentEmail !== false,
+      // Form consent; Meta call leads: allow unless explicitly false
+      consentSms: lead.consentSms === false ? false : true,
     });
-    for (const s of stageSends) {
-      channels.push({
-        ok: s.ok,
-        channel: s.channel === "sms" ? "openphone" : "resend",
-        detail: `${s.stepId}: ${s.detail || (s.ok ? "sent" : "fail")}`,
-      });
-    }
+    channels.push({
+      ...confirm,
+      detail:
+        confirm.detail || (confirm.ok ? "quote_received_sms" : "sms_skipped"),
+    });
   }
 
-  // 4) n8n delayed follow-ups — never queue while kill switch is on
-  if (followupAutomationDisabled()) {
-    channels.push({
-      ok: false,
-      channel: "n8n",
-      detail: followupDisabledReason(),
-    });
-  } else {
-    const n8nUrl =
-      process.env.N8N_CRM_WEBHOOK_URL ||
-      process.env.N8N_STAGE_WEBHOOK_URL ||
-      process.env.N8N_FUNNEL_WEBHOOK_URL;
-    if (n8nUrl) {
-      try {
-        const secret = process.env.N8N_WEBHOOK_SECRET;
-        const ctrl = new AbortController();
-        const t = setTimeout(() => ctrl.abort(), 2500);
-        const res = await fetch(n8nUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(secret ? { "x-toro-secret": secret } : {}),
-          },
-          body: JSON.stringify({
-            event: "crm_lead",
-            stage: "newLead",
-            funnel: lead.funnel,
-            source: lead.source,
-            firstName: lead.firstName,
-            lastName: lead.lastName,
-            email,
-            phone,
-            city: lead.city,
-            moveDate: lead.moveDate,
-            serviceType: lead.serviceType,
-            lang: lead.lang || "en",
-            consentSms: consentSms,
-            consentEmail: lead.consentEmail !== false,
-            utm: lead.utm,
-            landingPage: lead.landingPage,
-            note: lead.note,
-            delayedSteps: delayedStepsForN8n("newLead"),
-          }),
-          signal: ctrl.signal,
-        });
-        clearTimeout(t);
-        channels.push({
-          ok: res.ok,
-          channel: "n8n",
-          detail: res.ok ? "queued delayed steps" : `HTTP ${res.status}`,
-        });
-      } catch {
-        channels.push({ ok: false, channel: "n8n", detail: "timeout/error" });
-      }
-    }
+  // 4) n8n — never queue
+  if (n8nDisabled()) {
+    channels.push({ ok: false, channel: "n8n", detail: n8nDisabledReason() });
   }
 
   const ok = channels.some((c) => c.ok);

@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import {
+  followupAutomationDisabled,
+  followupDisabledReason,
+} from "@/lib/crm/automation-kill";
 import { sendEmail, sendSms } from "@/lib/crm/providers";
 
 /**
@@ -6,8 +10,19 @@ import { sendEmail, sendSms } from "@/lib/crm/providers";
  * Auth: x-lead-secret === LEAD_INTAKE_SECRET
  *
  * POST { channel: "sms"|"email", to, body, subject? }
+ *
+ * Killed while automation is off — Pipeline must not fire bulk SMS.
+ * Manual texts: use Quo app directly.
  */
 export async function POST(req: Request) {
+  if (followupAutomationDisabled()) {
+    return NextResponse.json({
+      ok: false,
+      disabled: true,
+      reason: followupDisabledReason(),
+    });
+  }
+
   const secret = process.env.LEAD_INTAKE_SECRET;
   const hdr = req.headers.get("x-lead-secret");
   if (!secret || hdr !== secret) {
