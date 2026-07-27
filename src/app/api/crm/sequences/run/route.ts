@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import {
+  followupAutomationDisabled,
+  followupDisabledReason,
+} from "@/lib/crm/automation-kill";
 import { buildSequence } from "@/lib/crm/sequences";
 import { sendEmail, sendSms } from "@/lib/crm/providers";
 import type { SequenceKey } from "@/lib/crm/types";
@@ -16,6 +20,14 @@ import type { SequenceKey } from "@/lib/crm/types";
  * }
  */
 export async function POST(req: Request) {
+  if (followupAutomationDisabled()) {
+    return NextResponse.json({
+      ok: false,
+      disabled: true,
+      reason: followupDisabledReason(),
+    });
+  }
+
   const secret = process.env.LEAD_INTAKE_SECRET;
   const n8n = process.env.N8N_WEBHOOK_SECRET;
   const hdr = req.headers.get("x-lead-secret");

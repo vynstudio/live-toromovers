@@ -77,39 +77,8 @@ export async function POST(req: Request) {
     skipAutomations: body.skipAutomations,
   });
 
-  // Optional: push delayed steps to n8n for this stage change
-  if (result.ok && result.delayedSteps?.length) {
-    const n8nUrl =
-      process.env.N8N_STAGE_WEBHOOK_URL ||
-      process.env.N8N_CRM_WEBHOOK_URL ||
-      process.env.N8N_FUNNEL_WEBHOOK_URL;
-    if (n8nUrl) {
-      try {
-        const secret = process.env.N8N_WEBHOOK_SECRET;
-        await fetch(n8nUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(secret ? { "x-toro-secret": secret } : {}),
-          },
-          body: JSON.stringify({
-            event: "stage_changed",
-            stage: result.stage,
-            email: body.email,
-            phone: body.phone,
-            firstName: body.firstName || "there",
-            lang: body.lang || "en",
-            consentSms: body.consentSms,
-            consentEmail: body.consentEmail,
-            delayedSteps: result.delayedSteps,
-          }),
-          signal: AbortSignal.timeout(2500),
-        });
-      } catch {
-        /* n8n optional */
-      }
-    }
-  }
+  // Delayed n8n stage SMS — disabled while FOLLOWUP_AUTOMATION kill switch is on
+  // (default off after 2026-07-27 SMS spam incident).
 
   return NextResponse.json(result, { status: result.ok ? 200 : 404 });
 }

@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
+import {
+  followupAutomationDisabled,
+  followupDisabledReason,
+} from "@/lib/crm/automation-kill";
 import { runDelayedStageStep } from "@/lib/crm/run-stage-automation";
 import type { StageKey } from "@/lib/crm/types";
 
 /**
  * Fire one delayed stage SMS/email step (called by n8n Wait nodes).
+ *
+ * KILL SWITCH: returns 200 no-op while followupAutomationDisabled() is true
+ * so in-flight n8n Wait nodes do not keep texting clients.
  *
  * Auth: x-lead-secret === LEAD_INTAKE_SECRET  OR  x-toro-secret === N8N_WEBHOOK_SECRET
  *
@@ -15,6 +22,15 @@ import type { StageKey } from "@/lib/crm/types";
  * }
  */
 export async function POST(req: Request) {
+  // Stop all delayed SMS/email immediately — even if n8n is still firing.
+  if (followupAutomationDisabled()) {
+    return NextResponse.json({
+      ok: false,
+      disabled: true,
+      reason: followupDisabledReason(),
+    });
+  }
+
   const secret = process.env.LEAD_INTAKE_SECRET;
   const n8n = process.env.N8N_WEBHOOK_SECRET;
   const hdr = req.headers.get("x-lead-secret");

@@ -2,6 +2,10 @@
  * Fire SMS/email for a HubSpot stage step (instant or delayed).
  */
 
+import {
+  followupAutomationDisabled,
+  followupDisabledReason,
+} from "./automation-kill";
 import { sendEmail, sendSms } from "./providers";
 import {
   buildStageStepCopy,
@@ -35,6 +39,17 @@ export async function runStageStep(
   step: StageSmsStep,
   opts: StageAutomationOpts,
 ): Promise<StepResult[]> {
+  if (followupAutomationDisabled()) {
+    return [
+      {
+        stepId: step.id,
+        channel: "system",
+        ok: false,
+        detail: followupDisabledReason(),
+      },
+    ];
+  }
+
   const copy = buildStageStepCopy(step.id, {
     firstName: opts.firstName,
     lang: opts.lang,
@@ -122,6 +137,16 @@ export async function runStageStep(
 export async function runInstantStageAutomation(
   opts: StageAutomationOpts,
 ): Promise<StepResult[]> {
+  if (followupAutomationDisabled()) {
+    return [
+      {
+        stepId: "kill_switch",
+        channel: "system",
+        ok: false,
+        detail: followupDisabledReason(),
+      },
+    ];
+  }
   const steps = getInstantSteps(opts.stage);
   const all: StepResult[] = [];
   for (const step of steps) {
@@ -134,6 +159,16 @@ export async function runInstantStageAutomation(
 export async function runDelayedStageStep(
   opts: StageAutomationOpts & { stepId: string },
 ): Promise<StepResult[]> {
+  if (followupAutomationDisabled()) {
+    return [
+      {
+        stepId: opts.stepId,
+        channel: "system",
+        ok: false,
+        detail: followupDisabledReason(),
+      },
+    ];
+  }
   const plan = getStagePlan(opts.stage);
   const step = plan?.steps.find((s) => s.id === opts.stepId);
   if (!step) {
@@ -149,7 +184,8 @@ export async function runDelayedStageStep(
   return runStageStep(step, opts);
 }
 
-/** Payload n8n should schedule after instant send */
+/** Payload n8n should schedule after instant send — empty while kill switch is on */
 export function delayedStepsForN8n(stage: StageKey) {
+  if (followupAutomationDisabled()) return [];
   return getStagePlan(stage)?.steps.filter((s) => s.delayMinutes > 0) || [];
 }

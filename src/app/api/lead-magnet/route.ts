@@ -365,6 +365,11 @@ async function postToN8n(
   phone: string,
   moveLabel: string,
 ): Promise<boolean> {
+  // Kill switch: do not queue any follow-up drips
+  if (process.env.FOLLOWUP_AUTOMATION !== "1") {
+    console.warn("[lead-magnet] n8n drip blocked — FOLLOWUP_AUTOMATION kill switch");
+    return false;
+  }
   const url = process.env.N8N_LEAD_WEBHOOK_URL;
   if (!url) return false; // drip not wired yet — instant delivery still worked
   try {

@@ -19,6 +19,10 @@ import {
   hsPatchContact,
 } from "./providers";
 import {
+  followupAutomationDisabled,
+  followupDisabledReason,
+} from "./automation-kill";
+import {
   delayedStepsForN8n,
   runInstantStageAutomation,
 } from "./run-stage-automation";
@@ -172,75 +176,90 @@ export async function intakeLead(lead: CrmLead): Promise<IntakeResult> {
   );
   channels.push(tg);
 
-  // 3) Client SMS + email (confirmation / stage plan — step 0 only here)
+  // 3) Client SMS + email (stage plan) — KILLED while followup kill switch is on
   const consentSms =
     lead.consentSms === true ||
     lead.source === "meta_call" ||
     lead.funnel === "call";
-  const stageSends = await runInstantStageAutomation({
-    stage: "newLead",
-    firstName: lead.firstName,
-    email,
-    phone: phone || undefined,
-    lang: lead.lang,
-    consentSms,
-    consentEmail: lead.consentEmail !== false,
-  });
-  for (const s of stageSends) {
+  if (followupAutomationDisabled()) {
     channels.push({
-      ok: s.ok,
-      channel: s.channel === "sms" ? "openphone" : "resend",
-      detail: `${s.stepId}: ${s.detail || (s.ok ? "sent" : "fail")}`,
+      ok: false,
+      channel: "openphone",
+      detail: followupDisabledReason(),
     });
+  } else {
+    const stageSends = await runInstantStageAutomation({
+      stage: "newLead",
+      firstName: lead.firstName,
+      email,
+      phone: phone || undefined,
+      lang: lead.lang,
+      consentSms,
+      consentEmail: lead.consentEmail !== false,
+    });
+    for (const s of stageSends) {
+      channels.push({
+        ok: s.ok,
+        channel: s.channel === "sms" ? "openphone" : "resend",
+        detail: `${s.stepId}: ${s.detail || (s.ok ? "sent" : "fail")}`,
+      });
+    }
   }
 
-  // 4) n8n — delayed New Lead follow-ups (1h / 24h / 72h)
-  // Prefer dedicated CRM/stage drip webhook over the labor/full-service funnel drip
-  const n8nUrl =
-    process.env.N8N_CRM_WEBHOOK_URL ||
-    process.env.N8N_STAGE_WEBHOOK_URL ||
-    process.env.N8N_FUNNEL_WEBHOOK_URL;
-  if (n8nUrl) {
-    try {
-      const secret = process.env.N8N_WEBHOOK_SECRET;
-      const ctrl = new AbortController();
-      const t = setTimeout(() => ctrl.abort(), 2500);
-      const res = await fetch(n8nUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(secret ? { "x-toro-secret": secret } : {}),
-        },
-        body: JSON.stringify({
-          event: "crm_lead",
-          stage: "newLead",
-          funnel: lead.funnel,
-          source: lead.source,
-          firstName: lead.firstName,
-          lastName: lead.lastName,
-          email,
-          phone,
-          city: lead.city,
-          moveDate: lead.moveDate,
-          serviceType: lead.serviceType,
-          lang: lead.lang || "en",
-          consentSms: consentSms,
-          consentEmail: lead.consentEmail !== false,
-          utm: lead.utm,
-          landingPage: lead.landingPage,
-          note: lead.note,
-          delayedSteps: delayedStepsForN8n("newLead"),
-        }),
-        signal: ctrl.signal,
-      });
-      clearTimeout(t);
-      channels.push({
-        ok: res.ok,
-        channel: "n8n",
-        detail: res.ok ? "queued delayed steps" : `HTTP ${res.status}`,
-      });
-    } catch {
-      channels.push({ ok: false, channel: "n8n", detail: "timeout/error" });
+  // 4) n8n delayed follow-ups — never queue while kill switch is on
+  if (followupAutomationDisabled()) {
+    channels.push({
+      ok: false,
+      channel: "n8n",
+      detail: followupDisabledReason(),
+    });
+  } else {
+    const n8nUrl =
+      process.env.N8N_CRM_WEBHOOK_URL ||
+      process.env.N8N_STAGE_WEBHOOK_URL ||
+      process.env.N8N_FUNNEL_WEBHOOK_URL;
+    if (n8nUrl) {
+      try {
+        const secret = process.env.N8N_WEBHOOK_SECRET;
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 2500);
+        const res = await fetch(n8nUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(secret ? { "x-toro-secret": secret } : {}),
+          },
+          body: JSON.stringify({
+            event: "crm_lead",
+            stage: "newLead",
+            funnel: lead.funnel,
+            source: lead.source,
+            firstName: lead.firstName,
+            lastName: lead.lastName,
+            email,
+            phone,
+            city: lead.city,
+            moveDate: lead.moveDate,
+            serviceType: lead.serviceType,
+            lang: lead.lang || "en",
+            consentSms: consentSms,
+            consentEmail: lead.consentEmail !== false,
+            utm: lead.utm,
+            landingPage: lead.landingPage,
+            note: lead.note,
+            delayedSteps: delayedStepsForN8n("newLead"),
+          }),
+          signal: ctrl.signal,
+        });
+        clearTimeout(t);
+        channels.push({
+          ok: res.ok,
+          channel: "n8n",
+          detail: res.ok ? "queued delayed steps" : `HTTP ${res.status}`,
+        });
+      } catch {
+        channels.push({ ok: false, channel: "n8n", detail: "timeout/error" });
+      }
     }
   }
 
