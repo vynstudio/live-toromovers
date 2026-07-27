@@ -45,18 +45,13 @@ export default function ThankYouChecklistPage() {
             Request a Quote
             <span className="arrow" aria-hidden />
           </a>
-          <Link href="/book" className="btn btn-outline" data-source="thank-you-checklist-book">
-            Book &amp; pay deposit
-          </Link>
-        </div>
-        <div className="thanks-cta-row" style={{ marginTop: 12 }}>
           <a href={PHONE_TEL} className="btn btn-outline">
             Call us now — {PHONE_DISPLAY}
           </a>
         </div>
 
         <p className="thanks-fine">
-          Ready to hold a date? Deposit applies to your move. Hablamos español.
+          Hablamos español. Family-owned. Up-front hourly pricing.
         </p>
       </div>
     </main>

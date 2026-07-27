@@ -1,13 +1,9 @@
 // Canonical quote entry — every "Get a quote" CTA goes to /get-my-price.
-// Book + deposit uses Square Appointments embed on /book.
 // After the sales funnel completes, the visitor is redirected home (/) in 3s.
 
 export const QUOTE_EVENT = "toro-open-quote";
 export const FUNNEL_PATH = "/get-my-price";
 export const FUNNEL_PATH_ES = "/es/get-my-price";
-/** Square Appointments embed — deposit + schedule */
-export const BOOK_PATH = "/book";
-export const BOOK_PATH_ES = "/es/book";
 export const RETURN_STORAGE_KEY = "toro-quote-return";
 
 export type QuoteOpenDetail = {

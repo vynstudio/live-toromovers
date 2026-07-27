@@ -32,19 +32,13 @@ export default function ThankYouPage() {
             Call us now — {PHONE_DISPLAY}
             <span className="arrow" aria-hidden />
           </a>
-          <Link href="/book" className="btn btn-outline" data-source="thank-you-book">
-            Book &amp; pay deposit
-          </Link>
-        </div>
-        <div className="thanks-cta-row" style={{ marginTop: 12 }}>
           <Link href="/" className="btn btn-outline">
             Back to home
           </Link>
         </div>
 
         <p className="thanks-fine">
-          Ready to lock a date? Book online and pay your deposit — it applies to
-          your move. Hablamos español. Family-owned.
+          Hablamos español. Family-owned. Up-front hourly pricing on every move.
         </p>
       </div>
     </main>

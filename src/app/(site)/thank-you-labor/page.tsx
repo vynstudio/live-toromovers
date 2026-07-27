@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ThankYouView, CallCta } from "@/components/funnel-tracking";
 import { PHONE_DISPLAY, BUSINESS_NAME } from "@/lib/contact";
 
@@ -26,16 +25,10 @@ export default function ThankYouLaborPage() {
         </p>
         <div className="fn-thanks-cta">
           <CallCta className="fn-btn fn-btn-primary fn-btn-lg">Call Now — {PHONE_DISPLAY}</CallCta>
-          <Link
-            href="/book?service=labor"
-            className="fn-btn fn-btn-ghost-light"
-            data-source="thank-you-labor-book"
-          >
-            Book &amp; pay deposit
-          </Link>
+          <CallCta className="fn-btn fn-btn-ghost-light">Need help ASAP? Call now — {PHONE_DISPLAY}</CallCta>
         </div>
         <p className="fn-thanks-fine">
-          Lock a date online with Square · Hablamos español · Family-owned
+          Hablamos español · Family-owned · Up-front hourly pricing
         </p>
       </div>
     </main>
