@@ -1,6 +1,6 @@
-// Sets the n8n webhook env vars on the Netlify site and triggers a deploy.
-// Reads creds + values from .env.wire (gitignored). Idempotent: updates existing
-// keys, creates missing ones.
+// Removes retired HubSpot / n8n env keys from Netlify (if present) and
+// triggers a deploy so runtime no longer sees them.
+// Reads NETLIFY_TOKEN + NETLIFY_SITE_ID from .env.wire (gitignored).
 //   node scripts/wire-netlify.mjs
 
 import { readFileSync } from "node:fs";
@@ -16,20 +16,42 @@ for (const line of readFileSync(resolve(root, ".env.wire"), "utf8").split("\n"))
 
 const TOKEN = env.NETLIFY_TOKEN;
 const SITE = env.NETLIFY_SITE_ID;
-const API = "https://api.netlify.com/api/v1";
-const H = { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" };
+if (!TOKEN || !SITE) {
+  console.error("Need NETLIFY_TOKEN + NETLIFY_SITE_ID in .env.wire");
+  process.exit(1);
+}
 
-const VARS = {
-  N8N_FUNNEL_WEBHOOK_URL: env.N8N_FUNNEL_WEBHOOK_URL,
-  N8N_LEAD_WEBHOOK_URL: env.N8N_LEAD_WEBHOOK_URL,
-  N8N_WEBHOOK_SECRET: env.N8N_WEBHOOK_SECRET,
+const API = "https://api.netlify.com/api/v1";
+const H = {
+  Authorization: `Bearer ${TOKEN}`,
+  "Content-Type": "application/json",
 };
-const SCOPES = ["builds", "functions", "runtime", "post_processing"];
+
+/** Keys that must not live on Netlify anymore */
+const DELETE_KEYS = [
+  "HUBSPOT_TOKEN",
+  "HUBSPOT_HAS_FUNNEL_TYPE",
+  "HUBSPOT_SYNC",
+  "N8N_FUNNEL_WEBHOOK_URL",
+  "N8N_LEAD_WEBHOOK_URL",
+  "N8N_CRM_WEBHOOK_URL",
+  "N8N_STAGE_WEBHOOK_URL",
+  "N8N_WEBHOOK_SECRET",
+  "N8N_BASE_URL",
+  "N8N_API_KEY",
+  "N8N_ENABLED",
+  "FOLLOWUP_AUTOMATION",
+];
 
 const j = async (url, opts = {}) => {
   const r = await fetch(url, { headers: H, ...opts });
   const t = await r.text();
-  let json = null; try { json = JSON.parse(t); } catch {}
+  let json = null;
+  try {
+    json = JSON.parse(t);
+  } catch {
+    /* */
+  }
   return { status: r.status, json, text: t };
 };
 
@@ -37,28 +59,35 @@ const site = (await j(`${API}/sites/${SITE}`)).json;
 const acct = site.account_slug;
 console.log(`Site: ${site.name} (${site.custom_domain}) · account ${acct}\n`);
 
-const existing = (await j(`${API}/accounts/${acct}/env?site_id=${SITE}`)).json || [];
-const has = new Set(existing.map((v) => v.key));
+const existing =
+  (await j(`${API}/accounts/${acct}/env?site_id=${SITE}`)).json || [];
+const byKey = new Map(existing.map((e) => [e.key, e]));
 
-for (const [key, value] of Object.entries(VARS)) {
-  if (has.has(key)) {
-    const r = await j(`${API}/accounts/${acct}/env/${key}?site_id=${SITE}`, {
-      method: "PATCH",
-      body: JSON.stringify({ context: "all", value }),
-    });
-    console.log(`${r.status < 300 ? "✓ updated" : "✗ FAILED " + r.status}  ${key}`);
-    if (r.status >= 300) console.log("   ", r.text.slice(0, 160));
-  } else {
-    const r = await j(`${API}/accounts/${acct}/env?site_id=${SITE}`, {
-      method: "POST",
-      body: JSON.stringify([{ key, scopes: SCOPES, values: [{ value, context: "all" }] }]),
-    });
-    console.log(`${r.status < 300 ? "✓ created" : "✗ FAILED " + r.status}  ${key}`);
-    if (r.status >= 300) console.log("   ", r.text.slice(0, 160));
+for (const key of DELETE_KEYS) {
+  const row = byKey.get(key);
+  if (!row) {
+    console.log(`· ${key} — not set`);
+    continue;
   }
+  // Netlify: DELETE /accounts/{account_id}/env/{key}?site_id=
+  const del = await j(
+    `${API}/accounts/${acct}/env/${encodeURIComponent(key)}?site_id=${SITE}`,
+    { method: "DELETE" },
+  );
+  console.log(
+    del.status < 300
+      ? `✓ deleted ${key}`
+      : `✗ ${key} delete ${del.status} ${String(del.text).slice(0, 120)}`,
+  );
 }
 
-// trigger a fresh production deploy so the new env vars take effect
-const build = await j(`${API}/sites/${SITE}/builds`, { method: "POST", body: "{}" });
-console.log(`\nDeploy trigger: ${build.status < 300 ? "✓ queued (build #" + (build.json?.id || "?") + ")" : "✗ FAILED " + build.status}`);
-if (build.status >= 300) console.log("  ", build.text.slice(0, 160));
+// Trigger deploy so functions pick up env without the deleted keys
+const deploy = await j(`${API}/sites/${SITE}/builds`, {
+  method: "POST",
+  body: JSON.stringify({ clear_cache: true }),
+});
+console.log(
+  deploy.status < 300
+    ? `\n✓ deploy triggered`
+    : `\n✗ deploy ${deploy.status} ${String(deploy.text).slice(0, 200)}`,
+);

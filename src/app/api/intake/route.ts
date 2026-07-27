@@ -95,17 +95,15 @@ export async function POST(req: Request) {
   const results = await Promise.allSettled([
     sendEmail(body, text),
     sendTelegram(text),
-    upsertHubspotContact(body, text),
   ]);
 
   const emailed = results[0].status === "fulfilled" && results[0].value === true;
   const telegrammed = results[1].status === "fulfilled" && results[1].value === true;
-  const crmed = results[2].status === "fulfilled" && results[2].value === true;
   if (!emailed && !telegrammed) {
     console.error("[intake] NO channel delivered the intake:", body.email, body.phone);
   }
 
-  return NextResponse.json({ ok: true, emailed, telegrammed, crmed });
+  return NextResponse.json({ ok: true, emailed, telegrammed, crmed: false });
 }
 
 async function sendEmail(body: IntakePayload, text: string): Promise<boolean> {
@@ -155,50 +153,6 @@ async function sendTelegram(text: string): Promise<boolean> {
     });
     return res.ok;
   } catch {
-    return false;
-  }
-}
-
-/** Upsert the intake into HubSpot, keyed by email — so it updates the SAME
- *  contact the quote already created instead of duplicating. Mirrors the
- *  booking route. Gated on HUBSPOT_TOKEN, fails soft. */
-async function upsertHubspotContact(body: IntakePayload, text: string): Promise<boolean> {
-  const token = process.env.HUBSPOT_TOKEN;
-  if (!token || !body.email) return false;
-
-  const [firstname, ...rest] = (body.name || "").trim().split(/\s+/);
-  const properties: Record<string, string> = {
-    email: body.email,
-    lifecyclestage: "lead",
-    hs_lead_status: "NEW",
-    message: text, // full move-day intake lands on the contact record
-  };
-  if (firstname) properties.firstname = firstname;
-  if (rest.length) properties.lastname = rest.join(" ");
-  if (body.phone) properties.phone = body.phone;
-
-  try {
-    const res = await fetch(
-      "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          inputs: [{ idProperty: "email", id: body.email, properties }],
-        }),
-      },
-    );
-    if (!res.ok) {
-      const detail = await res.text().catch(() => "");
-      console.error("[intake] HubSpot failed:", res.status, detail, "lead:", body.email);
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("[intake] HubSpot threw:", err, "lead:", body.email);
     return false;
   }
 }

@@ -7,7 +7,6 @@ import {
   type LeadMagnetInput,
 } from "@/lib/lead-magnet-schema";
 import { normalizePhone } from "@/lib/verify";
-import { upsertLeadToHubspot, telegramStageKeyboard } from "@/lib/hubspot";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
 const PDF_URL = `${SITE_URL}/central-florida-moving-checklist.pdf`;
@@ -59,16 +58,13 @@ export async function POST(req: Request) {
     `Magnet: Central Florida Moving Checklist`,
   ].join("\n");
 
-  // Automation kill: no HubSpot, no n8n drip, no checklist SMS (only email PDF + Telegram)
+  // No HubSpot, no n8n, no checklist SMS — email PDF + Telegram only
   void wantsSms;
-  void sendChecklistSms;
-  void upsertHubspotContact;
-  void postToN8n;
 
   const results = await Promise.allSettled([
     sendCustomerChecklistEmail(lead, moveLabel),
     sendTeamAlertEmail(lead, moveLabel, text),
-    sendTelegram(text), // no stage keyboard — avoids HubSpot stage SMS chain
+    sendTelegram(text),
     sendMetaCapi(lead, phone, eventId, req),
   ]);
 
@@ -214,7 +210,7 @@ async function sendTeamAlertEmail(
   }
 }
 
-async function sendTelegram(text: string, email?: string): Promise<boolean> {
+async function sendTelegram(text: string): Promise<boolean> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return false;
@@ -226,7 +222,6 @@ async function sendTelegram(text: string, email?: string): Promise<boolean> {
         chat_id: chatId,
         text,
         disable_web_page_preview: true,
-        reply_markup: telegramStageKeyboard(email),
       }),
     });
     return res.ok;
@@ -330,88 +325,6 @@ async function sendMetaCapi(
     return true;
   } catch (err) {
     console.error("[lead-magnet] Meta CAPI threw:", err);
-    return false;
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/* HubSpot — upsert by email, tagged as a checklist lead               */
-/* ------------------------------------------------------------------ */
-
-async function upsertHubspotContact(
-  lead: LeadMagnetInput,
-  phone: string,
-  moveLabel: string,
-  text: string,
-): Promise<boolean> {
-  return upsertLeadToHubspot({
-    email: lead.email,
-    firstName: lead.firstName,
-    phone,
-    city: lead.city,
-    lang: lead.lang,
-    funnel: "checklist",
-    serviceType: moveLabel,
-    moveDate: lead.moveDate?.trim() || undefined,
-    utm: lead.utm,
-    note: `${text}\n\nMove type: ${moveLabel}`,
-  });
-}
-
-/* ------------------------------------------------------------------ */
-/* n8n (on Railway) — fire-and-forget webhook that owns the drip       */
-/* (5-email + 3-SMS nurture sequence). Instant delivery already        */
-/* happened above; n8n is purely the follow-up scheduler.              */
-/* ------------------------------------------------------------------ */
-
-async function postToN8n(
-  lead: LeadMagnetInput,
-  phone: string,
-  moveLabel: string,
-): Promise<boolean> {
-  // Kill switch: do not queue any follow-up drips
-  if (process.env.FOLLOWUP_AUTOMATION !== "1") {
-    console.warn("[lead-magnet] n8n drip blocked — FOLLOWUP_AUTOMATION kill switch");
-    return false;
-  }
-  const url = process.env.N8N_LEAD_WEBHOOK_URL;
-  if (!url) return false; // drip not wired yet — instant delivery still worked
-  try {
-    // Hard 2.5s cap so a slow/unreachable n8n never delays the thank-you page.
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(process.env.N8N_WEBHOOK_SECRET
-          ? { "x-toro-secret": process.env.N8N_WEBHOOK_SECRET }
-          : {}),
-      },
-      signal: AbortSignal.timeout(2500),
-      body: JSON.stringify({
-        event: "lead_magnet_submit",
-        funnel: "checklist",
-        magnet: "central-florida-moving-checklist",
-        serviceType: moveLabel,
-        firstName: lead.firstName,
-        email: lead.email,
-        phone,
-        consentSms: Boolean(lead.smsOptIn && phone),
-        smsOptIn: Boolean(lead.smsOptIn && phone), // kept for the imported workflow's field name
-        consentEmail: true,
-        city: lead.city,
-        moveType: lead.moveType,
-        moveLabel,
-        moveDate: lead.moveDate?.trim() || "",
-        lang: lead.lang || "en",
-        source: lead.source || "",
-        landingPage: lead.landingPage || "/central-florida-moving-checklist",
-        utm: lead.utm || {},
-        links: { pdf: PDF_URL, webChecklist: WEB_CHECKLIST_URL, quote: QUOTE_URL },
-      }),
-    });
-    return res.ok;
-  } catch (err) {
-    console.error("[lead-magnet] n8n webhook failed (non-blocking):", err instanceof Error ? err.name : err);
     return false;
   }
 }
