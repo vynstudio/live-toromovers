@@ -22,7 +22,9 @@ export function StickyCta() {
     pathname === "/intake" ||
     !!pathname?.startsWith("/intake/") ||
     pathname === "/movingday-checklist" ||
-    !!pathname?.startsWith("/movingday-checklist/");
+    !!pathname?.startsWith("/movingday-checklist/") ||
+    pathname === "/move-details" ||
+    !!pathname?.startsWith("/move-details/");
 
   useEffect(() => {
     if (hide) return;
