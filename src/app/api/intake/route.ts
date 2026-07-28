@@ -59,8 +59,8 @@ type IntakePayload = {
 };
 
 const SERVICE_LABELS: Record<string, string> = {
-  "full-service": "Full-service move",
-  "labor-only": "Labor only",
+  "full-service": "Full moving service (with truck)",
+  "labor-only": "Labor only moving service",
   "loading-unloading": "Load / unload only",
   "packing-move": "Packing + move",
 };

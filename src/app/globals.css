@@ -4210,6 +4210,29 @@ html[data-lca-dock="1"] .lca-docked-inner .lca-back-solo {
   color: #fff;
 }
 .mdf-chip:active { opacity: 0.9; }
+.mdf-chip-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  border-radius: 10px;
+  min-height: 56px;
+  padding: 14px 16px;
+  text-align: left;
+}
+.mdf-chip-card strong {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.mdf-chip-card span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #737373;
+  line-height: 1.3;
+}
+.mdf-chip-card.on span { color: #d4d4d4; }
 
 .mdf-copy {
   align-self: flex-start;

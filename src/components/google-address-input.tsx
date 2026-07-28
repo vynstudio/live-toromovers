@@ -25,19 +25,61 @@ type PlacePrediction = {
 };
 
 async function fetchPredictions(input: string, sessionToken: string): Promise<Suggestion[]> {
-  if (!KEY) return [];
+  if (!KEY) {
+    if (typeof window !== "undefined" && process.env.NODE_ENV !== "production") {
+      console.warn("[GoogleAddressInput] NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is missing");
+    }
+    return [];
+  }
   const res = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "X-Goog-Api-Key": KEY },
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": KEY,
+      // Field mask required by Places API (New) for autocomplete responses.
+      "X-Goog-FieldMask":
+        "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat",
+    },
     body: JSON.stringify({
       input,
       sessionToken,
       includedRegionCodes: ["us"],
+      includedPrimaryTypes: ["street_address", "premise", "subpremise", "route"],
       locationBias: { circle: { center: CFL_CENTER, radius: CFL_RADIUS_M } },
     }),
   });
-  if (!res.ok) return [];
+  if (!res.ok) {
+    // Retry without primary-type filter (some keys / regions reject the filter).
+    if (res.status === 400) {
+      const retry = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": KEY,
+          "X-Goog-FieldMask":
+            "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat",
+        },
+        body: JSON.stringify({
+          input,
+          sessionToken,
+          includedRegionCodes: ["us"],
+          locationBias: { circle: { center: CFL_CENTER, radius: CFL_RADIUS_M } },
+        }),
+      });
+      if (!retry.ok) return [];
+      const retryData: { suggestions?: { placePrediction?: PlacePrediction }[] } =
+        await retry.json();
+      return mapPredictions(retryData);
+    }
+    return [];
+  }
   const data: { suggestions?: { placePrediction?: PlacePrediction }[] } = await res.json();
+  return mapPredictions(data);
+}
+
+function mapPredictions(data: {
+  suggestions?: { placePrediction?: PlacePrediction }[];
+}): Suggestion[] {
   return (data.suggestions ?? [])
     .map((s) => s.placePrediction)
     .filter((p): p is PlacePrediction => p != null)
@@ -46,7 +88,8 @@ async function fetchPredictions(input: string, sessionToken: string): Promise<Su
       primary: p.structuredFormat?.mainText?.text ?? p.text?.text ?? "",
       secondary: p.structuredFormat?.secondaryText?.text ?? "",
       full: p.text?.text ?? "",
-    }));
+    }))
+    .filter((s) => s.full || s.primary);
 }
 
 function newToken(): string {
@@ -87,7 +130,7 @@ export function GoogleAddressInput({
   }, []);
 
   const runFetch = async (query: string) => {
-    if (!KEY || query.trim().length < 3) {
+    if (!KEY || query.trim().length < 2) {
       setSuggestions([]);
       setOpen(false);
       return;
@@ -107,7 +150,7 @@ export function GoogleAddressInput({
   const onInput = (v: string) => {
     onChange(v);
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
-    debounceRef.current = window.setTimeout(() => runFetch(v), 260);
+    debounceRef.current = window.setTimeout(() => runFetch(v), 180);
   };
 
   const select = (s: Suggestion) => {

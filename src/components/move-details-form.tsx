@@ -24,10 +24,8 @@ const HOME = ["Apartment", "House", "Townhome", "Studio", "Office", "Storage"];
 const FLOORS = ["Ground", "2nd", "3rd", "4th", "5th+"];
 const BEDS = ["Studio", "1", "2", "3", "4", "5+"];
 const SERVICES = [
-  { v: "full-service", l: "Full-service" },
-  { v: "labor-only", l: "Labor only" },
-  { v: "loading-unloading", l: "Load / unload" },
-  { v: "packing-move", l: "Pack + move" },
+  { v: "full-service", l: "Full moving service", sub: "With truck + crew" },
+  { v: "labor-only", l: "Labor only", sub: "You have the truck" },
 ];
 const PARK = ["Driveway", "Street", "Loading dock", "Garage", "Not sure"];
 const PACK = [
@@ -142,7 +140,6 @@ type D = {
   packingStatus: string;
   needPackingHelp: Yn;
   svcDisassembly: Yn;
-  svcStorage: Yn;
   onSiteMe: Yn;
   petsOnSite: Yn;
   kidsOnSite: Yn;
@@ -157,7 +154,7 @@ const empty: D = {
   toAddress: "", toUnit: "", toHomeType: "",
   toFloor: "", toElevator: "", toParking: "", toLongCarry: "",
   itemCounts: {}, invOther: "", appliances: [], specialItems: [],
-  packingStatus: "", needPackingHelp: "", svcDisassembly: "", svcStorage: "",
+  packingStatus: "", needPackingHelp: "", svcDisassembly: "",
   onSiteMe: "", petsOnSite: "", kidsOnSite: "", notes: "",
 };
 
@@ -283,7 +280,6 @@ export function MoveDetailsForm() {
     !!(
       d.packingStatus &&
       d.svcDisassembly &&
-      d.svcStorage &&
       d.onSiteMe &&
       d.petsOnSite &&
       d.kidsOnSite &&
@@ -381,7 +377,7 @@ export function MoveDetailsForm() {
           },
           services: {
             disassembly: d.svcDisassembly === "yes",
-            storage: d.svcStorage === "yes",
+            storage: false,
           },
           contacts: {
             onSitePickupName: me ? d.name : "",
@@ -632,13 +628,15 @@ export function MoveDetailsForm() {
             <p className="mdf-sub">Tap one to continue.</p>
             <div className="mdf-chips mdf-chips-stack">
               {SERVICES.map((s) => (
-                <Chip
+                <button
                   key={s.v}
-                  on={d.serviceType === s.v}
+                  type="button"
+                  className={`mdf-chip mdf-chip-card${d.serviceType === s.v ? " on" : ""}`}
                   onClick={() => pick({ serviceType: s.v })}
                 >
-                  {s.l}
-                </Chip>
+                  <strong>{s.l}</strong>
+                  <span>{s.sub}</span>
+                </button>
               ))}
             </div>
           </>
@@ -759,16 +757,6 @@ export function MoveDetailsForm() {
               <div className="mdf-chips">
                 {(["yes", "no"] as const).map((v) => (
                   <Chip key={v} on={d.svcDisassembly === v} onClick={() => set({ svcDisassembly: v })}>
-                    {v === "yes" ? "Yes" : "No"}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-            <div className="mdf-field">
-              <span>Storage between stops?</span>
-              <div className="mdf-chips">
-                {(["yes", "no"] as const).map((v) => (
-                  <Chip key={v} on={d.svcStorage === v} onClick={() => set({ svcStorage: v })}>
                     {v === "yes" ? "Yes" : "No"}
                   </Chip>
                 ))}
