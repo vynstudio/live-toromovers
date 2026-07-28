@@ -25,7 +25,7 @@ export default function MoveDetailsPage() {
       <div className="mdf-wrap">
         <h1 className="mdf-title">Move details</h1>
         <p className="mdf-lede">
-          One page. Tap what applies. Crew gets the full run sheet.
+          Tap through. Type only what you need. Crew gets the full sheet.
         </p>
         <MoveDetailsForm />
       </div>

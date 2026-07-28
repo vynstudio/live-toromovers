@@ -1,11 +1,19 @@
 "use client";
 
 /**
- * Phone-first move details form (v2 test).
- * Single scroll page — no long wizard. Posts to /api/intake → Telegram.
+ * Phone-first move details — short steps + auto-advance on taps.
+ * Typing only for contact, addresses, optional notes.
+ * Posts full payload to /api/intake → Telegram.
  */
 
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { useRouter } from "next/navigation";
 import { GoogleAddressInput } from "./google-address-input";
 
@@ -24,15 +32,15 @@ const SERVICES = [
 const PARK = ["Driveway", "Street", "Loading dock", "Garage", "Not sure"];
 const PACK = [
   { v: "fully-packed", l: "Fully packed" },
-  { v: "mostly-packed", l: "Mostly" },
-  { v: "partially-packed", l: "Partial" },
+  { v: "mostly-packed", l: "Mostly packed" },
+  { v: "partially-packed", l: "Partially packed" },
   { v: "not-packed", l: "Not packed" },
 ];
 const TIMES = Array.from({ length: 11 }, (_, i) => {
   const h = 7 + i;
   return {
     v: `${String(h).padStart(2, "0")}:00`,
-    l: h === 12 ? "12p" : h > 12 ? `${h - 12}p` : `${h}a`,
+    l: h === 12 ? "12 PM" : h > 12 ? `${h - 12} PM` : `${h} AM`,
   };
 });
 const SPECIALS = [
@@ -77,7 +85,33 @@ const PRESETS: { id: string; l: string; counts: ItemCounts }[] = [
   },
 ];
 
-const KEY = "toro_move_details_v1";
+const KEY = "toro_move_details_v2";
+const ADVANCE_MS = 220;
+
+type Step =
+  | "contact"
+  | "date"
+  | "time"
+  | "service"
+  | "from"
+  | "to"
+  | "stuff"
+  | "dayof";
+
+const STEPS: Step[] = [
+  "contact", "date", "time", "service", "from", "to", "stuff", "dayof",
+];
+
+const LABELS: Record<Step, string> = {
+  contact: "Contact",
+  date: "Date",
+  time: "Time",
+  service: "Service",
+  from: "Pickup",
+  to: "Drop-off",
+  stuff: "Stuff",
+  dayof: "Day of",
+};
 
 type D = {
   name: string;
@@ -128,7 +162,7 @@ const empty: D = {
 };
 
 const multi = (t: string) => ["Apartment", "Townhome", "Office"].includes(t);
-const beds = (t: string) => !["Office", "Storage"].includes(t);
+const needsBeds = (t: string) => !["Office", "Storage"].includes(t);
 
 function Chip({
   on, children, onClick,
@@ -140,30 +174,67 @@ function Chip({
   );
 }
 
+function floorLabel(f: string) {
+  if (!f) return "";
+  if (f === "Ground") return "Ground floor";
+  return `${f} floor`;
+}
+
 export function MoveDetailsForm() {
   const router = useRouter();
   const [d, setD] = useState<D>(empty);
+  const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [preset, setPreset] = useState<string | null>(null);
   const [today, setToday] = useState("");
+  const advRef = useRef<number | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
-  const set = (p: Partial<D>) => setD((x) => ({ ...x, ...p }));
+  const set = useCallback((p: Partial<D>) => {
+    setD((x) => ({ ...x, ...p }));
+  }, []);
+
+  const goNext = useCallback(() => {
+    setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const goBack = () => {
+    if (advRef.current) window.clearTimeout(advRef.current);
+    setStep((s) => Math.max(0, s - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  /** Patch state and auto-advance after a short beat (for taps). */
+  const pick = useCallback((p: Partial<D>, advance = true) => {
+    setD((x) => ({ ...x, ...p }));
+    if (!advance) return;
+    if (advRef.current) window.clearTimeout(advRef.current);
+    advRef.current = window.setTimeout(() => {
+      setStep((s) => Math.min(s + 1, STEPS.length - 1));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, ADVANCE_MS);
+  }, []);
 
   useEffect(() => {
     setToday(new Date().toISOString().slice(0, 10));
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(KEY) || localStorage.getItem("toro_move_details_v1");
       if (raw) {
         const p = JSON.parse(raw) as Partial<D>;
         setD((x) => ({
-          ...x, ...p,
+          ...x,
+          ...p,
           itemCounts: { ...x.itemCounts, ...(p.itemCounts || {}) },
           appliances: p.appliances || x.appliances,
           specialItems: p.specialItems || x.specialItems,
         }));
       }
     } catch { /* ignore */ }
+    return () => {
+      if (advRef.current) window.clearTimeout(advRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -172,6 +243,76 @@ export function MoveDetailsForm() {
     }, 250);
     return () => window.clearTimeout(t);
   }, [d]);
+
+  // Keep fixed bar clear of keyboard on iOS
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const sync = () => {
+      const offset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+      document.documentElement.style.setProperty("--mdf-kb", `${offset}px`);
+    };
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    return () => {
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+      document.documentElement.style.removeProperty("--mdf-kb");
+    };
+  }, []);
+
+  const key = STEPS[step];
+  const isLast = step >= STEPS.length - 1;
+
+  const placeOk = (side: "from" | "to") => {
+    const f = side === "from";
+    const addr = f ? d.fromAddress : d.toAddress;
+    const type = f ? d.fromHomeType : d.toHomeType;
+    const parking = f ? d.fromParking : d.toParking;
+    const long = f ? d.fromLongCarry : d.toLongCarry;
+    const floor = f ? d.fromFloor : d.toFloor;
+    const elev = f ? d.fromElevator : d.toElevator;
+    if (!addr.trim() || !type || !parking || !long) return false;
+    if (f && needsBeds(type) && !d.bedrooms) return false;
+    if (multi(type) && (!floor || !elev)) return false;
+    return true;
+  };
+
+  const dayOk = () =>
+    !!(
+      d.packingStatus &&
+      d.svcDisassembly &&
+      d.svcStorage &&
+      d.onSiteMe &&
+      d.petsOnSite &&
+      d.kidsOnSite &&
+      (d.packingStatus === "fully-packed" || d.needPackingHelp)
+    );
+
+  const canContinue = (() => {
+    switch (key) {
+      case "contact":
+        return !!(d.name.trim() && d.phone.trim() && d.email.trim());
+      case "date":
+        return !!d.moveDate;
+      case "time":
+        return !!d.moveTime;
+      case "service":
+        return !!d.serviceType;
+      case "from":
+        return placeOk("from");
+      case "to":
+        return placeOk("to");
+      case "stuff":
+        return true;
+      case "dayof":
+        return dayOk();
+    }
+  })();
+
+  // Pure-tap steps hide Continue (auto-advance)
+  const tapOnly = key === "time" || key === "service";
 
   const pickPreset = (p: (typeof PRESETS)[number]) => {
     setPreset(p.id);
@@ -188,34 +329,7 @@ export function MoveDetailsForm() {
     });
   };
 
-  const valid =
-    d.name.trim() &&
-    d.phone.trim() &&
-    d.email.trim() &&
-    d.moveDate &&
-    d.moveTime &&
-    d.serviceType &&
-    d.fromAddress.trim() &&
-    d.fromHomeType &&
-    d.fromParking &&
-    d.fromLongCarry &&
-    d.toAddress.trim() &&
-    d.toHomeType &&
-    d.toParking &&
-    d.toLongCarry &&
-    d.packingStatus &&
-    d.svcDisassembly &&
-    d.svcStorage &&
-    d.onSiteMe &&
-    d.petsOnSite &&
-    d.kidsOnSite &&
-    (!beds(d.fromHomeType) || d.bedrooms) &&
-    (!multi(d.fromHomeType) || (d.fromFloor && d.fromElevator)) &&
-    (!multi(d.toHomeType) || (d.toFloor && d.toElevator));
-
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!valid || busy) return;
+  const submit = async () => {
     setErr(null);
     setBusy(true);
     const me = d.onSiteMe === "yes";
@@ -240,7 +354,7 @@ export function MoveDetailsForm() {
             unit: d.fromUnit,
             homeType: d.fromHomeType === "Storage" ? "Storage unit" : d.fromHomeType,
             bedrooms: d.bedrooms,
-            floor: d.fromFloor ? (d.fromFloor === "Ground" ? "Ground floor" : `${d.fromFloor} floor`) : "",
+            floor: floorLabel(d.fromFloor),
             elevator: d.fromElevator,
             parkingNotes: d.fromParking,
             longCarry: d.fromLongCarry === "yes",
@@ -249,7 +363,7 @@ export function MoveDetailsForm() {
             address: d.toAddress,
             unit: d.toUnit,
             homeType: d.toHomeType === "Storage" ? "Storage unit" : d.toHomeType,
-            floor: d.toFloor ? (d.toFloor === "Ground" ? "Ground floor" : `${d.toFloor} floor`) : "",
+            floor: floorLabel(d.toFloor),
             elevator: d.toElevator,
             parkingNotes: d.toParking,
             longCarry: d.toLongCarry === "yes",
@@ -271,9 +385,9 @@ export function MoveDetailsForm() {
           },
           contacts: {
             onSitePickupName: me ? d.name : "",
-            onSitePickupPhone: me ? d.phone : d.phone,
+            onSitePickupPhone: d.phone,
             onSiteDropoffName: me ? d.name : "",
-            onSiteDropoffPhone: me ? d.phone : d.phone,
+            onSiteDropoffPhone: d.phone,
             petsOnSite: d.petsOnSite === "yes",
             kidsOnSite: d.kidsOnSite === "yes",
             specialInstructions: d.notes,
@@ -285,7 +399,10 @@ export function MoveDetailsForm() {
         setBusy(false);
         return;
       }
-      try { localStorage.removeItem(KEY); } catch {}
+      try {
+        localStorage.removeItem(KEY);
+        localStorage.removeItem("toro_move_details_v1");
+      } catch {}
       router.push("/checklist?intake=done");
     } catch {
       setErr("Network error. Try again.");
@@ -293,19 +410,25 @@ export function MoveDetailsForm() {
     }
   };
 
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!canContinue || busy) return;
+    if (isLast) void submit();
+    else goNext();
+  };
+
   const Place = ({ side }: { side: "from" | "to" }) => {
     const f = side === "from";
     const type = f ? d.fromHomeType : d.toHomeType;
     return (
-      <div className="mdf-block">
-        <h3 className="mdf-h3">{f ? "Pickup" : "Drop-off"}</h3>
+      <>
         <label className="mdf-field">
           <span>Address</span>
           <GoogleAddressInput
             value={f ? d.fromAddress : d.toAddress}
             onChange={(v) => set(f ? { fromAddress: v } : { toAddress: v })}
-            placeholder="Street, city, FL"
-            ariaLabel={f ? "Pickup" : "Drop-off"}
+            placeholder="Start typing street…"
+            ariaLabel={f ? "Pickup address" : "Drop-off address"}
           />
         </label>
         <label className="mdf-field">
@@ -314,10 +437,12 @@ export function MoveDetailsForm() {
             value={f ? d.fromUnit : d.toUnit}
             onChange={(e) => set(f ? { fromUnit: e.target.value } : { toUnit: e.target.value })}
             placeholder="Apt #"
+            inputMode="text"
+            autoComplete="address-line2"
           />
         </label>
         <div className="mdf-field">
-          <span>Type</span>
+          <span>Home type</span>
           <div className="mdf-chips">
             {HOME.map((h) => (
               <Chip
@@ -326,7 +451,7 @@ export function MoveDetailsForm() {
                 onClick={() =>
                   set(
                     f
-                      ? { fromHomeType: h, bedrooms: beds(h) ? d.bedrooms : "" }
+                      ? { fromHomeType: h, bedrooms: needsBeds(h) ? d.bedrooms : "" }
                       : { toHomeType: h },
                   )
                 }
@@ -336,7 +461,7 @@ export function MoveDetailsForm() {
             ))}
           </div>
         </div>
-        {f && beds(type) && (
+        {f && needsBeds(type) && (
           <div className="mdf-field">
             <span>Bedrooms</span>
             <div className="mdf-chips">
@@ -381,7 +506,7 @@ export function MoveDetailsForm() {
           </>
         )}
         <div className="mdf-field">
-          <span>Parking</span>
+          <span>Truck parking</span>
           <div className="mdf-chips">
             {PARK.map((p) => (
               <Chip
@@ -408,201 +533,307 @@ export function MoveDetailsForm() {
             ))}
           </div>
         </div>
-      </div>
+      </>
     );
   };
 
   return (
-    <form className="mdf" onSubmit={submit}>
-      <section className="mdf-sec">
-        <h2 className="mdf-h2">1 · Contact</h2>
-        <label className="mdf-field">
-          <span>Name</span>
-          <input required value={d.name} onChange={(e) => set({ name: e.target.value })} placeholder="Full name" autoComplete="name" />
-        </label>
-        <label className="mdf-field">
-          <span>Phone</span>
-          <input required type="tel" value={d.phone} onChange={(e) => set({ phone: e.target.value })} placeholder="(689) 555-0000" autoComplete="tel" />
-        </label>
-        <label className="mdf-field">
-          <span>Email</span>
-          <input required type="email" value={d.email} onChange={(e) => set({ email: e.target.value })} placeholder="you@email.com" autoComplete="email" />
-        </label>
-      </section>
+    <form ref={formRef} className="mdf" onSubmit={onSubmit}>
+      <div className="mdf-progress" aria-hidden>
+        <span style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
+      </div>
+      <div className="mdf-step-label">{LABELS[key]}</div>
 
-      <section className="mdf-sec">
-        <h2 className="mdf-h2">2 · When</h2>
-        <label className="mdf-field">
-          <span>Date</span>
-          <input required type="date" min={today || undefined} value={d.moveDate} onChange={(e) => set({ moveDate: e.target.value })} />
-        </label>
-        <div className="mdf-field">
-          <span>Start time (7a–5p)</span>
-          <div className="mdf-chips">
-            {TIMES.map((t) => (
-              <Chip key={t.v} on={d.moveTime === t.v} onClick={() => set({ moveTime: t.v })}>
-                {t.l}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>Service</span>
-          <div className="mdf-chips">
-            {SERVICES.map((s) => (
-              <Chip key={s.v} on={d.serviceType === s.v} onClick={() => set({ serviceType: s.v })}>
-                {s.l}
-              </Chip>
-            ))}
-          </div>
-        </div>
-      </section>
+      <div className="mdf-body" key={key}>
+        {key === "contact" && (
+          <>
+            <h2 className="mdf-q">Your contact</h2>
+            <p className="mdf-sub">Name, phone, and email.</p>
+            <label className="mdf-field">
+              <span>Full name</span>
+              <input
+                autoFocus
+                required
+                name="name"
+                value={d.name}
+                onChange={(e) => set({ name: e.target.value })}
+                placeholder="Maria Lopez"
+                autoComplete="name"
+                enterKeyHint="next"
+              />
+            </label>
+            <label className="mdf-field">
+              <span>Phone</span>
+              <input
+                required
+                name="phone"
+                type="tel"
+                inputMode="tel"
+                value={d.phone}
+                onChange={(e) => set({ phone: e.target.value })}
+                placeholder="(689) 555-0000"
+                autoComplete="tel"
+                enterKeyHint="next"
+              />
+            </label>
+            <label className="mdf-field">
+              <span>Email</span>
+              <input
+                required
+                name="email"
+                type="email"
+                inputMode="email"
+                value={d.email}
+                onChange={(e) => set({ email: e.target.value })}
+                placeholder="you@email.com"
+                autoComplete="email"
+                enterKeyHint="done"
+              />
+            </label>
+          </>
+        )}
 
-      <section className="mdf-sec">
-        <h2 className="mdf-h2">3 · Places</h2>
-        <Place side="from" />
-        <button
-          type="button"
-          className="mdf-copy"
-          onClick={() =>
-            set({
-              toHomeType: d.fromHomeType,
-              toFloor: d.fromFloor,
-              toElevator: d.fromElevator,
-              toParking: d.fromParking,
-              toLongCarry: d.fromLongCarry,
-            })
-          }
-        >
-          Copy pickup type → drop-off
-        </button>
-        <Place side="to" />
-      </section>
+        {key === "date" && (
+          <>
+            <h2 className="mdf-q">Move date</h2>
+            <p className="mdf-sub">What day is the move?</p>
+            <label className="mdf-field">
+              <span>Date</span>
+              <input
+                autoFocus
+                required
+                type="date"
+                name="moveDate"
+                min={today || undefined}
+                value={d.moveDate}
+                onChange={(e) => set({ moveDate: e.target.value })}
+              />
+            </label>
+          </>
+        )}
 
-      <section className="mdf-sec">
-        <h2 className="mdf-h2">4 · Stuff</h2>
-        <div className="mdf-field">
-          <span>Home size</span>
-          <div className="mdf-chips">
-            {PRESETS.map((p) => (
-              <Chip key={p.id} on={preset === p.id} onClick={() => pickPreset(p)}>
-                {p.l}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>Appliances</span>
-          <div className="mdf-chips">
-            {APPLIANCES.map((a) => (
-              <Chip key={a} on={d.appliances.includes(a)} onClick={() => toggle("appliances", a)}>
-                {a}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>Special / heavy</span>
-          <div className="mdf-chips">
-            {SPECIALS.map((s) => (
-              <Chip key={s} on={d.specialItems.includes(s)} onClick={() => toggle("specialItems", s)}>
-                {s}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <label className="mdf-field">
-          <span>Other items (optional)</span>
-          <textarea rows={2} value={d.invOther} onChange={(e) => set({ invOther: e.target.value })} placeholder="Anything not listed" />
-        </label>
-      </section>
-
-      <section className="mdf-sec">
-        <h2 className="mdf-h2">5 · Day of</h2>
-        <div className="mdf-field">
-          <span>Packing</span>
-          <div className="mdf-chips">
-            {PACK.map((p) => (
-              <Chip key={p.v} on={d.packingStatus === p.v} onClick={() => set({ packingStatus: p.v })}>
-                {p.l}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        {(d.packingStatus === "not-packed" || d.packingStatus === "partially-packed" || d.packingStatus === "mostly-packed") && (
-          <div className="mdf-field">
-            <span>Need packing help?</span>
-            <div className="mdf-chips">
-              {(["yes", "no"] as const).map((v) => (
-                <Chip key={v} on={d.needPackingHelp === v} onClick={() => set({ needPackingHelp: v })}>
-                  {v === "yes" ? "Yes" : "No"}
+        {key === "time" && (
+          <>
+            <h2 className="mdf-q">Start time</h2>
+            <p className="mdf-sub">Tap one — 7 AM to 5 PM.</p>
+            <div className="mdf-chips mdf-chips-grid">
+              {TIMES.map((t) => (
+                <Chip key={t.v} on={d.moveTime === t.v} onClick={() => pick({ moveTime: t.v })}>
+                  {t.l}
                 </Chip>
               ))}
             </div>
-          </div>
+          </>
         )}
-        <div className="mdf-field">
-          <span>Disassembly help?</span>
-          <div className="mdf-chips">
-            {(["yes", "no"] as const).map((v) => (
-              <Chip key={v} on={d.svcDisassembly === v} onClick={() => set({ svcDisassembly: v })}>
-                {v === "yes" ? "Yes" : "No"}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>Storage between stops?</span>
-          <div className="mdf-chips">
-            {(["yes", "no"] as const).map((v) => (
-              <Chip key={v} on={d.svcStorage === v} onClick={() => set({ svcStorage: v })}>
-                {v === "yes" ? "Yes" : "No"}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>I&apos;ll be on site for the crew</span>
-          <div className="mdf-chips">
-            {(["yes", "no"] as const).map((v) => (
-              <Chip key={v} on={d.onSiteMe === v} onClick={() => set({ onSiteMe: v })}>
-                {v === "yes" ? "Yes" : "No"}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>Pets on site?</span>
-          <div className="mdf-chips">
-            {(["yes", "no"] as const).map((v) => (
-              <Chip key={v} on={d.petsOnSite === v} onClick={() => set({ petsOnSite: v })}>
-                {v === "yes" ? "Yes" : "No"}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>Kids on site?</span>
-          <div className="mdf-chips">
-            {(["yes", "no"] as const).map((v) => (
-              <Chip key={v} on={d.kidsOnSite === v} onClick={() => set({ kidsOnSite: v })}>
-                {v === "yes" ? "Yes" : "No"}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <label className="mdf-field">
-          <span>Gate codes / notes (optional)</span>
-          <textarea rows={2} value={d.notes} onChange={(e) => set({ notes: e.target.value })} placeholder="Codes, access, anything else" />
-        </label>
-      </section>
+
+        {key === "service" && (
+          <>
+            <h2 className="mdf-q">What kind of help?</h2>
+            <p className="mdf-sub">Tap one to continue.</p>
+            <div className="mdf-chips mdf-chips-stack">
+              {SERVICES.map((s) => (
+                <Chip
+                  key={s.v}
+                  on={d.serviceType === s.v}
+                  onClick={() => pick({ serviceType: s.v })}
+                >
+                  {s.l}
+                </Chip>
+              ))}
+            </div>
+          </>
+        )}
+
+        {key === "from" && (
+          <>
+            <h2 className="mdf-q">Pickup</h2>
+            <p className="mdf-sub">Where we load.</p>
+            <Place side="from" />
+          </>
+        )}
+
+        {key === "to" && (
+          <>
+            <h2 className="mdf-q">Drop-off</h2>
+            <p className="mdf-sub">Where everything lands.</p>
+            {d.fromHomeType && (
+              <button
+                type="button"
+                className="mdf-copy"
+                onClick={() =>
+                  set({
+                    toHomeType: d.fromHomeType,
+                    toFloor: d.fromFloor,
+                    toElevator: d.fromElevator,
+                    toParking: d.fromParking,
+                    toLongCarry: d.fromLongCarry,
+                  })
+                }
+              >
+                Copy type from pickup
+              </button>
+            )}
+            <Place side="to" />
+          </>
+        )}
+
+        {key === "stuff" && (
+          <>
+            <h2 className="mdf-q">What are you moving?</h2>
+            <p className="mdf-sub">Tap a size, then any appliances or specials.</p>
+            <div className="mdf-field">
+              <span>Home size</span>
+              <div className="mdf-chips">
+                {PRESETS.map((p) => (
+                  <Chip key={p.id} on={preset === p.id} onClick={() => pickPreset(p)}>
+                    {p.l}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="mdf-field">
+              <span>Appliances</span>
+              <div className="mdf-chips">
+                {APPLIANCES.map((a) => (
+                  <Chip key={a} on={d.appliances.includes(a)} onClick={() => toggle("appliances", a)}>
+                    {a}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="mdf-field">
+              <span>Special / heavy</span>
+              <div className="mdf-chips">
+                {SPECIALS.map((s) => (
+                  <Chip key={s} on={d.specialItems.includes(s)} onClick={() => toggle("specialItems", s)}>
+                    {s}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <label className="mdf-field">
+              <span>Other items (optional)</span>
+              <textarea
+                rows={2}
+                value={d.invOther}
+                onChange={(e) => set({ invOther: e.target.value })}
+                placeholder="Anything not listed"
+                enterKeyHint="done"
+              />
+            </label>
+          </>
+        )}
+
+        {key === "dayof" && (
+          <>
+            <h2 className="mdf-q">Day-of details</h2>
+            <p className="mdf-sub">Packing, services, and who&apos;s there.</p>
+            <div className="mdf-field">
+              <span>How packed?</span>
+              <div className="mdf-chips">
+                {PACK.map((p) => (
+                  <Chip
+                    key={p.v}
+                    on={d.packingStatus === p.v}
+                    onClick={() => set({ packingStatus: p.v, needPackingHelp: p.v === "fully-packed" ? "no" : d.needPackingHelp })}
+                  >
+                    {p.l}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            {d.packingStatus && d.packingStatus !== "fully-packed" && (
+              <div className="mdf-field">
+                <span>Need packing help?</span>
+                <div className="mdf-chips">
+                  {(["yes", "no"] as const).map((v) => (
+                    <Chip key={v} on={d.needPackingHelp === v} onClick={() => set({ needPackingHelp: v })}>
+                      {v === "yes" ? "Yes" : "No"}
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="mdf-field">
+              <span>Disassembly help?</span>
+              <div className="mdf-chips">
+                {(["yes", "no"] as const).map((v) => (
+                  <Chip key={v} on={d.svcDisassembly === v} onClick={() => set({ svcDisassembly: v })}>
+                    {v === "yes" ? "Yes" : "No"}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="mdf-field">
+              <span>Storage between stops?</span>
+              <div className="mdf-chips">
+                {(["yes", "no"] as const).map((v) => (
+                  <Chip key={v} on={d.svcStorage === v} onClick={() => set({ svcStorage: v })}>
+                    {v === "yes" ? "Yes" : "No"}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="mdf-field">
+              <span>I&apos;ll meet the crew on site</span>
+              <div className="mdf-chips">
+                {(["yes", "no"] as const).map((v) => (
+                  <Chip key={v} on={d.onSiteMe === v} onClick={() => set({ onSiteMe: v })}>
+                    {v === "yes" ? "Yes" : "No"}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="mdf-field">
+              <span>Pets on site?</span>
+              <div className="mdf-chips">
+                {(["yes", "no"] as const).map((v) => (
+                  <Chip key={v} on={d.petsOnSite === v} onClick={() => set({ petsOnSite: v })}>
+                    {v === "yes" ? "Yes" : "No"}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <div className="mdf-field">
+              <span>Kids on site?</span>
+              <div className="mdf-chips">
+                {(["yes", "no"] as const).map((v) => (
+                  <Chip key={v} on={d.kidsOnSite === v} onClick={() => set({ kidsOnSite: v })}>
+                    {v === "yes" ? "Yes" : "No"}
+                  </Chip>
+                ))}
+              </div>
+            </div>
+            <label className="mdf-field">
+              <span>Gate codes / notes (optional)</span>
+              <textarea
+                rows={3}
+                value={d.notes}
+                onChange={(e) => set({ notes: e.target.value })}
+                placeholder="Codes, access, anything else"
+                enterKeyHint="done"
+              />
+            </label>
+          </>
+        )}
+      </div>
 
       {err && <div className="mdf-err">{err}</div>}
 
       <div className="mdf-bar">
-        <button type="submit" className="mdf-submit" disabled={!valid || busy}>
-          {busy ? "Sending…" : "Send to crew"}
-        </button>
+        {step > 0 && (
+          <button type="button" className="mdf-back" onClick={goBack} disabled={busy}>
+            Back
+          </button>
+        )}
+        {(!tapOnly || isLast) && (
+          <button type="submit" className="mdf-submit" disabled={!canContinue || busy}>
+            {busy ? "Sending…" : isLast ? "Send to crew" : "Continue"}
+          </button>
+        )}
+        {tapOnly && !isLast && (
+          <p className="mdf-hint">Tap an option</p>
+        )}
       </div>
     </form>
   );
