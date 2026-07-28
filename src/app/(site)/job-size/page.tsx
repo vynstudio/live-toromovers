@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-/** Legacy path — keep for old SMS links. */
+/** Legacy path → moving day checklist */
 export default function JobSizeRedirectPage() {
-  redirect("/your-move");
+  redirect("/move-day-checklist");
 }

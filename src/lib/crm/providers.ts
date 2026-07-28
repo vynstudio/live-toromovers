@@ -20,6 +20,8 @@ export async function sendEmail(opts: {
   text?: string;
   replyTo?: string;
   fromName?: string;
+  /** Base64-encoded file attachments (Resend). */
+  attachments?: { filename: string; content: string }[];
 }): Promise<ChannelResult> {
   const apiKey = process.env.RESEND_API_KEY;
   // Client-facing from address (must be verified in Resend)
@@ -41,6 +43,9 @@ export async function sendEmail(opts: {
         subject: opts.subject,
         html: opts.html,
         text: opts.text,
+        ...(opts.attachments?.length
+          ? { attachments: opts.attachments }
+          : {}),
       }),
     });
     if (!res.ok) {
@@ -141,6 +146,48 @@ export async function sendTelegram(
     return { ok: true, channel: "telegram" };
   } catch (err) {
     console.error("[crm/telegram] threw", err);
+    return { ok: false, channel: "telegram", detail: "threw" };
+  }
+}
+
+/** Send a PDF (or any file) to the team Telegram chat. */
+export async function sendTelegramDocument(opts: {
+  filename: string;
+  bytes: Buffer;
+  caption?: string;
+}): Promise<ChannelResult> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) {
+    return {
+      ok: false,
+      channel: "telegram",
+      detail: "TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID missing",
+    };
+  }
+  try {
+    const form = new FormData();
+    form.append("chat_id", chatId);
+    if (opts.caption) {
+      form.append("caption", opts.caption.slice(0, 1024));
+    }
+    const blob = new Blob([new Uint8Array(opts.bytes)], {
+      type: "application/pdf",
+    });
+    form.append("document", blob, opts.filename);
+
+    const res = await fetch(
+      `https://api.telegram.org/bot${token}/sendDocument`,
+      { method: "POST", body: form },
+    );
+    if (!res.ok) {
+      const t = await res.text().catch(() => "");
+      console.error("[crm/telegram-doc]", res.status, t.slice(0, 200));
+      return { ok: false, channel: "telegram", detail: `HTTP ${res.status}` };
+    }
+    return { ok: true, channel: "telegram" };
+  } catch (err) {
+    console.error("[crm/telegram-doc] threw", err);
     return { ok: false, channel: "telegram", detail: "threw" };
   }
 }

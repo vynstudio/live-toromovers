@@ -7,7 +7,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { GoogleAddressInput } from "./google-address-input";
+import { AddressAutocomplete } from "./address-autocomplete";
 
 type Yn = "" | "No" | "Yes";
 
@@ -304,10 +304,10 @@ export function JobSizeForm() {
   if (done) {
     return (
       <div className="jsf-done">
-        <h2>Got it. Thank you.</h2>
+        <h2>Checklist received. Thank you.</h2>
         <p>
-          We received your move details and will set the right crew. If we need
-          anything else, we’ll text or call.
+          We got your moving day checklist and will set the right crew. If we
+          need anything else, we’ll text or call.
         </p>
         <p>
           <a href="tel:+16896002720">(689) 600-2720</a>
@@ -414,7 +414,7 @@ export function JobSizeForm() {
         <label className="jsf-label" htmlFor="jsf-from">
           Full street address
         </label>
-        <GoogleAddressInput
+        <AddressAutocomplete
           id="jsf-from"
           name="fromAddress"
           value={fromAddress}
@@ -442,7 +442,7 @@ export function JobSizeForm() {
         <label className="jsf-label" htmlFor="jsf-to">
           Full street address
         </label>
-        <GoogleAddressInput
+        <AddressAutocomplete
           id="jsf-to"
           name="toAddress"
           value={toAddress}

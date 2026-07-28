@@ -28,7 +28,9 @@ export function StickyCta() {
     pathname === "/job-size" ||
     !!pathname?.startsWith("/job-size/") ||
     pathname === "/your-move" ||
-    !!pathname?.startsWith("/your-move/");
+    !!pathname?.startsWith("/your-move/") ||
+    pathname === "/move-day-checklist" ||
+    !!pathname?.startsWith("/move-day-checklist/");
 
   useEffect(() => {
     if (hide) return;

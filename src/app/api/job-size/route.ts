@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
-import { sendEmail, sendTelegram } from "@/lib/crm/providers";
+import {
+  sendEmail,
+  sendTelegram,
+  sendTelegramDocument,
+} from "@/lib/crm/providers";
+import { buildMoveDayPdf, safePdfFilename } from "@/lib/move-day-pdf";
 
 /**
- * Post-book /your-move form → team email (Resend) + one Telegram message.
+ * Moving day checklist form → email (PDF attach) + Telegram (message + PDF).
  */
 
 type Inventory = Record<string, number>;
@@ -220,7 +225,7 @@ export async function POST(req: Request) {
   const hint = crewHint(size, packed, access, specials);
 
   const text = [
-    "📦 YOUR MOVE — booked client",
+    "📋 MOVING DAY CHECKLIST — booked client",
     "",
     `Name: ${name}`,
     `Phone: ${phone}`,
@@ -240,12 +245,14 @@ export async function POST(req: Request) {
     notes ? `\nNotes: ${notes}` : "",
     "",
     `→ Crew: ${hint}`,
+    "",
+    "PDF attached for print / share with crew.",
   ]
     .filter((line) => line !== undefined)
     .join("\n");
 
   // Telegram hard limit 4096 — keep a margin
-  const TELEGRAM_MAX = 4000;
+  const TELEGRAM_MAX = 3500;
   const telegramText =
     text.length <= TELEGRAM_MAX
       ? text
@@ -259,8 +266,9 @@ export async function POST(req: Request) {
 
   const html = `
   <div style="max-width:640px;margin:0 auto;padding:24px;background:#fff;font:14px/1.5 system-ui,sans-serif;color:#0a0a0a">
-    <h2 style="margin:0 0 4px;font:700 18px/1.3 system-ui,sans-serif">Your move — ${escapeHtml(name)}</h2>
+    <h2 style="margin:0 0 4px;font:700 18px/1.3 system-ui,sans-serif">Moving day checklist — ${escapeHtml(name)}</h2>
     <p style="margin:0 0 16px;color:#666;font-size:13px">${escapeHtml(schedule)} · ${escapeHtml(hint)}</p>
+    <p style="margin:0 0 12px;font-size:13px;color:#333">PDF checklist attached for the crew.</p>
     <table style="width:100%;border-collapse:collapse;border:1px solid #eee;border-radius:8px">
       ${row("Name", name)}
       ${row("Phone", phone)}
@@ -279,28 +287,54 @@ export async function POST(req: Request) {
     </table>
   </div>`;
 
-  const [emailResult, telegramResult] = await Promise.all([
+  const pdfBytes = buildMoveDayPdf({
+    name,
+    phone,
+    email: email || undefined,
+    when: schedule,
+    pickup: pickupLine,
+    dropoff: dropoffLine,
+    size,
+    packed,
+    access: accessLine,
+    specials: specialsLine,
+    inventory: invText || "—",
+    notes: notes || undefined,
+    crewHint: hint,
+  });
+  const pdfName = safePdfFilename(name, moveDate);
+  const pdfBase64 = pdfBytes.toString("base64");
+
+  const [emailResult, telegramMsg, telegramDoc] = await Promise.all([
     sendEmail({
       to,
-      subject: `Your move — ${name} · ${dateLabel} ${timeLabel} · ${size}`,
+      subject: `Moving day checklist — ${name} · ${dateLabel} ${timeLabel} · ${size}`,
       html,
       text,
       replyTo: email || undefined,
       fromName: "Toro Movers",
+      attachments: [{ filename: pdfName, content: pdfBase64 }],
     }),
     sendTelegram(telegramText),
+    sendTelegramDocument({
+      filename: pdfName,
+      bytes: pdfBytes,
+      caption: `📋 ${name} · ${schedule} · ${size}`,
+    }),
   ]);
 
   const emailed = emailResult.ok;
-  const telegrammed = telegramResult.ok;
+  const telegrammed = telegramMsg.ok || telegramDoc.ok;
 
   if (!emailed && !telegrammed) {
     console.error(
-      "[job-size] no channel delivered",
+      "[move-day] no channel delivered",
       "email=",
       emailResult.detail,
-      "telegram=",
-      telegramResult.detail,
+      "tg-msg=",
+      telegramMsg.detail,
+      "tg-doc=",
+      telegramDoc.detail,
     );
     return NextResponse.json(
       {
@@ -308,7 +342,8 @@ export async function POST(req: Request) {
         error: "delivery_failed",
         detail: {
           email: emailResult.detail,
-          telegram: telegramResult.detail,
+          telegram: telegramMsg.detail,
+          pdf: telegramDoc.detail,
         },
       },
       { status: 502 },
@@ -316,15 +351,19 @@ export async function POST(req: Request) {
   }
 
   if (!emailed) {
-    console.error("[job-size] email failed", emailResult.detail, "to=", to);
+    console.error("[move-day] email failed", emailResult.detail, "to=", to);
   }
-  if (!telegrammed) {
-    console.error("[job-size] telegram failed", telegramResult.detail);
+  if (!telegramMsg.ok) {
+    console.error("[move-day] telegram msg failed", telegramMsg.detail);
+  }
+  if (!telegramDoc.ok) {
+    console.error("[move-day] telegram pdf failed", telegramDoc.detail);
   }
 
   return NextResponse.json({
     ok: true,
     emailed,
     telegrammed,
+    pdf: telegramDoc.ok || emailed,
   });
 }
