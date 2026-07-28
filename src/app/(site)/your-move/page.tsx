@@ -28,7 +28,8 @@ export default function YourMovePage() {
       <div className="jsf-wrap">
         <h1 className="jsf-title">How big is your move?</h1>
         <p className="jsf-lede">
-          Addresses + a few quick questions so we send the right crew.
+          Date, start time, addresses, and what you’re moving — so we send the
+          right crew.
         </p>
         <JobSizeForm />
       </div>
