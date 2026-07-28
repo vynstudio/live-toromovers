@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * job-size.toromovers.net → serve /job-size (keep subdomain in the bar).
+ * job-size.toromovers.net → serve /your-move (keep subdomain in the bar).
  * API routes pass through so the form can POST to /api/job-size on the same host.
  */
 export function middleware(request: NextRequest) {
@@ -25,15 +25,28 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (pathname === "/job-size" || pathname.startsWith("/job-size/")) {
+  if (
+    pathname === "/your-move" ||
+    pathname.startsWith("/your-move/") ||
+    pathname === "/job-size" ||
+    pathname.startsWith("/job-size/")
+  ) {
+    // Canonical form path under the subdomain
+    if (pathname.startsWith("/job-size")) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/your-move";
+      return NextResponse.rewrite(url);
+    }
     return NextResponse.next();
   }
 
   const url = request.nextUrl.clone();
-  url.pathname = "/job-size";
+  url.pathname = "/your-move";
   return NextResponse.rewrite(url);
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js|map|txt|xml|webmanifest)$).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|css|js|map|txt|xml|webmanifest)$).*)",
+  ],
 };

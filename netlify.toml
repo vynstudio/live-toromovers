@@ -25,6 +25,6 @@
 # 301 to this site (see docs/domain-consolidation.md). Do not re-add
 # toromoveit.com as a content host — SEO home is toromovers.net only.
 
-# Post-book job-size form: job-size.toromovers.net is rewritten to /job-size
-# via src/middleware.ts (keeps subdomain URL). Path also works:
-# https://toromovers.net/job-size
+# Post-book form: https://toromovers.net/your-move
+# Subdomain job-size.toromovers.net rewrites to /your-move (src/middleware.ts).
+# Legacy /job-size redirects to /your-move.
