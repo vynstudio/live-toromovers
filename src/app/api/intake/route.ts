@@ -72,12 +72,8 @@ const PACKING_LABELS: Record<string, string> = {
   "not-packed": "Not packed yet",
 };
 
-const TELEGRAM_MAX = 3900;
-
-function mapsUrl(address?: string): string | null {
-  if (!address?.trim()) return null;
-  return `https://maps.google.com/?q=${encodeURIComponent(address.trim())}`;
-}
+/** Telegram hard limit is 4096; keep a safety margin. */
+const TELEGRAM_MAX = 4096;
 
 function formatTime(time?: string): string {
   if (!time) return "";
@@ -122,163 +118,120 @@ function scheduleLine(body: IntakePayload): string {
   return `${date} at ${time}`;
 }
 
-function yn(v: boolean | null | undefined, yes = "Yes", no = "No"): string {
-  if (v === true) return yes;
-  if (v === false) return no;
+function yn(v: boolean | null | undefined): string {
+  if (v === true) return "Yes";
+  if (v === false) return "No";
   return "—";
 }
 
-function endpointBlock(title: string, e?: Endpoint): string {
-  if (!e) return `${title}\n  —`;
+/** Compact one-line endpoint for a single Telegram message. */
+function endpointLine(label: string, e?: Endpoint): string {
+  if (!e) return `${label}: —`;
   const br = e.bedrooms
     ? e.bedrooms === "Studio"
       ? "Studio"
       : `${e.bedrooms} BR`
     : "";
-  const addr = [e.address || "(no address)", e.unit && `Unit ${e.unit}`]
-    .filter(Boolean)
-    .join(" · ");
-  const map = mapsUrl(e.address);
-  const lines = [
-    title,
-    `  ${addr}`,
-    map ? `  🗺 ${map}` : null,
-    e.homeType
-      ? `  ${e.homeType}${br ? ` · ${br}` : ""}`
-      : br
-        ? `  ${br}`
-        : null,
-    e.floor ? `  Floor: ${e.floor}` : null,
-    e.elevator === "yes"
-      ? "  Elevator: Yes ✓"
-      : e.elevator === "no"
-        ? "  Elevator: No"
-        : null,
-    e.stairsCount ? `  Stairs: ${e.stairsCount}` : null,
-    e.parkingNotes ? `  Parking: ${e.parkingNotes}` : null,
-    e.gateCode ? `  Gate/code: ${e.gateCode}` : null,
-    e.longCarry ? "  Long carry: Yes ⚠" : e.longCarry === false ? "  Long carry: No" : null,
-    e.hoaNotice ? "  HOA notified: Yes ✓" : e.hoaNotice === false ? "  HOA notified: Not yet" : null,
-    e.coiNeeded
-      ? `  COI required: Yes ⚠${e.coiEmail ? ` → ${e.coiEmail}` : ""}`
-      : e.coiNeeded === false
-        ? "  COI required: No / not sure"
-        : null,
-    e.accessNotes ? `  Access notes: ${e.accessNotes}` : null,
-  ].filter(Boolean) as string[];
-  return lines.join("\n");
+  const bits = [
+    [e.address || "(no address)", e.unit && `Unit ${e.unit}`].filter(Boolean).join(", "),
+    e.homeType && (br ? `${e.homeType}, ${br}` : e.homeType),
+    e.floor,
+    e.elevator === "yes" ? "Elevator" : e.elevator === "no" ? "No elevator" : null,
+    e.stairsCount && `${e.stairsCount} stairs`,
+    e.parkingNotes && `Park: ${e.parkingNotes}`,
+    e.gateCode && `Code: ${e.gateCode}`,
+    e.longCarry ? "Long carry ⚠" : null,
+    e.accessNotes,
+  ].filter(Boolean);
+  return `${label}: ${bits.join(" · ")}`;
 }
 
-function inventoryLines(inv?: IntakePayload["inventory"]): string[] {
-  if (!inv) return ["  —"];
+function inventoryCompact(inv?: IntakePayload["inventory"]): string {
+  if (!inv) return "—";
   const items = inv.items?.filter((i) => i.qty > 0) || [];
-  const lines: string[] = [];
-  const total =
-    inv.totalPieces ?? items.reduce((s, i) => s + i.qty, 0);
-  if (items.length) {
-    lines.push(`  Total pieces: ${total}`);
-    for (const i of items) lines.push(`  ${i.qty}× ${i.name}`);
-  } else {
-    lines.push("  (no checklist entries)");
-  }
-  if (inv.appliances?.length) {
-    lines.push(`  Appliances: ${inv.appliances.join(", ")}`);
-  } else {
-    lines.push("  Appliances: —");
-  }
-  if (inv.other) lines.push(`  Other: ${inv.other}`);
-  return lines;
+  const total = inv.totalPieces ?? items.reduce((s, i) => s + i.qty, 0);
+  const list = items.map((i) => `${i.qty}× ${i.name}`).join(", ");
+  const parts = [
+    items.length ? `${total} pcs: ${list}` : "no checklist",
+    inv.appliances?.length ? `Appliances: ${inv.appliances.join(", ")}` : null,
+    inv.other ? `Other: ${inv.other}` : null,
+  ].filter(Boolean);
+  return parts.join(" | ");
 }
 
-/** Full crew run sheet as ordered message chunks (Telegram 4096 limit). */
-function buildTelegramMessages(body: IntakePayload): string[] {
+/**
+ * One compact crew run sheet that must fit in a single Telegram message.
+ * If inventory is huge, trim the item list (not other fields).
+ */
+function buildTelegramText(body: IntakePayload): string {
   const c = body.contacts;
-  const time = resolveMoveTime(body);
-  const headline = [
-    body.name || "Customer",
-    body.moveDate || null,
-    time ? formatTime(time) : null,
-    body.origin?.homeType || null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  const service =
+    SERVICE_LABELS[body.serviceType || ""] || body.serviceType || "—";
+  const packing =
+    PACKING_LABELS[body.packing?.status || ""] || body.packing?.status || "—";
+  const specials = body.specialItems?.length
+    ? body.specialItems.join(", ")
+    : "—";
+  const specialsLine = body.otherSpecial
+    ? `${specials} · ${body.otherSpecial}`
+    : specials;
 
-  const msg1 = [
-    `📋 MOVE-DAY INTAKE — Toro Movers`,
-    headline,
-    `━━━━━━━━━━━━━━━━━━━━`,
-    ``,
-    `👤 CONTACT`,
-    `  Name: ${body.name || "—"}`,
-    `  Phone: ${body.phone || "—"}`,
-    `  Email: ${body.email || "—"}`,
-    `  Move: ${scheduleLine(body)}`,
-    `  Service: ${SERVICE_LABELS[body.serviceType || ""] || body.serviceType || "—"}`,
-    ``,
-    endpointBlock("📍 PICKUP", body.origin),
-    ``,
-    endpointBlock("📍 DROP-OFF", body.destination),
+  const onSite =
+    c?.onSitePickupName || c?.onSiteDropoffName
+      ? [
+          c?.onSitePickupName
+            ? `PU ${c.onSitePickupName}${c.onSitePickupPhone ? ` ${c.onSitePickupPhone}` : ""}`
+            : null,
+          c?.onSiteDropoffName
+            ? `DO ${c.onSiteDropoffName}${c.onSiteDropoffPhone ? ` ${c.onSiteDropoffPhone}` : ""}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      : c?.onSitePickupPhone || c?.onSiteDropoffPhone || c?.altPhone || "—";
+
+  const head = [
+    `📋 MOVE DAY — ${body.name || "Customer"}`,
+    `📞 ${body.phone || "—"} · ${body.email || "—"}`,
+    `🗓 ${scheduleLine(body)}`,
+    `🧰 ${service}`,
+    endpointLine("📍 PU", body.origin),
+    endpointLine("📍 DO", body.destination),
   ].join("\n");
 
-  const invLines = inventoryLines(body.inventory);
-  const specials =
-    body.specialItems?.length
-      ? body.specialItems.join(", ")
-      : "—";
-  const msg2 = [
-    `📦 INVENTORY`,
-    ...invLines,
-    ``,
-    `⚠ SPECIAL / HEAVY`,
-    `  ${specials}`,
-    body.otherSpecial ? `  Other: ${body.otherSpecial}` : "  Other: —",
+  const tail = [
+    `⚠ Special: ${specialsLine}`,
+    `🛠 Packed: ${packing}${body.packing?.needHelp ? " · needs packing help" : ""} · Disassembly: ${body.services?.disassembly ? "Yes" : "No"}`,
+    `👥 On-site: ${onSite} · Pets: ${yn(c?.petsOnSite)} · Kids: ${yn(c?.kidsOnSite)}`,
+    `📝 ${c?.specialInstructions || "—"}`,
   ].join("\n");
 
-  const msg3 = [
-    `🛠 SERVICES`,
-    `  Packing: ${PACKING_LABELS[body.packing?.status || ""] || body.packing?.status || "—"}`,
-    `  Packing help: ${body.packing?.needHelp ? "Yes" : "No"}`,
-    `  Disassembly: ${
-      body.services?.disassembly
-        ? `Yes${body.services.disassemblyItems ? ` (${body.services.disassemblyItems})` : ""}`
-        : "No"
-    }`,
-    `  Storage: ${
-      body.services?.storage
-        ? `Yes${body.services.storageNotes ? ` · ${body.services.storageNotes}` : ""}`
-        : "No"
-    }`,
-    ``,
-    `👥 DAY-OF`,
-    `  Pickup on-site: ${c?.onSitePickupName || "—"}${c?.onSitePickupPhone ? ` · ${c.onSitePickupPhone}` : ""}`,
-    `  Drop-off on-site: ${c?.onSiteDropoffName || "—"}${c?.onSiteDropoffPhone ? ` · ${c.onSiteDropoffPhone}` : ""}`,
-    `  Alt phone: ${c?.altPhone || "—"}`,
-    `  Pets: ${yn(c?.petsOnSite)}`,
-    `  Kids: ${yn(c?.kidsOnSite)}`,
-    `  Notes: ${c?.specialInstructions || "—"}`,
-  ].join("\n");
-
-  // Split any oversized chunk further (long inventory).
-  return [msg1, msg2, msg3].flatMap((chunk) => splitChunk(chunk, TELEGRAM_MAX));
-}
-
-function splitChunk(text: string, max: number): string[] {
-  if (text.length <= max) return [text];
-  const parts: string[] = [];
-  let rest = text;
-  while (rest.length > max) {
-    let cut = rest.lastIndexOf("\n", max);
-    if (cut < max * 0.5) cut = max;
-    parts.push(rest.slice(0, cut));
-    rest = rest.slice(cut).replace(/^\n+/, "");
+  // Fit inventory in remaining budget so we never split the message.
+  const budget = TELEGRAM_MAX - head.length - tail.length - 24; // "\n📦 …\n"
+  let inv = inventoryCompact(body.inventory);
+  if (inv.length > budget) {
+    const items = body.inventory?.items?.filter((i) => i.qty > 0) || [];
+    const total =
+      body.inventory?.totalPieces ?? items.reduce((s, i) => s + i.qty, 0);
+    // Keep top items by qty, then truncate.
+    const sorted = [...items].sort((a, b) => b.qty - a.qty);
+    let list = "";
+    for (const i of sorted) {
+      const bit = `${list ? ", " : ""}${i.qty}× ${i.name}`;
+      const next = `${total} pcs: ${list}${bit}`;
+      if (next.length > Math.max(80, budget - 40)) break;
+      list += bit;
+    }
+    inv = list
+      ? `${total} pcs: ${list}…`
+      : `${total} pcs (list truncated)`;
+    if (body.inventory?.appliances?.length) {
+      const a = ` | Appliances: ${body.inventory.appliances.join(", ")}`;
+      if (inv.length + a.length <= budget) inv += a;
+    }
   }
-  if (rest) parts.push(rest);
-  return parts;
-}
 
-/** Single plain-text body for email (always full, no split). */
-function buildFullText(body: IntakePayload): string {
-  return buildTelegramMessages(body).join("\n\n");
+  return [head, `📦 ${inv}`, tail].join("\n");
 }
 
 export async function POST(req: Request) {
@@ -299,12 +252,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });
   }
 
-  const fullText = buildFullText(body);
-  const telegramParts = buildTelegramMessages(body);
+  const text = buildTelegramText(body);
+  // Hard guarantee: one Telegram message only.
+  const telegramText =
+    text.length <= TELEGRAM_MAX
+      ? text
+      : text.slice(0, TELEGRAM_MAX - 1) + "…";
 
   const results = await Promise.allSettled([
-    sendEmail(body, fullText),
-    sendTelegramParts(telegramParts),
+    sendEmail(body, text),
+    sendTelegram(telegramText),
   ]);
 
   const emailed = results[0].status === "fulfilled" && results[0].value === true;
@@ -317,7 +274,7 @@ export async function POST(req: Request) {
     ok: true,
     emailed,
     telegrammed,
-    telegramParts: telegramParts.length,
+    chars: telegramText.length,
     crmed: false,
   });
 }
@@ -364,37 +321,29 @@ async function sendEmail(body: IntakePayload, text: string): Promise<boolean> {
   }
 }
 
-/** Send every chunk so inventory is never truncated away. */
-async function sendTelegramParts(parts: string[]): Promise<boolean> {
+async function sendTelegram(text: string): Promise<boolean> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return false;
-
-  let anyOk = false;
-  for (let i = 0; i < parts.length; i++) {
-    const text =
-      parts.length > 1
-        ? `${parts[i]}\n\n(${i + 1}/${parts.length})`
-        : parts[i];
-    try {
-      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text,
-          disable_web_page_preview: true,
-        }),
-      });
-      if (res.ok) anyOk = true;
-      else {
-        console.error("[intake] Telegram part failed:", i + 1, await res.text().catch(() => ""));
-      }
-    } catch (err) {
-      console.error("[intake] Telegram threw:", err);
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        disable_web_page_preview: true,
+      }),
+    });
+    if (!res.ok) {
+      console.error("[intake] Telegram failed:", await res.text().catch(() => ""));
+      return false;
     }
+    return true;
+  } catch (err) {
+    console.error("[intake] Telegram threw:", err);
+    return false;
   }
-  return anyOk;
 }
 
 function escapeHtml(s: string): string {
