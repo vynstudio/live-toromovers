@@ -7,7 +7,7 @@ import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 export const metadata: Metadata = {
   title: "Move-day intake form",
   description:
-    "Tell us everything we need to plan your move — addresses, access, inventory, special items, and day-of contacts.",
+    "Tell us everything we need to plan your move — date & time, contacts, addresses, access, item checklist, appliances, special items, and day-of details.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/intake" },
 };
@@ -35,10 +35,9 @@ export default function IntakePage() {
           <p className="intake-eyebrow">Move-day intake</p>
           <h1 className="intake-h1">Tell us everything we need to plan your move.</h1>
           <p className="intake-lede">
-            This is the detail sheet our crew will use the day of the move. The more
-            specific you are about access, special items, and quirks of the spaces,
-            the smoother the day goes. Takes about 5 minutes. We auto-save as you
-            type — come back any time.
+            Exact date and start time, contacts, access, item checklist, and day-of
+            details. About 10 quick screens — tap chips and presets to fly through.
+            Auto-saves as you go.
           </p>
         </div>
 

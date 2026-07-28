@@ -1,12 +1,39 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent, type TouchEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GoogleAddressInput } from "./google-address-input";
+
+type Yn = "yes" | "no" | "";
+type ItemCounts = Record<string, number>;
 
 const HOME_TYPES = ["Apartment", "House", "Townhome", "Studio", "Office", "Storage unit"];
 const FLOORS = ["Ground floor", "2nd floor", "3rd floor", "4th floor", "5th+ floor"];
 const BEDROOMS = ["Studio", "1", "2", "3", "4", "5+"];
+const SERVICE_TYPES = [
+  { value: "full-service", label: "Full-service move", sub: "We haul everything" },
+  { value: "labor-only", label: "Labor only", sub: "You have the truck" },
+  { value: "loading-unloading", label: "Load / unload only", sub: "POD, U-Haul, storage" },
+  { value: "packing-move", label: "Packing + move", sub: "We pack and haul" },
+];
+const PACKING_STATUS = [
+  { value: "fully-packed", label: "Fully packed", sub: "Ready to load" },
+  { value: "mostly-packed", label: "Mostly packed", sub: "A few things left" },
+  { value: "partially-packed", label: "Partially packed", sub: "Still working on it" },
+  { value: "not-packed", label: "Not packed yet", sub: "Need packing help?" },
+];
+/** One-tap crew start times (24h values for <input type="time">). */
+const TIME_CHIPS = [
+  { value: "08:00", label: "8:00 AM" },
+  { value: "09:00", label: "9:00 AM" },
+  { value: "10:00", label: "10:00 AM" },
+  { value: "11:00", label: "11:00 AM" },
+  { value: "12:00", label: "12:00 PM" },
+  { value: "13:00", label: "1:00 PM" },
+  { value: "14:00", label: "2:00 PM" },
+  { value: "15:00", label: "3:00 PM" },
+];
+const PARKING_CHIPS = ["Driveway", "Street parking", "Loading dock", "Assigned spot", "Garage"];
 const SPECIAL_OPTS = [
   "Piano",
   "Safe (>200 lb)",
@@ -18,80 +45,424 @@ const SPECIAL_OPTS = [
   "Artwork",
   "Gym equipment / treadmill",
   "Grandfather clock",
+  "Gun safe",
+  "Marble / stone table",
+  "Wine fridge / cooler",
+  "Arcade machine",
+];
+const APPLIANCE_OPTS = [
+  "Refrigerator",
+  "Washer",
+  "Dryer",
+  "Dishwasher",
+  "Stove / oven",
+  "Microwave (over-range)",
+  "Freezer",
+  "Wine fridge",
 ];
 
-const STORAGE_KEY = "toro_intake_draft";
+const INVENTORY_GROUPS: { room: string; items: string[] }[] = [
+  {
+    room: "Living room",
+    items: [
+      "Sofa / couch",
+      "Sectional",
+      "Loveseat",
+      "Recliner",
+      "Coffee table",
+      "End / side table",
+      "TV (flat screen)",
+      "TV stand / media console",
+      "Bookshelf",
+      "Entertainment center",
+      "Floor lamp",
+      "Area rug",
+    ],
+  },
+  {
+    room: "Bedroom",
+    items: [
+      "King bed (frame + mattress)",
+      "Queen bed (frame + mattress)",
+      "Full / double bed",
+      "Twin bed",
+      "Bunk bed",
+      "Dresser",
+      "Nightstand",
+      "Wardrobe / armoire",
+      "Chest of drawers",
+      "Vanity",
+      "Mirror (wall / freestanding)",
+      "Desk (bedroom)",
+    ],
+  },
+  {
+    room: "Dining / kitchen",
+    items: [
+      "Dining table",
+      "Dining chairs",
+      "Bar stools",
+      "China cabinet / hutch",
+      "Sideboard / buffet",
+      "Kitchen island (movable)",
+      "Microwave (countertop)",
+      "Small appliances box set",
+    ],
+  },
+  {
+    room: "Office / kids / other",
+    items: [
+      "Office desk",
+      "Office chair",
+      "Filing cabinet",
+      "Bookcase",
+      "Crib / toddler bed",
+      "Changing table",
+      "Toy chest",
+      "Futon / daybed",
+    ],
+  },
+  {
+    room: "Outdoor / garage",
+    items: [
+      "Patio table",
+      "Patio chairs",
+      "Grill / BBQ",
+      "Outdoor storage bin",
+      "Lawn mower / tools",
+      "Bike",
+      "Workbench",
+      "Shelving unit",
+    ],
+  },
+  {
+    room: "Boxes & misc",
+    items: [
+      "Small boxes",
+      "Medium boxes",
+      "Large boxes",
+      "Wardrobe boxes",
+      "Plastic bins",
+      "Suitcases / bags",
+      "Mirror / picture boxes",
+      "Garment bags",
+    ],
+  },
+];
+
+/** One-tap starter inventories (merge into counts — user can tweak). */
+const INVENTORY_PRESETS: { id: string; label: string; sub: string; counts: ItemCounts }[] = [
+  {
+    id: "studio",
+    label: "Studio",
+    sub: "~15 pieces",
+    counts: {
+      "Sofa / couch": 1,
+      "Coffee table": 1,
+      "TV (flat screen)": 1,
+      "TV stand / media console": 1,
+      "Queen bed (frame + mattress)": 1,
+      "Dresser": 1,
+      "Nightstand": 1,
+      "Medium boxes": 15,
+      "Large boxes": 5,
+    },
+  },
+  {
+    id: "1br",
+    label: "1 bedroom",
+    sub: "~25 pieces",
+    counts: {
+      "Sofa / couch": 1,
+      "Coffee table": 1,
+      "End / side table": 1,
+      "TV (flat screen)": 1,
+      "TV stand / media console": 1,
+      "Queen bed (frame + mattress)": 1,
+      "Dresser": 1,
+      "Nightstand": 2,
+      "Dining table": 1,
+      "Dining chairs": 4,
+      "Medium boxes": 20,
+      "Large boxes": 8,
+      "Wardrobe boxes": 2,
+    },
+  },
+  {
+    id: "2br",
+    label: "2 bedroom",
+    sub: "~40 pieces",
+    counts: {
+      "Sofa / couch": 1,
+      "Sectional": 0,
+      "Loveseat": 1,
+      "Coffee table": 1,
+      "End / side table": 2,
+      "TV (flat screen)": 1,
+      "TV stand / media console": 1,
+      "Bookshelf": 1,
+      "Queen bed (frame + mattress)": 1,
+      "Full / double bed": 1,
+      "Dresser": 2,
+      "Nightstand": 3,
+      "Dining table": 1,
+      "Dining chairs": 4,
+      "Medium boxes": 30,
+      "Large boxes": 12,
+      "Wardrobe boxes": 3,
+      "Plastic bins": 4,
+    },
+  },
+  {
+    id: "3br",
+    label: "3+ bedroom",
+    sub: "~55 pieces",
+    counts: {
+      "Sofa / couch": 1,
+      "Sectional": 1,
+      "Coffee table": 1,
+      "End / side table": 2,
+      "TV (flat screen)": 2,
+      "TV stand / media console": 1,
+      "Bookshelf": 2,
+      "King bed (frame + mattress)": 1,
+      "Queen bed (frame + mattress)": 1,
+      "Twin bed": 1,
+      "Dresser": 3,
+      "Nightstand": 4,
+      "Dining table": 1,
+      "Dining chairs": 6,
+      "Office desk": 1,
+      "Office chair": 1,
+      "Medium boxes": 40,
+      "Large boxes": 15,
+      "Wardrobe boxes": 4,
+      "Plastic bins": 6,
+    },
+  },
+];
+
+const STORAGE_KEY = "toro_intake_draft_v3";
+const AUTO_ADVANCE_MS = 180;
 
 type Data = {
-  // basics
-  name: string; phone: string; email: string; moveDate: string;
-  // origin
-  fromAddress: string; fromHomeType: string; bedrooms: string;
-  fromFloor: string; fromElevator: "yes" | "no" | ""; fromStairs: string;
-  fromHoa: "yes" | "no" | ""; fromCoi: "yes" | "no" | "";
-  fromParking: string; fromAccess: string;
-  // destination
-  toAddress: string; toHomeType: string;
-  toFloor: string; toElevator: "yes" | "no" | ""; toStairs: string;
-  toHoa: "yes" | "no" | ""; toCoi: "yes" | "no" | "";
-  toParking: string; toAccess: string;
-  // inventory
-  invBoxes: string; invLarge: string; invAwkward: string;
-  // special
-  specialItems: string[]; otherSpecial: string;
-  // services
-  svcDisassembly: "yes" | "no" | ""; svcDisassemblyItems: string;
-  svcStorage: "yes" | "no" | ""; svcStorageNotes: string;
-  // day-of
-  altPhone: string; specialInstructions: string;
+  name: string;
+  phone: string;
+  email: string;
+  moveDate: string;
+  moveTime: string;
+  serviceType: string;
+  fromAddress: string;
+  fromUnit: string;
+  fromHomeType: string;
+  bedrooms: string;
+  fromFloor: string;
+  fromElevator: Yn;
+  fromStairs: string;
+  fromHoa: Yn;
+  fromCoi: Yn;
+  fromCoiEmail: string;
+  fromParking: string;
+  fromGateCode: string;
+  fromLongCarry: Yn;
+  fromAccess: string;
+  toAddress: string;
+  toUnit: string;
+  toHomeType: string;
+  toFloor: string;
+  toElevator: Yn;
+  toStairs: string;
+  toHoa: Yn;
+  toCoi: Yn;
+  toCoiEmail: string;
+  toParking: string;
+  toGateCode: string;
+  toLongCarry: Yn;
+  toAccess: string;
+  itemCounts: ItemCounts;
+  invOther: string;
+  appliances: string[];
+  specialItems: string[];
+  otherSpecial: string;
+  packingStatus: string;
+  needPackingHelp: Yn;
+  svcDisassembly: Yn;
+  svcDisassemblyItems: string;
+  svcStorage: Yn;
+  svcStorageNotes: string;
+  onSitePickupName: string;
+  onSitePickupPhone: string;
+  onSiteDropoffName: string;
+  onSiteDropoffPhone: string;
+  altPhone: string;
+  petsOnSite: Yn;
+  kidsOnSite: Yn;
+  specialInstructions: string;
 };
 
 const initial: Data = {
-  name: "", phone: "", email: "", moveDate: "",
-  fromAddress: "", fromHomeType: "", bedrooms: "", fromFloor: "", fromElevator: "", fromStairs: "",
-  fromHoa: "", fromCoi: "", fromParking: "", fromAccess: "",
-  toAddress: "", toHomeType: "", toFloor: "", toElevator: "", toStairs: "",
-  toHoa: "", toCoi: "", toParking: "", toAccess: "",
-  invBoxes: "", invLarge: "", invAwkward: "",
-  specialItems: [], otherSpecial: "",
-  svcDisassembly: "", svcDisassemblyItems: "",
-  svcStorage: "", svcStorageNotes: "",
-  altPhone: "", specialInstructions: "",
+  name: "",
+  phone: "",
+  email: "",
+  moveDate: "",
+  moveTime: "",
+  serviceType: "",
+  fromAddress: "",
+  fromUnit: "",
+  fromHomeType: "",
+  bedrooms: "",
+  fromFloor: "",
+  fromElevator: "",
+  fromStairs: "",
+  fromHoa: "",
+  fromCoi: "",
+  fromCoiEmail: "",
+  fromParking: "",
+  fromGateCode: "",
+  fromLongCarry: "",
+  fromAccess: "",
+  toAddress: "",
+  toUnit: "",
+  toHomeType: "",
+  toFloor: "",
+  toElevator: "",
+  toStairs: "",
+  toHoa: "",
+  toCoi: "",
+  toCoiEmail: "",
+  toParking: "",
+  toGateCode: "",
+  toLongCarry: "",
+  toAccess: "",
+  itemCounts: {},
+  invOther: "",
+  appliances: [],
+  specialItems: [],
+  otherSpecial: "",
+  packingStatus: "",
+  needPackingHelp: "",
+  svcDisassembly: "",
+  svcDisassemblyItems: "",
+  svcStorage: "",
+  svcStorageNotes: "",
+  onSitePickupName: "",
+  onSitePickupPhone: "",
+  onSiteDropoffName: "",
+  onSiteDropoffPhone: "",
+  altPhone: "",
+  petsOnSite: "",
+  kidsOnSite: "",
+  specialInstructions: "",
 };
 
-// Multi-floor home types: ask floor + elevator. Single-level skips that.
 const isMultiFloor = (homeType: string) =>
   ["Apartment", "Townhome", "Office"].includes(homeType);
-// HOA / COI questions only matter for apartments + townhomes (buildings).
 const hasHoa = (homeType: string) =>
   ["Apartment", "Townhome"].includes(homeType);
-// Bedrooms applies to anything you live in; skip for office / storage.
 const hasBedrooms = (homeType: string) =>
   !["Office", "Storage unit"].includes(homeType);
 
-// Step keys, evaluated against data to skip irrelevant ones.
+/**
+ * Consolidated wizard (~10 screens max instead of ~20).
+ * Optional access/extras stay optional so people can fly through.
+ */
 type StepKey =
-  | "basics"
-  | "fromAddress" | "fromHomeType" | "size" | "fromFloor" | "fromHoa" | "fromParking"
-  | "toAddress" | "toHomeType" | "toFloor" | "toHoa" | "toParking"
-  | "inventory" | "special" | "services" | "dayOf";
+  | "contact"
+  | "service"
+  | "from"
+  | "fromAccess"
+  | "to"
+  | "toAccess"
+  | "inventory"
+  | "extras"
+  | "packing"
+  | "dayOf";
 
 const ALL_STEPS: StepKey[] = [
-  "basics",
-  "fromAddress", "fromHomeType", "size", "fromFloor", "fromHoa", "fromParking",
-  "toAddress", "toHomeType", "toFloor", "toHoa", "toParking",
-  "inventory", "special", "services", "dayOf",
+  "contact",
+  "service",
+  "from",
+  "fromAccess",
+  "to",
+  "toAccess",
+  "inventory",
+  "extras",
+  "packing",
+  "dayOf",
 ];
 
-function visibleSteps(d: Data): StepKey[] {
-  return ALL_STEPS.filter((k) => {
-    if (k === "size") return hasBedrooms(d.fromHomeType);
-    if (k === "fromFloor") return isMultiFloor(d.fromHomeType);
-    if (k === "fromHoa") return hasHoa(d.fromHomeType);
-    if (k === "toFloor") return isMultiFloor(d.toHomeType);
-    if (k === "toHoa") return hasHoa(d.toHomeType);
-    return true;
-  });
+const STEP_META: Record<StepKey, { section: string; label: string }> = {
+  contact: { section: "You", label: "Contact & schedule" },
+  service: { section: "You", label: "Service" },
+  from: { section: "Pickup", label: "Pickup place" },
+  fromAccess: { section: "Pickup", label: "Pickup access" },
+  to: { section: "Drop-off", label: "Drop-off place" },
+  toAccess: { section: "Drop-off", label: "Drop-off access" },
+  inventory: { section: "Stuff", label: "Item checklist" },
+  extras: { section: "Stuff", label: "Appliances & specials" },
+  packing: { section: "Stuff", label: "Packing & services" },
+  dayOf: { section: "Day-of", label: "Who’s on site" },
+};
+
+function inventorySelected(counts: ItemCounts): { name: string; qty: number }[] {
+  return Object.entries(counts)
+    .filter(([, qty]) => qty > 0)
+    .map(([name, qty]) => ({ name, qty }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function inventoryTotal(counts: ItemCounts): number {
+  return Object.values(counts).reduce((sum, n) => sum + (n || 0), 0);
+}
+
+function formatScheduleConfirm(date: string, time: string): string {
+  try {
+    const [y, m, d] = date.split("-").map(Number);
+    const [hh, mm] = time.split(":").map(Number);
+    if (!y || !m || !d || Number.isNaN(hh) || Number.isNaN(mm)) {
+      return `${date} at ${time}`;
+    }
+    const dt = new Date(y, m - 1, d, hh, mm);
+    return dt.toLocaleString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return `${date} at ${time}`;
+  }
+}
+
+function isFromPlaceValid(d: Data): boolean {
+  if (!d.fromAddress.trim() || !d.fromHomeType) return false;
+  if (hasBedrooms(d.fromHomeType) && !d.bedrooms) return false;
+  if (isMultiFloor(d.fromHomeType) && (!d.fromFloor || !d.fromElevator)) return false;
+  return true;
+}
+
+function isToPlaceValid(d: Data): boolean {
+  if (!d.toAddress.trim() || !d.toHomeType) return false;
+  if (isMultiFloor(d.toHomeType) && (!d.toFloor || !d.toElevator)) return false;
+  return true;
+}
+
+function isFromAccessValid(d: Data): boolean {
+  if (hasHoa(d.fromHomeType) && (!d.fromHoa || !d.fromCoi)) return false;
+  return true;
+}
+
+function isToAccessValid(d: Data): boolean {
+  if (hasHoa(d.toHomeType) && (!d.toHoa || !d.toCoi)) return false;
+  return true;
+}
+
+function isPackingValid(d: Data): boolean {
+  if (!d.packingStatus) return false;
+  if (!d.svcDisassembly || !d.svcStorage) return false;
+  return true;
 }
 
 export function IntakeForm() {
@@ -102,10 +473,21 @@ export function IntakeForm() {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activePreset, setActivePreset] = useState<string | null>(null);
+  const [flash, setFlash] = useState(false);
+  const [openRooms, setOpenRooms] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(INVENTORY_GROUPS.map((g, i) => [g.room, i < 2])),
+  );
 
-  const update = (patch: Partial<Data>) => setData((d) => ({ ...d, ...patch }));
+  const advanceTimer = useRef<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
-  // Prefill from URL params (Diler can pre-link a customer).
+  const update = useCallback((patch: Partial<Data>) => {
+    setData((d) => ({ ...d, ...patch }));
+  }, []);
+
+  // Prefill from URL params (ops can pre-link a customer).
   useEffect(() => {
     const sp = searchParams;
     const patch: Partial<Data> = {};
@@ -113,124 +495,290 @@ export function IntakeForm() {
     const p = sp.get("phone"); if (p) patch.phone = p;
     const e = sp.get("email"); if (e) patch.email = e;
     const dd = sp.get("date"); if (dd) patch.moveDate = dd;
+    const tm = sp.get("time"); if (tm) patch.moveTime = tm;
     const f = sp.get("from"); if (f) patch.fromAddress = f;
     const t = sp.get("to"); if (t) patch.toAddress = t;
+    const svc = sp.get("service"); if (svc) patch.serviceType = svc;
     if (Object.keys(patch).length) setData((d) => ({ ...d, ...patch }));
   }, [searchParams]);
 
   // Load draft once on mount.
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("toro_intake_draft_v2");
       if (raw) {
-        const parsed = JSON.parse(raw) as Partial<Data>;
-        setData((d) => ({ ...d, ...parsed }));
+        const parsed = JSON.parse(raw) as Partial<Data> & {
+          specificTime?: string;
+          timeWindow?: string;
+        };
+        const moveTime =
+          parsed.moveTime ||
+          parsed.specificTime ||
+          (parsed.timeWindow && /^\d{1,2}:\d{2}$/.test(parsed.timeWindow) ? parsed.timeWindow : "") ||
+          "";
+        setData((d) => ({
+          ...d,
+          ...parsed,
+          moveTime: moveTime || d.moveTime,
+          itemCounts: { ...d.itemCounts, ...(parsed.itemCounts || {}) },
+          specialItems: parsed.specialItems || d.specialItems,
+          appliances: parsed.appliances || d.appliances,
+        }));
       }
     } catch { /* ignore */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Save draft on every change.
+  // Debounced draft save (smoother typing on mobile).
   useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+    const t = window.setTimeout(() => {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+    }, 200);
+    return () => window.clearTimeout(t);
   }, [data]);
 
-  const steps = useMemo(() => visibleSteps(data), [data]);
+  const steps = ALL_STEPS;
   const currentKey = steps[Math.min(step, steps.length - 1)];
   const totalSteps = steps.length;
   const isLast = step >= steps.length - 1;
+  const meta = STEP_META[currentKey];
 
-  const isStepValid = (key: StepKey): boolean => {
+  const isStepValid = useCallback((key: StepKey, d: Data = data): boolean => {
     switch (key) {
-      case "basics":
-        return !!(data.name.trim() && data.phone.trim() && data.email.trim());
-      case "fromAddress": return !!data.fromAddress.trim();
-      case "fromHomeType": return !!data.fromHomeType;
-      case "size": return !!data.bedrooms;
-      case "fromFloor": return !!data.fromFloor && !!data.fromElevator;
-      case "fromHoa": return !!data.fromHoa && !!data.fromCoi;
-      case "fromParking": return true; // optional
-      case "toAddress": return !!data.toAddress.trim();
-      case "toHomeType": return !!data.toHomeType;
-      case "toFloor": return !!data.toFloor && !!data.toElevator;
-      case "toHoa": return !!data.toHoa && !!data.toCoi;
-      case "toParking": return true;
-      case "inventory": return true; // optional rough numbers
-      case "special": return true;
-      case "services":
-        return !!data.svcDisassembly && !!data.svcStorage;
-      case "dayOf": return true;
+      case "contact":
+        return !!(d.name.trim() && d.phone.trim() && d.email.trim() && d.moveDate.trim() && d.moveTime.trim());
+      case "service":
+        return !!d.serviceType;
+      case "from":
+        return isFromPlaceValid(d);
+      case "fromAccess":
+        return isFromAccessValid(d);
+      case "to":
+        return isToPlaceValid(d);
+      case "toAccess":
+        return isToAccessValid(d);
+      case "inventory":
+      case "extras":
+      case "dayOf":
+        return true;
+      case "packing":
+        return isPackingValid(d);
     }
-  };
+  }, [data]);
 
   const canAdvance = isStepValid(currentKey);
+
+  const goNext = useCallback(() => {
+    setFlash(true);
+    window.setTimeout(() => setFlash(false), 220);
+    setStep((s) => Math.min(s + 1, steps.length - 1));
+    // Scroll form top into view on step change (mobile).
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [steps.length]);
 
   const next = () => {
     if (!canAdvance) return;
     if (isLast) {
-      submit();
+      void submit();
       return;
     }
-    setStep((s) => Math.min(s + 1, steps.length - 1));
+    goNext();
   };
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
-  // Auto-advance after a single-choice tap on these one-question steps —
-  // saves the customer the extra "Continue" tap. Small delay shows the
-  // selected state before sliding to the next screen.
-  const AUTO_ADVANCE: Partial<Record<StepKey, true>> = {
-    fromHomeType: true,
-    toHomeType: true,
-    size: true,
+  const scheduleAdvance = useCallback(() => {
+    if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
+    advanceTimer.current = window.setTimeout(() => {
+      setStep((s) => Math.min(s + 1, ALL_STEPS.length - 1));
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, AUTO_ADVANCE_MS);
+  }, []);
+
+  /** Patch + auto-advance when the step becomes valid (single-choice steps). */
+  const pickAndAdvance = (patch: Partial<Data>, onlyIf: StepKey[] = ["service"]) => {
+    setData((d) => {
+      const nextData = { ...d, ...patch };
+      if (onlyIf.includes(currentKey) && isStepValid(currentKey, nextData)) {
+        // Defer advance so state paints first.
+        if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
+        advanceTimer.current = window.setTimeout(() => {
+          setFlash(true);
+          window.setTimeout(() => setFlash(false), 220);
+          setStep((s) => Math.min(s + 1, ALL_STEPS.length - 1));
+          formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, AUTO_ADVANCE_MS);
+      }
+      return nextData;
+    });
   };
-  const advanceTimer = useRef<number | null>(null);
-  const pickAndAdvance = (patch: Partial<Data>) => {
-    update(patch);
-    if (AUTO_ADVANCE[currentKey]) {
-      if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
-      advanceTimer.current = window.setTimeout(() => {
-        setStep((s) => Math.min(s + 1, steps.length - 1));
-      }, 260);
-    }
-  };
+
   useEffect(() => {
     return () => {
       if (advanceTimer.current) window.clearTimeout(advanceTimer.current);
     };
   }, []);
 
+  const setItemQty = (item: string, qty: number) => {
+    const nextQty = Math.max(0, Math.min(99, qty));
+    setActivePreset(null);
+    setData((d) => {
+      const itemCounts = { ...d.itemCounts };
+      if (nextQty <= 0) delete itemCounts[item];
+      else itemCounts[item] = nextQty;
+      return { ...d, itemCounts };
+    });
+  };
+
+  const applyPreset = (preset: (typeof INVENTORY_PRESETS)[number]) => {
+    setActivePreset(preset.id);
+    // Drop zero entries from preset counts.
+    const cleaned: ItemCounts = {};
+    for (const [k, v] of Object.entries(preset.counts)) {
+      if (v > 0) cleaned[k] = v;
+    }
+    setData((d) => ({ ...d, itemCounts: cleaned }));
+    // Open rooms that have items in the preset.
+    setOpenRooms((rooms) => {
+      const next = { ...rooms };
+      for (const g of INVENTORY_GROUPS) {
+        next[g.room] = g.items.some((i) => (cleaned[i] || 0) > 0);
+      }
+      return next;
+    });
+  };
+
+  const clearInventory = () => {
+    setActivePreset(null);
+    update({ itemCounts: {} });
+  };
+
+  const toggleList = (field: "specialItems" | "appliances", opt: string) => {
+    setData((d) => {
+      const list = d[field];
+      const on = list.includes(opt);
+      return {
+        ...d,
+        [field]: on ? list.filter((x) => x !== opt) : [...list, opt],
+      };
+    });
+  };
+
+  const fillImOnSite = () => {
+    update({
+      onSitePickupName: data.name,
+      onSitePickupPhone: data.phone,
+      onSiteDropoffName: data.name,
+      onSiteDropoffPhone: data.phone,
+    });
+  };
+
+  const copyPickupToDropoffSite = () => {
+    update({
+      onSiteDropoffName: data.onSitePickupName || data.name,
+      onSiteDropoffPhone: data.onSitePickupPhone || data.phone,
+    });
+  };
+
+  const sameHomeTypeAsPickup = () => {
+    if (!data.fromHomeType) return;
+    const patch: Partial<Data> = { toHomeType: data.fromHomeType };
+    if (isMultiFloor(data.fromHomeType)) {
+      // Don't auto-copy floor — different building — but user can re-pick fast.
+    }
+    pickAndAdvance(patch, []);
+    update(patch);
+  };
+
+  // Light swipe navigation (mobile).
+  const onTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.changedTouches[0]?.clientX ?? null;
+  };
+  const onTouchEnd = (e: TouchEvent) => {
+    const start = touchStartX.current;
+    touchStartX.current = null;
+    if (start == null) return;
+    const dx = (e.changedTouches[0]?.clientX ?? start) - start;
+    if (Math.abs(dx) < 70) return;
+    if (dx > 0 && step > 0) back();
+    else if (dx < 0 && canAdvance && !isLast) goNext();
+  };
+
   const submit = async () => {
     setError(null);
     setSubmitting(true);
     try {
+      const items = inventorySelected(data.itemCounts);
       const res = await fetch("/api/intake", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: data.name, phone: data.phone, email: data.email, moveDate: data.moveDate,
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          moveDate: data.moveDate,
+          moveTime: data.moveTime,
+          serviceType: data.serviceType,
           origin: {
-            address: data.fromAddress, homeType: data.fromHomeType, bedrooms: data.bedrooms,
-            floor: data.fromFloor, elevator: data.fromElevator, stairsCount: data.fromStairs,
+            address: data.fromAddress,
+            unit: data.fromUnit,
+            homeType: data.fromHomeType,
+            bedrooms: data.bedrooms,
+            floor: data.fromFloor,
+            elevator: data.fromElevator,
+            stairsCount: data.fromStairs,
             parkingNotes: data.fromParking,
+            gateCode: data.fromGateCode,
+            longCarry: data.fromLongCarry === "yes",
             hoaNotice: data.fromHoa === "yes",
             coiNeeded: data.fromCoi === "yes",
+            coiEmail: data.fromCoiEmail,
             accessNotes: data.fromAccess,
           },
           destination: {
-            address: data.toAddress, homeType: data.toHomeType,
-            floor: data.toFloor, elevator: data.toElevator, stairsCount: data.toStairs,
+            address: data.toAddress,
+            unit: data.toUnit,
+            homeType: data.toHomeType,
+            floor: data.toFloor,
+            elevator: data.toElevator,
+            stairsCount: data.toStairs,
             parkingNotes: data.toParking,
+            gateCode: data.toGateCode,
+            longCarry: data.toLongCarry === "yes",
             hoaNotice: data.toHoa === "yes",
             coiNeeded: data.toCoi === "yes",
+            coiEmail: data.toCoiEmail,
             accessNotes: data.toAccess,
           },
-          inventory: { boxes: data.invBoxes, largeItems: data.invLarge, awkward: data.invAwkward },
-          specialItems: data.specialItems, otherSpecial: data.otherSpecial,
-          services: {
-            disassembly: data.svcDisassembly === "yes", disassemblyItems: data.svcDisassemblyItems,
-            storage: data.svcStorage === "yes", storageNotes: data.svcStorageNotes,
+          inventory: {
+            items,
+            totalPieces: inventoryTotal(data.itemCounts),
+            other: data.invOther,
+            appliances: data.appliances,
           },
-          contacts: { altPhone: data.altPhone, specialInstructions: data.specialInstructions },
+          specialItems: data.specialItems,
+          otherSpecial: data.otherSpecial,
+          packing: {
+            status: data.packingStatus,
+            needHelp: data.needPackingHelp === "yes",
+          },
+          services: {
+            disassembly: data.svcDisassembly === "yes",
+            disassemblyItems: data.svcDisassemblyItems,
+            storage: data.svcStorage === "yes",
+            storageNotes: data.svcStorageNotes,
+          },
+          contacts: {
+            onSitePickupName: data.onSitePickupName,
+            onSitePickupPhone: data.onSitePickupPhone,
+            onSiteDropoffName: data.onSiteDropoffName,
+            onSiteDropoffPhone: data.onSiteDropoffPhone,
+            altPhone: data.altPhone,
+            petsOnSite:
+              data.petsOnSite === "yes" ? true : data.petsOnSite === "no" ? false : null,
+            kidsOnSite:
+              data.kidsOnSite === "yes" ? true : data.kidsOnSite === "no" ? false : null,
+            specialInstructions: data.specialInstructions,
+          },
         }),
       });
       if (!res.ok) {
@@ -238,8 +786,10 @@ export function IntakeForm() {
         setSubmitting(false);
         return;
       }
-      try { localStorage.removeItem(STORAGE_KEY); } catch {}
-      // Funnel naturally into the prep checklist with a confirmation banner.
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem("toro_intake_draft_v2");
+      } catch {}
       router.push("/checklist?intake=done");
     } catch {
       setError("Network error. Try again or call us.");
@@ -247,9 +797,11 @@ export function IntakeForm() {
     }
   };
 
-  // Generic pill picker (used for many one-question screens).
   const Pills = ({
-    options, value, onChange, columns = 2,
+    options,
+    value,
+    onChange,
+    columns = 2,
   }: {
     options: { value: string; label: string; sub?: string }[];
     value: string;
@@ -271,329 +823,635 @@ export function IntakeForm() {
     </div>
   );
 
+  const ChipRow = ({
+    options,
+    value,
+    onChange,
+  }: {
+    options: { value: string; label: string }[] | string[];
+    value: string;
+    onChange: (v: string) => void;
+  }) => (
+    <div className="iwiz-chips" role="listbox">
+      {options.map((o) => {
+        const v = typeof o === "string" ? o : o.value;
+        const label = typeof o === "string" ? o : o.label;
+        const on = value === v;
+        return (
+          <button
+            key={v}
+            type="button"
+            role="option"
+            aria-selected={on}
+            className={`iwiz-chip${on ? " on" : ""}`}
+            onClick={() => onChange(v)}
+          >
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  const CheckGrid = ({
+    options,
+    selected,
+    onToggle,
+  }: {
+    options: string[];
+    selected: string[];
+    onToggle: (opt: string) => void;
+  }) => (
+    <div className="iwiz-checks">
+      {options.map((opt) => {
+        const on = selected.includes(opt);
+        return (
+          <button
+            type="button"
+            key={opt}
+            className={`iwiz-check${on ? " on" : ""}`}
+            onClick={() => onToggle(opt)}
+            aria-pressed={on}
+          >
+            <span className="iwiz-check-tick" aria-hidden>{on ? "✓" : ""}</span>
+            <span>{opt}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  const selectedCount = inventoryTotal(data.itemCounts);
+  const today = new Date().toISOString().slice(0, 10);
+  const minsLeft = Math.max(1, Math.ceil((totalSteps - step) * 0.45));
+
+  // Auto-advance when service / packing multi-pills complete via storage+disassembly.
+  const tryAdvancePacking = (patch: Partial<Data>) => {
+    setData((d) => {
+      const nextData = { ...d, ...patch };
+      if (isPackingValid(nextData) && !nextData.svcDisassemblyItems && !(nextData.svcStorage && nextData.svcStorageNotes)) {
+        // If no free-text follow-ups needed, advance.
+        const needsText =
+          (nextData.svcDisassembly === "yes" && !nextData.svcDisassemblyItems.trim()) ||
+          (nextData.svcStorage === "yes" && !nextData.svcStorageNotes.trim());
+        if (!needsText && nextData.packingStatus) {
+          scheduleAdvance();
+        }
+      }
+      return nextData;
+    });
+  };
+
   return (
     <form
-      className="iwiz"
-      onSubmit={(e: FormEvent) => { e.preventDefault(); next(); }}
+      ref={formRef}
+      className={`iwiz${flash ? " iwiz-flash" : ""}`}
+      onSubmit={(e: FormEvent) => {
+        e.preventDefault();
+        next();
+      }}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       <div className="iwiz-progress" aria-hidden>
         <span style={{ width: `${((step + 1) / totalSteps) * 100}%` }} />
       </div>
-      <div className="iwiz-step">Step {step + 1} of {totalSteps}</div>
+      <div className="iwiz-stepbar">
+        <div className="iwiz-step">
+          {meta.section} · {step + 1}/{totalSteps}
+        </div>
+        <div className="iwiz-eta">~{minsLeft} min left</div>
+      </div>
 
-      {/* keyed wrapper → React remounts on step change, replays the slide-in anim */}
       <div className="iwiz-stepbody" key={currentKey}>
 
-      {currentKey === "basics" && (
-        <>
-          <h2 className="iwiz-q">Let's start with your info.</h2>
-          <p className="iwiz-sub">So the right person reaches you on move day.</p>
-          <label className="iwiz-field"><span>Full name</span>
-            <input autoFocus required value={data.name} onChange={(e) => update({ name: e.target.value })} placeholder="Maria Lopez" />
-          </label>
-          <label className="iwiz-field"><span>Phone</span>
-            <input required type="tel" value={data.phone} onChange={(e) => update({ phone: e.target.value })} placeholder="(689) 555-0000" />
-          </label>
-          <label className="iwiz-field"><span>Email</span>
-            <input required type="email" value={data.email} onChange={(e) => update({ email: e.target.value })} placeholder="you@email.com" />
-          </label>
-          <label className="iwiz-field"><span>Move date</span>
-            <input type="date" value={data.moveDate} onChange={(e) => update({ moveDate: e.target.value })} />
-          </label>
-        </>
-      )}
-
-      {currentKey === "fromAddress" && (
-        <>
-          <h2 className="iwiz-q">Where are we picking up from?</h2>
-          <label className="iwiz-field"><span>Pickup address</span>
-            <GoogleAddressInput
-              value={data.fromAddress}
-              onChange={(v) => update({ fromAddress: v })}
-              placeholder="Street, city, FL"
-              ariaLabel="Pickup address"
-            />
-          </label>
-        </>
-      )}
-
-      {currentKey === "fromHomeType" && (
-        <>
-          <h2 className="iwiz-q">What kind of home are we picking up from?</h2>
-          <Pills
-            options={HOME_TYPES.map((h) => ({ value: h, label: h }))}
-            value={data.fromHomeType}
-            onChange={(v) => pickAndAdvance({ fromHomeType: v })}
-            columns={2}
-          />
-        </>
-      )}
-
-      {currentKey === "size" && (
-        <>
-          <h2 className="iwiz-q">How many bedrooms?</h2>
-          <p className="iwiz-sub">Helps us size the crew and the truck.</p>
-          <Pills
-            options={BEDROOMS.map((b) => ({ value: b, label: b === "Studio" ? "Studio" : `${b} BR` }))}
-            value={data.bedrooms}
-            onChange={(v) => pickAndAdvance({ bedrooms: v })}
-            columns={3}
-          />
-        </>
-      )}
-
-      {currentKey === "fromFloor" && (
-        <>
-          <h2 className="iwiz-q">Floor + access at pickup.</h2>
-          <p className="iwiz-sub">{data.fromHomeType}.</p>
-          <div className="iwiz-field"><span>Which floor</span>
-            <Pills
-              options={FLOORS.map((f) => ({ value: f, label: f }))}
-              value={data.fromFloor}
-              onChange={(v) => update({ fromFloor: v })}
-              columns={2}
-            />
-          </div>
-          <div className="iwiz-field"><span>Elevator available?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
-              value={data.fromElevator}
-              onChange={(v) => update({ fromElevator: v as "yes" | "no" })}
-              columns={2}
-            />
-          </div>
-          {data.fromElevator === "no" && data.fromFloor !== "Ground floor" && (
-            <label className="iwiz-field"><span>How many stairs total?</span>
-              <input type="text" inputMode="numeric" value={data.fromStairs} onChange={(e) => update({ fromStairs: e.target.value })} placeholder="e.g. 12" />
+        {currentKey === "contact" && (
+          <>
+            <h2 className="iwiz-q">You + move schedule.</h2>
+            <p className="iwiz-sub">Exact date &amp; start time — crew shows up then.</p>
+            <label className="iwiz-field"><span>Full name</span>
+              <input autoFocus required value={data.name} onChange={(e) => update({ name: e.target.value })} placeholder="Maria Lopez" autoComplete="name" />
             </label>
-          )}
-        </>
-      )}
-
-      {currentKey === "fromHoa" && (
-        <>
-          <h2 className="iwiz-q">Building requirements at pickup.</h2>
-          <div className="iwiz-field"><span>HOA / building notified about the move?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "Not yet" }]}
-              value={data.fromHoa}
-              onChange={(v) => update({ fromHoa: v as "yes" | "no" })}
-              columns={2}
-            />
-          </div>
-          <div className="iwiz-field"><span>Does the building require a Certificate of Insurance (COI) from us?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No / not sure" }]}
-              value={data.fromCoi}
-              onChange={(v) => update({ fromCoi: v as "yes" | "no" })}
-              columns={2}
-            />
-          </div>
-        </>
-      )}
-
-      {currentKey === "fromParking" && (
-        <>
-          <h2 className="iwiz-q">Truck access at pickup.</h2>
-          <label className="iwiz-field"><span>Where can the truck park?</span>
-            <input autoFocus value={data.fromParking} onChange={(e) => update({ fromParking: e.target.value })} placeholder="Loading dock around back · street parking · driveway" />
-          </label>
-          <label className="iwiz-field"><span>Anything else? (gate codes, narrow halls, low ceilings) — optional</span>
-            <textarea rows={2} value={data.fromAccess} onChange={(e) => update({ fromAccess: e.target.value })} placeholder="Gate code 1234. Hallway 36 in." />
-          </label>
-        </>
-      )}
-
-      {currentKey === "toAddress" && (
-        <>
-          <h2 className="iwiz-q">Where are we dropping off?</h2>
-          <label className="iwiz-field"><span>Drop-off address</span>
-            <GoogleAddressInput
-              value={data.toAddress}
-              onChange={(v) => update({ toAddress: v })}
-              placeholder="Street, city, FL"
-              ariaLabel="Drop-off address"
-            />
-          </label>
-        </>
-      )}
-
-      {currentKey === "toHomeType" && (
-        <>
-          <h2 className="iwiz-q">What kind of home are we dropping off at?</h2>
-          <Pills
-            options={HOME_TYPES.map((h) => ({ value: h, label: h }))}
-            value={data.toHomeType}
-            onChange={(v) => pickAndAdvance({ toHomeType: v })}
-            columns={2}
-          />
-        </>
-      )}
-
-      {currentKey === "toFloor" && (
-        <>
-          <h2 className="iwiz-q">Floor + access at drop-off.</h2>
-          <p className="iwiz-sub">{data.toHomeType}.</p>
-          <div className="iwiz-field"><span>Which floor</span>
-            <Pills
-              options={FLOORS.map((f) => ({ value: f, label: f }))}
-              value={data.toFloor}
-              onChange={(v) => update({ toFloor: v })}
-              columns={2}
-            />
-          </div>
-          <div className="iwiz-field"><span>Elevator available?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
-              value={data.toElevator}
-              onChange={(v) => update({ toElevator: v as "yes" | "no" })}
-              columns={2}
-            />
-          </div>
-          {data.toElevator === "no" && data.toFloor !== "Ground floor" && (
-            <label className="iwiz-field"><span>How many stairs total?</span>
-              <input type="text" inputMode="numeric" value={data.toStairs} onChange={(e) => update({ toStairs: e.target.value })} placeholder="e.g. 12" />
-            </label>
-          )}
-        </>
-      )}
-
-      {currentKey === "toHoa" && (
-        <>
-          <h2 className="iwiz-q">Building requirements at drop-off.</h2>
-          <div className="iwiz-field"><span>HOA / building notified about the move?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "Not yet" }]}
-              value={data.toHoa}
-              onChange={(v) => update({ toHoa: v as "yes" | "no" })}
-              columns={2}
-            />
-          </div>
-          <div className="iwiz-field"><span>Building requires a COI from us?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No / not sure" }]}
-              value={data.toCoi}
-              onChange={(v) => update({ toCoi: v as "yes" | "no" })}
-              columns={2}
-            />
-          </div>
-        </>
-      )}
-
-      {currentKey === "toParking" && (
-        <>
-          <h2 className="iwiz-q">Truck access at drop-off.</h2>
-          <label className="iwiz-field"><span>Where can the truck park?</span>
-            <input autoFocus value={data.toParking} onChange={(e) => update({ toParking: e.target.value })} placeholder="Loading zone · driveway · street" />
-          </label>
-          <label className="iwiz-field"><span>Anything else? — optional</span>
-            <textarea rows={2} value={data.toAccess} onChange={(e) => update({ toAccess: e.target.value })} placeholder="Gate code, narrow halls, low ceilings…" />
-          </label>
-        </>
-      )}
-
-      {currentKey === "inventory" && (
-        <>
-          <h2 className="iwiz-q">Rough inventory.</h2>
-          <p className="iwiz-sub">Estimates are fine — we just want to size the truck right.</p>
-          <label className="iwiz-field"><span>Estimated # of boxes</span>
-            <input type="text" inputMode="numeric" value={data.invBoxes} onChange={(e) => update({ invBoxes: e.target.value })} placeholder="e.g. 25" />
-          </label>
-          <label className="iwiz-field"><span>Estimated # of large furniture pieces</span>
-            <input type="text" inputMode="numeric" value={data.invLarge} onChange={(e) => update({ invLarge: e.target.value })} placeholder="couch, beds, dressers… ~10" />
-          </label>
-          <label className="iwiz-field"><span>Tall, heavy, or awkward stuff? — optional</span>
-            <textarea rows={2} value={data.invAwkward} onChange={(e) => update({ invAwkward: e.target.value })} placeholder="Sectional sofa, oversized armoire, treadmill…" />
-          </label>
-        </>
-      )}
-
-      {currentKey === "special" && (
-        <>
-          <h2 className="iwiz-q">Any special items?</h2>
-          <p className="iwiz-sub">
-            Tap any that apply — these need extra prep.
-            {data.specialItems.length > 0 && (
-              <em className="iwiz-count"> · {data.specialItems.length} selected</em>
+            <div className="iwiz-row2">
+              <label className="iwiz-field"><span>Phone</span>
+                <input required type="tel" value={data.phone} onChange={(e) => update({ phone: e.target.value })} placeholder="(689) 555-0000" autoComplete="tel" />
+              </label>
+              <label className="iwiz-field"><span>Email</span>
+                <input required type="email" value={data.email} onChange={(e) => update({ email: e.target.value })} placeholder="you@email.com" autoComplete="email" />
+              </label>
+            </div>
+            <div className="iwiz-row2">
+              <label className="iwiz-field"><span>Move date</span>
+                <input required type="date" min={today} value={data.moveDate} onChange={(e) => update({ moveDate: e.target.value })} />
+              </label>
+              <label className="iwiz-field"><span>Start time</span>
+                <input required type="time" step={300} value={data.moveTime} onChange={(e) => update({ moveTime: e.target.value })} />
+              </label>
+            </div>
+            <div className="iwiz-field">
+              <span>Quick time</span>
+              <ChipRow
+                options={TIME_CHIPS}
+                value={data.moveTime}
+                onChange={(v) => update({ moveTime: v })}
+              />
+            </div>
+            {data.moveDate && data.moveTime && (
+              <p className="iwiz-hint iwiz-schedule-confirm" role="status">
+                Scheduled for <strong>{formatScheduleConfirm(data.moveDate, data.moveTime)}</strong>
+              </p>
             )}
-          </p>
-          <div className="iwiz-checks">
-            {SPECIAL_OPTS.map((opt) => {
-              const on = data.specialItems.includes(opt);
-              return (
+          </>
+        )}
+
+        {currentKey === "service" && (
+          <>
+            <h2 className="iwiz-q">What kind of help?</h2>
+            <p className="iwiz-sub">Tap one — we advance automatically.</p>
+            <Pills
+              options={SERVICE_TYPES}
+              value={data.serviceType}
+              onChange={(v) => pickAndAdvance({ serviceType: v }, ["service"])}
+              columns={1}
+            />
+          </>
+        )}
+
+        {currentKey === "from" && (
+          <>
+            <h2 className="iwiz-q">Pickup place.</h2>
+            <p className="iwiz-sub">Address + what kind of home.</p>
+            <label className="iwiz-field"><span>Pickup address</span>
+              <GoogleAddressInput
+                value={data.fromAddress}
+                onChange={(v) => update({ fromAddress: v })}
+                placeholder="Street, city, FL"
+                ariaLabel="Pickup address"
+              />
+            </label>
+            <label className="iwiz-field"><span>Apt / unit — optional</span>
+              <input value={data.fromUnit} onChange={(e) => update({ fromUnit: e.target.value })} placeholder="Apt 204" autoComplete="address-line2" />
+            </label>
+            <div className="iwiz-field"><span>Home type</span>
+              <Pills
+                options={HOME_TYPES.map((h) => ({ value: h, label: h }))}
+                value={data.fromHomeType}
+                onChange={(v) => update({ fromHomeType: v, bedrooms: hasBedrooms(v) ? data.bedrooms : "" })}
+                columns={2}
+              />
+            </div>
+            {hasBedrooms(data.fromHomeType) && (
+              <div className="iwiz-field"><span>Bedrooms</span>
+                <Pills
+                  options={BEDROOMS.map((b) => ({ value: b, label: b === "Studio" ? "Studio" : `${b} BR` }))}
+                  value={data.bedrooms}
+                  onChange={(v) => update({ bedrooms: v })}
+                  columns={3}
+                />
+              </div>
+            )}
+            {isMultiFloor(data.fromHomeType) && (
+              <>
+                <div className="iwiz-field"><span>Floor</span>
+                  <Pills
+                    options={FLOORS.map((f) => ({ value: f, label: f }))}
+                    value={data.fromFloor}
+                    onChange={(v) => update({ fromFloor: v })}
+                    columns={2}
+                  />
+                </div>
+                <div className="iwiz-field"><span>Elevator?</span>
+                  <Pills
+                    options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                    value={data.fromElevator}
+                    onChange={(v) => update({ fromElevator: v as Yn })}
+                    columns={2}
+                  />
+                </div>
+                {data.fromElevator === "no" && data.fromFloor !== "Ground floor" && (
+                  <label className="iwiz-field"><span>Stairs total</span>
+                    <input type="text" inputMode="numeric" value={data.fromStairs} onChange={(e) => update({ fromStairs: e.target.value })} placeholder="e.g. 12" />
+                  </label>
+                )}
+              </>
+            )}
+          </>
+        )}
+
+        {currentKey === "fromAccess" && (
+          <>
+            <h2 className="iwiz-q">Pickup access.</h2>
+            <p className="iwiz-sub">Tap chips for speed — skip free-text if nothing special.</p>
+            {hasHoa(data.fromHomeType) && (
+              <>
+                <div className="iwiz-field"><span>HOA / building notified?</span>
+                  <Pills
+                    options={[{ value: "yes", label: "Yes" }, { value: "no", label: "Not yet" }]}
+                    value={data.fromHoa}
+                    onChange={(v) => update({ fromHoa: v as Yn })}
+                    columns={2}
+                  />
+                </div>
+                <div className="iwiz-field"><span>COI required?</span>
+                  <Pills
+                    options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No / not sure" }]}
+                    value={data.fromCoi}
+                    onChange={(v) => update({ fromCoi: v as Yn })}
+                    columns={2}
+                  />
+                </div>
+                {data.fromCoi === "yes" && (
+                  <label className="iwiz-field"><span>COI email — optional</span>
+                    <input type="email" value={data.fromCoiEmail} onChange={(e) => update({ fromCoiEmail: e.target.value })} placeholder="manager@building.com" />
+                  </label>
+                )}
+              </>
+            )}
+            <div className="iwiz-field"><span>Truck parking</span>
+              <ChipRow
+                options={PARKING_CHIPS}
+                value={data.fromParking}
+                onChange={(v) => update({ fromParking: v })}
+              />
+              <input
+                className="iwiz-inline"
+                value={data.fromParking}
+                onChange={(e) => update({ fromParking: e.target.value })}
+                placeholder="Or type details…"
+              />
+            </div>
+            <label className="iwiz-field"><span>Gate / door code — optional</span>
+              <input value={data.fromGateCode} onChange={(e) => update({ fromGateCode: e.target.value })} placeholder="Gate 1234" autoComplete="off" />
+            </label>
+            <div className="iwiz-field"><span>Long carry?</span>
+              <Pills
+                options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                value={data.fromLongCarry}
+                onChange={(v) => update({ fromLongCarry: v as Yn })}
+                columns={2}
+              />
+            </div>
+            <label className="iwiz-field"><span>Other access notes — optional</span>
+              <textarea rows={2} value={data.fromAccess} onChange={(e) => update({ fromAccess: e.target.value })} placeholder="Narrow halls, reserved elevator…" />
+            </label>
+          </>
+        )}
+
+        {currentKey === "to" && (
+          <>
+            <h2 className="iwiz-q">Drop-off place.</h2>
+            <p className="iwiz-sub">Where everything lands.</p>
+            {data.fromHomeType && (
+              <button type="button" className="iwiz-quick" onClick={sameHomeTypeAsPickup}>
+                Same home type as pickup ({data.fromHomeType})
+              </button>
+            )}
+            <label className="iwiz-field"><span>Drop-off address</span>
+              <GoogleAddressInput
+                value={data.toAddress}
+                onChange={(v) => update({ toAddress: v })}
+                placeholder="Street, city, FL"
+                ariaLabel="Drop-off address"
+              />
+            </label>
+            <label className="iwiz-field"><span>Apt / unit — optional</span>
+              <input value={data.toUnit} onChange={(e) => update({ toUnit: e.target.value })} placeholder="Apt 12" autoComplete="address-line2" />
+            </label>
+            <div className="iwiz-field"><span>Home type</span>
+              <Pills
+                options={HOME_TYPES.map((h) => ({ value: h, label: h }))}
+                value={data.toHomeType}
+                onChange={(v) => update({ toHomeType: v })}
+                columns={2}
+              />
+            </div>
+            {isMultiFloor(data.toHomeType) && (
+              <>
+                <div className="iwiz-field"><span>Floor</span>
+                  <Pills
+                    options={FLOORS.map((f) => ({ value: f, label: f }))}
+                    value={data.toFloor}
+                    onChange={(v) => update({ toFloor: v })}
+                    columns={2}
+                  />
+                </div>
+                <div className="iwiz-field"><span>Elevator?</span>
+                  <Pills
+                    options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                    value={data.toElevator}
+                    onChange={(v) => update({ toElevator: v as Yn })}
+                    columns={2}
+                  />
+                </div>
+                {data.toElevator === "no" && data.toFloor !== "Ground floor" && (
+                  <label className="iwiz-field"><span>Stairs total</span>
+                    <input type="text" inputMode="numeric" value={data.toStairs} onChange={(e) => update({ toStairs: e.target.value })} placeholder="e.g. 12" />
+                  </label>
+                )}
+              </>
+            )}
+          </>
+        )}
+
+        {currentKey === "toAccess" && (
+          <>
+            <h2 className="iwiz-q">Drop-off access.</h2>
+            <p className="iwiz-sub">Same idea — chips first, details only if needed.</p>
+            {hasHoa(data.toHomeType) && (
+              <>
+                <div className="iwiz-field"><span>HOA / building notified?</span>
+                  <Pills
+                    options={[{ value: "yes", label: "Yes" }, { value: "no", label: "Not yet" }]}
+                    value={data.toHoa}
+                    onChange={(v) => update({ toHoa: v as Yn })}
+                    columns={2}
+                  />
+                </div>
+                <div className="iwiz-field"><span>COI required?</span>
+                  <Pills
+                    options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No / not sure" }]}
+                    value={data.toCoi}
+                    onChange={(v) => update({ toCoi: v as Yn })}
+                    columns={2}
+                  />
+                </div>
+                {data.toCoi === "yes" && (
+                  <label className="iwiz-field"><span>COI email — optional</span>
+                    <input type="email" value={data.toCoiEmail} onChange={(e) => update({ toCoiEmail: e.target.value })} placeholder="manager@building.com" />
+                  </label>
+                )}
+              </>
+            )}
+            <div className="iwiz-field"><span>Truck parking</span>
+              <ChipRow
+                options={PARKING_CHIPS}
+                value={data.toParking}
+                onChange={(v) => update({ toParking: v })}
+              />
+              <input
+                className="iwiz-inline"
+                value={data.toParking}
+                onChange={(e) => update({ toParking: e.target.value })}
+                placeholder="Or type details…"
+              />
+            </div>
+            <label className="iwiz-field"><span>Gate / door code — optional</span>
+              <input value={data.toGateCode} onChange={(e) => update({ toGateCode: e.target.value })} placeholder="Gate 5678" autoComplete="off" />
+            </label>
+            <div className="iwiz-field"><span>Long carry?</span>
+              <Pills
+                options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                value={data.toLongCarry}
+                onChange={(v) => update({ toLongCarry: v as Yn })}
+                columns={2}
+              />
+            </div>
+            <label className="iwiz-field"><span>Other access notes — optional</span>
+              <textarea rows={2} value={data.toAccess} onChange={(e) => update({ toAccess: e.target.value })} placeholder="Narrow halls, low ceilings…" />
+            </label>
+          </>
+        )}
+
+        {currentKey === "inventory" && (
+          <>
+            <h2 className="iwiz-q">Item checklist.</h2>
+            <p className="iwiz-sub">
+              Tap a starter, then tweak. Tap an item name to +1.
+              {selectedCount > 0 && (
+                <em className="iwiz-count"> · {selectedCount} piece{selectedCount === 1 ? "" : "s"}</em>
+              )}
+            </p>
+            <div className="iwiz-presets">
+              {INVENTORY_PRESETS.map((p) => (
                 <button
+                  key={p.id}
                   type="button"
-                  key={opt}
-                  className={`iwiz-check${on ? " on" : ""}`}
-                  onClick={() => update({
-                    specialItems: on
-                      ? data.specialItems.filter((x) => x !== opt)
-                      : [...data.specialItems, opt],
-                  })}
-                  aria-pressed={on}
+                  className={`iwiz-preset${activePreset === p.id ? " on" : ""}`}
+                  onClick={() => applyPreset(p)}
                 >
-                  <span className="iwiz-check-tick" aria-hidden>{on ? "✓" : ""}</span>
-                  <span>{opt}</span>
+                  <strong>{p.label}</strong>
+                  <span>{p.sub}</span>
                 </button>
-              );
-            })}
-          </div>
-          <label className="iwiz-field"><span>Anything else worth flagging? — optional</span>
-            <input value={data.otherSpecial} onChange={(e) => update({ otherSpecial: e.target.value })} placeholder="Custom-built table, vintage records…" />
-          </label>
-        </>
-      )}
+              ))}
+              {selectedCount > 0 && (
+                <button type="button" className="iwiz-preset iwiz-preset-clear" onClick={clearInventory}>
+                  <strong>Clear</strong>
+                  <span>Start over</span>
+                </button>
+              )}
+            </div>
+            <div className="iwiz-inv">
+              {INVENTORY_GROUPS.map((group) => {
+                const open = openRooms[group.room] ?? false;
+                const roomTotal = group.items.reduce((s, item) => s + (data.itemCounts[item] || 0), 0);
+                return (
+                  <div key={group.room} className={`iwiz-inv-room${open ? " open" : ""}`}>
+                    <button
+                      type="button"
+                      className="iwiz-inv-room-head"
+                      onClick={() => setOpenRooms((r) => ({ ...r, [group.room]: !open }))}
+                      aria-expanded={open}
+                    >
+                      <span>{group.room}</span>
+                      <span className="iwiz-inv-room-meta">
+                        {roomTotal > 0 ? `${roomTotal}` : "—"}
+                        <span className="iwiz-inv-chevron" aria-hidden>{open ? "▾" : "▸"}</span>
+                      </span>
+                    </button>
+                    {open && (
+                      <ul className="iwiz-inv-list">
+                        {group.items.map((item) => {
+                          const qty = data.itemCounts[item] || 0;
+                          return (
+                            <li key={item} className={`iwiz-inv-row${qty > 0 ? " on" : ""}`}>
+                              <button
+                                type="button"
+                                className="iwiz-inv-name"
+                                onClick={() => setItemQty(item, qty + 1)}
+                                title="Tap to add 1"
+                              >
+                                {item}
+                              </button>
+                              <div className="iwiz-qty" role="group" aria-label={`${item} quantity`}>
+                                <button
+                                  type="button"
+                                  className="iwiz-qty-btn"
+                                  onClick={() => setItemQty(item, qty - 1)}
+                                  disabled={qty <= 0}
+                                  aria-label={`Decrease ${item}`}
+                                >
+                                  −
+                                </button>
+                                <span className="iwiz-qty-val" aria-live="polite">{qty}</span>
+                                <button
+                                  type="button"
+                                  className="iwiz-qty-btn"
+                                  onClick={() => setItemQty(item, qty + 1)}
+                                  aria-label={`Increase ${item}`}
+                                >
+                                  +
+                                </button>
+                              </div>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <label className="iwiz-field"><span>Not listed? — optional</span>
+              <textarea rows={2} value={data.invOther} onChange={(e) => update({ invOther: e.target.value })} placeholder="Kayak, custom shelves…" />
+            </label>
+          </>
+        )}
 
-      {currentKey === "services" && (
-        <>
-          <h2 className="iwiz-q">Services you need.</h2>
-          <p className="iwiz-sub">Tap yes or no for each.</p>
-
-          <div className="iwiz-field"><span>Disassembly / reassembly help?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
-              value={data.svcDisassembly}
-              onChange={(v) => update({ svcDisassembly: v as "yes" | "no" })}
-              columns={2}
-            />
-            {data.svcDisassembly === "yes" && (
-              <input
-                className="iwiz-inline" value={data.svcDisassemblyItems}
-                onChange={(e) => update({ svcDisassemblyItems: e.target.value })}
-                placeholder="Which items? (King bed, IKEA wardrobe…)"
+        {currentKey === "extras" && (
+          <>
+            <h2 className="iwiz-q">Appliances &amp; specials.</h2>
+            <p className="iwiz-sub">
+              Tap any that apply — or skip.
+              {(data.appliances.length + data.specialItems.length) > 0 && (
+                <em className="iwiz-count"> · {data.appliances.length + data.specialItems.length} flagged</em>
+              )}
+            </p>
+            <div className="iwiz-field"><span>Major appliances</span>
+              <CheckGrid
+                options={APPLIANCE_OPTS}
+                selected={data.appliances}
+                onToggle={(opt) => toggleList("appliances", opt)}
               />
-            )}
-          </div>
-
-          <div className="iwiz-field"><span>Storage between pickup and drop-off?</span>
-            <Pills
-              options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
-              value={data.svcStorage}
-              onChange={(v) => update({ svcStorage: v as "yes" | "no" })}
-              columns={2}
-            />
-            {data.svcStorage === "yes" && (
-              <input
-                className="iwiz-inline" value={data.svcStorageNotes}
-                onChange={(e) => update({ svcStorageNotes: e.target.value })}
-                placeholder="How many days? Climate-controlled?"
+            </div>
+            <div className="iwiz-field"><span>Special / heavy items</span>
+              <CheckGrid
+                options={SPECIAL_OPTS}
+                selected={data.specialItems}
+                onToggle={(opt) => toggleList("specialItems", opt)}
               />
-            )}
-          </div>
-        </>
-      )}
+            </div>
+            <label className="iwiz-field"><span>Anything else? — optional</span>
+              <input value={data.otherSpecial} onChange={(e) => update({ otherSpecial: e.target.value })} placeholder="Custom table, vintage records…" />
+            </label>
+          </>
+        )}
 
-      {currentKey === "dayOf" && (
-        <>
-          <h2 className="iwiz-q">Last thing — day-of contact.</h2>
-          <label className="iwiz-field"><span>Alternate contact phone (someone reachable that day) — optional</span>
-            <input type="tel" value={data.altPhone} onChange={(e) => update({ altPhone: e.target.value })} placeholder="(689) 555-0000" />
-          </label>
-          <label className="iwiz-field"><span>Anything special the crew should know? — optional</span>
-            <textarea rows={3} value={data.specialInstructions} onChange={(e) => update({ specialInstructions: e.target.value })} placeholder="Kids · pets · accessibility · neighbors · quiet hours…" />
-          </label>
-        </>
-      )}
+        {currentKey === "packing" && (
+          <>
+            <h2 className="iwiz-q">Packing &amp; extras.</h2>
+            <p className="iwiz-sub">Quick taps — we move on when you&apos;re done.</p>
+            <div className="iwiz-field"><span>How packed will things be?</span>
+              <Pills
+                options={PACKING_STATUS}
+                value={data.packingStatus}
+                onChange={(v) => tryAdvancePacking({ packingStatus: v })}
+                columns={1}
+              />
+            </div>
+            {(data.packingStatus === "not-packed" || data.packingStatus === "partially-packed" || data.packingStatus === "mostly-packed") && (
+              <div className="iwiz-field"><span>Need packing help?</span>
+                <Pills
+                  options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                  value={data.needPackingHelp}
+                  onChange={(v) => tryAdvancePacking({ needPackingHelp: v as Yn })}
+                  columns={2}
+                />
+              </div>
+            )}
+            <div className="iwiz-field"><span>Disassembly / reassembly?</span>
+              <Pills
+                options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                value={data.svcDisassembly}
+                onChange={(v) => tryAdvancePacking({ svcDisassembly: v as Yn })}
+                columns={2}
+              />
+              {data.svcDisassembly === "yes" && (
+                <input
+                  className="iwiz-inline"
+                  value={data.svcDisassemblyItems}
+                  onChange={(e) => update({ svcDisassemblyItems: e.target.value })}
+                  placeholder="Which items? (King bed, IKEA…)"
+                />
+              )}
+            </div>
+            <div className="iwiz-field"><span>Storage between stops?</span>
+              <Pills
+                options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                value={data.svcStorage}
+                onChange={(v) => tryAdvancePacking({ svcStorage: v as Yn })}
+                columns={2}
+              />
+              {data.svcStorage === "yes" && (
+                <input
+                  className="iwiz-inline"
+                  value={data.svcStorageNotes}
+                  onChange={(e) => update({ svcStorageNotes: e.target.value })}
+                  placeholder="How many days?"
+                />
+              )}
+            </div>
+          </>
+        )}
+
+        {currentKey === "dayOf" && (
+          <>
+            <h2 className="iwiz-q">Who&apos;s on site?</h2>
+            <p className="iwiz-sub">One tap if that&apos;s you both places.</p>
+            <div className="iwiz-quick-row">
+              <button type="button" className="iwiz-quick" onClick={fillImOnSite}>
+                I&apos;m there both places
+              </button>
+              <button type="button" className="iwiz-quick iwiz-quick-ghost" onClick={copyPickupToDropoffSite}>
+                Copy pickup → drop-off
+              </button>
+            </div>
+            <div className="iwiz-row2">
+              <label className="iwiz-field"><span>Pickup — name</span>
+                <input autoFocus value={data.onSitePickupName} onChange={(e) => update({ onSitePickupName: e.target.value })} placeholder="Name" />
+              </label>
+              <label className="iwiz-field"><span>Pickup — phone</span>
+                <input type="tel" value={data.onSitePickupPhone} onChange={(e) => update({ onSitePickupPhone: e.target.value })} placeholder="Phone" />
+              </label>
+            </div>
+            <div className="iwiz-row2">
+              <label className="iwiz-field"><span>Drop-off — name</span>
+                <input value={data.onSiteDropoffName} onChange={(e) => update({ onSiteDropoffName: e.target.value })} placeholder="Name" />
+              </label>
+              <label className="iwiz-field"><span>Drop-off — phone</span>
+                <input type="tel" value={data.onSiteDropoffPhone} onChange={(e) => update({ onSiteDropoffPhone: e.target.value })} placeholder="Phone" />
+              </label>
+            </div>
+            <label className="iwiz-field"><span>Alt / emergency phone — optional</span>
+              <input type="tel" value={data.altPhone} onChange={(e) => update({ altPhone: e.target.value })} placeholder="(689) 555-0000" />
+            </label>
+            <div className="iwiz-row2">
+              <div className="iwiz-field"><span>Pets on site?</span>
+                <Pills
+                  options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                  value={data.petsOnSite}
+                  onChange={(v) => update({ petsOnSite: v as Yn })}
+                  columns={2}
+                />
+              </div>
+              <div className="iwiz-field"><span>Kids on site?</span>
+                <Pills
+                  options={[{ value: "yes", label: "Yes" }, { value: "no", label: "No" }]}
+                  value={data.kidsOnSite}
+                  onChange={(v) => update({ kidsOnSite: v as Yn })}
+                  columns={2}
+                />
+              </div>
+            </div>
+            <label className="iwiz-field"><span>Anything else? — optional</span>
+              <textarea
+                rows={2}
+                value={data.specialInstructions}
+                onChange={(e) => update({ specialInstructions: e.target.value })}
+                placeholder="Quiet hours, accessibility…"
+              />
+            </label>
+          </>
+        )}
 
       </div>
 
@@ -609,7 +1467,9 @@ export function IntakeForm() {
         </button>
       </div>
 
-      <p className="iwiz-fine">We save what you've typed so you can come back later.</p>
+      <p className="iwiz-fine">
+        Auto-saves as you go · swipe left/right to navigate
+      </p>
     </form>
   );
 }

@@ -979,6 +979,136 @@ nav.top .btn-primary .arrow { width: 12px; height: 12px; }
   border-color: var(--red); background: var(--red); color: #fff;
 }
 .iwiz-count { color: var(--red-deep); font-weight: 600; font-style: italic; }
+.iwiz-hint { font-size: 13px; color: var(--muted-soft); margin-top: -4px; }
+.iwiz-schedule-confirm {
+  margin: 0; padding: 12px 14px; border-radius: 10px;
+  background: var(--red-soft); border: 1px solid var(--red);
+  color: var(--ink-soft); font-size: 14px; line-height: 1.4;
+}
+.iwiz-schedule-confirm strong { color: var(--red-deep); font-weight: 700; }
+
+.iwiz-stepbar {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+}
+.iwiz-eta { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.02em; }
+.iwiz-row2 {
+  display: grid; grid-template-columns: 1fr; gap: 12px;
+}
+@media (min-width: 520px) {
+  .iwiz-row2 { grid-template-columns: 1fr 1fr; }
+}
+
+/* Horizontal quick chips (times, parking) */
+.iwiz-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.iwiz-chip {
+  padding: 10px 14px; min-height: 40px;
+  border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font-size: 13.5px; font-weight: 600; color: var(--ink); cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, transform 0.1s, box-shadow 0.12s;
+}
+.iwiz-chip:hover { border-color: var(--line-strong); }
+.iwiz-chip:active { transform: scale(0.97); }
+.iwiz-chip.on {
+  border-color: var(--red); background: var(--red-soft); color: var(--red-deep);
+  box-shadow: 0 0 0 3px var(--red-glow);
+}
+
+/* Inventory starter presets */
+.iwiz-presets {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+}
+@media (min-width: 520px) {
+  .iwiz-presets { grid-template-columns: repeat(4, 1fr); }
+}
+.iwiz-preset {
+  display: flex; flex-direction: column; gap: 2px; align-items: flex-start;
+  padding: 12px 12px; min-height: 56px;
+  border: 1px solid var(--line); border-radius: 12px; background: #fff;
+  cursor: pointer; text-align: left; color: var(--ink);
+  transition: border-color 0.12s, background 0.12s, transform 0.1s, box-shadow 0.12s;
+}
+.iwiz-preset:hover { border-color: var(--line-strong); }
+.iwiz-preset:active { transform: scale(0.98); }
+.iwiz-preset strong { font-size: 14px; font-weight: 700; }
+.iwiz-preset span { font-size: 12px; color: var(--muted); }
+.iwiz-preset.on {
+  border-color: var(--red); background: var(--red-soft);
+  box-shadow: 0 0 0 3px var(--red-glow);
+}
+.iwiz-preset.on strong { color: var(--red-deep); }
+.iwiz-preset-clear { border-style: dashed; }
+
+/* One-tap shortcuts */
+.iwiz-quick-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.iwiz-quick {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 14px; min-height: 42px;
+  border: 1px solid var(--red); border-radius: 999px;
+  background: var(--red-soft); color: var(--red-deep);
+  font-size: 13.5px; font-weight: 700; cursor: pointer;
+  transition: transform 0.1s, background 0.12s;
+}
+.iwiz-quick:hover { background: #f8d4d4; }
+.iwiz-quick:active { transform: scale(0.98); }
+.iwiz-quick-ghost {
+  border-color: var(--line); background: #fff; color: var(--ink-soft); font-weight: 600;
+}
+.iwiz-quick-ghost:hover { background: var(--line-soft); border-color: var(--line-strong); }
+
+/* Flash on successful step advance */
+.iwiz.iwiz-flash {
+  box-shadow: 0 0 0 3px var(--red-glow), 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+.iwiz-inv-name {
+  border: 0; background: transparent; padding: 0; margin: 0;
+  font: inherit; font-size: 14px; color: var(--ink); text-align: left;
+  cursor: pointer; flex: 1 1 auto; min-width: 0;
+}
+.iwiz-inv-name:hover { color: var(--red-deep); }
+
+/* Room / item checklist with quantity steppers */
+.iwiz-inv { display: flex; flex-direction: column; gap: 8px; }
+.iwiz-inv-room {
+  border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff;
+}
+.iwiz-inv-room.open { border-color: var(--line-strong); }
+.iwiz-inv-room-head {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 16px; background: #fff; border: 0; cursor: pointer; text-align: left;
+  font: inherit; font-size: 15px; font-weight: 600; color: var(--ink);
+}
+.iwiz-inv-room-head:hover { background: var(--line-soft); }
+.iwiz-inv-room-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12.5px; font-weight: 500; color: var(--muted); white-space: nowrap;
+}
+.iwiz-inv-chevron { font-size: 12px; color: var(--muted); width: 1em; text-align: center; }
+.iwiz-inv-list { list-style: none; margin: 0; padding: 0 0 8px; border-top: 1px solid var(--line-soft); }
+.iwiz-inv-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 14px 10px 16px;
+}
+.iwiz-inv-row.on { background: var(--red-soft); }
+.iwiz-inv-name { font-size: 14px; color: var(--ink); flex: 1 1 auto; min-width: 0; }
+.iwiz-qty {
+  display: inline-flex; align-items: center; gap: 0;
+  border: 1px solid var(--line); border-radius: 999px; background: #fff; flex: 0 0 auto;
+}
+.iwiz-qty-btn {
+  width: 36px; height: 36px; border: 0; background: transparent; cursor: pointer;
+  font-size: 18px; line-height: 1; color: var(--ink); border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+}
+.iwiz-qty-btn:hover:not(:disabled) { background: var(--line-soft); color: var(--red-deep); }
+.iwiz-qty-btn:disabled { opacity: 0.35; cursor: default; }
+.iwiz-qty-val {
+  min-width: 28px; text-align: center; font-size: 14px; font-weight: 700;
+  font-variant-numeric: tabular-nums; color: var(--ink);
+}
+.iwiz-inv-row.on .iwiz-qty { border-color: var(--red); }
+.iwiz-inv-row.on .iwiz-qty-val { color: var(--red-deep); }
 
 /* Slide-in animation for each step body (keyed → remounts on step change). */
 .iwiz-stepbody {
