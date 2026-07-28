@@ -3,9 +3,11 @@
 /**
  * Mobile sticky bar: Call now + Get Quote.
  * Hidden at top of page; appears when the user scrolls (nav hides at the same time).
+ * Suppressed on moving-day checklist so it doesn't cover wizard actions.
  */
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useLang } from "./lang-provider";
 import { PHONE_TEL, PHONE_DISPLAY } from "@/lib/contact";
 import { openQuote } from "@/lib/open-quote";
@@ -14,14 +16,23 @@ const SHOW_AFTER_PX = 72;
 
 export function StickyCta() {
   const { t } = useLang();
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
+  const hide =
+    pathname === "/intake" ||
+    !!pathname?.startsWith("/intake/") ||
+    pathname === "/movingday-checklist" ||
+    !!pathname?.startsWith("/movingday-checklist/");
 
   useEffect(() => {
+    if (hide) return;
     const onScroll = () => setVisible(window.scrollY > SHOW_AFTER_PX);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [hide]);
+
+  if (hide) return null;
 
   return (
     <div
@@ -41,7 +52,7 @@ export function StickyCta() {
       <button
         type="button"
         className="quote-cta"
-        data-open-quote
+        data-open-quote="true"
         data-source="sticky-cta"
         tabIndex={visible ? 0 : -1}
         onClick={() => openQuote({ source: "sticky-cta" })}

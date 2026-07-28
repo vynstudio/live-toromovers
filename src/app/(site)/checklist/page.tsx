@@ -101,8 +101,8 @@ export default function ChecklistPage() {
           </p>
           <div className="checklist-actions">
             <ChecklistPrintButton />
-            <Link href="/intake" className="btn btn-outline">
-              Move-day intake form →
+            <Link href="/movingday-checklist" className="btn btn-outline">
+              Moving day checklist →
             </Link>
           </div>
         </div>

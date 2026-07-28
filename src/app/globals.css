@@ -3580,6 +3580,9 @@ html[data-lca-dock="1"] .lca-docked-inner .lca-back-solo {
 .lca-page ~ .sticky-cta,
 .lca-page .sticky-cta { display: none !important; }
 
+/* Moving-day checklist wizard owns the bottom bar — no Call/Quote sticky */
+.intake-page ~ .sticky-cta { display: none !important; }
+
 @media (min-width: 760px) {
   .lca-page { padding-bottom: 0; }
   .lca-top { padding: 14px 24px; }

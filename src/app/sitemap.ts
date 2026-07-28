@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Real, indexable pages only. Homepage anchors (#services, #faq, …) were
   // removed — they aren't pages and Google flagged them as blank. Funnel/LP
-  // routes (/quote, /intake, /thank-you, /ads/*) are intentionally excluded so
+  // routes (/quote, /intake, /movingday-checklist, /thank-you, /ads/*) are intentionally excluded so
   // they don't compete in organic search.
   const pages = [
     { url: BASE, priority: 1.0, changeFrequency: "weekly" as const },
