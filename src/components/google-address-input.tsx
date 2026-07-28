@@ -1,15 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 
-// Google Places autocomplete via the Places API (New) REST endpoint, called
-// directly with fetch (CORS-supported). No Maps JavaScript API needed — only
-// "Places API (New)" enabled on the key. Renders a custom dropdown styled like
-// .address-suggestions, biased to Central Florida. Falls back to a plain text
-// input if the key is missing or a request fails.
+/**
+ * Google Places autocomplete (Places API New, REST).
+ * Keeps a stable input identity so typing never loses focus.
+ */
 
 const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-// Bias toward the Orlando metro (50 km = Places API max for a locationBias circle).
 const CFL_CENTER = { latitude: 28.5383, longitude: -81.3792 };
 const CFL_RADIUS_M = 50000;
 
@@ -24,62 +22,49 @@ type PlacePrediction = {
   };
 };
 
-async function fetchPredictions(input: string, sessionToken: string): Promise<Suggestion[]> {
-  if (!KEY) {
-    if (typeof window !== "undefined" && process.env.NODE_ENV !== "production") {
-      console.warn("[GoogleAddressInput] NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is missing");
-    }
-    return [];
-  }
-  const res = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Goog-Api-Key": KEY,
-      // Field mask required by Places API (New) for autocomplete responses.
-      "X-Goog-FieldMask":
-        "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat",
+async function fetchPredictions(
+  input: string,
+  sessionToken: string,
+): Promise<Suggestion[]> {
+  if (!KEY) return [];
+
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Goog-Api-Key": KEY,
+    "X-Goog-FieldMask":
+      "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat",
+  };
+
+  const bodyBase = {
+    input,
+    sessionToken,
+    includedRegionCodes: ["us"] as string[],
+    locationBias: {
+      circle: { center: CFL_CENTER, radius: CFL_RADIUS_M },
     },
+  };
+
+  // Prefer address-like results; fall back if the API rejects the type filter.
+  let res = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
+    method: "POST",
+    headers,
     body: JSON.stringify({
-      input,
-      sessionToken,
-      includedRegionCodes: ["us"],
+      ...bodyBase,
       includedPrimaryTypes: ["street_address", "premise", "subpremise", "route"],
-      locationBias: { circle: { center: CFL_CENTER, radius: CFL_RADIUS_M } },
     }),
   });
-  if (!res.ok) {
-    // Retry without primary-type filter (some keys / regions reject the filter).
-    if (res.status === 400) {
-      const retry = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Goog-Api-Key": KEY,
-          "X-Goog-FieldMask":
-            "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat",
-        },
-        body: JSON.stringify({
-          input,
-          sessionToken,
-          includedRegionCodes: ["us"],
-          locationBias: { circle: { center: CFL_CENTER, radius: CFL_RADIUS_M } },
-        }),
-      });
-      if (!retry.ok) return [];
-      const retryData: { suggestions?: { placePrediction?: PlacePrediction }[] } =
-        await retry.json();
-      return mapPredictions(retryData);
-    }
-    return [];
-  }
-  const data: { suggestions?: { placePrediction?: PlacePrediction }[] } = await res.json();
-  return mapPredictions(data);
-}
 
-function mapPredictions(data: {
-  suggestions?: { placePrediction?: PlacePrediction }[];
-}): Suggestion[] {
+  if (!res.ok) {
+    res = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(bodyBase),
+    });
+  }
+  if (!res.ok) return [];
+
+  const data: { suggestions?: { placePrediction?: PlacePrediction }[] } =
+    await res.json();
   return (data.suggestions ?? [])
     .map((s) => s.placePrediction)
     .filter((p): p is PlacePrediction => p != null)
@@ -103,30 +88,50 @@ type Props = {
   onChange: (value: string) => void;
   placeholder?: string;
   ariaLabel?: string;
+  /** Prefer off so browser autofill doesn't fight Places. */
   autoComplete?: string;
+  name?: string;
+  id?: string;
 };
 
 export function GoogleAddressInput({
   value,
   onChange,
-  placeholder,
+  placeholder = "Start typing street…",
   ariaLabel,
-  autoComplete = "street-address",
+  autoComplete = "off",
+  name,
+  id,
 }: Props) {
+  const reactId = useId();
+  const listId = `${reactId}-list`;
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const debounceRef = useRef<number | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
-  const tokenRef = useRef<string>(newToken());
+  const inputRef = useRef<HTMLInputElement>(null);
+  const tokenRef = useRef(newToken());
   const fetchSeq = useRef(0);
+  // Keep latest onChange without re-binding effect deps
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
 
   useEffect(() => {
-    const onDocClick = (e: MouseEvent) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    const onDocPointer = (e: Event) => {
+      const t = e.target as Node | null;
+      if (wrapRef.current && t && !wrapRef.current.contains(t)) {
+        setOpen(false);
+      }
     };
-    document.addEventListener("mousedown", onDocClick);
-    return () => document.removeEventListener("mousedown", onDocClick);
+    document.addEventListener("pointerdown", onDocPointer, true);
+    return () => document.removeEventListener("pointerdown", onDocPointer, true);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
   }, []);
 
   const runFetch = async (query: string) => {
@@ -138,29 +143,52 @@ export function GoogleAddressInput({
     const seq = ++fetchSeq.current;
     try {
       const items = await fetchPredictions(query, tokenRef.current);
-      if (seq !== fetchSeq.current) return; // stale response
+      if (seq !== fetchSeq.current) return;
+      // Don't steal focus — only update list
       setSuggestions(items);
-      setOpen(items.length > 0);
+      setOpen(items.length > 0 && document.activeElement === inputRef.current);
       setActive(-1);
     } catch {
-      /* no key / request failed — plain input still works */
+      /* plain input still works */
     }
   };
 
-  const onInput = (v: string) => {
-    onChange(v);
+  const handleChange = (v: string) => {
+    onChangeRef.current(v);
     if (debounceRef.current) window.clearTimeout(debounceRef.current);
-    debounceRef.current = window.setTimeout(() => runFetch(v), 180);
+    debounceRef.current = window.setTimeout(() => {
+      void runFetch(v);
+    }, 200);
   };
 
   const select = (s: Suggestion) => {
-    onChange(s.full);
+    const full = s.full || s.primary;
+    onChangeRef.current(full);
     setSuggestions([]);
     setOpen(false);
-    tokenRef.current = newToken(); // end this autocomplete session
+    setActive(-1);
+    tokenRef.current = newToken();
+    // Restore focus after selection so user can keep editing unit, etc.
+    requestAnimationFrame(() => inputRef.current?.blur());
   };
 
-  const onKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKey = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      // Never submit the outer form while the user is in this field
+      // unless they're confirming a highlighted suggestion.
+      if (open && suggestions.length > 0) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (active >= 0 && active < suggestions.length) {
+          select(suggestions[active]);
+        } else if (suggestions[0]) {
+          select(suggestions[0]);
+        }
+        return;
+      }
+      // Allow Enter to move on — parent form handles submit/continue
+      return;
+    }
     if (!open || suggestions.length === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -168,44 +196,57 @@ export function GoogleAddressInput({
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setActive((a) => Math.max(a - 1, 0));
-    } else if (e.key === "Enter" && active >= 0) {
-      e.preventDefault();
-      select(suggestions[active]);
     } else if (e.key === "Escape") {
+      e.preventDefault();
       setOpen(false);
+      setActive(-1);
     }
   };
 
   return (
     <div ref={wrapRef} className="address-input-wrap">
       <input
+        ref={inputRef}
+        id={id}
+        name={name}
         type="text"
+        // "off" / "new-password" quirks — use street-address disabled via off
         autoComplete={autoComplete}
+        autoCorrect="off"
+        autoCapitalize="words"
+        spellCheck={false}
         placeholder={placeholder}
         value={value}
-        onChange={(e) => onInput(e.target.value)}
-        onFocus={() => suggestions.length > 0 && setOpen(true)}
+        onChange={(e) => handleChange(e.target.value)}
+        onFocus={() => {
+          if (suggestions.length > 0) setOpen(true);
+        }}
         onKeyDown={onKey}
         aria-label={ariaLabel}
         aria-autocomplete="list"
+        aria-controls={listId}
         aria-expanded={open}
+        role="combobox"
       />
       {open && suggestions.length > 0 && (
-        <ul className="address-suggestions" role="listbox">
+        <ul id={listId} className="address-suggestions" role="listbox">
           {suggestions.map((s, i) => (
             <li
               key={s.id}
               role="option"
               aria-selected={i === active}
               className={`address-suggestion${i === active ? " active" : ""}`}
-              onMouseDown={(e) => {
+              // pointerdown + preventDefault keeps input from blurring before select on mobile
+              onPointerDown={(e) => {
                 e.preventDefault();
                 select(s);
               }}
               onMouseEnter={() => setActive(i)}
             >
-              <span className="addr-primary">{s.primary}</span>
-              <span className="addr-secondary">{s.secondary || s.full}</span>
+              <span className="addr-primary">{s.primary || s.full}</span>
+              {s.secondary ? (
+                <span className="addr-secondary">{s.secondary}</span>
+              ) : null}
             </li>
           ))}
         </ul>

@@ -4135,7 +4135,13 @@ html[data-lca-dock="1"] .lca-docked-inner .lca-back-solo {
 .mdf-field input[type="date"] {
   height: 52px;
   min-height: 52px;
-  line-height: 52px !important;
+}
+/* Prevent iOS from zooming / shifting layout on focus */
+.mdf-field input,
+.mdf-field textarea,
+.mdf .address-input-wrap > input {
+  font-size: 16px !important;
+  transform: translateZ(0);
 }
 
 .mdf .address-input-wrap {

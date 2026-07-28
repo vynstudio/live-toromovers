@@ -177,6 +177,138 @@ function floorLabel(f: string) {
   return `${f} floor`;
 }
 
+/** Stable place fields — MUST live outside parent so inputs never remount while typing. */
+function PlaceFields({
+  side,
+  d,
+  set,
+}: {
+  side: "from" | "to";
+  d: D;
+  set: (p: Partial<D>) => void;
+}) {
+  const f = side === "from";
+  const type = f ? d.fromHomeType : d.toHomeType;
+  return (
+    <>
+      <label className="mdf-field">
+        <span>Address</span>
+        <GoogleAddressInput
+          name={f ? "fromAddress" : "toAddress"}
+          value={f ? d.fromAddress : d.toAddress}
+          onChange={(v) => set(f ? { fromAddress: v } : { toAddress: v })}
+          placeholder="Start typing street…"
+          ariaLabel={f ? "Pickup address" : "Drop-off address"}
+          autoComplete="off"
+        />
+      </label>
+      <label className="mdf-field">
+        <span>Unit (optional)</span>
+        <input
+          name={f ? "fromUnit" : "toUnit"}
+          value={f ? d.fromUnit : d.toUnit}
+          onChange={(e) => set(f ? { fromUnit: e.target.value } : { toUnit: e.target.value })}
+          placeholder="Apt #"
+          inputMode="text"
+          autoComplete="off"
+        />
+      </label>
+      <div className="mdf-field">
+        <span>Home type</span>
+        <div className="mdf-chips">
+          {HOME.map((h) => (
+            <Chip
+              key={h}
+              on={type === h}
+              onClick={() =>
+                set(
+                  f
+                    ? { fromHomeType: h, bedrooms: needsBeds(h) ? d.bedrooms : "" }
+                    : { toHomeType: h },
+                )
+              }
+            >
+              {h}
+            </Chip>
+          ))}
+        </div>
+      </div>
+      {f && needsBeds(type) && (
+        <div className="mdf-field">
+          <span>Bedrooms</span>
+          <div className="mdf-chips">
+            {BEDS.map((b) => (
+              <Chip key={b} on={d.bedrooms === b} onClick={() => set({ bedrooms: b })}>
+                {b === "Studio" ? "Studio" : `${b} BR`}
+              </Chip>
+            ))}
+          </div>
+        </div>
+      )}
+      {multi(type) && (
+        <>
+          <div className="mdf-field">
+            <span>Floor</span>
+            <div className="mdf-chips">
+              {FLOORS.map((fl) => (
+                <Chip
+                  key={fl}
+                  on={(f ? d.fromFloor : d.toFloor) === fl}
+                  onClick={() => set(f ? { fromFloor: fl } : { toFloor: fl })}
+                >
+                  {fl}
+                </Chip>
+              ))}
+            </div>
+          </div>
+          <div className="mdf-field">
+            <span>Elevator</span>
+            <div className="mdf-chips">
+              {(["yes", "no"] as const).map((v) => (
+                <Chip
+                  key={v}
+                  on={(f ? d.fromElevator : d.toElevator) === v}
+                  onClick={() => set(f ? { fromElevator: v } : { toElevator: v })}
+                >
+                  {v === "yes" ? "Yes" : "No"}
+                </Chip>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+      <div className="mdf-field">
+        <span>Truck parking</span>
+        <div className="mdf-chips">
+          {PARK.map((p) => (
+            <Chip
+              key={p}
+              on={(f ? d.fromParking : d.toParking) === p}
+              onClick={() => set(f ? { fromParking: p } : { toParking: p })}
+            >
+              {p}
+            </Chip>
+          ))}
+        </div>
+      </div>
+      <div className="mdf-field">
+        <span>Long carry</span>
+        <div className="mdf-chips">
+          {(["yes", "no"] as const).map((v) => (
+            <Chip
+              key={v}
+              on={(f ? d.fromLongCarry : d.toLongCarry) === v}
+              onClick={() => set(f ? { fromLongCarry: v } : { toLongCarry: v })}
+            >
+              {v === "yes" ? "Yes" : "No"}
+            </Chip>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function MoveDetailsForm() {
   const router = useRouter();
   const [d, setD] = useState<D>(empty);
@@ -413,126 +545,6 @@ export function MoveDetailsForm() {
     else goNext();
   };
 
-  const Place = ({ side }: { side: "from" | "to" }) => {
-    const f = side === "from";
-    const type = f ? d.fromHomeType : d.toHomeType;
-    return (
-      <>
-        <label className="mdf-field">
-          <span>Address</span>
-          <GoogleAddressInput
-            value={f ? d.fromAddress : d.toAddress}
-            onChange={(v) => set(f ? { fromAddress: v } : { toAddress: v })}
-            placeholder="Start typing street…"
-            ariaLabel={f ? "Pickup address" : "Drop-off address"}
-          />
-        </label>
-        <label className="mdf-field">
-          <span>Unit (optional)</span>
-          <input
-            value={f ? d.fromUnit : d.toUnit}
-            onChange={(e) => set(f ? { fromUnit: e.target.value } : { toUnit: e.target.value })}
-            placeholder="Apt #"
-            inputMode="text"
-            autoComplete="address-line2"
-          />
-        </label>
-        <div className="mdf-field">
-          <span>Home type</span>
-          <div className="mdf-chips">
-            {HOME.map((h) => (
-              <Chip
-                key={h}
-                on={type === h}
-                onClick={() =>
-                  set(
-                    f
-                      ? { fromHomeType: h, bedrooms: needsBeds(h) ? d.bedrooms : "" }
-                      : { toHomeType: h },
-                  )
-                }
-              >
-                {h}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        {f && needsBeds(type) && (
-          <div className="mdf-field">
-            <span>Bedrooms</span>
-            <div className="mdf-chips">
-              {BEDS.map((b) => (
-                <Chip key={b} on={d.bedrooms === b} onClick={() => set({ bedrooms: b })}>
-                  {b === "Studio" ? "Studio" : `${b} BR`}
-                </Chip>
-              ))}
-            </div>
-          </div>
-        )}
-        {multi(type) && (
-          <>
-            <div className="mdf-field">
-              <span>Floor</span>
-              <div className="mdf-chips">
-                {FLOORS.map((fl) => (
-                  <Chip
-                    key={fl}
-                    on={(f ? d.fromFloor : d.toFloor) === fl}
-                    onClick={() => set(f ? { fromFloor: fl } : { toFloor: fl })}
-                  >
-                    {fl}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-            <div className="mdf-field">
-              <span>Elevator</span>
-              <div className="mdf-chips">
-                {(["yes", "no"] as const).map((v) => (
-                  <Chip
-                    key={v}
-                    on={(f ? d.fromElevator : d.toElevator) === v}
-                    onClick={() => set(f ? { fromElevator: v } : { toElevator: v })}
-                  >
-                    {v === "yes" ? "Yes" : "No"}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-        <div className="mdf-field">
-          <span>Truck parking</span>
-          <div className="mdf-chips">
-            {PARK.map((p) => (
-              <Chip
-                key={p}
-                on={(f ? d.fromParking : d.toParking) === p}
-                onClick={() => set(f ? { fromParking: p } : { toParking: p })}
-              >
-                {p}
-              </Chip>
-            ))}
-          </div>
-        </div>
-        <div className="mdf-field">
-          <span>Long carry</span>
-          <div className="mdf-chips">
-            {(["yes", "no"] as const).map((v) => (
-              <Chip
-                key={v}
-                on={(f ? d.fromLongCarry : d.toLongCarry) === v}
-                onClick={() => set(f ? { fromLongCarry: v } : { toLongCarry: v })}
-              >
-                {v === "yes" ? "Yes" : "No"}
-              </Chip>
-            ))}
-          </div>
-        </div>
-      </>
-    );
-  };
-
   return (
     <form ref={formRef} className="mdf" onSubmit={onSubmit}>
       <div className="mdf-progress" aria-hidden>
@@ -555,6 +567,8 @@ export function MoveDetailsForm() {
                 onChange={(e) => set({ name: e.target.value })}
                 placeholder="Maria Lopez"
                 autoComplete="name"
+                autoCorrect="off"
+                spellCheck={false}
                 enterKeyHint="next"
               />
             </label>
@@ -583,6 +597,9 @@ export function MoveDetailsForm() {
                 onChange={(e) => set({ email: e.target.value })}
                 placeholder="you@email.com"
                 autoComplete="email"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
                 enterKeyHint="done"
               />
             </label>
@@ -646,7 +663,7 @@ export function MoveDetailsForm() {
           <>
             <h2 className="mdf-q">Pickup</h2>
             <p className="mdf-sub">Where we load.</p>
-            <Place side="from" />
+            <PlaceFields side="from" d={d} set={set} />
           </>
         )}
 
@@ -671,7 +688,7 @@ export function MoveDetailsForm() {
                 Copy type from pickup
               </button>
             )}
-            <Place side="to" />
+            <PlaceFields side="to" d={d} set={set} />
           </>
         )}
 
