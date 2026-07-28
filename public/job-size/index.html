@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex" />
+  <title>Move size · Toro Movers</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0a0a0a;
+      --muted: #5a5a5a;
+      --line: #e5e5e5;
+      --line-strong: #0a0a0a;
+      --chip: #f4f4f4;
+      --radius: 12px;
+      --tap: 48px;
+      --max: 440px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bar {
+      border-bottom: 1px solid var(--line);
+      padding: 14px 20px;
+    }
+    .bar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .bar a {
+      color: var(--ink);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .sub {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .field { margin-bottom: 22px; }
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .q {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      min-height: var(--tap);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font: inherit;
+      font-size: 16px;
+      color: var(--ink);
+      background: #fff;
+      transition: border-color 0.15s ease;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--ink);
+    }
+    textarea {
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      min-height: var(--tap);
+      padding: 10px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+    }
+    .chip:hover { border-color: #bbb; }
+    .chip.on {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff;
+    }
+    .chip:active { transform: scale(0.98); }
+
+    .reveal {
+      display: none;
+      margin-top: 12px;
+    }
+    .reveal.show { display: block; }
+
+    .err {
+      display: none;
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--ink);
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .err.show { display: block; }
+
+    .submit {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+    }
+    .submit:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .submit:not(:disabled):hover { background: #222; }
+
+    .fine {
+      margin: 18px 0 0;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* Honeypot */
+    .ohnohoney {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .done {
+      display: none;
+      padding: 40px 0 20px;
+      text-align: left;
+    }
+    .done.show { display: block; }
+    .done h2 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+    .done p {
+      margin: 0 0 20px;
+      color: var(--muted);
+    }
+    .done a {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    form.hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="bar">
+      <div class="bar-inner">
+        <div class="brand">Toro Movers</div>
+        <a href="tel:+16896002720">(689) 600-2720</a>
+      </div>
+    </div>
+
+    <main>
+      <!--
+        EMAIL DESTINATION
+        Change the address in the form action below.
+        First submit with FormSubmit asks you to confirm that inbox once.
+      -->
+      <form
+        id="form"
+        action="https://formsubmit.co/hello@toromovers.net"
+        method="POST"
+        novalidate
+      >
+        <!-- FormSubmit config -->
+        <input type="hidden" name="_subject" value="Toro Movers — Job size (booked client)" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_blacklist" value="spam,viagra" />
+        <!-- Optional: thank-you redirect after email sends
+        <input type="hidden" name="_next" value="https://toromovers.net/thank-you" />
+        -->
+
+        <!-- Honeypot (FormSubmit ignores real users) -->
+        <input type="text" name="_honey" class="ohnohoney" tabindex="-1" autocomplete="off" />
+
+        <!-- Hidden fields filled by JS from chip selections -->
+        <input type="hidden" name="Move size" id="f_size" value="" />
+        <input type="hidden" name="Packing status" id="f_packed" value="" />
+        <input type="hidden" name="Pickup access" id="f_access" value="" />
+        <input type="hidden" name="Heavy / special" id="f_specials" value="" />
+        <input type="hidden" name="Crew hint" id="f_hint" value="" />
+        <input type="hidden" name="Source" value="job-size-form-bw" />
+
+        <h1>How big is your move?</h1>
+        <p class="sub">Four quick questions so we send the right crew. About 60 seconds.</p>
+
+        <div class="err" id="err" role="alert"></div>
+
+        <div class="field">
+          <label class="label" for="name">Full name</label>
+          <input id="name" name="Name" type="text" autocomplete="name" required placeholder="Your name" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="phone">Phone</label>
+          <input id="phone" name="Phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(689) 000-0000" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="email">Email <span style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+          <input id="email" name="Email" type="email" autocomplete="email" placeholder="you@email.com" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="moveDate">Move date</label>
+          <input id="moveDate" name="Move date" type="date" required />
+        </div>
+
+        <div class="field" data-q="size">
+          <p class="q">1. How big is the move?</p>
+          <div class="chips" role="group" aria-label="Move size">
+            <button type="button" class="chip" data-val="Studio / few items">Studio / few items</button>
+            <button type="button" class="chip" data-val="1 bedroom">1 BR</button>
+            <button type="button" class="chip" data-val="2 bedrooms">2 BR</button>
+            <button type="button" class="chip" data-val="3 bedrooms">3 BR</button>
+            <button type="button" class="chip" data-val="4+ bedrooms">4+ BR</button>
+          </div>
+        </div>
+
+        <div class="field" data-q="packed">
+          <p class="q">2. How packed will you be?</p>
+          <div class="chips" role="group" aria-label="Packing status">
+            <button type="button" class="chip" data-val="Ready (boxed)">Ready (boxed)</button>
+            <button type="button" class="chip" data-val="Halfway">Halfway</button>
+            <button type="button" class="chip" data-val="Still packing">Still packing</button>
+          </div>
+        </div>
+
+        <div class="field" data-q="access">
+          <p class="q">3. Pickup access</p>
+          <div class="chips" role="group" aria-label="Pickup access">
+            <button type="button" class="chip" data-val="Ground / easy parking">Ground / easy</button>
+            <button type="button" class="chip" data-val="Elevator">Elevator</button>
+            <button type="button" class="chip" data-val="Stairs">Stairs</button>
+          </div>
+          <div class="reveal" id="floorReveal">
+            <label class="label" for="floor">Which floor?</label>
+            <input id="floor" name="Stairs floor" type="text" inputmode="numeric" placeholder="e.g. 2" />
+          </div>
+        </div>
+
+        <div class="field" data-q="specials">
+          <p class="q">4. Heavy or special items?</p>
+          <div class="chips" role="group" aria-label="Special items">
+            <button type="button" class="chip" data-val="No">No</button>
+            <button type="button" class="chip" data-val="Yes">Yes</button>
+          </div>
+          <div class="reveal" id="specialsReveal">
+            <label class="label" for="specialsWhat">What?</label>
+            <textarea id="specialsWhat" name="Special items detail" placeholder="Piano, safe, fridge, hot tub…"></textarea>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="notes">Anything else? <span style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+          <textarea id="notes" name="Notes" placeholder="Gate code, elevator reserved, parking notes…"></textarea>
+        </div>
+
+        <button type="submit" class="submit" id="submitBtn">Send details</button>
+        <p class="fine">Goes to Toro only · (689) 600-2720 · Hablamos español</p>
+      </form>
+
+      <div class="done" id="done">
+        <h2>Got it. Thank you.</h2>
+        <p>We’ll use this to set your crew. If we need anything else, we’ll text or call.</p>
+        <p><a href="tel:+16896002720">(689) 600-2720</a></p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      // Change this if you want a different inbox (must match form action email).
+      // Form action is set in HTML: formsubmit.co/hello@toromovers.net
+
+      var answers = { size: "", packed: "", access: "", specials: "" };
+
+      function $(id) { return document.getElementById(id); }
+
+      function crewHint(size, packed, access, specials) {
+        var s = (size || "").toLowerCase();
+        var base = "2 movers · ~3–4 hrs";
+        if (s.indexOf("studio") !== -1 || s.indexOf("few") !== -1) base = "2 movers · ~2–3 hrs";
+        else if (s.indexOf("1") !== -1) base = "2 movers · ~3–4 hrs";
+        else if (s.indexOf("2") !== -1) base = "2–3 movers · ~4–6 hrs";
+        else if (s.indexOf("3") !== -1) base = "3–4 movers · ~6–8 hrs";
+        else if (s.indexOf("4") !== -1) base = "4 movers · ~8+ hrs";
+
+        var bumps = [];
+        if ((packed || "").toLowerCase().indexOf("still") !== -1) bumps.push("+packing");
+        if ((access || "").toLowerCase().indexOf("stair") !== -1) bumps.push("+stairs");
+        if ((specials || "").toLowerCase() === "yes") bumps.push("+specials");
+        return bumps.length ? base + " (adjust: " + bumps.join(", ") + ")" : base;
+      }
+
+      function showErr(msg) {
+        var el = $("err");
+        el.textContent = msg;
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      function clearErr() {
+        $("err").classList.remove("show");
+      }
+
+      document.querySelectorAll("[data-q]").forEach(function (block) {
+        var key = block.getAttribute("data-q");
+        block.querySelectorAll(".chip").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            block.querySelectorAll(".chip").forEach(function (b) { b.classList.remove("on"); });
+            btn.classList.add("on");
+            answers[key] = btn.getAttribute("data-val") || "";
+
+            if (key === "access") {
+              $("floorReveal").classList.toggle("show", answers.access === "Stairs");
+            }
+            if (key === "specials") {
+              $("specialsReveal").classList.toggle("show", answers.specials === "Yes");
+            }
+          });
+        });
+      });
+
+      $("form").addEventListener("submit", function (ev) {
+        clearErr();
+
+        var name = $("name").value.trim();
+        var phone = $("phone").value.trim();
+        var moveDate = $("moveDate").value;
+        var floor = $("floor").value.trim();
+        var specialsWhat = $("specialsWhat").value.trim();
+
+        if (!name || !phone) {
+          ev.preventDefault();
+          showErr("Name and phone are required.");
+          return;
+        }
+        if (!moveDate) {
+          ev.preventDefault();
+          showErr("Please pick your move date.");
+          return;
+        }
+        if (!answers.size || !answers.packed || !answers.access || !answers.specials) {
+          ev.preventDefault();
+          showErr("Please answer all 4 questions (tap the options).");
+          return;
+        }
+        if (answers.access === "Stairs" && !floor) {
+          ev.preventDefault();
+          showErr("Which floor for stairs?");
+          return;
+        }
+        if (answers.specials === "Yes" && !specialsWhat) {
+          ev.preventDefault();
+          showErr("What heavy or special items?");
+          return;
+        }
+
+        // Compose access / specials for the email table
+        var accessLine = answers.access;
+        if (floor) accessLine += " · floor " + floor;
+
+        var specialsLine = answers.specials;
+        if (specialsWhat) specialsLine += " · " + specialsWhat;
+
+        $("f_size").value = answers.size;
+        $("f_packed").value = answers.packed;
+        $("f_access").value = accessLine;
+        $("f_specials").value = specialsLine;
+        $("f_hint").value = crewHint(answers.size, answers.packed, answers.access, answers.specials);
+
+        var btn = $("submitBtn");
+        btn.disabled = true;
+        btn.textContent = "Sending…";
+
+        // Let the browser POST to FormSubmit (email only).
+        // On success FormSubmit shows its page, or _next if you set one.
+        // If the user stays on this file via file:// FormSubmit still works over network.
+      });
+    })();
+  </script>
+</body>
+</html>

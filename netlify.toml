@@ -24,3 +24,23 @@
 # Legacy ad domains are hosted on the toro-ads-landing Netlify project and
 # 301 to this site (see docs/domain-consolidation.md). Do not re-add
 # toromoveit.com as a content host — SEO home is toromovers.net only.
+
+# Post-book job-size form (email only) — subdomain + path
+# https://job-size.toromovers.net  →  /job-size/
+[[redirects]]
+  from = "https://job-size.toromovers.net"
+  to = "/job-size/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://job-size.toromovers.net/"
+  to = "/job-size/"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://job-size.toromovers.net/*"
+  to = "/job-size/"
+  status = 200
+  force = true
