@@ -16,7 +16,7 @@ const AD_LANDING_PATHS = [
   "/loading-help",
   "/lp",
   "/funnel",
-  "/move-details",
+  // "/move-details" is a real crew intake form — do not redirect to the funnel
 ];
 
 // Older URL pattern (/movers-{city}) from a still-older version of the site.
