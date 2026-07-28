@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
-import { sendEmail } from "@/lib/crm/providers";
+import { sendEmail, sendTelegram } from "@/lib/crm/providers";
 
 /**
- * Post-book /your-move form → team email only (Resend).
+ * Post-book /your-move form → team email (Resend) + one Telegram message.
  */
 
 type Inventory = Record<string, number>;
@@ -220,7 +220,7 @@ export async function POST(req: Request) {
   const hint = crewHint(size, packed, access, specials);
 
   const text = [
-    "YOUR MOVE — booked client details",
+    "📦 YOUR MOVE — booked client",
     "",
     `Name: ${name}`,
     `Phone: ${phone}`,
@@ -239,10 +239,17 @@ export async function POST(req: Request) {
     invText || "—",
     notes ? `\nNotes: ${notes}` : "",
     "",
-    `Crew hint: ${hint}`,
+    `→ Crew: ${hint}`,
   ]
     .filter((line) => line !== undefined)
     .join("\n");
+
+  // Telegram hard limit 4096 — keep a margin
+  const TELEGRAM_MAX = 4000;
+  const telegramText =
+    text.length <= TELEGRAM_MAX
+      ? text
+      : `${text.slice(0, TELEGRAM_MAX - 1)}…`;
 
   const to =
     process.env.LEAD_NOTIFICATION_EMAIL ||
@@ -272,22 +279,52 @@ export async function POST(req: Request) {
     </table>
   </div>`;
 
-  const result = await sendEmail({
-    to,
-    subject: `Your move — ${name} · ${dateLabel} ${timeLabel} · ${size}`,
-    html,
-    text,
-    replyTo: email || undefined,
-    fromName: "Toro Movers",
-  });
+  const [emailResult, telegramResult] = await Promise.all([
+    sendEmail({
+      to,
+      subject: `Your move — ${name} · ${dateLabel} ${timeLabel} · ${size}`,
+      html,
+      text,
+      replyTo: email || undefined,
+      fromName: "Toro Movers",
+    }),
+    sendTelegram(telegramText),
+  ]);
 
-  if (!result.ok) {
-    console.error("[job-size] email failed", result.detail, "to=", to);
+  const emailed = emailResult.ok;
+  const telegrammed = telegramResult.ok;
+
+  if (!emailed && !telegrammed) {
+    console.error(
+      "[job-size] no channel delivered",
+      "email=",
+      emailResult.detail,
+      "telegram=",
+      telegramResult.detail,
+    );
     return NextResponse.json(
-      { ok: false, error: "email_failed", detail: result.detail },
+      {
+        ok: false,
+        error: "delivery_failed",
+        detail: {
+          email: emailResult.detail,
+          telegram: telegramResult.detail,
+        },
+      },
       { status: 502 },
     );
   }
 
-  return NextResponse.json({ ok: true, emailed: true });
+  if (!emailed) {
+    console.error("[job-size] email failed", emailResult.detail, "to=", to);
+  }
+  if (!telegrammed) {
+    console.error("[job-size] telegram failed", telegramResult.detail);
+  }
+
+  return NextResponse.json({
+    ok: true,
+    emailed,
+    telegrammed,
+  });
 }

@@ -272,6 +272,8 @@ export function JobSizeForm() {
             "Too many tries. Wait a minute or call (689) 600-2720.",
           email_failed:
             "Could not deliver to our inbox. Call or text (689) 600-2720.",
+          delivery_failed:
+            "Could not send your details. Call or text (689) 600-2720.",
           name_phone_required: "Name and phone are required.",
           move_date_required: "Please pick your move date.",
           move_time_required: "Please pick a start time.",
