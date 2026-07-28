@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { IntakeForm } from "@/components/intake-form";
@@ -7,7 +6,7 @@ import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
 export const metadata: Metadata = {
   title: "Move-day intake form",
   description:
-    "Tell us everything we need to plan your move — date & time, contacts, addresses, access, item checklist, appliances, special items, and day-of details.",
+    "Share the details our crew needs for moving day — schedule, contacts, addresses, access, inventory, and special instructions.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/intake" },
 };
@@ -35,15 +34,13 @@ export default function IntakePage() {
           <p className="intake-eyebrow">Move-day intake</p>
           <h1 className="intake-h1">Tell us everything we need to plan your move.</h1>
           <p className="intake-lede">
-            Exact date and start time, contacts, access, item checklist, and day-of
-            details. About 10 quick screens — tap chips and presets to fly through.
-            Auto-saves as you go.
+            This is the detail sheet our crew uses on moving day — your schedule,
+            who to call, pickup and drop-off access, what you&apos;re moving, and
+            anything special we should know so the day runs smoothly.
           </p>
         </div>
 
-        <Suspense fallback={null}>
-          <IntakeForm />
-        </Suspense>
+        <IntakeForm />
       </div>
     </main>
   );

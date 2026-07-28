@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent, type TouchEvent } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { GoogleAddressInput } from "./google-address-input";
 
 type Yn = "yes" | "no" | "";
@@ -401,7 +401,7 @@ const STEP_META: Record<StepKey, { section: string; label: string }> = {
   inventory: { section: "Stuff", label: "Item checklist" },
   extras: { section: "Stuff", label: "Appliances & specials" },
   packing: { section: "Stuff", label: "Packing & services" },
-  dayOf: { section: "Day-of", label: "Who’s on site" },
+  dayOf: { section: "Day-of", label: "Who is on site" },
 };
 
 function inventorySelected(counts: ItemCounts): { name: string; qty: number }[] {
@@ -467,7 +467,6 @@ function isPackingValid(d: Data): boolean {
 
 export function IntakeForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [data, setData] = useState<Data>(initial);
   const [step, setStep] = useState(0);
@@ -478,6 +477,7 @@ export function IntakeForm() {
   const [openRooms, setOpenRooms] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(INVENTORY_GROUPS.map((g, i) => [g.room, i < 2])),
   );
+  const [mounted, setMounted] = useState(false);
 
   const advanceTimer = useRef<number | null>(null);
   const touchStartX = useRef<number | null>(null);
@@ -487,20 +487,23 @@ export function IntakeForm() {
     setData((d) => ({ ...d, ...patch }));
   }, []);
 
-  // Prefill from URL params (ops can pre-link a customer).
+  // Prefill from URL params without useSearchParams (avoids CSR bailout / blank form).
   useEffect(() => {
-    const sp = searchParams;
-    const patch: Partial<Data> = {};
-    const n = sp.get("name"); if (n) patch.name = n;
-    const p = sp.get("phone"); if (p) patch.phone = p;
-    const e = sp.get("email"); if (e) patch.email = e;
-    const dd = sp.get("date"); if (dd) patch.moveDate = dd;
-    const tm = sp.get("time"); if (tm) patch.moveTime = tm;
-    const f = sp.get("from"); if (f) patch.fromAddress = f;
-    const t = sp.get("to"); if (t) patch.toAddress = t;
-    const svc = sp.get("service"); if (svc) patch.serviceType = svc;
-    if (Object.keys(patch).length) setData((d) => ({ ...d, ...patch }));
-  }, [searchParams]);
+    setMounted(true);
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      const patch: Partial<Data> = {};
+      const n = sp.get("name"); if (n) patch.name = n;
+      const p = sp.get("phone"); if (p) patch.phone = p;
+      const e = sp.get("email"); if (e) patch.email = e;
+      const dd = sp.get("date"); if (dd) patch.moveDate = dd;
+      const tm = sp.get("time"); if (tm) patch.moveTime = tm;
+      const f = sp.get("from"); if (f) patch.fromAddress = f;
+      const t = sp.get("to"); if (t) patch.toAddress = t;
+      const svc = sp.get("service"); if (svc) patch.serviceType = svc;
+      if (Object.keys(patch).length) setData((d) => ({ ...d, ...patch }));
+    } catch { /* ignore */ }
+  }, []);
 
   // Load draft once on mount.
   useEffect(() => {
@@ -882,8 +885,8 @@ export function IntakeForm() {
   );
 
   const selectedCount = inventoryTotal(data.itemCounts);
-  const today = new Date().toISOString().slice(0, 10);
-  const minsLeft = Math.max(1, Math.ceil((totalSteps - step) * 0.45));
+  // Avoid SSR/client date mismatch; set min date after mount.
+  const today = mounted ? new Date().toISOString().slice(0, 10) : undefined;
 
   // Auto-advance when service / packing multi-pills complete via storage+disassembly.
   const tryAdvancePacking = (patch: Partial<Data>) => {
@@ -917,10 +920,7 @@ export function IntakeForm() {
         <span style={{ width: `${((step + 1) / totalSteps) * 100}%` }} />
       </div>
       <div className="iwiz-stepbar">
-        <div className="iwiz-step">
-          {meta.section} · {step + 1}/{totalSteps}
-        </div>
-        <div className="iwiz-eta">~{minsLeft} min left</div>
+        <div className="iwiz-step">{meta.label}</div>
       </div>
 
       <div className="iwiz-stepbody" key={currentKey}>
@@ -942,7 +942,7 @@ export function IntakeForm() {
             </div>
             <div className="iwiz-row2">
               <label className="iwiz-field"><span>Move date</span>
-                <input required type="date" min={today} value={data.moveDate} onChange={(e) => update({ moveDate: e.target.value })} />
+                <input required type="date" {...(today ? { min: today } : {})} value={data.moveDate} onChange={(e) => update({ moveDate: e.target.value })} />
               </label>
               <label className="iwiz-field"><span>Start time</span>
                 <input required type="time" step={300} value={data.moveTime} onChange={(e) => update({ moveTime: e.target.value })} />
@@ -1467,9 +1467,7 @@ export function IntakeForm() {
         </button>
       </div>
 
-      <p className="iwiz-fine">
-        Auto-saves as you go · swipe left/right to navigate
-      </p>
+      <p className="iwiz-fine">Your answers are saved automatically as you go.</p>
     </form>
   );
 }
