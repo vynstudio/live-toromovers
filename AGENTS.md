@@ -20,3 +20,15 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Deploy
 - `npx netlify deploy --prod --build` from repo root; site `live-toro-site` → toromovers.net
+- If Netlify cloud build is blocked (credit usage), local CLI deploy with auth still works
+
+## Move-day form (crew intake)
+- **Canonical URL:** `/move-details` (https://toromovers.net/move-details)
+- Legacy: `/movingday-checklist`; `/intake` redirects to checklist
+- POST `/api/intake` → Resend + **one** Telegram message (`buildTelegramText` — never multi-part)
+- Services only: `full-service` (truck+crew), `labor-only`. No storage / load-only / pack+move
+- No HOA or COI fields on the form
+- Address: `GoogleAddressInput` + `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (Places API New)
+- Sticky CTA hidden on move-details / movingday-checklist / intake
+- **Do not** put `/move-details` in `next.config.ts` `AD_LANDING_PATHS` (was redirecting to get-my-price)
+- **Do not** define form field components inside the parent render (remounts inputs / focus loss while typing)
