@@ -270,7 +270,7 @@
         <input type="hidden" name="Source" value="job-size-form-bw" />
 
         <h1>How big is your move?</h1>
-        <p class="sub">Four quick questions so we send the right crew. About 60 seconds.</p>
+        <p class="sub">Addresses + a few quick questions so we send the right crew.</p>
 
         <div class="err" id="err" role="alert"></div>
 
@@ -292,6 +292,40 @@
         <div class="field">
           <label class="label" for="moveDate">Move date</label>
           <input id="moveDate" name="Move date" type="date" required />
+        </div>
+
+        <div class="field">
+          <p class="q">Pickup address</p>
+          <label class="label" for="fromAddress">Full street address</label>
+          <input
+            id="fromAddress"
+            name="Pickup address"
+            type="text"
+            autocomplete="street-address"
+            required
+            placeholder="123 Main St, Orlando, FL 32801"
+          />
+          <div style="margin-top:10px">
+            <label class="label" for="fromUnit">Apt / unit <span style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input id="fromUnit" name="Pickup unit" type="text" autocomplete="address-line2" placeholder="Apt 2B" />
+          </div>
+        </div>
+
+        <div class="field">
+          <p class="q">Drop-off address</p>
+          <label class="label" for="toAddress">Full street address</label>
+          <input
+            id="toAddress"
+            name="Drop-off address"
+            type="text"
+            autocomplete="off"
+            required
+            placeholder="456 Oak Ave, Kissimmee, FL 34741"
+          />
+          <div style="margin-top:10px">
+            <label class="label" for="toUnit">Apt / unit <span style="font-weight:500;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input id="toUnit" name="Drop-off unit" type="text" autocomplete="off" placeholder="Unit 5" />
+          </div>
         </div>
 
         <div class="field" data-q="size">
@@ -415,6 +449,8 @@
         var name = $("name").value.trim();
         var phone = $("phone").value.trim();
         var moveDate = $("moveDate").value;
+        var fromAddress = $("fromAddress").value.trim();
+        var toAddress = $("toAddress").value.trim();
         var floor = $("floor").value.trim();
         var specialsWhat = $("specialsWhat").value.trim();
 
@@ -426,6 +462,21 @@
         if (!moveDate) {
           ev.preventDefault();
           showErr("Please pick your move date.");
+          return;
+        }
+        if (!fromAddress) {
+          ev.preventDefault();
+          showErr("Pickup address is required.");
+          return;
+        }
+        if (!toAddress) {
+          ev.preventDefault();
+          showErr("Drop-off address is required.");
+          return;
+        }
+        if (fromAddress.length < 8 || toAddress.length < 8) {
+          ev.preventDefault();
+          showErr("Please enter the full street address (street, city, ZIP).");
           return;
         }
         if (!answers.size || !answers.packed || !answers.access || !answers.specials) {
