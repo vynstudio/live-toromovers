@@ -25,9 +25,14 @@ function firstName(name: string): string {
   return (name || "there").trim().split(/\s+/)[0] || "there";
 }
 
-/** Join non-empty lines with real newlines (readable SMS layout). */
+/**
+ * Join lines with newlines. Keep "" as blank separator lines.
+ * Only drop null/undefined/false (optional bits), not empty strings.
+ */
 function lines(...parts: (string | false | null | undefined)[]): string {
-  return parts.filter(Boolean).join("\n");
+  return parts
+    .filter((p): p is string => p !== null && p !== undefined && p !== false)
+    .join("\n");
 }
 
 /** 1) Ready to lock a date — send Square booking link */
@@ -43,8 +48,10 @@ export function bookOnlineSms(opts: {
       `Agenda tu mudanza online.`,
       `El depósito se paga en Square al reservar.`,
       ``,
+      `────────`,
       `Book online:`,
       BOOK,
+      `────────`,
       ``,
       `O llama: ${PHONE_DISPLAY}`,
       ``,
@@ -57,8 +64,10 @@ export function bookOnlineSms(opts: {
     `Book your move date online.`,
     `Deposit is paid in Square when you reserve.`,
     ``,
+    `────────`,
     `Book here:`,
     BOOK,
+    `────────`,
     ``,
     `Or call: ${PHONE_DISPLAY}`,
     ``,
@@ -84,7 +93,9 @@ export function bookedConfirmSms(opts: {
       `Siguiente paso — checklist del día (2 min)`,
       `para mandar el crew correcto:`,
       ``,
+      `────────`,
       CHECKLIST,
+      `────────`,
       ``,
       `Dudas: ${PHONE_DISPLAY}`,
       ``,
@@ -99,7 +110,9 @@ export function bookedConfirmSms(opts: {
     `Next step — moving day checklist (2 min)`,
     `so we send the right crew:`,
     ``,
+    `────────`,
     CHECKLIST,
+    `────────`,
     ``,
     `Questions? ${PHONE_DISPLAY}`,
     ``,
@@ -123,8 +136,10 @@ export function checklistReminderSms(opts: {
       `Aún necesitamos tu checklist del día de mudanza.`,
       date ? `Mudanza: ${date}` : null,
       ``,
+      `────────`,
       `Complétalo aquí (2 min):`,
       CHECKLIST,
+      `────────`,
       ``,
       `${PHONE_DISPLAY}`,
       ``,
@@ -137,8 +152,10 @@ export function checklistReminderSms(opts: {
     `We still need your moving day checklist.`,
     date ? `Move date: ${date}` : null,
     ``,
+    `────────`,
     `Finish it here (2 min):`,
     CHECKLIST,
+    `────────`,
     ``,
     `${PHONE_DISPLAY}`,
     ``,

@@ -13,8 +13,11 @@ const MAPS =
   process.env.GOOGLE_MAPS_REVIEWS_URL ||
   "https://maps.app.goo.gl/HBfjZzWu2YbdXUW1A?g_st=ic";
 
+/** Keep "" as blank separator lines (filter(Boolean) would strip them). */
 function lines(...parts: (string | false | null | undefined)[]): string {
-  return parts.filter(Boolean).join("\n");
+  return parts
+    .filter((p): p is string => p !== null && p !== undefined && p !== false)
+    .join("\n");
 }
 
 export function quoteReceivedSms(opts: {
