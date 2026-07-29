@@ -11,6 +11,11 @@ export const PHONE_TEL = "tel:+16896002720";
 export const EMAIL = "hello@toromovers.net";
 export const EMAIL_HREF = "mailto:hello@toromovers.net";
 
+/** Square Appointments — book online (deposit handled in Square). */
+export const SQUARE_BOOKING_URL =
+  "https://app.squareup.com/appointments/book/81n62yjpmpqdfr/L5D6N73XD7ADG/start";
+export const MOVE_DAY_CHECKLIST_URL = "/move-day-checklist";
+
 export const HOURS_LABEL = "Mon–Sat · 7:00 AM – 7:00 PM";
 export const HOURS_LABEL_ES = "Lun–Sáb · 7:00 AM – 7:00 PM";
 export const HOURS_NOTE = "Sunday on request";

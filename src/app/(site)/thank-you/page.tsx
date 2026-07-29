@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ThankYouTracking } from "@/components/thank-you-tracking";
-import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME } from "@/lib/contact";
+import {
+  PHONE_DISPLAY,
+  PHONE_TEL,
+  SQUARE_BOOKING_URL,
+  MOVE_DAY_CHECKLIST_URL,
+} from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Quote request received",
@@ -32,13 +37,20 @@ export default function ThankYouPage() {
             Call us now — {PHONE_DISPLAY}
             <span className="arrow" aria-hidden />
           </a>
-          <Link href="/" className="btn btn-outline">
-            Back to home
-          </Link>
+          <a
+            href={SQUARE_BOOKING_URL}
+            className="btn btn-outline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Book online (Square)
+          </a>
         </div>
 
         <p className="thanks-fine">
-          Hablamos español. Family-owned. Up-front hourly pricing on every move.
+          After you book and pay the deposit:{" "}
+          <Link href={MOVE_DAY_CHECKLIST_URL}>moving day checklist</Link>
+          . Hablamos español · Up-front hourly pricing.
         </p>
       </div>
     </main>

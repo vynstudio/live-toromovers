@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useLang } from "./lang-provider";
 import { LangToggle } from "./lang-toggle";
 import { RequestButton } from "./request-button";
-import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
+import { PHONE_DISPLAY, PHONE_TEL, SQUARE_BOOKING_URL } from "@/lib/contact";
 
 const SERVICE_LINKS = [
   { href: "/full-service-moving", labelEn: "Full-Service Moving", labelEs: "Mudanza completa" },

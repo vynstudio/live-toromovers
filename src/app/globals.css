@@ -5237,3 +5237,125 @@ html[data-jsf="1"] .sticky-cta { display: none !important; }
   color: #0a0a0a;
   font-weight: 700;
 }
+
+/* —— Book online (Square) —— */
+.book-page {
+  min-height: 100dvh;
+  background: #fff;
+  color: #0a0a0a;
+}
+.book-bar {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 14px 20px;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+}
+.book-bar-inner {
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.book-brand {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  text-decoration: none;
+}
+.book-phone {
+  color: #0a0a0a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid #0a0a0a;
+}
+.book-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 36px 20px 72px;
+}
+.book-eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5a5a5a;
+}
+.book-title {
+  margin: 0 0 12px;
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.book-lede {
+  margin: 0 0 28px;
+  color: #5a5a5a;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+.book-steps {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.book-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1.5px solid #e5e5e5;
+  border-radius: 14px;
+  background: #fafafa;
+}
+.book-step-n {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #0a0a0a;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: grid;
+  place-items: center;
+}
+.book-step-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.book-step-body {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #5a5a5a;
+  line-height: 1.45;
+}
+.book-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.book-fine {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: #3a3a3a;
+  line-height: 1.45;
+}
+.book-fine.muted { color: #5a5a5a; font-size: 0.82rem; }
+.book-link {
+  color: #0a0a0a;
+  font-weight: 700;
+  text-underline-offset: 2px;
+}
