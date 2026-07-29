@@ -8,7 +8,7 @@ import { otherServices, type ServiceData } from "@/lib/services";
 import { CITIES } from "@/lib/cities";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME, GOOGLE_RATING } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 
 export function ServicePage({ service }: { service: ServiceData }) {
   const others = otherServices(service.slug);

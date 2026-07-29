@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  * Write interactive booking email HTML previews to public/email-preview/
- * Open: https://toromovers.net/email-preview/book-online.html
+ * Open: https://toromovers.com/email-preview/
  *
- *   node scripts/preview-booking-emails.mjs
+ *   node --experimental-strip-types scripts/preview-booking-emails.mjs
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -41,6 +41,8 @@ const kinds = [
   "book_online",
   "booked_confirm",
   "checklist_reminder",
+  "day_before",
+  "review_request",
 ];
 
 const buildBookingEmail = await loadBuilder();

@@ -136,7 +136,7 @@ export default function OpenGraph() {
             fontWeight: 600,
           }}
         >
-          <span>toromovers.net</span>
+          <span>toromovers.com</span>
           <span style={{ color: "#C8442A" }}>(689) 600-2720</span>
         </div>
       </div>

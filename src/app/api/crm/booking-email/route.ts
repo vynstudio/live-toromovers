@@ -15,6 +15,7 @@ import { EMAIL as REPLY } from "@/lib/contact";
  *
  * Body:
  *   kind: quote_received | book_online | booked_confirm | checklist_reminder
+ *         | day_before | review_request
  *   firstName, email
  *   moveDate?, lang?
  */
@@ -24,6 +25,8 @@ const KINDS = new Set<BookingEmailKind>([
   "book_online",
   "booked_confirm",
   "checklist_reminder",
+  "day_before",
+  "review_request",
 ]);
 
 export async function POST(req: Request) {

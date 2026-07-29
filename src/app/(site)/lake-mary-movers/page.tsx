@@ -12,7 +12,7 @@ import {
   SERVICE_BASE_LOCALITY,
 } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 const HREF = "/lake-mary-movers";
 
 const TITLE = "Lake Mary Movers | Local Moving Company | Toro Movers";

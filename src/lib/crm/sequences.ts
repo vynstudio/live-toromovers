@@ -7,7 +7,7 @@ import type { SequenceKey } from "./types";
 
 const PHONE_DISPLAY = "(689) 600-2720";
 const PHONE_TEL = "+16896002720";
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
 const QUOTE = `${SITE}/get-my-price`;
 const REVIEW =
   process.env.GOOGLE_REVIEW_URL ||
@@ -154,7 +154,7 @@ export function buildSequence(
 
     case "booked_confirm": {
       const checklist =
-        (process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net") +
+        (process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com") +
         "/move-day-checklist";
       return {
         sms: es

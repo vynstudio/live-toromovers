@@ -11,7 +11,7 @@ import {
   SERVICE_REGION,
 } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 const HREF = "/central-florida-moving-checklist";
 
 // Title uses template → final "… | Toro Movers"; keep segment short (≤45).

@@ -12,7 +12,7 @@ import {
   SERVICE_BASE_LOCALITY,
 } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 const HREF = "/maitland-movers";
 
 const TITLE = "Maitland Movers | Local Moving Company | Toro Movers";

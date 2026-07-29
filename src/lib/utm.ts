@@ -19,7 +19,7 @@ function classifySource(referrer: string): string {
   if (!referrer) return "direct";
   try {
     const host = new URL(referrer).hostname.replace(/^www\./, "");
-    if (host.includes("toromovers.net")) return "internal";
+    if (host.includes("toromovers.com") || host.includes("toromovers.net")) return "internal";
     if (/(google|bing|yahoo|duckduckgo|ecosia|brave)\./.test(host))
       return `organic:${host}`;
     if (/(facebook|instagram|fb\.|t\.co|twitter|x\.com|linkedin|tiktok|youtube)/.test(host))

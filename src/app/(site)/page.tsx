@@ -12,7 +12,7 @@ import { Footer } from "@/components/footer";
 import { content, REVIEWS } from "@/lib/content";
 import { GOOGLE_RATING, REVIEW_COUNT, BUSINESS_NAME } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 
 // Homepage-only schema: the rating + reviews and the homepage FAQ live here
 // (not in the sitewide layout) so they aren't duplicated onto pages whose

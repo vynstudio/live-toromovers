@@ -33,7 +33,7 @@ export function sanitizeReturnPath(raw: string | null | undefined): string {
     }
     const u = new URL(trimmed);
     const host = u.hostname.replace(/^www\./, "");
-    if (host === "toromovers.net" || host === "localhost" || host.endsWith(".netlify.app")) {
+    if (host === "toromovers.com" || host === "toromovers.net" || host === "localhost" || host.endsWith(".netlify.app")) {
       const path = u.pathname + u.search;
       return sanitizeReturnPath(path || "/");
     }

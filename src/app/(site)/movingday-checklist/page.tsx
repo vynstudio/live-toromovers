@@ -32,10 +32,9 @@ export default function MovingDayChecklistPage() {
       <div className="intake-wrap">
         <div className="intake-hero">
           <p className="intake-eyebrow">Moving day checklist</p>
-          <h1 className="intake-h1">Tell us everything we need to plan your move.</h1>
+          <h1 className="intake-h1">Moving day details.</h1>
           <p className="intake-lede">
-            This is the detail sheet our crew uses on moving day — schedule,
-            access, inventory, and who to call so the day runs smoothly.
+            Schedule, access, inventory, and who to call — so moving day runs smoothly.
           </p>
         </div>
 

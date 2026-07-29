@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * job-size.toromovers.net → /move-day-checklist
+ * job-size.toromovers.com / job-size.toromovers.net → /move-day-checklist
  * API routes pass through so the form can POST to /api/job-size on the same host.
  */
 export function middleware(request: NextRequest) {
   const host = (request.headers.get("host") || "").split(":")[0].toLowerCase();
-  if (host !== "job-size.toromovers.net") {
+  const isJobSizeHost =
+    host === "job-size.toromovers.com" || host === "job-size.toromovers.net";
+  if (!isJobSizeHost) {
     return NextResponse.next();
   }
 

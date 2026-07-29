@@ -8,7 +8,7 @@ import {
 } from "@/lib/lead-magnet-schema";
 import { normalizePhone } from "@/lib/verify";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 const PDF_URL = `${SITE_URL}/central-florida-moving-checklist.pdf`;
 const WEB_CHECKLIST_URL = `${SITE_URL}/checklist`;
 const QUOTE_URL = `${SITE_URL}/quote`;

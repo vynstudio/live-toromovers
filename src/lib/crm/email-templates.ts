@@ -12,11 +12,16 @@ import {
   PHONE_TEL,
   SQUARE_BOOKING_URL,
   SLOGAN,
+  GOOGLE_MAPS_REVIEWS_URL,
 } from "@/lib/contact";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
 const CHECKLIST = `${SITE}/move-day-checklist`;
 const BOOK = SQUARE_BOOKING_URL;
+/** Direct Google review write link (GBP). */
+const REVIEW =
+  process.env.GOOGLE_REVIEW_URL ||
+  "https://g.page/r/CYAKurQHh5TvEAI/review";
 const CHERRY = "#C8102E";
 const NAVY = "#1B2A52";
 const INK = "#0A0A0A";
@@ -30,7 +35,9 @@ export type BookingEmailKind =
   | "quote_received"
   | "book_online"
   | "booked_confirm"
-  | "checklist_reminder";
+  | "checklist_reminder"
+  | "day_before"
+  | "review_request";
 
 export type BookingEmailOpts = {
   firstName: string;
@@ -197,7 +204,7 @@ function shell(opts: {
                     &nbsp;·&nbsp;
                     <a href="mailto:${EMAIL}" style="color:${MUTED};text-decoration:none;">${EMAIL}</a>
                     &nbsp;·&nbsp;
-                    <a href="${SITE}" style="color:${MUTED};text-decoration:none;">toromovers.net</a>
+                    <a href="${SITE}" style="color:${MUTED};text-decoration:none;">toromovers.com</a>
                   </td>
                 </tr>
               </table>
@@ -469,6 +476,140 @@ export function buildBookingEmail(
         lang === "es"
           ? `Hola ${name},\n\nAún necesitamos tu checklist del día de mudanza.${date ? `\nMudanza: ${date}` : ""}\n\n${CHECKLIST}\n\n${PHONE_DISPLAY}${textFooter(lang)}`
           : `Hi ${name},\n\nWe still need your moving day checklist.${date ? `\nMove date: ${date}` : ""}\n\n${CHECKLIST}\n\n${PHONE_DISPLAY}${textFooter(lang)}`;
+
+      return {
+        subject,
+        html: shell({
+          preheader: opts.preheader || preheader,
+          title: subject,
+          bodyHtml: body,
+          lang,
+        }),
+        text,
+      };
+    }
+
+    case "day_before": {
+      const subject =
+        lang === "es"
+          ? `Mañana es el día, ${name} — Toro Movers`
+          : `Tomorrow is move day, ${name} — Toro Movers`;
+      const preheader =
+        lang === "es"
+          ? "Hora de inicio, acceso y lo que el crew necesita."
+          : "Start time, access, and what the crew needs.";
+
+      const dateRow = date
+        ? lang === "es"
+          ? `<p style="margin:0 0 12px;text-align:center;"><strong style="color:${INK};">Fecha:</strong> ${esc(date)}</p>`
+          : `<p style="margin:0 0 12px;text-align:center;"><strong style="color:${INK};">Date:</strong> ${esc(date)}</p>`
+        : "";
+
+      const body =
+        lang === "es"
+          ? `
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
+              Mañana nos vemos, ${esc(name)}
+            </h1>
+            ${dateRow}
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
+              El crew llega en la ventana acordada. Ten listo: acceso al edificio, elevador si aplica, y cajas cerradas en lo posible.
+            </p>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px;background:${BG};border-radius:12px;">
+              <tr>
+                <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
+                  <strong style="color:${INK};">Checklist rápido</strong><br />
+                  · Pasillos despejados<br />
+                  · Frágil etiquetado<br />
+                  · Estacionamiento / loading cerca de la puerta
+                </td>
+              </tr>
+            </table>
+            ${ctaButton(CHECKLIST, "Revisar checklist →", NAVY)}
+            ${ctaOutline(PHONE_TEL, `Llámanos ${PHONE_DISPLAY}`)}
+          `
+          : `
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
+              See you tomorrow, ${esc(name)}
+            </h1>
+            ${dateRow}
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
+              The crew arrives in the agreed window. Please have building access, elevator reservation if needed, and boxes closed when possible.
+            </p>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px;background:${BG};border-radius:12px;">
+              <tr>
+                <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
+                  <strong style="color:${INK};">Quick checklist</strong><br />
+                  · Clear hallways<br />
+                  · Fragile items labeled<br />
+                  · Parking / loading near the door
+                </td>
+              </tr>
+            </table>
+            ${ctaButton(CHECKLIST, "Review checklist →", NAVY)}
+            ${ctaOutline(PHONE_TEL, `Call us ${PHONE_DISPLAY}`)}
+          `;
+
+      const text =
+        lang === "es"
+          ? `Hola ${name},\n\nMañana es el día de mudanza.${date ? `\nFecha: ${date}` : ""}\n\nTen listo acceso, elevador si aplica, y cajas cerradas.\nChecklist: ${CHECKLIST}\n\n${PHONE_DISPLAY}${textFooter(lang)}`
+          : `Hi ${name},\n\nTomorrow is move day.${date ? `\nDate: ${date}` : ""}\n\nHave building access, elevator if needed, and boxes closed.\nChecklist: ${CHECKLIST}\n\n${PHONE_DISPLAY}${textFooter(lang)}`;
+
+      return {
+        subject,
+        html: shell({
+          preheader: opts.preheader || preheader,
+          title: subject,
+          bodyHtml: body,
+          lang,
+        }),
+        text,
+      };
+    }
+
+    case "review_request": {
+      const subject =
+        lang === "es"
+          ? `${name}, ¿cómo te fue con Toro?`
+          : `${name}, how did your move go?`;
+      const preheader =
+        lang === "es"
+          ? "Una reseña en Google nos ayuda muchísimo."
+          : "A quick Google review helps our family business a lot.";
+
+      const body =
+        lang === "es"
+          ? `
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
+              Gracias, ${esc(name)}
+            </h1>
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
+              Esperamos que la mudanza haya salido bien. Si el crew hizo un gran trabajo, una reseña en Google ayuda a nuestra familia a seguir creciendo.
+            </p>
+            ${ctaButton(REVIEW, "Dejar reseña en Google →")}
+            ${ctaOutline(GOOGLE_MAPS_REVIEWS_URL, "Ver reseñas de otros")}
+            <p style="margin:20px 0 0;color:${MUTED};font-size:14px;text-align:center;">
+              ¿Algo no salió perfecto? Responde este correo o llama ${PHONE_DISPLAY} — lo arreglamos.
+            </p>
+          `
+          : `
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
+              Thank you, ${esc(name)}
+            </h1>
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
+              We hope the move went smoothly. If the crew did a great job, a Google review genuinely helps our small family business.
+            </p>
+            ${ctaButton(REVIEW, "Leave a Google review →")}
+            ${ctaOutline(GOOGLE_MAPS_REVIEWS_URL, "See other reviews")}
+            <p style="margin:20px 0 0;color:${MUTED};font-size:14px;text-align:center;">
+              Something not perfect? Reply to this email or call ${PHONE_DISPLAY} — we'll make it right.
+            </p>
+          `;
+
+      const text =
+        lang === "es"
+          ? `Hola ${name},\n\nGracias por confiar en Toro. Si todo salió bien, una reseña en Google nos ayuda mucho:\n${REVIEW}\n\n¿Algo que mejorar? ${PHONE_DISPLAY}${textFooter(lang)}`
+          : `Hi ${name},\n\nThanks for trusting Toro. If everything went well, a Google review helps a lot:\n${REVIEW}\n\nAnything to improve? ${PHONE_DISPLAY}${textFooter(lang)}`;
 
       return {
         subject,

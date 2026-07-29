@@ -3,7 +3,7 @@ import { ServicePage } from "@/components/service-page";
 import { FunnelView } from "@/components/funnel-tracking";
 import { LABOR_ONLY_MOVING as S } from "@/lib/services";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 
 export const metadata: Metadata = {
   title: { absolute: `${S.metadata.title} | Toro Movers` },

@@ -4,7 +4,7 @@ import { SERVICES } from "@/lib/services";
 import { GUIDES } from "@/lib/guides";
 
 const BASE =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

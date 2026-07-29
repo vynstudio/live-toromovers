@@ -12,14 +12,19 @@ import {
   PHONE_DISPLAY,
 } from "@/lib/contact";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
 const CHECKLIST = `${SITE}/move-day-checklist`;
 const BOOK = SQUARE_BOOKING_URL;
+const REVIEW =
+  process.env.GOOGLE_REVIEW_URL ||
+  "https://g.page/r/CYAKurQHh5TvEAI/review";
 
 export type BookingSmsKind =
   | "book_online"
   | "booked_confirm"
-  | "checklist_reminder";
+  | "checklist_reminder"
+  | "day_before"
+  | "review_request";
 
 function firstName(name: string): string {
   return (name || "there").trim().split(/\s+/)[0] || "there";
@@ -163,6 +168,90 @@ export function checklistReminderSms(opts: {
   );
 }
 
+/** 4) Night before move day */
+export function dayBeforeSms(opts: {
+  firstName: string;
+  moveDate?: string;
+  lang?: "en" | "es";
+}): string {
+  const name = firstName(opts.firstName);
+  const date = opts.moveDate?.trim();
+
+  if (opts.lang === "es") {
+    return lines(
+      `Hola ${name} — Toro Movers`,
+      ``,
+      `Mañana es el día de mudanza.`,
+      date ? `Fecha: ${date}` : null,
+      ``,
+      `Ten listo: acceso, elevador si aplica, cajas cerradas.`,
+      ``,
+      `────────`,
+      `Checklist:`,
+      CHECKLIST,
+      `────────`,
+      ``,
+      `Dudas: ${PHONE_DISPLAY}`,
+      ``,
+      `Responde STOP para salir.`,
+    );
+  }
+  return lines(
+    `Hi ${name} — Toro Movers`,
+    ``,
+    `Tomorrow is move day.`,
+    date ? `Date: ${date}` : null,
+    ``,
+    `Have ready: building access, elevator if needed, boxes closed.`,
+    ``,
+    `────────`,
+    `Checklist:`,
+    CHECKLIST,
+    `────────`,
+    ``,
+    `Questions? ${PHONE_DISPLAY}`,
+    ``,
+    `Reply STOP to opt out.`,
+  );
+}
+
+/** 5) Post-move Google review ask */
+export function reviewRequestSms(opts: {
+  firstName: string;
+  lang?: "en" | "es";
+}): string {
+  const name = firstName(opts.firstName);
+
+  if (opts.lang === "es") {
+    return lines(
+      `Gracias ${name} — Toro Movers`,
+      ``,
+      `Si el crew hizo un gran trabajo, una reseña en Google nos ayuda muchísimo:`,
+      ``,
+      `────────`,
+      REVIEW,
+      `────────`,
+      ``,
+      `¿Algo que mejorar? ${PHONE_DISPLAY}`,
+      ``,
+      `Responde STOP para salir.`,
+    );
+  }
+  return lines(
+    `Thank you ${name} — Toro Movers`,
+    ``,
+    `If the crew did a great job, a Google review helps our family business a lot:`,
+    ``,
+    `────────`,
+    REVIEW,
+    `────────`,
+    ``,
+    `Anything to improve? ${PHONE_DISPLAY}`,
+    ``,
+    `Reply STOP to opt out.`,
+  );
+}
+
 export function buildBookingSms(
   kind: BookingSmsKind,
   opts: { firstName: string; moveDate?: string; lang?: "en" | "es" },
@@ -174,6 +263,10 @@ export function buildBookingSms(
       return bookedConfirmSms(opts);
     case "checklist_reminder":
       return checklistReminderSms(opts);
+    case "day_before":
+      return dayBeforeSms(opts);
+    case "review_request":
+      return reviewRequestSms(opts);
     default:
       return bookOnlineSms(opts);
   }

@@ -15,7 +15,7 @@ import {
   SERVICE_REGION,
 } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 const HREF = "/apartment-movers-orlando-fl";
 
 // Description ≤155 chars; absolute title ≤60.

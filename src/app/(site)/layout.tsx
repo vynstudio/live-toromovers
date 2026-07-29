@@ -34,7 +34,7 @@ const sans = Inter({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 
 export const metadata: Metadata = {
   title: {

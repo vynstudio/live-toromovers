@@ -12,9 +12,9 @@ import { rateLimit, clientIp } from "@/lib/rate-limit";
  * Auth: x-lead-secret === LEAD_INTAKE_SECRET
  *
  * Body:
- *   kind: "book_online" | "booked_confirm" | "checklist_reminder"
+ *   kind: book_online | booked_confirm | checklist_reminder | day_before | review_request
  *   firstName, phone
- *   moveDate?  (shown in booked_confirm / checklist_reminder)
+ *   moveDate?  (booked_confirm / checklist_reminder / day_before)
  *   lang?      "en" | "es"
  *   consentSms? default true
  *
@@ -27,12 +27,20 @@ import { rateLimit, clientIp } from "@/lib/rate-limit";
  *
  *   // Nudge for checklist
  *   { "kind": "checklist_reminder", "firstName": "Maria", "phone": "+1689..." }
+ *
+ *   // Night before
+ *   { "kind": "day_before", "firstName": "Maria", "phone": "+1689...", "moveDate": "Fri Aug 15" }
+ *
+ *   // After move
+ *   { "kind": "review_request", "firstName": "Maria", "phone": "+1689..." }
  */
 
 const KINDS = new Set<BookingSmsKind>([
   "book_online",
   "booked_confirm",
   "checklist_reminder",
+  "day_before",
+  "review_request",
 ]);
 
 export async function POST(req: Request) {

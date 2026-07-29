@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

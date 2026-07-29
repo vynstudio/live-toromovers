@@ -39,7 +39,7 @@ export default function PrivacyPage() {
         <p>
           {BUSINESS_NAME} is a DBA of{" "}
           <strong>Diler Dynamics Group LLC</strong> (&ldquo;we&rdquo;,
-          &ldquo;us&rdquo;). We operate toromovers.net to provide moving quotes
+          &ldquo;us&rdquo;). We operate toromovers.com to provide moving quotes
           and bookings in Central Florida. This policy explains what we collect
           and how we use it.
         </p>

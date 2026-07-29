@@ -10,7 +10,7 @@ import { CITIES } from "@/lib/cities";
 import { SERVICES } from "@/lib/services";
 import { PHONE_DISPLAY, PHONE_TEL, BUSINESS_NAME, GOOGLE_RATING } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 const HREF = "/central-florida-movers";
 
 const TITLE = "Central Florida Movers";

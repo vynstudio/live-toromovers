@@ -31,7 +31,7 @@ function detailFromEl(el: HTMLElement): QuoteOpenDetail {
   const href = el.getAttribute("href") || "";
   if (href.includes("?")) {
     try {
-      const u = new URL(href, "https://toromovers.net");
+      const u = new URL(href, "https://toromovers.com");
       hrefSvc = u.searchParams.get("service") || undefined;
       hrefSource = u.searchParams.get("source") || undefined;
       hrefCity = u.searchParams.get("city") || undefined;

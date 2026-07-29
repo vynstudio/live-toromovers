@@ -7,7 +7,7 @@ import { Footer } from "./footer";
 import type { GuideData } from "@/lib/guides";
 import { BUSINESS_NAME } from "@/lib/contact";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.net";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
