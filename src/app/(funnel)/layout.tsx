@@ -5,6 +5,9 @@ import { UtmCapture } from "@/components/utm-capture";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
+const SEARCHABLE_SITE_TOKEN =
+  process.env.NEXT_PUBLIC_SEARCHABLE_SITE_TOKEN ||
+  "pst_18bcf81295a1c8185e489122";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -22,6 +25,18 @@ export default function FunnelLayout({
       {/* Critical path: form + UTM only */}
       <UtmCapture />
       {children}
+
+      {/* Searchable Analytics */}
+      <Script id="searchable-queue-funnel" strategy="lazyOnload">
+        {`window.sa=window.sa||function(){(sa.q=sa.q||[]).push(arguments)}`}
+      </Script>
+      <Script
+        id="searchable-tracker-funnel"
+        src="https://searchable-tracker.searchable.workers.dev/s.js"
+        strategy="lazyOnload"
+        data-domain="toromovers.com"
+        data-site-token={SEARCHABLE_SITE_TOKEN}
+      />
 
       {/* Tracking last — lazy so it doesn't block first paint / TTI */}
       {PIXEL_ID && (

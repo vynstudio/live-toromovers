@@ -2,12 +2,28 @@ import Script from "next/script";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
+/** Searchable Analytics browser token (LLM / human visitor correlation) */
+const SEARCHABLE_SITE_TOKEN =
+  process.env.NEXT_PUBLIC_SEARCHABLE_SITE_TOKEN ||
+  "pst_18bcf81295a1c8185e489122";
 
 /** Meta Pixel + GA4 base tags. Each only renders when its env var is set,
  *  so previews / local builds without the IDs stay clean. */
 export function Analytics() {
   return (
     <>
+      {/* Searchable Analytics — homepage design has this too; needed on SEO pages via hybrid proxy */}
+      <Script id="searchable-queue" strategy="beforeInteractive">
+        {`window.sa=window.sa||function(){(sa.q=sa.q||[]).push(arguments)}`}
+      </Script>
+      <Script
+        id="searchable-tracker"
+        src="https://searchable-tracker.searchable.workers.dev/s.js"
+        strategy="afterInteractive"
+        data-domain="toromovers.com"
+        data-site-token={SEARCHABLE_SITE_TOKEN}
+      />
+
       {PIXEL_ID && (
         <>
           <Script id="meta-pixel" strategy="afterInteractive">
