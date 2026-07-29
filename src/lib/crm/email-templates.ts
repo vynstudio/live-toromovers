@@ -169,33 +169,29 @@ function shell(opts: {
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid ${LINE};">
           <!-- Header -->
           <tr>
-            <td style="background:${NAVY};padding:22px 28px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-                <tr>
-                  <td style="font:700 13px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:0.14em;text-transform:uppercase;color:#ffffff;">
-                    ${esc(BUSINESS_NAME)}
-                  </td>
-                  <td align="right" style="font:500 12px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:rgba(255,255,255,0.75);">
-                    ${esc(SLOGAN)}
-                  </td>
-                </tr>
-              </table>
+            <td align="center" style="background:${NAVY};padding:22px 28px;text-align:center;">
+              <div style="font:700 13px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;letter-spacing:0.14em;text-transform:uppercase;color:#ffffff;">
+                ${esc(BUSINESS_NAME)}
+              </div>
+              <div style="margin-top:6px;font:500 12px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:rgba(255,255,255,0.75);">
+                ${esc(SLOGAN)}
+              </div>
             </td>
           </tr>
 
-          <!-- Body -->
+          <!-- Body (centered) -->
           <tr>
-            <td style="padding:28px 28px 8px;font:15px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${INK};">
+            <td align="center" style="padding:28px 28px 8px;font:15px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${INK};text-align:center;">
               ${opts.bodyHtml}
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="padding:8px 28px 28px;">
+            <td align="center" style="padding:8px 28px 28px;text-align:center;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-top:1px solid ${LINE};">
                 <tr>
-                  <td style="padding-top:18px;font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${MUTED};">
+                  <td align="center" style="padding-top:18px;font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${MUTED};text-align:center;">
                     ${esc(footerNote)}<br />
                     <a href="${PHONE_TEL}" style="color:${CHERRY};text-decoration:none;font-weight:600;">${PHONE_DISPLAY}</a>
                     &nbsp;·&nbsp;
@@ -247,28 +243,28 @@ export function buildBookingEmail(
       const body =
         lang === "es"
           ? `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               Hola ${esc(name)},
             </h1>
-            <p style="margin:0 0 16px;color:${MUTED};">
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
               Recibimos tu solicitud de cotización. Un miembro del equipo te contacta pronto con precio y disponibilidad.
             </p>
             ${progressSteps(1, lang)}
-            <p style="margin:0 0 20px;color:${MUTED};font-size:14px;">
+            <p style="margin:0 0 20px;color:${MUTED};font-size:14px;text-align:center;">
               Cuando el precio te funcione, podrás <strong style="color:${INK};">agendar online</strong> y pagar el depósito en Square.
             </p>
             ${ctaButton(BOOK, "Ver agenda online →", NAVY)}
             ${ctaOutline(PHONE_TEL, `Llamar ${PHONE_DISPLAY}`)}
           `
           : `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               Hi ${esc(name)},
             </h1>
-            <p style="margin:0 0 16px;color:${MUTED};">
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
               We got your quote request. A team member will contact you shortly with pricing and availability.
             </p>
             ${progressSteps(1, lang)}
-            <p style="margin:0 0 20px;color:${MUTED};font-size:14px;">
+            <p style="margin:0 0 20px;color:${MUTED};font-size:14px;text-align:center;">
               When the quote works for you, you can <strong style="color:${INK};">book online</strong> and pay the deposit in Square.
             </p>
             ${ctaButton(BOOK, "View booking calendar →", NAVY)}
@@ -305,16 +301,16 @@ export function buildBookingEmail(
       const body =
         lang === "es"
           ? `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               Agenda tu mudanza
             </h1>
-            <p style="margin:0 0 16px;color:${MUTED};">
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
               Hola ${esc(name)} — elige fecha y hora online. El depósito se paga en Square al reservar y se aplica a la factura final.
             </p>
             ${progressSteps(1, lang)}
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px;background:${BG};border-radius:12px;">
               <tr>
-                <td style="padding:16px 18px;font-size:14px;color:${MUTED};">
+                <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
                   <strong style="color:${INK};">Qué pasa después</strong><br />
                   1. Reservas en Square<br />
                   2. Pagas el depósito<br />
@@ -326,16 +322,16 @@ export function buildBookingEmail(
             ${ctaOutline(PHONE_TEL, `O llama ${PHONE_DISPLAY}`)}
           `
           : `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               Book your move
             </h1>
-            <p style="margin:0 0 16px;color:${MUTED};">
+            <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
               Hi ${esc(name)} — pick your date and time online. Deposit is paid in Square when you reserve and applies to your final invoice.
             </p>
             ${progressSteps(1, lang)}
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px;background:${BG};border-radius:12px;">
               <tr>
-                <td style="padding:16px 18px;font-size:14px;color:${MUTED};">
+                <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
                   <strong style="color:${INK};">What happens next</strong><br />
                   1. Book in Square<br />
                   2. Pay the deposit<br />
@@ -376,33 +372,33 @@ export function buildBookingEmail(
 
       const dateRow = date
         ? lang === "es"
-          ? `<p style="margin:0 0 8px;"><strong style="color:${INK};">Fecha:</strong> ${esc(date)}</p>`
-          : `<p style="margin:0 0 8px;"><strong style="color:${INK};">Date:</strong> ${esc(date)}</p>`
+          ? `<p style="margin:0 0 8px;text-align:center;"><strong style="color:${INK};">Fecha:</strong> ${esc(date)}</p>`
+          : `<p style="margin:0 0 8px;text-align:center;"><strong style="color:${INK};">Date:</strong> ${esc(date)}</p>`
         : "";
 
       const body =
         lang === "es"
           ? `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               ¡Estás agendado, ${esc(name)}!
             </h1>
-            <p style="margin:0 0 8px;color:${MUTED};">Depósito recibido. Tu fecha está reservada.</p>
+            <p style="margin:0 0 8px;color:${MUTED};text-align:center;">Depósito recibido. Tu fecha está reservada.</p>
             ${dateRow}
             ${progressSteps(3, lang)}
-            <p style="margin:0 0 20px;color:${MUTED};">
+            <p style="margin:0 0 20px;color:${MUTED};text-align:center;">
               Último paso: el <strong style="color:${INK};">checklist del día de mudanza</strong> (direcciones, hora de inicio, inventario) para mandar el crew correcto.
             </p>
             ${ctaButton(CHECKLIST, "Completar checklist (2 min) →")}
             ${ctaOutline(PHONE_TEL, `Preguntas? ${PHONE_DISPLAY}`)}
           `
           : `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               You're booked, ${esc(name)}!
             </h1>
-            <p style="margin:0 0 8px;color:${MUTED};">Deposit received. Your date is locked in.</p>
+            <p style="margin:0 0 8px;color:${MUTED};text-align:center;">Deposit received. Your date is locked in.</p>
             ${dateRow}
             ${progressSteps(3, lang)}
-            <p style="margin:0 0 20px;color:${MUTED};">
+            <p style="margin:0 0 20px;color:${MUTED};text-align:center;">
               Last step: the <strong style="color:${INK};">moving day checklist</strong> (addresses, start time, inventory) so we send the right crew.
             </p>
             ${ctaButton(CHECKLIST, "Complete checklist (2 min) →")}
@@ -438,17 +434,17 @@ export function buildBookingEmail(
 
       const dateRow = date
         ? lang === "es"
-          ? `<p style="margin:0 0 16px;color:${MUTED};">Mudanza: <strong style="color:${INK};">${esc(date)}</strong></p>`
-          : `<p style="margin:0 0 16px;color:${MUTED};">Move date: <strong style="color:${INK};">${esc(date)}</strong></p>`
+          ? `<p style="margin:0 0 16px;color:${MUTED};text-align:center;">Mudanza: <strong style="color:${INK};">${esc(date)}</strong></p>`
+          : `<p style="margin:0 0 16px;color:${MUTED};text-align:center;">Move date: <strong style="color:${INK};">${esc(date)}</strong></p>`
         : "";
 
       const body =
         lang === "es"
           ? `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               Checklist pendiente
             </h1>
-            <p style="margin:0 0 8px;color:${MUTED};">
+            <p style="margin:0 0 8px;color:${MUTED};text-align:center;">
               Hola ${esc(name)} — aún necesitamos el checklist del día de mudanza para preparar el crew.
             </p>
             ${dateRow}
@@ -457,10 +453,10 @@ export function buildBookingEmail(
             ${ctaOutline(PHONE_TEL, PHONE_DISPLAY)}
           `
           : `
-            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;">
+            <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
               Checklist still needed
             </h1>
-            <p style="margin:0 0 8px;color:${MUTED};">
+            <p style="margin:0 0 8px;color:${MUTED};text-align:center;">
               Hi ${esc(name)} — we still need your moving day checklist so we can prep the crew.
             </p>
             ${dateRow}
