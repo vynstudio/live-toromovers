@@ -19,11 +19,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Token in `.env.wire` (never commit)
 
 ## Deploy
-- `npx netlify deploy --prod --build` from repo root; site `live-toro-site` → toromovers.net
+- `npx netlify deploy --prod --build` from repo root; site `live-toro-site` → toromovers.com
 - If Netlify cloud build is blocked (credit usage), local CLI deploy with auth still works
 
 ## Move-day form (crew intake)
-- **Canonical URL:** `/move-details` (https://toromovers.net/move-details)
+- **Canonical URL:** `/move-details` (https://toromovers.com/move-details)
 - Legacy: `/movingday-checklist`; `/intake` redirects to checklist
 - POST `/api/intake` → Resend + **one** Telegram message (`buildTelegramText` — never multi-part)
 - Services only: `full-service` (truck+crew), `labor-only`. No storage / load-only / pack+move

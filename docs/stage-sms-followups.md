@@ -4,7 +4,7 @@
 **Pipeline CRM** (`crm.toromovers.net`) is on hold — this doc is the **main site** automation.
 
 Review link: `https://g.page/r/CYAKurQHh5TvEAI/review`  
-**Book online (pre-book stages):** `https://toromovers.net/get-my-price?src=sms&step=<stepId>`  
+**Book online (pre-book stages):** `https://toromovers.com/get-my-price?src=sms&step=<stepId>`  
 (Spanish: `/es/get-my-price?src=sms&step=…`)
 
 Pre-book SMS/email (New Lead → Quote Sent) always include the book link.  
@@ -44,11 +44,11 @@ Cancel rule: delayed steps should **not** send if HubSpot stage has already move
 ## APIs
 
 ```http
-GET  https://toromovers.net/api/crm/sequences/plan
+GET  https://toromovers.com/api/crm/sequences/plan
 ```
 
 ```http
-POST https://toromovers.net/api/crm/sequences/stage-run
+POST https://toromovers.com/api/crm/sequences/stage-run
 x-lead-secret: $LEAD_INTAKE_SECRET
 Content-Type: application/json
 
@@ -65,7 +65,7 @@ Content-Type: application/json
 ```
 
 ```http
-POST https://toromovers.net/api/crm/stage
+POST https://toromovers.com/api/crm/stage
 x-lead-secret: $LEAD_INTAKE_SECRET
 
 {

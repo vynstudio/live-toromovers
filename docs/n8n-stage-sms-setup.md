@@ -11,7 +11,7 @@ Your n8n host: `https://n8n-production-d3d0.up.railway.app`
 
 n8n only waits and calls:
 
-`POST https://toromovers.net/api/crm/sequences/stage-run`
+`POST https://toromovers.com/api/crm/sequences/stage-run`
 
 ---
 
@@ -46,7 +46,7 @@ Wait nodes need **queue mode or a persistent DB** (you already use Postgres on R
 
 ---
 
-## 3. Netlify env (toromovers.net / live-toro-site)
+## 3. Netlify env (toromovers.com / live-toro-site)
 
 Add or update:
 
@@ -75,7 +75,7 @@ Site code prefers:
 ### A. Instant only (no wait)
 
 ```bash
-curl -s -X POST https://toromovers.net/api/crm/sequences/stage-run \
+curl -s -X POST https://toromovers.com/api/crm/sequences/stage-run \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
   -d '{

@@ -68,7 +68,7 @@ Drip (n8n Wait or cron):
 ### Log a Call Now lead (internal)
 
 ```bash
-curl -X POST https://toromovers.net/api/crm/lead \
+curl -X POST https://toromovers.com/api/crm/lead \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
   -d '{
@@ -89,7 +89,7 @@ Phone-only leads upsert HubSpot by **phone** (E.164) and open a **Mudanzas** dea
 
 ```bash
 # Telegram-style
-curl "https://toromovers.net/api/crm/stage?e=client@email.com&s=c"
+curl "https://toromovers.com/api/crm/stage?e=client@email.com&s=c"
 
 # Codes: a=no answer · c=contacted · q=quote · b=booked · m=move done · r=review sent · o=review got
 ```
@@ -97,7 +97,7 @@ curl "https://toromovers.net/api/crm/stage?e=client@email.com&s=c"
 ### Run a sequence step
 
 ```bash
-curl -X POST https://toromovers.net/api/crm/sequences/run \
+curl -X POST https://toromovers.com/api/crm/sequences/run \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
   -d '{
@@ -132,7 +132,7 @@ Sequences: `call_instant` · `followup_1h` · `followup_24h` · `followup_72h` �
 | `N8N_WEBHOOK_SECRET` | Optional shared secret |
 | `OPENPHONE_WEBHOOK_SECRET` | Optional inbound webhook auth |
 | `GOOGLE_REVIEW_URL` | Review asks |
-| `NEXT_PUBLIC_SITE_URL` | `https://toromovers.net` |
+| `NEXT_PUBLIC_SITE_URL` | `https://toromovers.com` |
 
 HubSpot pipeline IDs are already in `src/lib/hubspot.ts` (`Mudanzas`). Re-run:
 
@@ -172,7 +172,7 @@ Import existing funnels from:
 Point Telegram stage URLs at **site** `/api/crm/stage` if you want stage moves without n8n:
 
 ```
-https://toromovers.net/api/crm/stage?e={{email}}&s=c
+https://toromovers.com/api/crm/stage?e={{email}}&s=c
 ```
 
 (Or keep Railway n8n hook already set in `telegramStageKeyboard`.)
@@ -183,7 +183,7 @@ https://toromovers.net/api/crm/stage?e={{email}}&s=c
 
 1. OpenPhone / Quo → **Settings → Webhooks**  
 2. Event: **message.received**  
-3. URL: `https://toromovers.net/api/crm/webhooks/openphone`  
+3. URL: `https://toromovers.com/api/crm/webhooks/openphone`  
 4. Optional header secret → `OPENPHONE_WEBHOOK_SECRET`
 
 Contacts **must** store phone in **E.164** (`+1689…`) so inbound matches — `intake` + funnel routes already normalize.
@@ -241,19 +241,19 @@ After quote → Square book → deposit → checklist:
 
 ```bash
 # 1) Send Square book link (ready to lock date)
-curl -X POST https://toromovers.net/api/crm/booking-sms \
+curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
   -d '{"kind":"book_online","firstName":"Maria","phone":"+16896002720"}'
 
 # 2) After Square book + deposit paid
-curl -X POST https://toromovers.net/api/crm/booking-sms \
+curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
   -d '{"kind":"booked_confirm","firstName":"Maria","phone":"+16896002720","moveDate":"Fri Aug 15"}'
 
 # 3) Checklist nudge
-curl -X POST https://toromovers.net/api/crm/booking-sms \
+curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
   -d '{"kind":"checklist_reminder","firstName":"Maria","phone":"+16896002720"}'
@@ -264,4 +264,4 @@ Spanish: add `"lang":"es"`.
 Uses `OPENPHONE_API_KEY` + `OPENPHONE_FROM_NUMBER` (same as quote confirm).
 
 Square book URL: from `SQUARE_BOOKING_URL` in `src/lib/contact.ts`  
-Checklist: `https://toromovers.net/move-day-checklist`
+Checklist: `https://toromovers.com/move-day-checklist`

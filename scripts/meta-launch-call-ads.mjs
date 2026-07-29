@@ -61,7 +61,7 @@ async function api(method, path, fields = {}, isForm = false) {
 
 function utm(content, campaign = "call_fs_20260718") {
   // Always land paid traffic on the main SEO domain (not toromoveit.com).
-  const base = "https://toromovers.net/full-service-moving";
+  const base = "https://toromovers.com/full-service-moving";
   const params = new URLSearchParams({
     utm_source: "meta",
     utm_medium: "paid_social",

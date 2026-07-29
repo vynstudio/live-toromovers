@@ -62,7 +62,7 @@ All but the last two already exist for the quote funnel.
 | `HUBSPOT_TOKEN` | CRM upsert (private app token) |
 | `META_ACCESS_TOKEN` / `NEXT_PUBLIC_META_PIXEL_ID` | Meta CAPI + Pixel |
 | `NEXT_PUBLIC_GA4_ID` | GA4 |
-| `NEXT_PUBLIC_SITE_URL` | Absolute links in emails/SMS/canonical (default `https://toromovers.net`) |
+| `NEXT_PUBLIC_SITE_URL` | Absolute links in emails/SMS/canonical (default `https://toromovers.com`) |
 | `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | Internal Telegram alert |
 | `N8N_LEAD_WEBHOOK_URL` | **new** — n8n Production webhook URL that starts the drip |
 | `N8N_WEBHOOK_SECRET` | **new, optional** — sent as `x-toro-secret`; verify it in n8n |

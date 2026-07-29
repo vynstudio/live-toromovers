@@ -18,7 +18,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const b = $input.first().json.body || $input.first().json;\nconst firstName = b.firstName || (b.name || 'there').split(' ')[0];\nreturn [{ json: {\n  firstName,\n  email: b.email || '',\n  phone: b.phone || '',\n  lang: b.lang === 'es' ? 'es' : 'en',\n  funnel: b.funnel || 'full-service',\n  consentSms: !!(b.consentSms || b.smsConsent),\n  base: 'https://toromovers.net'\n}}];"
+        "jsCode": "const b = $input.first().json.body || $input.first().json;\nconst firstName = b.firstName || (b.name || 'there').split(' ')[0];\nreturn [{ json: {\n  firstName,\n  email: b.email || '',\n  phone: b.phone || '',\n  lang: b.lang === 'es' ? 'es' : 'en',\n  funnel: b.funnel || 'full-service',\n  consentSms: !!(b.consentSms || b.smsConsent),\n  base: 'https://toromovers.com'\n}}];"
       },
       "id": "norm",
       "name": "Normalize",

@@ -1,5 +1,5 @@
 # Toro Movers — Funnel Automation Build Report
-**Date:** 2026-06-11 · **Repo:** vynstudio/live-toromovers · **Site:** toromovers.net (Netlify)
+**Date:** 2026-06-11 · **Repo:** vynstudio/live-toromovers · **Site:** toromovers.com (Netlify)
 
 ## Summary
 The two high-intent lead funnels (labor-only + full-service) and the checklist

@@ -55,7 +55,7 @@ const ASSET_DIR =
   join(homedir(), "toro-ads-landing/public/ads/toro-diler-2026-07");
 // Canonical paid landing = sales funnel (contact-first lead form)
 const LP =
-  "https://toromovers.net/get-my-price?service=full-service&source=meta-diler";
+  "https://toromovers.com/get-my-price?service=full-service&source=meta-diler";
 const UTM_CAMPAIGN = "fs_diler_20260723";
 
 /** Launch day (UTC date) for the 3-day gate. */
@@ -82,7 +82,7 @@ const BENCH = [
     file: "clean_story_b_9x16.jpg",
     slug: "diler_stories_carry_b",
     primary:
-      "Professional local movers you can trust. Family-owned Central Florida crew — free quote at toromovers.net.",
+      "Professional local movers you can trust. Family-owned Central Florida crew — free quote at toromovers.com.",
     headline: "Get a free quote today",
     description: "Bilingual · Family-owned",
   },
@@ -92,13 +92,13 @@ const BENCH = [
     primary:
       "Moving in Orlando or Central Florida? Careful handling and on-time service. Truck + crew — free quote today.",
     headline: "Orlando movers · On time",
-    description: "Get quote · toromovers.net",
+    description: "Get quote · toromovers.com",
   },
   {
     file: "protection_boxes_4x5.jpg",
     slug: "diler_protection_boxes",
     primary:
-      "Trusted movers across Central Florida. Professional team, careful handling, stress-free moves. Free quote at toromovers.net.",
+      "Trusted movers across Central Florida. Professional team, careful handling, stress-free moves. Free quote at toromovers.com.",
     headline: "Trusted Central FL movers",
     description: "Free quote · Family-owned",
   },
@@ -114,7 +114,7 @@ const BENCH = [
     file: "protection_family_4x5.jpg",
     slug: "diler_protection_family",
     primary:
-      "Family-owned Central Florida movers. Careful service, bilingual crew. Get your free quote at toromovers.net.",
+      "Family-owned Central Florida movers. Careful service, bilingual crew. Get your free quote at toromovers.com.",
     headline: "Family-owned · Free quote",
     description: "Orlando & Central Florida",
   },

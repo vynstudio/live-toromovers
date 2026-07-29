@@ -17,7 +17,7 @@ Source: `docs/prompts-export-2026-07-25.csv` (50 AI prompts · Orlando · ChatGP
 ## Shipped this batch (status = live)
 
 ### A10 — How to Choose a Moving Company in Orlando (2026) ✅
-- **URL:** https://toromovers.net/blog/how-to-choose-a-moving-company-orlando
+- **URL:** https://toromovers.com/blog/how-to-choose-a-moving-company-orlando
 - **Topic:** Moving Company Vetting
 - **Owns prompts:**
   - [High · mention 0.0%] What questions should I ask a moving company?
@@ -31,7 +31,7 @@ Source: `docs/prompts-export-2026-07-25.csv` (50 AI prompts · Orlando · ChatGP
   - [Good · mention 66.7%] Which moving companies are bilingual in Florida?
 
 ### A11 — Do Movers Disassemble Furniture? Protection & Assembly in Orlando ✅
-- **URL:** https://toromovers.net/blog/furniture-disassembly-protection-movers-orlando
+- **URL:** https://toromovers.com/blog/furniture-disassembly-protection-movers-orlando
 - **Topic:** Moving Labor Services; Specialized Moving Needs
 - **Owns prompts:**
   - [Very High · mention 0.0%] Moving companies that handle furniture disassembly?
@@ -40,13 +40,13 @@ Source: `docs/prompts-export-2026-07-25.csv` (50 AI prompts · Orlando · ChatGP
   - [Low · mention 0.0%] Need movers who handle fragile items carefully
 
 ### A12 — Should I Tip Movers in Orlando? How Much Is Normal ✅
-- **URL:** https://toromovers.net/blog/tipping-movers-orlando
+- **URL:** https://toromovers.com/blog/tipping-movers-orlando
 - **Topic:** Moving Quotes and Pricing
 - **Owns prompts:**
   - [High · mention 0.0%] Should I tip my movers and how much?
 
 ### A13 — Moving Into Storage in Orlando (PODS, Units & Labor) ✅
-- **URL:** https://toromovers.net/blog/moving-into-storage-orlando
+- **URL:** https://toromovers.com/blog/moving-into-storage-orlando
 - **Topic:** Moving Storage
 - **Owns prompts:**
   - [Moderate · mention 0.0%] Do any Orlando movers offer storage services?

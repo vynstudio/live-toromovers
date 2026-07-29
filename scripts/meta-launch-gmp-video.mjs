@@ -30,7 +30,7 @@ const LANDING = (() => {
     utm_term: "full_service",
     source: "meta-gmp-video",
   });
-  return `https://toromovers.net/get-my-price?${p.toString()}`;
+  return `https://toromovers.com/get-my-price?${p.toString()}`;
 })();
 
 const COPY = {

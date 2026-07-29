@@ -42,11 +42,13 @@ if (!TOKEN) {
   process.exit(1);
 }
 
-const FUNNEL = "https://toromovers.net/get-my-price";
-const FUNNEL_ES = "https://toromovers.net/es/get-my-price";
+const FUNNEL = "https://toromovers.com/get-my-price";
+const FUNNEL_ES = "https://toromovers.com/es/get-my-price";
 
 /** Paths we rewrite → funnel (service inferred from path / params). */
 const REWRITE_HOSTS = new Set([
+  "toromovers.com",
+  "www.toromovers.com",
   "toromovers.net",
   "www.toromovers.net",
   "toromoveit.com",
@@ -92,7 +94,7 @@ function mapLink(raw) {
     return null;
   }
   const host = u.hostname.replace(/^www\./, "");
-  if (!["toromovers.net", "toromoveit.com", "go.toromovers.net"].includes(host)) {
+  if (!["toromovers.com", "toromovers.net", "toromoveit.com", "go.toromovers.net"].includes(host)) {
     return null;
   }
   const path = u.pathname.replace(/\/$/, "") || "/";

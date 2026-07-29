@@ -64,7 +64,7 @@ const CREATIVE_DIR =
 
 // Canonical paid landing = sales funnel (contact-first lead form)
 const LP_BASE =
-  "https://toromovers.net/get-my-price?service=full-service&source=meta-fs-trust";
+  "https://toromovers.com/get-my-price?service=full-service&source=meta-fs-trust";
 const UTM_CAMPAIGN = "fs_trust_20260723";
 
 if (!TOKEN) {

@@ -79,7 +79,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Still need a crew? We're quick on labor-only\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — you keep the truck, we bring the muscle. Loading, unloading, stairs by the hour, priced up front. <a href='https://toromovers.net/quote'>Check availability</a>.</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Still need a crew? We're quick on labor-only\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — you keep the truck, we bring the muscle. Loading, unloading, stairs by the hour, priced up front. <a href='https://toromovers.com/quote'>Check availability</a>.</p>\"\n}",
         "options": {}
       },
       "id": "l-email2",
@@ -121,7 +121,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Ready to book your labor help?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — family-owned, insured, 4.9 on Google. We'll lock in a crew with up-front hourly pricing. <a href='https://toromovers.net/quote'>Get my hourly quote</a> or call (689) 600-2720.</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Ready to book your labor help?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — family-owned, insured, 4.9 on Google. We'll lock in a crew with up-front hourly pricing. <a href='https://toromovers.com/quote'>Get my hourly quote</a> or call (689) 600-2720.</p>\"\n}",
         "options": {}
       },
       "id": "l-email3",
@@ -194,7 +194,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Still need movers for the day? We can check availability fast and price by the hour: https://toromovers.net/quote — Toro Movers. STOP to opt out.\"\n}",
+        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Still need movers for the day? We can check availability fast and price by the hour: https://toromovers.com/quote — Toro Movers. STOP to opt out.\"\n}",
         "options": {}
       },
       "id": "l-sms2",
@@ -236,7 +236,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"We'll handle the whole move — carefully\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — full-service means you don't lift a box. We pack, protect, load, transport, and set everything up. Want packing too? Just say the word. <a href='https://toromovers.net/quote'>Get my quote</a>.</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"We'll handle the whole move — carefully\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — full-service means you don't lift a box. We pack, protect, load, transport, and set everything up. Want packing too? Just say the word. <a href='https://toromovers.com/quote'>Get my quote</a>.</p>\"\n}",
         "options": {}
       },
       "id": "f-email2",
@@ -278,7 +278,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Ready for a stress-free move?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — family-owned, insured, 4.9 on Google. 'On time, professional, handled everything with care.' When you're ready we'll lock in your full-service date. <a href='https://toromovers.net/quote'>Request full-service pricing</a> or call (689) 600-2720.</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Ready for a stress-free move?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — family-owned, insured, 4.9 on Google. 'On time, professional, handled everything with care.' When you're ready we'll lock in your full-service date. <a href='https://toromovers.com/quote'>Request full-service pricing</a> or call (689) 600-2720.</p>\"\n}",
         "options": {}
       },
       "id": "f-email3",
@@ -351,7 +351,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Want us to handle the whole move? Family-owned, insured, up-front pricing. Get your full-service quote: https://toromovers.net/quote — Toro Movers. STOP to opt out.\"\n}",
+        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Want us to handle the whole move? Family-owned, insured, up-front pricing. Get your full-service quote: https://toromovers.com/quote — Toro Movers. STOP to opt out.\"\n}",
         "options": {}
       },
       "id": "f-sms2",

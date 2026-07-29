@@ -1,0 +1,118 @@
+{
+  "started_at": "2026-07-29T00:24:03.735Z",
+  "apply": true,
+  "campaign_id": "120249400265720325",
+  "swaps": [
+    {
+      "sourceAdId": "120251049087540325",
+      "adsetId": "120250020261220325",
+      "file": "protection_sofa_4x5.jpg",
+      "slug": "labor-yourtruck-diler-sofa",
+      "name": "Ad · st-yourtruck2 · diler sofa · 2026-07-28",
+      "creative_id": "2283312772497331",
+      "ad_id": "120251589498770325",
+      "image_hash": "e5300fba933d91795512537557abc7da",
+      "link": "https://toromovers.net/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-yourtruck-diler-sofa"
+    },
+    {
+      "sourceAdId": "120251219794710325",
+      "adsetId": "120250020261220325",
+      "file": "wrap_protect_4x5.jpg",
+      "slug": "labor-welift-diler-wrap",
+      "name": "Ad · pt2-welift · diler wrap · 2026-07-28",
+      "creative_id": "1988527258535137",
+      "ad_id": "120251589499940325",
+      "image_hash": "65fbb934ecc99a903cae1d1d693936cb",
+      "link": "https://toromovers.net/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-welift-diler-wrap"
+    },
+    {
+      "sourceAdId": "120251219590730325",
+      "adsetId": "120251219580310325",
+      "file": "orlando_ontime_b_4x5.jpg",
+      "slug": "fs-doortruck-diler-orlando",
+      "name": "Ad · pt-doortruck · diler orlando · 2026-07-28",
+      "creative_id": "1316409213602588",
+      "ad_id": "120251589500890325",
+      "image_hash": "a88f78eeeb3e5067d0c52a7c8f828d74",
+      "link": "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-doortruck-diler-orlando"
+    },
+    {
+      "sourceAdId": "120251219589450325",
+      "adsetId": "120251219580310325",
+      "file": "family_trust_4x5.jpg",
+      "slug": "fs-apartment-diler-family",
+      "name": "Ad · pt-apartment · diler family · 2026-07-28",
+      "creative_id": "1329444392606287",
+      "ad_id": "120251589502130325",
+      "image_hash": "06fefb00ec968f46efafc4c7fc0eb1c4",
+      "link": "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-apartment-diler-family"
+    },
+    {
+      "sourceAdId": "120251049087360325",
+      "adsetId": "120249400265990325",
+      "file": "trusted_local_4x5.jpg",
+      "slug": "hi-doorstep-diler-trusted",
+      "name": "Ad · pt-doorstep2 · diler trusted · 2026-07-28",
+      "creative_id": "1794868995020917",
+      "ad_id": "120251589506280325",
+      "image_hash": "c8d4c1559246cbe5c9baddb5008137e2",
+      "link": "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=hi-doorstep-diler-trusted"
+    },
+    {
+      "sourceAdId": "120251049087240325",
+      "adsetId": "120249400265990325",
+      "file": "protection_boxes_4x5.jpg",
+      "slug": "hi-nohidden-diler-boxes",
+      "name": "Ad · pt-nohidden2 · diler boxes · 2026-07-28",
+      "creative_id": "1569487764875165",
+      "ad_id": "120251589507880325",
+      "image_hash": "3e794397c2713de4edbe11403e8623d2",
+      "link": "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=hi-nohidden-diler-boxes"
+    },
+    {
+      "sourceAdId": "120251219588990325",
+      "adsetId": "120251219580310325",
+      "file": "protection_fridge_4x5.jpg",
+      "slug": "fs-home-diler-fridge",
+      "name": "Ad · pt-home · diler fridge · 2026-07-28",
+      "creative_id": "2329742704435188",
+      "ad_id": "120251589509510325",
+      "image_hash": "6a4a54e9b532350ead7ab726d0994e58",
+      "link": "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-home-diler-fridge"
+    },
+    {
+      "sourceAdId": "120251049087540325",
+      "adsetId": "120250020261220325",
+      "file": "reliable_feed_4x5.jpg",
+      "slug": "labor-reliable-diler",
+      "name": "Ad · labor · diler reliable · 2026-07-28",
+      "creative_id": "901415609155290",
+      "ad_id": "120251589511140325",
+      "image_hash": "ffde8b012f2d23eff6ee0b16815a4024",
+      "link": "https://toromovers.net/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-reliable-diler"
+    }
+  ],
+  "activations": [
+    {
+      "type": "adset",
+      "id": "120251219580310325",
+      "daily_budget_cents": 1200
+    },
+    {
+      "type": "adset",
+      "id": "120250020261220325",
+      "daily_budget_cents": 800
+    },
+    {
+      "type": "adset",
+      "id": "120249400265990325",
+      "daily_budget_cents": 500
+    },
+    {
+      "type": "campaign",
+      "id": "120249400265720325"
+    }
+  ],
+  "errors": [],
+  "finished_at": "2026-07-29T00:25:06.916Z"
+}

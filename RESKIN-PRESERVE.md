@@ -3,7 +3,7 @@
 **Captured:** 2026-07-08 · **Purpose:** freeze the SEO-critical surface of the live site so a visual reskin (applying the Relume `toromovers-design` system) changes **only presentation** and provably regresses nothing.
 **Rule:** anything in this file is *preserve-exactly* unless we deliberately decide otherwise (see "Open decisions").
 
-Stack: **Next.js 16.2.6 (App Router) · React 19 · Tailwind v4 (CSS-first, no config)**. Canonical domain `https://toromovers.net` (`NEXT_PUBLIC_SITE_URL`).
+Stack: **Next.js 16.2.6 (App Router) · React 19 · Tailwind v4 (CSS-first, no config)**. Canonical domain `https://toromovers.com` (`NEXT_PUBLIC_SITE_URL`).
 
 ---
 
@@ -62,9 +62,9 @@ Config lives in **`next.config.ts` `redirects()` (:91-110)** and **`netlify.toml
 - Legacy city slugs → new (301): `/movers-orlando→/orlando-movers`, `/movers-lake-mary→…`, `/movers-winter-park→…`; `/pages/cities/{slug}[.html]→/{slug}` (28 rules); no-page cities → `/central-florida-movers` (301).
 - `/apartment-movers → /apartment-movers-orlando-fl` (301).
 - Ad LP aliases → `/ads/meta-orlando-movers` (307); `/mudanza→/es/ads/…`; legacy content → `/#…` (307).
-- Cross-domain: **`toromudanzas.com` → `toromovers.net` 301** (netlify.toml, force).
+- Cross-domain: **`toromudanzas.com` → `toromovers.com` 301** (netlify.toml, force).
 
-✅ **Resolved:** `toromoveit.com` / `go.toromovers.net` 301 → `toromovers.net` funnels (see `docs/domain-consolidation.md`).
+✅ **Resolved:** `toromoveit.com` / `go.toromovers.net` 301 → `toromovers.com` funnels (see `docs/domain-consolidation.md`).
 
 ## 6. Internal-link graph (preserve — core local-SEO asset)
 

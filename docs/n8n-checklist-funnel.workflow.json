@@ -49,7 +49,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"What affects local moving cost in Central Florida?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — local moving cost comes down to crew size and hours, stairs vs. elevator, access/parking, and any special items. We quote up front by the hour, no surprises.</p><p><a href='https://toromovers.net/quote'>Get My Price</a></p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"What affects local moving cost in Central Florida?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — local moving cost comes down to crew size and hours, stairs vs. elevator, access/parking, and any special items. We quote up front by the hour, no surprises.</p><p><a href='https://toromovers.com/quote'>Get My Price</a></p>\"\n}",
         "options": {}
       },
       "id": "email2",
@@ -91,7 +91,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Planning your move in Orlando, FL?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — moving from an apartment? Reserve the elevator, ask the office if a COI is required, and confirm the loading-zone window. We handle the heavy part.</p><p><a href='https://toromovers.net/quote'>Request a Quote</a></p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Planning your move in Orlando, FL?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — moving from an apartment? Reserve the elevator, ask the office if a COI is required, and confirm the loading-zone window. We handle the heavy part.</p><p><a href='https://toromovers.com/quote'>Request a Quote</a></p>\"\n}",
         "options": {}
       },
       "id": "email3",
@@ -133,7 +133,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"How to pack faster for your move\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — pack room by room, label every box (room + 2 words), and keep a 'first night' bag aside. Want us to pack for you? We offer full and partial packing.</p><p><a href='https://toromovers.net/quote'>Get My Price</a></p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"How to pack faster for your move\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — pack room by room, label every box (room + 2 words), and keep a 'first night' bag aside. Want us to pack for you? We offer full and partial packing.</p><p><a href='https://toromovers.com/quote'>Get My Price</a></p>\"\n}",
         "options": {}
       },
       "id": "email4",
@@ -175,7 +175,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Need help with your Central Florida move?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — Toro Movers is family-owned, fully insured, and rated 4.9 on Google by Central Florida families. When you're ready, we'll lock in your slot.</p><p><a href='https://toromovers.net/quote'>Request a Quote</a> · (689) 600-2720</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Need help with your Central Florida move?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — Toro Movers is family-owned, fully insured, and rated 4.9 on Google by Central Florida families. When you're ready, we'll lock in your slot.</p><p><a href='https://toromovers.com/quote'>Request a Quote</a> · (689) 600-2720</p>\"\n}",
         "options": {}
       },
       "id": "email5",
@@ -248,7 +248,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Need a fast quote for your move in Orlando? We can price it in under 60 seconds: https://toromovers.net/quote — Toro Movers. STOP to opt out.\"\n}",
+        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"Need a fast quote for your move in Orlando? We can price it in under 60 seconds: https://toromovers.com/quote — Toro Movers. STOP to opt out.\"\n}",
         "options": {}
       },
       "id": "sms2",
@@ -290,7 +290,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"We're family-owned, insured, and bilingual — ready to help with your Central Florida move. Get your quote: https://toromovers.net/quote — Toro Movers. STOP to opt out.\"\n}",
+        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"We're family-owned, insured, and bilingual — ready to help with your Central Florida move. Get your quote: https://toromovers.com/quote — Toro Movers. STOP to opt out.\"\n}",
         "options": {}
       },
       "id": "sms3",

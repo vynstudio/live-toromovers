@@ -21,7 +21,7 @@ const PALETTE = [
 const FUNNELS = [
   {
     name: "LABOR-ONLY FUNNEL",
-    url: "toromovers.net/labor-only-moving",
+    url: "toromovers.com/labor-only-moving",
     headlines: [
       "Labor-Only Movers in Orlando & Central Florida",
       "Loading & Unloading Help — Hourly, Insured Crews",
@@ -34,7 +34,7 @@ const FUNNELS = [
   },
   {
     name: "FULL-SERVICE FUNNEL",
-    url: "toromovers.net/full-service-moving",
+    url: "toromovers.com/full-service-moving",
     headlines: [
       "Full-Service Movers in Orlando & Central Florida",
       "Packing, Loading & Moving — Handled Start to Finish",
@@ -70,7 +70,7 @@ const txt = (x, yy, s, size, color = "0 0 0", font = "F1") => ops.push(`BT /${fo
 
 const BLACK = hex("#0B0B0D"), RED = hex("#C8102E"), WHITE = "1 1 1", INK = hex("#141414"), MUTED = hex("#6B6B72");
 
-const footer = () => txt(ML, 36, "Toro Movers  ·  (689) 600-2720  ·  toromovers.net  ·  Type: Schibsted Grotesk (display) + Inter (body)", 8, MUTED);
+const footer = () => txt(ML, 36, "Toro Movers  ·  (689) 600-2720  ·  toromovers.com  ·  Type: Schibsted Grotesk (display) + Inter (body)", 8, MUTED);
 
 const newPage = (first) => {
   if (ops.length) { footer(); pages.push(ops); }

@@ -1,15 +1,15 @@
 # Domain consolidation — one SEO home
 
-**Organic SEO and paid funnels live on `https://toromovers.net` only.**
+**Organic SEO and paid funnels live on `https://toromovers.com` only.**
 
 ## Why
 
 | Host | Role |
 |------|------|
-| **toromovers.net** | Brand, rankings, reviews, funnels, CRM |
-| toromoveit.com | Legacy ad host → **301 → toromovers.net** |
-| go.toromovers.net | Legacy ad alias → **301 → toromovers.net** |
-| toromudanzas.com | Already 301 → toromovers.net |
+| **toromovers.com** | Brand, rankings, reviews, funnels, CRM |
+| toromoveit.com | Legacy ad host → **301 → toromovers.com** |
+| go.toromovers.net | Legacy ad alias → **301 → toromovers.com** |
+| toromudanzas.com | Already 301 → toromovers.com |
 
 A second brand domain (even with `noindex`) still:
 
@@ -22,15 +22,15 @@ A second brand domain (even with `noindex`) still:
 
 | Intent | URL |
 |--------|-----|
-| Full-service (default) | `https://toromovers.net/full-service-moving` |
-| Labor-only | `https://toromovers.net/labor-only-moving` |
-| Generic wizard (noindex) | `https://toromovers.net/get-quote` |
-| Homepage / organic | `https://toromovers.net/` |
+| Full-service (default) | `https://toromovers.com/full-service-moving` |
+| Labor-only | `https://toromovers.com/labor-only-moving` |
+| Generic wizard (noindex) | `https://toromovers.com/get-quote` |
+| Homepage / organic | `https://toromovers.com/` |
 
 Append UTMs as usual, e.g.
 
 ```text
-https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=call_fs
+https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=call_fs
 ```
 
 ## Redirect map (legacy hosts)
@@ -51,9 +51,9 @@ Query strings (UTMs, `fbclid`, `gclid`) are preserved by Netlify.
 ## Meta Ads Manager checklist
 
 1. Open each active ad set / ad.
-2. Change website URL from `toromoveit.com` or `go.toromovers.net` → `toromovers.net/...` above.
+2. Change website URL from `toromoveit.com` or `go.toromovers.net` → `toromovers.com/...` above.
 3. Call Now ads: keep phone `(689) 600-2720`; website URL still matters for pixel/view-through.
-4. Events Manager: confirm pixel fires on toromovers.net (already installed).
+4. Events Manager: confirm pixel fires on toromovers.com (already installed).
 5. After 48h, old domains should only show as 301 in crawls — no content.
 
 ## Optional later cleanup

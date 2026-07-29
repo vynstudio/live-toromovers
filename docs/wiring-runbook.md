@@ -32,7 +32,7 @@ the workflow's first IF node branches on it. The checklist payload carries
   "source": "utm_source=facebook · utm_medium=cpc · …",  // human-readable
   "utm": { "utm_source": "facebook", "utm_medium": "cpc", "utm_campaign": "…" }, // structured → HubSpot
   "landingPage": "/labor-only-moving",
-  "links": { "quote": "https://toromovers.net/quote" }
+  "links": { "quote": "https://toromovers.com/quote" }
 }
 ```
 
