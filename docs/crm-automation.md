@@ -59,6 +59,7 @@ Drip (n8n Wait or cron):
 | `GET/POST /api/crm/stage` | secret on POST; GET for Telegram links | Advance deal stage |
 | `POST /api/crm/webhooks/openphone` | optional `x-openphone-secret` | Inbound SMS → Contacted |
 | `POST /api/crm/sequences/run` | `x-lead-secret` or `x-toro-secret` | Fire drip email/SMS step |
+| `POST /api/crm/booking-sms` | `x-lead-secret` | OpenPhone: book / booked+deposit / checklist SMS |
 | `POST /api/funnel-lead` | public | Labor / full-service (existing) |
 | `POST /api/lead-magnet` | public | Checklist (existing) |
 | `POST /api/review-request` | `x-lead-secret` | Post-move Google review (existing) |
@@ -232,3 +233,34 @@ Meta Call Now does **not** send a server webhook with the caller’s number to y
 3. **Form + Call** — keep Call Now for intent; retarget engagers with Get Quote  
 
 Phone **(689) 600-2720** is the brand number used across sequences.
+
+### Booking-flow SMS (OpenPhone) — live
+
+After quote → Square book → deposit → checklist:
+
+```bash
+# 1) Send Square book link (ready to lock date)
+curl -X POST https://toromovers.net/api/crm/booking-sms \
+  -H "Content-Type: application/json" \
+  -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
+  -d '{"kind":"book_online","firstName":"Maria","phone":"+16896002720"}'
+
+# 2) After Square book + deposit paid
+curl -X POST https://toromovers.net/api/crm/booking-sms \
+  -H "Content-Type: application/json" \
+  -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
+  -d '{"kind":"booked_confirm","firstName":"Maria","phone":"+16896002720","moveDate":"Fri Aug 15"}'
+
+# 3) Checklist nudge
+curl -X POST https://toromovers.net/api/crm/booking-sms \
+  -H "Content-Type: application/json" \
+  -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
+  -d '{"kind":"checklist_reminder","firstName":"Maria","phone":"+16896002720"}'
+```
+
+Kinds: `book_online` · `booked_confirm` · `checklist_reminder`  
+Spanish: add `"lang":"es"`.  
+Uses `OPENPHONE_API_KEY` + `OPENPHONE_FROM_NUMBER` (same as quote confirm).
+
+Square book URL: from `SQUARE_BOOKING_URL` in `src/lib/contact.ts`  
+Checklist: `https://toromovers.net/move-day-checklist`

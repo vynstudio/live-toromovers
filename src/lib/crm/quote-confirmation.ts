@@ -1,12 +1,13 @@
 /**
- * Single allowed client SMS: quote request received.
- * Sent via Quo / OpenPhone only.
+ * Client SMS: quote request received (OpenPhone / Quo).
+ * Mentions next step: book online after we confirm pricing.
  */
 
 import { sendSms } from "./providers";
 import type { ChannelResult } from "./types";
+import { PHONE_DISPLAY, SQUARE_BOOKING_URL } from "@/lib/contact";
 
-const PHONE = "(689) 600-2720";
+const PHONE = PHONE_DISPLAY;
 /** Google Maps listing — reviews while we call */
 const MAPS =
   process.env.GOOGLE_MAPS_REVIEWS_URL ||
@@ -21,15 +22,31 @@ export function quoteReceivedSms(opts: {
     return (
       `Hola ${name}, somos Toro Movers — recibimos tu solicitud de cotización. ` +
       `Te llamamos pronto con precio y disponibilidad. ` +
-      `Mientras tanto, mira nuestras reseñas en Google Maps: ${MAPS} ` +
-      `Dudas: ${PHONE}. Responde STOP para salir.`
+      `Reseñas: ${MAPS} · Dudas: ${PHONE}. Responde STOP para salir.`
     );
   }
   return (
     `Hi ${name}, this is Toro Movers — we got your quote request. ` +
     `We'll call you soon with pricing and availability. ` +
-    `While you wait, take a look at Toro Movers on Google Maps: ${MAPS} ` +
-    `Questions? ${PHONE}. Reply STOP to opt out.`
+    `Reviews: ${MAPS} · Questions? ${PHONE}. Reply STOP to opt out.`
+  );
+}
+
+/** After quote call — ready to lock the date via Square */
+export function quoteReadyToBookSms(opts: {
+  firstName: string;
+  lang?: "en" | "es";
+}): string {
+  const name = (opts.firstName || "there").trim().split(/\s+/)[0] || "there";
+  if (opts.lang === "es") {
+    return (
+      `Hola ${name}, Toro — si el precio te funciona, agenda online (depósito en Square): ${SQUARE_BOOKING_URL} ` +
+      `O llama ${PHONE}. STOP para salir.`
+    );
+  }
+  return (
+    `Hi ${name}, Toro — if the quote works, book online (deposit via Square): ${SQUARE_BOOKING_URL} ` +
+    `Or call ${PHONE}. Reply STOP to opt out.`
   );
 }
 

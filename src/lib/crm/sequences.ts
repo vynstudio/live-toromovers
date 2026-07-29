@@ -152,23 +152,27 @@ export function buildSequence(
         },
       };
 
-    case "booked_confirm":
+    case "booked_confirm": {
+      const checklist =
+        (process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net") +
+        "/move-day-checklist";
       return {
         sms: es
-          ? `✅ ${name}, tu mudanza con Toro está agendada. Te escribimos con detalles. Dudas: ${PHONE_DISPLAY}. STOP para salir.`
-          : `✅ ${name}, your Toro move is booked. We'll text details soon. Questions: ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `✅ ${name}, tu mudanza con Toro está agendada. Depósito recibido. Checklist del día (2 min): ${checklist} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `✅ ${name}, your Toro move is booked. Deposit received. Moving day checklist (2 min): ${checklist} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
           subject: es ? "Mudanza confirmada — Toro Movers" : "Move confirmed — Toro Movers",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">¡Estás agendado, ${esc(name)}!</h2><p>Gracias por confiar en Toro. Revisaremos detalles de llegada y contacto el día anterior. ¿Preguntas? <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">You're booked, ${esc(name)}!</h2><p>Thanks for choosing Toro. We'll confirm arrival window and contact the day before. Questions? <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">¡Estás agendado, ${esc(name)}!</h2><p>Depósito recibido. Completa el <a href="${checklist}">checklist del día de mudanza</a> (direcciones, hora, inventario) para mandar el crew correcto. ¿Preguntas? <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">You're booked, ${esc(name)}!</h2><p>Deposit received. Complete the <a href="${checklist}">moving day checklist</a> (addresses, start time, inventory) so we send the right crew. Questions? <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`,
           ),
           text: es
-            ? `Mudanza Toro confirmada. ${PHONE_DISPLAY}`
-            : `Toro move confirmed. ${PHONE_DISPLAY}`,
+            ? `Mudanza Toro confirmada. Checklist: ${checklist} · ${PHONE_DISPLAY}`
+            : `Toro move confirmed. Checklist: ${checklist} · ${PHONE_DISPLAY}`,
         },
       };
+    }
 
     case "move_day_eve":
       return {

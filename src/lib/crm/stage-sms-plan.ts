@@ -10,17 +10,18 @@
 
 import type { StageKey } from "./types";
 
+import { SQUARE_BOOKING_URL } from "@/lib/contact";
+
 const PHONE_DISPLAY = "(689) 600-2720";
 const REVIEW =
   process.env.GOOGLE_REVIEW_URL ||
   "https://g.page/r/CYAKurQHh5TvEAI/review";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.net";
+const CHECKLIST = `${SITE}/move-day-checklist`;
 
-/** Canonical online book / price funnel (all CTAs → /get-my-price). */
-function bookUrl(opts: { stepId: string; lang?: "en" | "es" }): string {
-  const path = opts.lang === "es" ? "/es/get-my-price" : "/get-my-price";
-  // src=sms-* so Meta/GA can attribute SMS → funnel (no secrets in URL)
-  return `${SITE}${path}?src=sms&step=${encodeURIComponent(opts.stepId)}`;
+/** Online book = Square Appointments (deposit collected there). */
+function bookUrl(_opts?: { stepId?: string; lang?: "en" | "es" }): string {
+  return SQUARE_BOOKING_URL;
 }
 
 export type StageSmsStep = {
@@ -303,17 +304,17 @@ export function buildStageStepCopy(
           : `${name}, dates fill up — book with Toro now: ${BOOK} · ${PHONE_DISPLAY}. STOP to opt out.`,
       };
 
-    // ── Post-book: no funnel CTA ───────────────────────────────────────
+    // ── Post-book: deposit done → moving day checklist ─────────────────
     case "booked_0":
       return {
         sms: es
-          ? `✅ ${name}, mudanza Toro confirmada. Te escribimos con detalles. ${PHONE_DISPLAY}. STOP para salir.`
-          : `✅ ${name}, your Toro move is booked. Details coming. ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? `✅ ${name}, mudanza Toro confirmada (depósito recibido). Checklist del día (2 min): ${CHECKLIST} · ${PHONE_DISPLAY}. STOP para salir.`
+          : `✅ ${name}, your Toro move is booked (deposit received). Moving day checklist (2 min): ${CHECKLIST} · ${PHONE_DISPLAY}. STOP to opt out.`,
         email: {
-          subject: es ? "Mudanza confirmada" : "Move confirmed",
+          subject: es ? "Mudanza confirmada — checklist" : "Move confirmed — checklist",
           text: es
-            ? `${name}, estás agendado con Toro. ${PHONE_DISPLAY}`
-            : `${name}, you're booked with Toro. ${PHONE_DISPLAY}`,
+            ? `${name}, estás agendado con Toro. Completa el checklist: ${CHECKLIST}\n\n${PHONE_DISPLAY}`
+            : `${name}, you're booked with Toro. Complete the checklist: ${CHECKLIST}\n\n${PHONE_DISPLAY}`,
         },
       };
 
