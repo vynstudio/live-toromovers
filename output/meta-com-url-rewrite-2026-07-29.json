@@ -1,0 +1,485 @@
+{
+  "changed": [
+    {
+      "ad": "Ad \u00b7 pt-home \u00b7 diler fridge \u00b7 2026-07-28",
+      "id": "120251589509510325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-home-diler-fridge",
+          "https://toromovers.com/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-home-diler-fridge"
+        ]
+      ],
+      "new_creative": "1633334215019487"
+    },
+    {
+      "ad": "Ad \u00b7 pt-nohidden2 \u00b7 diler boxes \u00b7 2026-07-28",
+      "id": "120251589507880325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=hi-nohidden-diler-boxes",
+          "https://toromovers.com/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=hi-nohidden-diler-boxes"
+        ]
+      ],
+      "new_creative": "904565902119908"
+    },
+    {
+      "ad": "Ad \u00b7 st-yourtruck2 \u00b7 diler sofa \u00b7 2026-07-28",
+      "id": "120251589498770325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-yourtruck-diler-sofa",
+          "https://toromovers.com/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-yourtruck-diler-sofa"
+        ]
+      ],
+      "new_creative": "1710601190189592"
+    },
+    {
+      "ad": "Ad \u00b7 labor \u00b7 diler reliable \u00b7 2026-07-28",
+      "id": "120251589511140325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-reliable-diler",
+          "https://toromovers.com/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-reliable-diler"
+        ]
+      ],
+      "new_creative": "2042965756590355"
+    },
+    {
+      "ad": "Ad \u00b7 pt2-welift \u00b7 diler wrap \u00b7 2026-07-28",
+      "id": "120251589499940325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-welift-diler-wrap",
+          "https://toromovers.com/get-quote?servicetype=labor-only&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=labor-welift-diler-wrap"
+        ]
+      ],
+      "new_creative": "1734592757772076"
+    },
+    {
+      "ad": "Ad \u00b7 pt-apartment \u00b7 diler family \u00b7 2026-07-28",
+      "id": "120251589502130325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-apartment-diler-family",
+          "https://toromovers.com/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-apartment-diler-family"
+        ]
+      ],
+      "new_creative": "4363463163867002"
+    },
+    {
+      "ad": "Ad \u00b7 pt-doortruck \u00b7 diler orlando \u00b7 2026-07-28",
+      "id": "120251589500890325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-doortruck-diler-orlando",
+          "https://toromovers.com/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=fs-doortruck-diler-orlando"
+        ]
+      ],
+      "new_creative": "1767498541159938"
+    },
+    {
+      "ad": "Ad \u00b7 pt-doorstep2 \u00b7 diler trusted \u00b7 2026-07-28",
+      "id": "120251589506280325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=hi-doorstep-diler-trusted",
+          "https://toromovers.com/get-quote?servicetype=full-service&utm_source=meta&utm_medium=paid_social&utm_campaign=hi_diler_20260728&utm_content=hi-doorstep-diler-trusted"
+        ]
+      ],
+      "new_creative": "1733237611434691"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_protection_brand \u00b7 2026-07-23",
+      "id": "120251489161670325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_protection_brand&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_protection_brand&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1067597835718576"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_relax_truck \u00b7 2026-07-23",
+      "id": "120251489161500325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_relax_truck&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_relax_truck&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1046985031533041"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_stories_carry \u00b7 2026-07-23",
+      "id": "120251489158950325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_stories_carry&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_stories_carry&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1003769395834619"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_family_trust \u00b7 2026-07-23",
+      "id": "120251489160170325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_family_trust&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_family_trust&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "2031357180808267"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_orlando_ontime \u00b7 2026-07-23",
+      "id": "120251489160840325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_orlando_ontime&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_orlando_ontime&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "2213562882761663"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_wrap_protect \u00b7 2026-07-23",
+      "id": "120251489159520325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_wrap_protect&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_wrap_protect&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "2857238194652552"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_stories_sofa \u00b7 2026-07-23",
+      "id": "120251489158380325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_stories_sofa&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_stories_sofa&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1327307819254191"
+    },
+    {
+      "ad": "Ad \u00b7 Diler \u00b7 diler_reliable \u00b7 2026-07-23",
+      "id": "120251489162400325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_reliable&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_diler_20260723&utm_content=diler_reliable&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1041270408454712"
+    },
+    {
+      "ad": "Ad \u00b7 FS \u00b7 wrap_protect \u00b7 2026-07-23",
+      "id": "120251487478780325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=wrap_protect&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=wrap_protect&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1356154636641694"
+    },
+    {
+      "ad": "Ad \u00b7 FS \u00b7 relax_truck \u00b7 2026-07-23",
+      "id": "120251487479730325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=relax_truck&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=relax_truck&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "2511410969373119"
+    },
+    {
+      "ad": "Ad \u00b7 FS \u00b7 family_handshake \u00b7 2026-07-23",
+      "id": "120251487477870325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=family_handshake&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=family_handshake&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1742027913513847"
+    },
+    {
+      "ad": "Ad \u00b7 FS \u00b7 orlando_crew \u00b7 2026-07-23",
+      "id": "120251487482000325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=orlando_crew&utm_term=full_service",
+          "https://toromovers.com/full-service-moving?utm_source=meta&utm_medium=paid_social&utm_campaign=fs_trust_20260723&utm_content=orlando_crew&utm_term=full_service"
+        ]
+      ],
+      "new_creative": "1015289137779932"
+    },
+    {
+      "ad": "Ad \u00b7 st1v-sofas",
+      "id": "120247047150000325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/movers-orlando-lp?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=st1v-sofas",
+          "https://toromovers.com/movers-orlando-lp?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=st1v-sofas"
+        ]
+      ],
+      "new_creative": "1690986545342857"
+    },
+    {
+      "ad": "lv-rental-truck-labor",
+      "id": "120247054763540325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/loading-help?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-rental-truck",
+          "https://toromovers.com/loading-help?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-rental-truck"
+        ]
+      ],
+      "new_creative": "27999432836353077"
+    },
+    {
+      "ad": "lv-hourly-movers-orlando",
+      "id": "120247054770640325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/quote?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-hourly",
+          "https://toromovers.com/quote?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-hourly"
+        ]
+      ],
+      "new_creative": "1073677948523408"
+    },
+    {
+      "ad": "lv-pod-loading",
+      "id": "120247054761390325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/loading-help?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-pod-loading",
+          "https://toromovers.com/loading-help?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-pod-loading"
+        ]
+      ],
+      "new_creative": "1346161793811772"
+    },
+    {
+      "ad": "lv-top-rated-orlando",
+      "id": "120247054745920325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-top-rated",
+          "https://toromovers.com/?utm_source=meta&utm_medium=paid_social&utm_campaign=tm-orlando-moving&utm_content=lv-top-rated"
+        ]
+      ],
+      "new_creative": "3499344716894626"
+    },
+    {
+      "ad": "Ad \u00b7 st1-heavy \u00b7 funnel \u00b7 labor",
+      "id": "120250020285630325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only",
+          "https://toromovers.com/get-quote?servicetype=labor-only"
+        ]
+      ],
+      "new_creative": "2813411892371746"
+    },
+    {
+      "ad": "Ad \u00b7 pt2-welift \u00b7 labor \u00b7 direct \u00b7 2026-07-12",
+      "id": "120251219794710325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only",
+          "https://toromovers.com/get-quote?servicetype=labor-only"
+        ]
+      ],
+      "new_creative": "957566107370788"
+    },
+    {
+      "ad": "Ad \u00b7 st-yourtruck2 \u00b7 labor \u00b7 2026-07-06",
+      "id": "120251049087540325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only",
+          "https://toromovers.com/get-quote?servicetype=labor-only"
+        ]
+      ],
+      "new_creative": "4358762207677686"
+    },
+    {
+      "ad": "Ad \u00b7 pt-doortruck \u00b7 CR \u00b7 2026-07-12",
+      "id": "120251219590730325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service",
+          "https://toromovers.com/get-quote?servicetype=full-service"
+        ]
+      ],
+      "new_creative": "1070686162306579"
+    },
+    {
+      "ad": "Ad \u00b7 pt-home \u00b7 CR \u00b7 2026-07-12",
+      "id": "120251219588990325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service",
+          "https://toromovers.com/get-quote?servicetype=full-service"
+        ]
+      ],
+      "new_creative": "1736066747735471"
+    },
+    {
+      "ad": "Ad \u00b7 pt-apartment \u00b7 CR \u00b7 2026-07-12",
+      "id": "120251219589450325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service",
+          "https://toromovers.com/get-quote?servicetype=full-service"
+        ]
+      ],
+      "new_creative": "1044406048078471"
+    },
+    {
+      "ad": "Ad \u00b7 pt2-welift \u00b7 labor \u00b7 clean \u00b7 2026-07-12",
+      "id": "120251219599200325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only",
+          "https://toromovers.com/get-quote?servicetype=labor-only"
+        ]
+      ],
+      "new_creative": "3978742122435213"
+    },
+    {
+      "ad": "Ad \u00b7 pt-apartment \u00b7 full \u00b7 2026-07-10",
+      "id": "120251199352350325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service",
+          "https://toromovers.com/get-quote?servicetype=full-service"
+        ]
+      ],
+      "new_creative": "1029310243029706"
+    },
+    {
+      "ad": "Ad \u00b7 pt-home \u00b7 full \u00b7 2026-07-10",
+      "id": "120251199352030325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service",
+          "https://toromovers.com/get-quote?servicetype=full-service"
+        ]
+      ],
+      "new_creative": "1736066747735471"
+    },
+    {
+      "ad": "Ad \u00b7 st-welift3 \u00b7 labor \u00b7 2026-07-06",
+      "id": "120251049087660325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=labor-only",
+          "https://toromovers.com/get-quote?servicetype=labor-only"
+        ]
+      ],
+      "new_creative": "996156883406554"
+    },
+    {
+      "ad": "Ad \u00b7 pt-nohidden2 \u00b7 full \u00b7 2026-07-06",
+      "id": "120251049087240325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service",
+          "https://toromovers.com/get-quote?servicetype=full-service"
+        ]
+      ],
+      "new_creative": "994624186945133"
+    },
+    {
+      "ad": "Ad \u00b7 pt-doorstep2 \u00b7 full \u00b7 2026-07-06",
+      "id": "120251049087360325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/get-quote?servicetype=full-service",
+          "https://toromovers.com/get-quote?servicetype=full-service"
+        ]
+      ],
+      "new_creative": "2049073602360311"
+    },
+    {
+      "ad": "Ad \u00b7 pt-social \u00b7 HI-EN 2026-06-06",
+      "id": "120249400269010325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/moving?utm_source=meta&utm_medium=paid&utm_campaign=tm-orlando-moving&utm_content=pt-social",
+          "https://toromovers.com/moving?utm_source=meta&utm_medium=paid&utm_campaign=tm-orlando-moving&utm_content=pt-social"
+        ]
+      ],
+      "new_creative": "1581968896850034"
+    },
+    {
+      "ad": "Ad \u00b7 pt-nearme \u00b7 HI-EN 2026-06-06",
+      "id": "120249400269770325",
+      "from_to": [
+        [
+          "object_story_spec.link_data.link",
+          "https://toromovers.net/moving?utm_source=meta&utm_medium=paid&utm_campaign=tm-orlando-moving&utm_content=pt-nearme",
+          "https://toromovers.com/moving?utm_source=meta&utm_medium=paid&utm_campaign=tm-orlando-moving&utm_content=pt-nearme"
+        ]
+      ],
+      "new_creative": "3732403556900231"
+    }
+  ],
+  "errors": [
+    [
+      "120251467531370325",
+      "GMP \u00b7 Video sole \u00b7 get-my-price \u00b7 2026-07-22",
+      "HTTP Error 400: Bad Request"
+    ],
+    [
+      "120251467619340325",
+      "GMP \u00b7 Video v2 variation \u00b7 get-my-price \u00b7 2026-07-22",
+      "HTTP Error 400: Bad Request"
+    ]
+  ],
+  "skipped_count": 18
+}

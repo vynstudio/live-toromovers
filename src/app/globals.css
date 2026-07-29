@@ -12,19 +12,18 @@
   --line: #E6E6EA;
   --line-soft: #F0F0F2;
   --line-strong: #D2D2D8;
-  /* Cherry-red accent + navy-blue secondary on a white base. */
-  --red: #C8102E;
-  --red-bright: #E01233;
-  --red-deep: #9E0C24;
-  --red-soft: #FBE3E8;
-  --red-glow: rgba(200, 16, 46, 0.16);
-  /* Navy secondary (matches the crew polos in the ad creatives). */
-  --navy: #1B2A52;
-  --navy-deep: #101C3A;
-  --navy-soft: #EBEEF5;
-  --gold: #C9A227;
-  --gold-soft: #F3E9C9;
-  /* City-page visual system aliases (premium local landing) */
+  /* Pure black / white only (design kit direction). */
+  --red: #0A0A0A;
+  --red-bright: #1A1A1A;
+  --red-deep: #000000;
+  --red-soft: #F3F4F6;
+  --red-glow: rgba(0, 0, 0, 0.12);
+  --navy: #0A0A0A;
+  --navy-deep: #000000;
+  --navy-soft: #F3F4F6;
+  --gold: #6B6B6B;
+  --gold-soft: #F3F4F6;
+  /* City-page visual system aliases */
   --toro-primary: var(--red);
   --toro-primary-bright: var(--red-bright);
   --toro-primary-soft: var(--red-soft);

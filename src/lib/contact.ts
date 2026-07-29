@@ -46,6 +46,13 @@ export const SOCIAL_PROFILES = [
   "https://www.google.com/maps/place/Toro+Movers/@27.5242113,-82.9347487,8z/data=!4m10!1m2!2m1!1storo+movers!3m6!1s0xaab4eea8998e0b43:0xef948707b4ba0a80!8m2!3d28.5187116!4d-81.5872639!15sCgt0b3JvIG1vdmVyc1oNIgt0b3JvIG1vdmVyc5IBDm1vdmluZ19jb21wYW554AEA!16s%2Fg%2F11xmqc_lk7",
 ];
 
+/** Named social links for design-kit footer */
+export const SOCIAL = {
+  facebook: "https://www.facebook.com/722514634274519",
+  x: "https://x.com",
+  instagram: "https://www.instagram.com",
+} as const;
+
 export const SERVICE_BASE_CITY = "Orlando, FL";
 // Schema address — real business base. Owner-confirmed public ZIP; no public
 // street address exists, so streetAddress is intentionally omitted.

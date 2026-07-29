@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Schibsted_Grotesk, Inter } from "next/font/google";
 import "../globals.css";
+import "../design-kit.css";
 import { LangProvider } from "@/components/lang-provider";
 import { Analytics } from "@/components/analytics";
 import { UtmCapture } from "@/components/utm-capture";
 import { ClickTracking } from "@/components/click-tracking";
 import { QuoteModal } from "@/components/quote-modal";
-import { StickyCta } from "@/components/sticky-cta";
+import { StickyCta as KitStickyCta } from "@/components/home-kit/StickyCta";
 import { SERVICE_CITIES } from "@/lib/content";
 import {
   PHONE_DISPLAY,
@@ -182,8 +183,10 @@ export default function SiteLayout({
       <LangProvider>
         {children}
         <QuoteModal />
-        {/* Mobile: Call + Get Quote after scroll (nav hides at the same threshold) */}
-        <StickyCta />
+        {/* Kit sticky is rendered on homepage; other pages use mono sticky here */}
+        <div className="site-sticky-fallback">
+          <KitStickyCta />
+        </div>
       </LangProvider>
     </div>
   );
