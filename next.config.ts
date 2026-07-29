@@ -135,6 +135,35 @@ const nextConfig: NextConfig = {
       { source: "/get-quote/:path*", destination: "/get-my-price", permanent: true },
       // Packing was never a standalone offer — send old links to full-service.
       { source: "/packing-services", destination: "/full-service-moving", permanent: true },
+      // Moving-day checklist — single canonical form URL (SEO-safe redesign)
+      {
+        source: "/movingday-checklist",
+        destination: "/move-day-checklist",
+        permanent: true,
+      },
+      {
+        source: "/movingday-checklist/:path*",
+        destination: "/move-day-checklist",
+        permanent: true,
+      },
+      { source: "/job-size", destination: "/move-day-checklist", permanent: true },
+      {
+        source: "/job-size/:path*",
+        destination: "/move-day-checklist",
+        permanent: true,
+      },
+      { source: "/your-move", destination: "/move-day-checklist", permanent: true },
+      {
+        source: "/your-move/:path*",
+        destination: "/move-day-checklist",
+        permanent: true,
+      },
+      { source: "/intake", destination: "/move-day-checklist", permanent: true },
+      {
+        source: "/intake/:path*",
+        destination: "/move-day-checklist",
+        permanent: true,
+      },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       APARTMENT_REDIRECT,
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),

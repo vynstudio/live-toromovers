@@ -91,8 +91,8 @@ export function Nav() {
         aria-label="Toro Movers — Home"
         onClick={closeMenu}
       >
-        <span className="brand-mark" aria-hidden>
-          <img src="/bull.svg" alt="" />
+        <span className="brand-mark brand-mark--mono" aria-hidden>
+          <img src="/logos/toro-bull-black.svg" alt="" />
         </span>
         <span className="brand-name">
           TORO<span className="accent">·</span>MOVERS

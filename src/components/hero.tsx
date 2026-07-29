@@ -11,7 +11,7 @@ export function Hero() {
   const { t, lang } = useLang();
 
   return (
-    <section className="hero hero--split">
+    <section className="hero hero--split hero--redesign" id="hero">
       <div className="hero-inner">
         <div className="hero-copy">
           <div className="hero-badge">
