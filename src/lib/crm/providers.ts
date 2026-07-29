@@ -100,8 +100,15 @@ export async function sendSms(toRaw: string, content: string): Promise<ChannelRe
     });
     if (!res.ok) {
       const t = await res.text().catch(() => "");
-      console.error("[crm/openphone]", res.status, t.slice(0, 200));
-      return { ok: false, channel: "openphone", detail: `HTTP ${res.status}` };
+      console.error("[crm/openphone]", res.status, t.slice(0, 400), "to=", to);
+      let msg = `HTTP ${res.status}`;
+      try {
+        const j = JSON.parse(t) as { error?: { message?: string }; message?: string };
+        msg = j?.error?.message || j?.message || msg;
+      } catch {
+        if (t) msg = `${msg}: ${t.slice(0, 180)}`;
+      }
+      return { ok: false, channel: "openphone", detail: msg };
     }
     return { ok: true, channel: "openphone" };
   } catch (err) {
