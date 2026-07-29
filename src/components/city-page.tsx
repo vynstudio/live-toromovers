@@ -16,21 +16,44 @@ import { getCityImages } from "@/lib/city-images";
 import { REVIEWS } from "@/lib/content";
 import {
   PHONE_DISPLAY,
+  PHONE_TEL,
   BUSINESS_NAME,
+  EMAIL,
   GOOGLE_RATING,
   SERVICE_BASE_LOCALITY,
+  SERVICE_REGION,
 } from "@/lib/contact";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
+const PHONE_E164 = PHONE_TEL.replace(/^tel:/, "");
 
 function buildServices(city: CityData) {
   const n = city.name;
+  const isOrlando = city.slug === "orlando-movers";
   return [
     {
-      title: "Apartment & condo moves",
-      description: `Elevators, walk-ups, loading zones, and move-in windows across ${n} apartment communities — careful carries and clear hourly pricing.`,
+      title: isOrlando ? "Apartment movers in Orlando" : "Apartment & condo moves",
+      description: isOrlando
+        ? `Walk-ups, elevators, tight hallways, parking limits, and move-in windows across Orlando apartment communities — careful carries and up-front hourly rates.`
+        : `Elevators, walk-ups, loading zones, and move-in windows across ${n} apartment communities — careful carries and clear hourly pricing.`,
       href: "/apartment-movers-orlando-fl",
       meta: "Local apartments & condos",
+    },
+    {
+      title: isOrlando ? "Full-service movers in Orlando" : "Full-service moving",
+      description: isOrlando
+        ? `Truck plus crew for door-to-door Orlando moves — load, transport, unload, and place with up-front hourly rates.`
+        : `Truck plus crew for door-to-door ${n} moves — load, transport, unload, and place with upfront hourly rates.`,
+      href: "/full-service-moving",
+      meta: "Truck + crew",
+    },
+    {
+      title: isOrlando ? "Labor-only movers in Orlando" : "Labor-only / truck help",
+      description: isOrlando
+        ? `Already have a U-Haul, POD, or rental truck? Hire labor-only movers in Orlando to load or unload — same careful crew, by the hour.`
+        : `Already have a U-Haul, POD, or rental? Hire muscle only to load or unload in ${n} — same careful crew, no truck fee.`,
+      href: "/labor-only-moving",
+      meta: "U-Haul, PODS & rentals",
     },
     {
       title: "Home & residential moves",
@@ -43,18 +66,6 @@ function buildServices(city: CityData) {
       description: `Suites, small offices, and after-hours loads near ${n}. We plan dock and elevator access so your team loses less time.`,
       href: "/commercial-movers",
       meta: "Offices & suites",
-    },
-    {
-      title: "Full-service moving",
-      description: `Truck plus crew for door-to-door ${n} moves — load, transport, unload, and place with upfront hourly rates.`,
-      href: "/full-service-moving",
-      meta: "Truck + crew",
-    },
-    {
-      title: "Labor-only / truck help",
-      description: `Already have a U-Haul, POD, or rental? Hire muscle only to load or unload in ${n} — same careful crew, no truck fee.`,
-      href: "/labor-only-moving",
-      meta: "U-Haul, PODS & rentals",
     },
     {
       title: "Loading & unloading",
@@ -77,17 +88,13 @@ export function CityPage({ city }: { city: CityData }) {
         },
       ];
 
-  const heroH1 =
-    city.slug === "orlando-movers"
-      ? "Orlando Movers — Family-Owned, No Hidden Fees"
-      : city.h1.includes("—")
-        ? city.h1
-        : `${city.name} Movers — Family-Owned, No Hidden Fees`;
+  const heroH1 = city.h1;
+  const subhead = city.subline;
+  const isOrlando = city.slug === "orlando-movers";
 
-  const subhead =
-    city.slug === "orlando-movers"
-      ? `Apartment, home, and office moves with transparent hourly pricing. ${GOOGLE_RATING}★ on Google, fully insured bilingual crew.`
-      : city.subline;
+  const businessDescription = isOrlando
+    ? "Toro Movers is a family-owned Orlando moving company serving Central Florida with full-service moves, labor-only loading and unloading, apartment moves, bilingual English and Spanish crews, and up-front hourly rates."
+    : `${BUSINESS_NAME} is a family-owned moving company serving ${city.name} and ${SERVICE_REGION} with full-service moves, labor-only loading, apartment moves, and up-front hourly rates.`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -95,10 +102,15 @@ export function CityPage({ city }: { city: CityData }) {
       {
         "@type": ["MovingCompany", "LocalBusiness"],
         "@id": `${SITE_URL}${city.href}#business`,
-        name: `${BUSINESS_NAME} — ${city.name}`,
+        name: isOrlando ? `${BUSINESS_NAME} — Orlando Movers` : `${BUSINESS_NAME} — ${city.name}`,
         url: `${SITE_URL}${city.href}`,
-        telephone: PHONE_DISPLAY,
-        areaServed: { "@type": "City", name: `${city.name}, FL` },
+        telephone: PHONE_E164,
+        email: EMAIL,
+        description: businessDescription,
+        areaServed: [
+          { "@type": "City", name: `${city.name}, FL` },
+          { "@type": "AdministrativeArea", name: SERVICE_REGION },
+        ],
         address: {
           "@type": "PostalAddress",
           addressLocality: SERVICE_BASE_LOCALITY,
@@ -114,6 +126,51 @@ export function CityPage({ city }: { city: CityData }) {
           "@type": "GeoCoordinates",
           latitude: city.schema.lat,
           longitude: city.schema.lng,
+        },
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: GOOGLE_RATING,
+          bestRating: "5",
+        },
+        knowsLanguage: ["en", "es"],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: `${city.name} moving services`,
+          itemListElement: [
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Full-service local moving",
+                serviceType: "Full-service moving",
+                areaServed: `${city.name}, FL`,
+                description:
+                  "Loading, transportation, unloading, and placement with a local crew.",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Labor-only loading and unloading",
+                serviceType: "Labor-only moving",
+                areaServed: `${city.name}, FL`,
+                description:
+                  "Loading and unloading for U-Haul trucks, PODS, trailers, rental trucks, and storage units.",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Apartment and condo moving",
+                serviceType: "Apartment moving",
+                areaServed: `${city.name}, FL`,
+                description:
+                  "Apartment moves with stairs, elevators, loading zones, and scheduled move-in windows.",
+              },
+            },
+          ],
         },
       },
       {
@@ -168,20 +225,40 @@ export function CityPage({ city }: { city: CityData }) {
         <p className="city-sec-kicker">About {city.name.toLowerCase()} moves</p>
         <h2 className="city-sec-title">{city.about.h2}</h2>
         <div className="city-prose">
-          <p>{city.about.lead}</p>
+          <p className="aeo-answer">{city.about.lead}</p>
+          {city.sections?.map((sec) => (
+            <div key={sec.h2} className="city-seo-block">
+              <h2 className="city-sec-title city-seo-h2">{sec.h2}</h2>
+              <p className="aeo-answer">{sec.body}</p>
+            </div>
+          ))}
           <p>
             Prefer a full map of coverage? See all{" "}
-            <Link href="/service-areas">Central Florida moving service areas</Link>{" "}
-            or our{" "}
-            <Link href="/orlando-movers">Orlando movers</Link> hub.
+            <Link href="/service-areas">service areas</Link>
+            {city.slug !== "orlando-movers" ? (
+              <>
+                {" "}
+                or our <Link href="/orlando-movers">Orlando movers</Link> hub
+              </>
+            ) : null}
+            . Ready for a clear estimate?{" "}
+            <Link href="/get-my-price">Get my price</Link>.
           </p>
         </div>
       </CitySection>
 
       <CitySection soft>
         <ServiceGrid
-          title={`${city.name} moving services`}
-          lead={`Local, apartment, full-service, and labor-only help in ${city.name}, FL — same transparent hourly model across Central Florida.`}
+          title={
+            isOrlando
+              ? "Orlando moving services"
+              : `${city.name} moving services`
+          }
+          lead={
+            isOrlando
+              ? "Full-service movers, labor-only movers, and apartment movers in Orlando, FL — same up-front hourly model across Central Florida."
+              : `Local, apartment, full-service, and labor-only help in ${city.name}, FL — same transparent hourly model across Central Florida.`
+          }
           services={buildServices(city)}
         />
         {/* Mid-page contextual image — lazy-loaded, does not change H2/copy order */}
@@ -250,7 +327,11 @@ export function CityPage({ city }: { city: CityData }) {
       {city.faqs?.length ? (
         <CitySection>
           <FAQAccordion
-            title={`${city.name} movers — common questions`}
+            title={
+              isOrlando
+                ? "Orlando movers — common questions"
+                : `${city.name} movers — common questions`
+            }
             items={city.faqs}
           />
         </CitySection>
@@ -258,8 +339,16 @@ export function CityPage({ city }: { city: CityData }) {
 
       <CitySection soft>
         <QuoteFormCard
-          title={`Get your ${city.name} moving estimate`}
-          lead={`Share your ${city.name} addresses and move size. We’ll confirm hourly rate and crew size — no spam, no hidden fees.`}
+          title={
+            isOrlando
+              ? "Get a moving quote in Orlando"
+              : `Get your ${city.name} moving estimate`
+          }
+          lead={
+            isOrlando
+              ? "Share your Orlando addresses, home or apartment type, and whether you need full-service or labor-only movers. We’ll explain the up-front hourly rate and crew size — no spam."
+              : `Share your ${city.name} addresses and move size. We’ll confirm hourly rate and crew size — no spam, no hidden fees.`
+          }
           source={`city-quote-${city.slug}`}
         />
       </CitySection>

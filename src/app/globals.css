@@ -4891,6 +4891,18 @@ html[data-lca-dock="1"] .lca-docked-inner .lca-back-solo {
 }
 .city-prose a:hover { text-decoration: underline; }
 
+/* Flagship city SEO blocks (H2 answer sections under intro) */
+.city-seo-block {
+  margin-top: 2rem;
+}
+.city-seo-block .city-seo-h2 {
+  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+  margin-bottom: 0.65rem;
+}
+.city-seo-block .aeo-answer {
+  margin: 0;
+}
+
 /* City SEO images (Runway-generated WebP under /public/city/) */
 .city-img-figure { margin: 0; }
 .city-img-frame {

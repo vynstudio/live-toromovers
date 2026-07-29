@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { CityPage } from "@/components/city-page";
 import { ORLANDO } from "@/lib/cities";
 
-const TITLE = "Orlando Movers | Family-Owned, No Hidden Fees | Toro Movers";
-const DESCRIPTION =
-  "Family-owned Orlando movers — apartments, homes & offices with transparent hourly pricing. 4.9★ on Google, bilingual crew, no fuel or stair fees.";
+const TITLE = ORLANDO.metadata.title;
+const DESCRIPTION = ORLANDO.metadata.description;
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -17,6 +16,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
   },
+  robots: { index: true, follow: true },
 };
 
 /**

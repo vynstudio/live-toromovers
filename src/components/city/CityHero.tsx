@@ -65,9 +65,9 @@ export function CityHero({
                 <strong>{GOOGLE_RATING}★</strong> on Google
               </span>
               <span className="city-trust-pill">Family-owned</span>
-              <span className="city-trust-pill">Fully insured crew</span>
+              <span className="city-trust-pill">Up-front hourly rates</span>
               <span className="city-trust-pill">Bilingual · Hablamos español</span>
-              <span className="city-trust-pill">No hidden fees</span>
+              <span className="city-trust-pill">Local crew</span>
             </div>
           </div>
 

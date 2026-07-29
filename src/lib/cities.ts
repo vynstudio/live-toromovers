@@ -17,6 +17,8 @@ export interface CityData {
     h2: string;
     lead: string;
   };
+  /** Optional answer-first SEO sections (H2 + body) for flagship city pages. */
+  sections?: readonly { h2: string; body: string }[];
   neighborhoods: string[];
   uniqueAngle: {
     eyebrow: string;
@@ -39,17 +41,35 @@ export const ORLANDO: CityData = {
   name: "Orlando",
   navLabel: "Orlando movers",
   metadata: {
-    title: "Orlando Movers | Family-Owned, No Hidden Fees",
+    title: "Orlando Movers | Local Moving Company in Orlando FL",
     description:
-      "Family-owned Orlando movers — apartments, homes & offices with transparent hourly pricing. 4.9★ on Google, bilingual crew, no fuel or stair fees.",
+      "Need Orlando movers? Toro Movers is a family-owned moving company offering full-service moves, labor-only loading, apartment moves, and up-front hourly rates.",
   },
-  h1: "Orlando Movers — Family-Owned, No Hidden Fees",
+  h1: "Orlando Movers for Clear, Careful Local Moves",
   subline:
-    "Apartment, home, and office moves with transparent hourly pricing. 4.9★ on Google, fully insured bilingual crew.",
+    "Toro Movers is a family-owned Orlando moving company helping local customers with full-service moves, labor-only loading and unloading, apartment moves, and up-front hourly rates.",
   about: {
-    h2: "Orlando movers built for the city.",
-    lead: "Toro Movers is a family-owned Central Florida moving company handling apartment, home, and commercial moves throughout Orlando and Orange County. From downtown high-rises to single-family homes in Baldwin Park and Lake Nona townhomes, the process stays the same: phone estimate, scheduled crew, upfront hourly pricing, and no surprises.",
+    h2: "Local movers in Orlando, FL",
+    lead: "Toro Movers provides local moving help in Orlando, FL for homes, apartments, storage units, rental trucks, and POD-style containers. Our bilingual English and Spanish crew helps with full-service moves, labor-only loading, apartment moves, and careful placement at your new address.",
   },
+  sections: [
+    {
+      h2: "Full-service movers in Orlando",
+      body: "Our full-service movers in Orlando handle loading, transportation, unloading, and placement so you do not have to manage the heavy parts yourself. Toro Movers plans around access details like stairs, elevators, parking, storage units, and building rules before move day.",
+    },
+    {
+      h2: "Labor-only movers in Orlando",
+      body: "Toro Movers offers labor-only moving help in Orlando for U-Haul trucks, PODS, trailers, rental trucks, and storage units. You provide the vehicle or container, and our crew handles loading, unloading, heavy lifting, and placement by the hour.",
+    },
+    {
+      h2: "Apartment movers in Orlando",
+      body: "Toro Movers helps with apartment moves in Orlando, including walk-ups, elevators, tight hallways, parking limits, loading zones, and scheduled move-in windows. Our crew plans around access details so the move stays organized and careful.",
+    },
+    {
+      h2: "Up-front hourly moving rates",
+      body: "Toro Movers uses up-front hourly rates for most Orlando local moves. Pricing depends on crew size, truck needs, stairs, elevators, access, distance, and how much you need moved. We explain the rate structure before move day so expectations are clear.",
+    },
+  ],
   neighborhoods: [
     "Downtown Orlando",
     "Lake Nona",
@@ -61,22 +81,34 @@ export const ORLANDO: CityData = {
     "Thornton Park",
   ],
   uniqueAngle: {
-    eyebrow: "timing & traffic",
-    h2: "Orlando timing matters.",
-    body: "Orlando’s traffic patterns affect moving day more than most cities. I-4 closures, theme park weekend congestion, and downtown construction zones can add hours to a move if the crew doesn’t know the area. Toro Movers crews work Orlando full-time and plan routes around city patterns — not Google Maps defaults.",
+    eyebrow: "why toro",
+    h2: "Why Orlando customers choose Toro Movers",
+    body: "Toro Movers is family-owned, locally operated, bilingual in English and Spanish, and rated 4.9 stars on Google. Orlando customers choose Toro because they want a local crew, clear communication, up-front hourly pricing, and movers who understand apartments, storage moves, stairs, elevators, and rental truck loading.",
   },
   faqs: [
     {
-      q: "How does Orlando traffic affect my moving day?",
-      a: "More than most cities — I-4 work, theme-park weekend congestion, and downtown construction can add time if a crew doesn't know the area. Our Orlando crews plan routes around city patterns, not map-app defaults, and we quote the timing honestly up front.",
+      q: "How much do movers cost in Orlando?",
+      a: "Toro Movers quotes most Orlando moves with up-front hourly rates. The final cost depends on crew size, truck needs, stairs, elevators, distance, access, and how much you need moved. Call or text (689) 600-2720 with your move details and we will explain the hourly pricing model before move day.",
     },
     {
-      q: "Can you move a downtown Orlando high-rise or apartment?",
-      a: "Yes. We move downtown high-rises, Lake Nona apartments, and homes across Orange County regularly — reserving the freight elevator or loading zone where the building requires it and working within your complex's move-in window.",
+      q: "Do you offer labor-only movers in Orlando?",
+      a: "Yes, Toro Movers offers labor-only movers in Orlando for U-Haul trucks, PODS, trailers, storage units, and rental trucks. You provide the vehicle or container, and our crew handles the loading, unloading, heavy lifting, and placement.",
     },
     {
-      q: "How is an Orlando move priced?",
-      a: "By the hour, with the crew size and rate agreed before the day — no per-mile charge, no fuel surcharge, no hidden fees. You only pay for the time the move actually takes.",
+      q: "Do you handle apartment moves in Orlando?",
+      a: "Yes, Toro Movers handles apartment moves in Orlando, including walk-ups, elevators, loading zones, tight hallways, parking limits, and scheduled move-in windows. We ask about apartment access before quoting so the crew can plan the move correctly.",
+    },
+    {
+      q: "Are you a local Orlando moving company?",
+      a: "Yes, Toro Movers is a family-owned local moving company serving Orlando and Central Florida. You work with a local crew instead of a franchise hand-off, which helps keep communication, scheduling, and move-day expectations clear.",
+    },
+    {
+      q: "What is the difference between full-service and labor-only moving?",
+      a: "Full-service moving includes the crew, truck, loading, transportation, unloading, and placement. Labor-only moving is for customers who already have a U-Haul, POD, trailer, or rental truck and only need movers for loading, unloading, or heavy lifting.",
+    },
+    {
+      q: "How do I get a moving quote in Orlando?",
+      a: "To get a moving quote in Orlando, call or text Toro Movers at (689) 600-2720. Share your move date, pickup and drop-off locations, home or apartment type, stairs or elevators, and whether you need full-service movers or labor-only help.",
     },
   ],
   schema: { lat: 28.5384, lng: -81.3789 },
