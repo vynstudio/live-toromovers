@@ -19,6 +19,7 @@ export function StickyCta() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const hide =
+    pathname === "/" ||
     pathname === "/intake" ||
     !!pathname?.startsWith("/intake/") ||
     pathname === "/movingday-checklist" ||

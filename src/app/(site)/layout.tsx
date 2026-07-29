@@ -8,6 +8,7 @@ import { UtmCapture } from "@/components/utm-capture";
 import { ClickTracking } from "@/components/click-tracking";
 import { QuoteModal } from "@/components/quote-modal";
 import { StickyCta as KitStickyCta } from "@/components/home-kit/StickyCta";
+import { StickyCta } from "@/components/sticky-cta";
 import { SERVICE_CITIES } from "@/lib/content";
 import {
   PHONE_DISPLAY,
@@ -183,10 +184,9 @@ export default function SiteLayout({
       <LangProvider>
         {children}
         <QuoteModal />
-        {/* Kit sticky is rendered on homepage; other pages use mono sticky here */}
-        <div className="site-sticky-fallback">
-          <KitStickyCta />
-        </div>
+        {/* Homepage: design-kit sticky. Other pages: original sticky. */}
+        <KitStickyCta />
+        <StickyCta />
       </LangProvider>
     </div>
   );

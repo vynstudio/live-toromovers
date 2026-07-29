@@ -1,17 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { PHONE_TEL } from "@/lib/contact";
 import { IconArrow } from "./icons";
 
 /**
  * Mobile sticky conversion bar — Call + Get quote.
  * Appears when the mobile nav hides (past hero). Desktop: never shown.
+ * Only on homepage so it doesn't fight city/service layouts.
  */
 export function StickyCta() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
+  const isHome = pathname === "/" || pathname === "";
 
   useEffect(() => {
+    if (!isHome) {
+      setVisible(false);
+      return;
+    }
     const mq = window.matchMedia("(max-width: 767px)");
 
     const onScroll = () => {
@@ -42,7 +50,9 @@ export function StickyCta() {
       window.removeEventListener("resize", onScroll);
       mq.removeEventListener("change", onScroll);
     };
-  }, []);
+  }, [isHome]);
+
+  if (!isHome) return null;
 
   return (
     <div

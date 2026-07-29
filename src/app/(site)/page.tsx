@@ -11,6 +11,7 @@ import { Faq } from "@/components/home-kit/Faq";
 import { Areas } from "@/components/home-kit/Areas";
 import { ClosingCta } from "@/components/home-kit/ClosingCta";
 import { Footer } from "@/components/home-kit/Footer";
+import type { Metadata } from "next";
 import { faq } from "@/lib/home-kit-content";
 import { googleReviews } from "@/lib/home-kit-reviews";
 import {
@@ -20,6 +21,15 @@ import {
 } from "@/lib/contact";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Trusted Orlando & Central Florida Movers · 4.9★ | Toro Movers",
+  },
+  description:
+    "Trusted Orlando & Central Florida movers — family-owned crew, upfront hourly pricing, bilingual crews, no hidden fees. Apartment, home & office moves. Quote in 60s.",
+  alternates: { canonical: "/" },
+};
 
 /**
  * Homepage layout matches https://toromovers-com.netlify.app (pure B/W).
@@ -83,103 +93,7 @@ export default function Home() {
         <Areas />
         <ClosingCta />
       </main>
-      {/* SEO internal-link strip — mono, below design footer visual */}
-      <nav
-        className="full-bleed border-t border-border bg-white px-[var(--container-pad)] py-10"
-        aria-label="Site links"
-      >
-        <div className="site-container grid gap-8 sm:grid-cols-3">
-          <div>
-            <p className="text-sm font-semibold tracking-tight text-foreground">
-              Services
-            </p>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/full-service-moving">
-                  Full-service moving
-                </a>
-              </li>
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/labor-only-moving">
-                  Labor-only moving
-                </a>
-              </li>
-              <li>
-                <a
-                  className="underline-offset-2 hover:underline"
-                  href="/apartment-movers-orlando-fl"
-                >
-                  Apartment movers
-                </a>
-              </li>
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/blog">
-                  Moving guides
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-sm font-semibold tracking-tight text-foreground">
-              Areas
-            </p>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/orlando-movers">
-                  Orlando movers
-                </a>
-              </li>
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/kissimmee-movers">
-                  Kissimmee movers
-                </a>
-              </li>
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/winter-park-movers">
-                  Winter Park movers
-                </a>
-              </li>
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/service-areas">
-                  All service areas
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-sm font-semibold tracking-tight text-foreground">
-              Next step
-            </p>
-            <ul className="mt-3 space-y-2 text-sm text-muted">
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/get-my-price">
-                  Get a free quote
-                </a>
-              </li>
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/book">
-                  Book online
-                </a>
-              </li>
-              <li>
-                <a
-                  className="underline-offset-2 hover:underline"
-                  href="/central-florida-moving-checklist"
-                >
-                  Moving checklist
-                </a>
-              </li>
-              <li>
-                <a className="underline-offset-2 hover:underline" href="/privacy">
-                  Privacy
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
       <Footer />
-      {/* Sticky rendered once via layout (kit); avoid double dock on home */}
     </div>
   );
 }
