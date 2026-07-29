@@ -26,9 +26,9 @@ export function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <a href="#" className="brand">
-              <span className="brand-mark">
+              <span className="brand-mark brand-mark--mono">
                 <img
-                  src="/bull.svg"
+                  src="/logos/toro-bull-black.svg"
                   alt="Toro Movers logo"
                   title="Toro Movers — Family-owned Orlando Moving Company"
                 />
