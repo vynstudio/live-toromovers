@@ -85,10 +85,17 @@ const APARTMENT_REDIRECT = {
   permanent: true,
 };
 
+// Hybrid: when domain is on design site, engine assets load from this origin.
+const ASSET_PREFIX = (process.env.NEXT_PUBLIC_ASSET_PREFIX || "").replace(/\/$/, "");
+
 const nextConfig: NextConfig = {
+  ...(ASSET_PREFIX ? { assetPrefix: ASSET_PREFIX } : {}),
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "live-toro-site.netlify.app" },
+      { protocol: "https", hostname: "toromovers.com" },
+      { protocol: "https", hostname: "www.toromovers.com" },
     ],
   },
   async redirects() {
