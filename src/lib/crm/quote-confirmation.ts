@@ -13,22 +13,42 @@ const MAPS =
   process.env.GOOGLE_MAPS_REVIEWS_URL ||
   "https://maps.app.goo.gl/HBfjZzWu2YbdXUW1A?g_st=ic";
 
+function lines(...parts: (string | false | null | undefined)[]): string {
+  return parts.filter(Boolean).join("\n");
+}
+
 export function quoteReceivedSms(opts: {
   firstName: string;
   lang?: "en" | "es";
 }): string {
   const name = (opts.firstName || "there").trim().split(/\s+/)[0] || "there";
   if (opts.lang === "es") {
-    return (
-      `Hola ${name}, somos Toro Movers — recibimos tu solicitud de cotización. ` +
-      `Te llamamos pronto con precio y disponibilidad. ` +
-      `Reseñas: ${MAPS} · Dudas: ${PHONE}. Responde STOP para salir.`
+    return lines(
+      `Hola ${name} — Toro Movers`,
+      ``,
+      `Recibimos tu solicitud de cotización.`,
+      `Te llamamos pronto con precio y disponibilidad.`,
+      ``,
+      `Reseñas:`,
+      MAPS,
+      ``,
+      `Dudas: ${PHONE}`,
+      ``,
+      `Responde STOP para salir.`,
     );
   }
-  return (
-    `Hi ${name}, this is Toro Movers — we got your quote request. ` +
-    `We'll call you soon with pricing and availability. ` +
-    `Reviews: ${MAPS} · Questions? ${PHONE}. Reply STOP to opt out.`
+  return lines(
+    `Hi ${name} — Toro Movers`,
+    ``,
+    `We got your quote request.`,
+    `We'll call you soon with pricing and availability.`,
+    ``,
+    `Reviews:`,
+    MAPS,
+    ``,
+    `Questions? ${PHONE}`,
+    ``,
+    `Reply STOP to opt out.`,
   );
 }
 
@@ -39,14 +59,32 @@ export function quoteReadyToBookSms(opts: {
 }): string {
   const name = (opts.firstName || "there").trim().split(/\s+/)[0] || "there";
   if (opts.lang === "es") {
-    return (
-      `Hola ${name}, Toro — si el precio te funciona, agenda online (depósito en Square): ${SQUARE_BOOKING_URL} ` +
-      `O llama ${PHONE}. STOP para salir.`
+    return lines(
+      `Hola ${name} — Toro Movers`,
+      ``,
+      `Si el precio te funciona, agenda online.`,
+      `El depósito se paga en Square al reservar.`,
+      ``,
+      `Book online:`,
+      SQUARE_BOOKING_URL,
+      ``,
+      `O llama: ${PHONE}`,
+      ``,
+      `Responde STOP para salir.`,
     );
   }
-  return (
-    `Hi ${name}, Toro — if the quote works, book online (deposit via Square): ${SQUARE_BOOKING_URL} ` +
-    `Or call ${PHONE}. Reply STOP to opt out.`
+  return lines(
+    `Hi ${name} — Toro Movers`,
+    ``,
+    `If the quote works, book your date online.`,
+    `Deposit is paid in Square when you reserve.`,
+    ``,
+    `Book here:`,
+    SQUARE_BOOKING_URL,
+    ``,
+    `Or call: ${PHONE}`,
+    ``,
+    `Reply STOP to opt out.`,
   );
 }
 

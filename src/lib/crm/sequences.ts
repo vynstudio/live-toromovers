@@ -158,8 +158,28 @@ export function buildSequence(
         "/move-day-checklist";
       return {
         sms: es
-          ? `✅ ${name}, tu mudanza con Toro está agendada. Depósito recibido. Checklist del día (2 min): ${checklist} · ${PHONE_DISPLAY}. STOP para salir.`
-          : `✅ ${name}, your Toro move is booked. Deposit received. Moving day checklist (2 min): ${checklist} · ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? [
+              `✅ ${name}, ¡estás agendado con Toro!`,
+              `Depósito recibido.`,
+              ``,
+              `Checklist del día (2 min):`,
+              checklist,
+              ``,
+              `Dudas: ${PHONE_DISPLAY}`,
+              ``,
+              `Responde STOP para salir.`,
+            ].join("\n")
+          : [
+              `✅ ${name}, you're booked with Toro!`,
+              `Deposit received.`,
+              ``,
+              `Moving day checklist (2 min):`,
+              checklist,
+              ``,
+              `Questions? ${PHONE_DISPLAY}`,
+              ``,
+              `Reply STOP to opt out.`,
+            ].join("\n"),
         email: {
           subject: es ? "Mudanza confirmada — Toro Movers" : "Move confirmed — Toro Movers",
           html: wrap(
@@ -168,8 +188,8 @@ export function buildSequence(
               : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">You're booked, ${esc(name)}!</h2><p>Deposit received. Complete the <a href="${checklist}">moving day checklist</a> (addresses, start time, inventory) so we send the right crew. Questions? <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`,
           ),
           text: es
-            ? `Mudanza Toro confirmada. Checklist: ${checklist} · ${PHONE_DISPLAY}`
-            : `Toro move confirmed. Checklist: ${checklist} · ${PHONE_DISPLAY}`,
+            ? `Mudanza Toro confirmada.\n\nChecklist:\n${checklist}\n\n${PHONE_DISPLAY}`
+            : `Toro move confirmed.\n\nChecklist:\n${checklist}\n\n${PHONE_DISPLAY}`,
         },
       };
     }

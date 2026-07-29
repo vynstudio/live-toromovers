@@ -2,7 +2,7 @@
  * OpenPhone / Quo SMS for the booking funnel:
  *   quote → book online (Square) → deposit → moving day checklist
  *
- * These are intentional confirmation texts (not multi-SMS drip).
+ * Line breaks keep each message easy to scan on a phone.
  */
 
 import { sendSms } from "./providers";
@@ -25,6 +25,11 @@ function firstName(name: string): string {
   return (name || "there").trim().split(/\s+/)[0] || "there";
 }
 
+/** Join non-empty lines with real newlines (readable SMS layout). */
+function lines(...parts: (string | false | null | undefined)[]): string {
+  return parts.filter(Boolean).join("\n");
+}
+
 /** 1) Ready to lock a date — send Square booking link */
 export function bookOnlineSms(opts: {
   firstName: string;
@@ -32,14 +37,32 @@ export function bookOnlineSms(opts: {
 }): string {
   const name = firstName(opts.firstName);
   if (opts.lang === "es") {
-    return (
-      `Hola ${name}, Toro Movers — agenda tu mudanza online (depósito en Square): ${BOOK} ` +
-      `O llama ${PHONE_DISPLAY}. Responde STOP para salir.`
+    return lines(
+      `Hola ${name} — Toro Movers`,
+      ``,
+      `Agenda tu mudanza online.`,
+      `El depósito se paga en Square al reservar.`,
+      ``,
+      `Book online:`,
+      BOOK,
+      ``,
+      `O llama: ${PHONE_DISPLAY}`,
+      ``,
+      `Responde STOP para salir.`,
     );
   }
-  return (
-    `Hi ${name}, Toro Movers — book your move date online (deposit via Square): ${BOOK} ` +
-    `Or call ${PHONE_DISPLAY}. Reply STOP to opt out.`
+  return lines(
+    `Hi ${name} — Toro Movers`,
+    ``,
+    `Book your move date online.`,
+    `Deposit is paid in Square when you reserve.`,
+    ``,
+    `Book here:`,
+    BOOK,
+    ``,
+    `Or call: ${PHONE_DISPLAY}`,
+    ``,
+    `Reply STOP to opt out.`,
   );
 }
 
@@ -50,23 +73,37 @@ export function bookedConfirmSms(opts: {
   lang?: "en" | "es";
 }): string {
   const name = firstName(opts.firstName);
-  const dateBit = opts.moveDate?.trim()
-    ? opts.lang === "es"
-      ? ` para el ${opts.moveDate.trim()}`
-      : ` for ${opts.moveDate.trim()}`
-    : "";
+  const date = opts.moveDate?.trim();
 
   if (opts.lang === "es") {
-    return (
-      `✅ ${name}, tu mudanza con Toro está agendada${dateBit}. Depósito recibido. ` +
-      `Checklist del día de mudanza (2 min) para mandar el crew correcto: ${CHECKLIST} ` +
-      `Dudas: ${PHONE_DISPLAY}. Responde STOP para salir.`
+    return lines(
+      `✅ ${name}, ¡estás agendado con Toro!`,
+      date ? `Fecha: ${date}` : null,
+      `Depósito recibido.`,
+      ``,
+      `Siguiente paso — checklist del día (2 min)`,
+      `para mandar el crew correcto:`,
+      ``,
+      CHECKLIST,
+      ``,
+      `Dudas: ${PHONE_DISPLAY}`,
+      ``,
+      `Responde STOP para salir.`,
     );
   }
-  return (
-    `✅ ${name}, you're booked with Toro Movers${dateBit}. Deposit received. ` +
-    `Moving day checklist (2 min) so we send the right crew: ${CHECKLIST} ` +
-    `Questions? ${PHONE_DISPLAY}. Reply STOP to opt out.`
+  return lines(
+    `✅ ${name}, you're booked with Toro Movers!`,
+    date ? `Date: ${date}` : null,
+    `Deposit received.`,
+    ``,
+    `Next step — moving day checklist (2 min)`,
+    `so we send the right crew:`,
+    ``,
+    CHECKLIST,
+    ``,
+    `Questions? ${PHONE_DISPLAY}`,
+    ``,
+    `Reply STOP to opt out.`,
   );
 }
 
@@ -77,21 +114,35 @@ export function checklistReminderSms(opts: {
   lang?: "en" | "es";
 }): string {
   const name = firstName(opts.firstName);
-  const dateBit = opts.moveDate?.trim()
-    ? opts.lang === "es"
-      ? ` (${opts.moveDate.trim()})`
-      : ` (${opts.moveDate.trim()})`
-    : "";
+  const date = opts.moveDate?.trim();
 
   if (opts.lang === "es") {
-    return (
-      `Hola ${name}, aún necesitamos tu checklist del día de mudanza${dateBit}: ${CHECKLIST} ` +
-      `— Toro Movers ${PHONE_DISPLAY}. STOP para salir.`
+    return lines(
+      `Hola ${name} — Toro Movers`,
+      ``,
+      `Aún necesitamos tu checklist del día de mudanza.`,
+      date ? `Mudanza: ${date}` : null,
+      ``,
+      `Complétalo aquí (2 min):`,
+      CHECKLIST,
+      ``,
+      `${PHONE_DISPLAY}`,
+      ``,
+      `Responde STOP para salir.`,
     );
   }
-  return (
-    `Hi ${name}, we still need your moving day checklist${dateBit}: ${CHECKLIST} ` +
-    `— Toro Movers ${PHONE_DISPLAY}. Reply STOP to opt out.`
+  return lines(
+    `Hi ${name} — Toro Movers`,
+    ``,
+    `We still need your moving day checklist.`,
+    date ? `Move date: ${date}` : null,
+    ``,
+    `Finish it here (2 min):`,
+    CHECKLIST,
+    ``,
+    `${PHONE_DISPLAY}`,
+    ``,
+    `Reply STOP to opt out.`,
   );
 }
 

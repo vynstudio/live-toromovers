@@ -308,13 +308,33 @@ export function buildStageStepCopy(
     case "booked_0":
       return {
         sms: es
-          ? `✅ ${name}, mudanza Toro confirmada (depósito recibido). Checklist del día (2 min): ${CHECKLIST} · ${PHONE_DISPLAY}. STOP para salir.`
-          : `✅ ${name}, your Toro move is booked (deposit received). Moving day checklist (2 min): ${CHECKLIST} · ${PHONE_DISPLAY}. STOP to opt out.`,
+          ? [
+              `✅ ${name}, ¡estás agendado con Toro!`,
+              `Depósito recibido.`,
+              ``,
+              `Checklist del día (2 min):`,
+              CHECKLIST,
+              ``,
+              `Dudas: ${PHONE_DISPLAY}`,
+              ``,
+              `Responde STOP para salir.`,
+            ].join("\n")
+          : [
+              `✅ ${name}, you're booked with Toro!`,
+              `Deposit received.`,
+              ``,
+              `Moving day checklist (2 min):`,
+              CHECKLIST,
+              ``,
+              `Questions? ${PHONE_DISPLAY}`,
+              ``,
+              `Reply STOP to opt out.`,
+            ].join("\n"),
         email: {
           subject: es ? "Mudanza confirmada — checklist" : "Move confirmed — checklist",
           text: es
-            ? `${name}, estás agendado con Toro. Completa el checklist: ${CHECKLIST}\n\n${PHONE_DISPLAY}`
-            : `${name}, you're booked with Toro. Complete the checklist: ${CHECKLIST}\n\n${PHONE_DISPLAY}`,
+            ? `${name}, estás agendado con Toro.\n\nChecklist:\n${CHECKLIST}\n\n${PHONE_DISPLAY}`
+            : `${name}, you're booked with Toro.\n\nChecklist:\n${CHECKLIST}\n\n${PHONE_DISPLAY}`,
         },
       };
 
