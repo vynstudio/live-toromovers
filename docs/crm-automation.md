@@ -60,6 +60,7 @@ Drip (n8n Wait or cron):
 | `POST /api/crm/webhooks/openphone` | optional `x-openphone-secret` | Inbound SMS → Contacted |
 | `POST /api/crm/sequences/run` | `x-lead-secret` or `x-toro-secret` | Fire drip email/SMS step |
 | `POST /api/crm/booking-sms` | `x-lead-secret` | OpenPhone: book / booked+deposit / checklist SMS |
+| `POST /api/crm/booking-email` | `x-lead-secret` | Resend: interactive HTML book / deposit / checklist emails |
 | `POST /api/funnel-lead` | public | Labor / full-service (existing) |
 | `POST /api/lead-magnet` | public | Checklist (existing) |
 | `POST /api/review-request` | `x-lead-secret` | Post-move Google review (existing) |
