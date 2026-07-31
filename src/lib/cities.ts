@@ -83,7 +83,7 @@ export const ORLANDO: CityData = {
   uniqueAngle: {
     eyebrow: "why toro",
     h2: "Why Orlando customers choose Toro Movers",
-    body: "Toro Movers is family-owned, locally operated, bilingual in English and Spanish, and rated 4.9 stars on Google. Orlando customers choose Toro because they want a local crew, clear communication, up-front hourly pricing, and movers who understand apartments, storage moves, stairs, elevators, and rental truck loading.",
+    body: "Toro Movers is family-owned, locally operated, bilingual in English and Spanish, and rated 5 stars on Google. Orlando customers choose Toro because they want a local crew, clear communication, up-front hourly pricing, and movers who understand apartments, storage moves, stairs, elevators, and rental truck loading.",
   },
   faqs: [
     {

@@ -21,9 +21,9 @@ export const HOURS_LABEL_ES = "Lun–Sáb · 7:00 AM – 7:00 PM";
 export const HOURS_NOTE = "Sunday on request";
 export const HOURS_NOTE_ES = "Domingos bajo solicitud";
 
-export const GOOGLE_RATING = "4.9";
+export const GOOGLE_RATING = "5";
 export const GOOGLE_RATING_LABEL = "on Google";
-export const MOVES_DONE = "100+";
+export const MOVES_DONE = "1,000+";
 
 // Real Google review total — used in the homepage AggregateRating schema (not
 // shown visibly on the site). Owner-confirmed from Google Business Profile.

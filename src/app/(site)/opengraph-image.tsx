@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt =
-  "Toro Movers — Family-owned movers across Central Florida · 4.9★ on Google";
+  "Toro Movers — Family-owned movers across Central Florida · 5★ on Google";
 
 export default function OpenGraph() {
   return new ImageResponse(
@@ -87,7 +87,7 @@ export default function OpenGraph() {
               </svg>
             ))}
           </div>
-          <span>4.9 ON GOOGLE</span>
+          <span>5 ON GOOGLE</span>
         </div>
 
         {/* Main headline */}

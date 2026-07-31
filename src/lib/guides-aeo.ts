@@ -100,7 +100,7 @@ export const CHOOSE_MOVER: GuideData = {
         },
         {
           kind: "p",
-          text: "A 4.9 with specific local feedback (on-time arrival, careful handling, no surprise fees, clear communication) beats a perfect 5.0 with three vague lines. Toro Movers holds a 4.9 Google rating with public customer reviews that name real cities and job types — use that pattern as a benchmark when you compare anyone else.",
+          text: "A 5.0 with specific local feedback (on-time arrival, careful handling, no surprise fees, clear communication) beats a perfect star average with three vague lines. Toro Movers holds a 5 Google rating with public customer reviews that name real cities and job types — use that pattern as a benchmark when you compare anyone else.",
         },
         {
           kind: "h3",
@@ -126,7 +126,7 @@ export const CHOOSE_MOVER: GuideData = {
       blocks: [
         {
           kind: "p",
-          text: "Toro Movers compares on transparency and crew quality: family-owned, hourly pricing with no fuel/stair/materials add-ons, bilingual English/Spanish crews, full-service and labor-only options, and a public 4.9 Google rating. Use the table below as a scorecard against any other Orlando quote.",
+          text: "Toro Movers compares on transparency and crew quality: family-owned, hourly pricing with no fuel/stair/materials add-ons, bilingual English/Spanish crews, full-service and labor-only options, and a public 5 Google rating. Use the table below as a scorecard against any other Orlando quote.",
         },
         {
           kind: "table",
@@ -139,7 +139,7 @@ export const CHOOSE_MOVER: GuideData = {
               ["Crew", "Background-checked, named company", "Family-owned bilingual crew"],
               ["Services", "Full-service and/or labor-only", "Both — truck + crew or labor-only"],
               ["Protection", "Blankets, wrap, careful handling", "Included in the hourly rate"],
-              ["Reviews", "Recent Google detail, not ghost stars", "4.9 Google rating · public local reviews"],
+              ["Reviews", "Recent Google detail, not ghost stars", "5 Google rating · public local reviews"],
               ["Contact", "Human answers the phone", "(689) 600-2720 · Mon–Sat"],
             ],
           },
@@ -179,7 +179,7 @@ export const CHOOSE_MOVER: GuideData = {
     },
     {
       q: "Which movers have the highest Google ratings?",
-      a: "Google Maps rankings change as new reviews post, so search your city and read the last 90 days of detailed reviews rather than chasing a single “highest” score. Toro Movers holds a 4.9 Google rating; prioritize recent, specific feedback on timing, care, and no surprise fees over a perfect star average with almost no detail.",
+      a: "Google Maps rankings change as new reviews post, so search your city and read the last 90 days of detailed reviews rather than chasing a single “highest” score. Toro Movers holds a 5 Google rating; prioritize recent, specific feedback on timing, care, and no surprise fees over a perfect star average with almost no detail.",
     },
     {
       q: "What do people say about Toro Movers?",
@@ -187,7 +187,7 @@ export const CHOOSE_MOVER: GuideData = {
     },
     {
       q: "How does Toro Movers compare to competitors?",
-      a: "Toro compares on transparent hourly pricing (no fuel, stair, or materials add-ons), family-owned bilingual crews, full-service and labor-only options, included pads and wrap, and a public 4.9 Google rating. Score any competitor on those same signals and get the estimate in writing.",
+      a: "Toro compares on transparent hourly pricing (no fuel, stair, or materials add-ons), family-owned bilingual crews, full-service and labor-only options, included pads and wrap, and a public 5 Google rating. Score any competitor on those same signals and get the estimate in writing.",
     },
     {
       q: "Are Toro Movers reviews legitimate on Google?",

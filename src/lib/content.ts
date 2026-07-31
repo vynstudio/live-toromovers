@@ -242,7 +242,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       textUs: "Text us",
     },
     hero: {
-      badge: "4.9★ on Google · Family-owned · Central Florida",
+      badge: "5★ on Google · Family-owned · Central Florida",
       h1Line1: "Trusted Orlando &",
       h1Line2: "Central Florida Movers",
       h1Line3: "",
@@ -250,10 +250,10 @@ export const content: { en: ContentShape; es: ContentShape } = {
         "Family-owned movers serving Orlando and Central Florida with upfront hourly pricing, bilingual crews, and no hidden fees.",
       ctaPrimary: "Get my price",
       ctaSecondary: "Call (689) 600-2720",
-      note: "4.9-star Google-rated · No fuel surcharges · No stair fees · Same-week availability",
+      note: "5-star Google-rated · No fuel surcharges · No stair fees · Same-week availability",
     },
     trust: [
-      "4.9★ on Google",
+      "5★ on Google",
       "Family-owned · Central FL",
       "Background-checked crew",
       "Bilingual · Hablamos español",
@@ -351,7 +351,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       eyebrow: "What customers say",
       head: "Trusted by Central Florida",
       headItalic: "homeowners.",
-      rating: "4.9★ on Google",
+      rating: "5★ on Google",
     },
     faq: {
       eyebrow: "Common questions",
@@ -453,7 +453,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       textUs: "Escríbenos",
     },
     hero: {
-      badge: "4.9★ en Google · Familiares · Florida Central",
+      badge: "5★ en Google · Familiares · Florida Central",
       h1Line1: "Mudanceros de confianza en",
       h1Line2: "Orlando y Florida Central",
       h1Line3: "",
@@ -461,10 +461,10 @@ export const content: { en: ContentShape; es: ContentShape } = {
         "Compañía familiar de mudanzas en Orlando y Florida Central con precios por hora claros, cuadrilla bilingüe y sin tarifas ocultas.",
       ctaPrimary: "Ver mi precio",
       ctaSecondary: "Llamar (689) 600-2720",
-      note: "4.9★ en Google · Sin recargos de combustible · Sin tarifas de escaleras · Disponibilidad esta semana",
+      note: "5★ en Google · Sin recargos de combustible · Sin tarifas de escaleras · Disponibilidad esta semana",
     },
     trust: [
-      "4.9★ en Google",
+      "5★ en Google",
       "Familia · Florida Central",
       "Cuadrilla verificada",
       "Bilingüe · Hablamos español",
@@ -562,7 +562,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       eyebrow: "Lo que dicen los clientes",
       head: "La confianza de los",
       headItalic: "vecinos de Florida Central.",
-      rating: "4.9★ en Google",
+      rating: "5★ en Google",
     },
     faq: {
       eyebrow: "Preguntas frecuentes",

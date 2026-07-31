@@ -39,7 +39,7 @@ const SITE_URL =
 export const metadata: Metadata = {
   title: {
     default:
-      "Trusted Orlando & Central Florida Movers · 4.9★ | Toro Movers",
+      "Trusted Orlando & Central Florida Movers · 5★ | Toro Movers",
     template: "%s | Toro Movers",
   },
   description:
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: BUSINESS_NAME,
-    title: "Trusted Orlando & Central Florida Movers · 4.9★ | Toro Movers",
+    title: "Trusted Orlando & Central Florida Movers · 5★ | Toro Movers",
     description:
       "Family-owned Orlando movers with truck & crew. Upfront hourly pricing, no hidden fees. Serving Central Florida. Quote in 60s.",
     images: [
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Trusted Orlando & Central Florida movers — Toro Movers · 4.9★",
+        alt: "Trusted Orlando & Central Florida movers — Toro Movers · 5★",
       },
     ],
   },
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Trusted Orlando & Central Florida Movers | Toro Movers",
     description:
-      "Family-owned Orlando movers. Upfront hourly pricing, no hidden fees. 4.9★ on Google. Quote in 60s.",
+      "Family-owned Orlando movers. Upfront hourly pricing, no hidden fees. 5★ on Google. Quote in 60s.",
     images: ["/opengraph-image"],
   },
   robots: {

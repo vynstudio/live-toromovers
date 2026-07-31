@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default:
-      "Trusted Orlando & Central Florida Movers · 4.9★ | Toro Movers",
+      "Trusted Orlando & Central Florida Movers · 5★ | Toro Movers",
     template: "%s | Toro Movers",
   },
 };
