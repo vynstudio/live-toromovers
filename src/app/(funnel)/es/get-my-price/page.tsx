@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/es/get-my-price" },
 };
 
+export const dynamic = "force-static";
+
 export default function GetMyPriceEsPage() {
   return (
     <main className="lca-page" lang="es">

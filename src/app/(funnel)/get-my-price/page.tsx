@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/get-my-price" },
 };
 
+/** Pre-render static HTML — avoids cold-start lag on first visit */
+export const dynamic = "force-static";
+
 /**
  * Pure sales funnel (matches toro-sales-funnel).
  * Contact first → soft lead → service → ZIPs → size → optional → when.
