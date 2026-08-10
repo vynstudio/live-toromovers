@@ -5,7 +5,14 @@
 
 import { sendSms } from "./providers";
 import type { ChannelResult } from "./types";
-import { PHONE_DISPLAY, SQUARE_BOOKING_URL } from "@/lib/contact";
+import {
+  PHONE_DISPLAY,
+  BOOKINGS_PATH,
+  DEPOSIT_AMOUNT_DISPLAY,
+} from "@/lib/contact";
+
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
+const DEPOSIT_LINK = `${SITE}${BOOKINGS_PATH}`;
 
 const PHONE = PHONE_DISPLAY;
 /** Google Maps listing — reviews while we call */
@@ -65,11 +72,11 @@ export function quoteReadyToBookSms(opts: {
     return lines(
       `Hola ${name} — Toro Movers`,
       ``,
-      `Si el precio te funciona, agenda online.`,
-      `El depósito se paga en Square al reservar.`,
+      `Si el precio te funciona, asegura tu fecha.`,
+      `El depósito de ${DEPOSIT_AMOUNT_DISPLAY} se descuenta de la factura final.`,
       ``,
-      `Book online:`,
-      SQUARE_BOOKING_URL,
+      `Paga tu depósito:`,
+      DEPOSIT_LINK,
       ``,
       `O llama: ${PHONE}`,
       ``,
@@ -79,11 +86,11 @@ export function quoteReadyToBookSms(opts: {
   return lines(
     `Hi ${name} — Toro Movers`,
     ``,
-    `If the quote works, book your date online.`,
-    `Deposit is paid in Square when you reserve.`,
+    `If the quote works, lock in your date.`,
+    `The ${DEPOSIT_AMOUNT_DISPLAY} deposit comes off your final invoice.`,
     ``,
-    `Book here:`,
-    SQUARE_BOOKING_URL,
+    `Pay your deposit:`,
+    DEPOSIT_LINK,
     ``,
     `Or call: ${PHONE}`,
     ``,

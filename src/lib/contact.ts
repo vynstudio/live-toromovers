@@ -11,9 +11,19 @@ export const PHONE_TEL = "tel:+16896002720";
 export const EMAIL = "hello@toromovers.net";
 export const EMAIL_HREF = "mailto:hello@toromovers.net";
 
-/** Square Appointments — book online (deposit handled in Square). */
-export const SQUARE_BOOKING_URL =
-  "https://app.squareup.com/appointments/book/81n62yjpmpqdfr/L5D6N73XD7ADG/start";
+/**
+ * THE Square link. Single source of truth — a checkout link that takes the
+ * move-date deposit. The old Square Appointments URL was retired on purpose;
+ * do not reintroduce a second Square link.
+ *
+ * Customer-facing surfaces should link to /bookings (BOOKINGS_PATH), not this
+ * URL directly — the branded page explains the deposit before handing off.
+ */
+export const SQUARE_DEPOSIT_URL = "https://square.link/u/mmDKXQjf";
+/** Deposit charged by SQUARE_DEPOSIT_URL. Keep in sync with the Square item. */
+export const DEPOSIT_AMOUNT_DISPLAY = "$75";
+/** On-site deposit page that fronts SQUARE_DEPOSIT_URL. */
+export const BOOKINGS_PATH = "/bookings";
 export const MOVE_DAY_CHECKLIST_URL = "/move-day-checklist";
 
 export const HOURS_LABEL = "Mon–Sat · 7:00 AM – 7:00 PM";

@@ -31,7 +31,7 @@ export type CityImageSet = {
   };
 };
 
-const FALLBACK_HERO = "/hero/slide-01.webp";
+const FALLBACK_HERO = "/hero/slide-02.webp";
 const FALLBACK_MID = "/hero/slide-02.webp";
 
 /** Per-city assets. Prefer /city/{slug}-* when generated; falls back to site heroes. */

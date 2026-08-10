@@ -5,7 +5,7 @@ import { PHONE_TEL, PHONE_DISPLAY } from "@/lib/contact";
 import { openQuote } from "@/lib/open-quote";
 
 // Real team photo (converted from HEIC → WebP). New filename busts CDN/browser cache.
-const HERO_IMAGE = "/hero/home-team.webp";
+const HERO_IMAGE = "/hero/slide-02.webp";
 
 export function Hero() {
   const { t, lang } = useLang();
@@ -57,7 +57,7 @@ export function Hero() {
         <div className="hero-media">
           <img
             src={HERO_IMAGE}
-            srcSet="/hero/home-team-760.webp 760w, /hero/home-team-1140.webp 1140w, /hero/home-team.webp 1440w"
+            srcSet="/hero/slide-02-760.webp 760w, /hero/slide-02-1140.webp 1140w, /hero/slide-02.webp 1440w"
             sizes="(min-width: 980px) 560px, 100vw"
             width={1440}
             height={960}

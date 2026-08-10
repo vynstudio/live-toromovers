@@ -4,7 +4,8 @@ import { ThankYouTracking } from "@/components/thank-you-tracking";
 import {
   PHONE_DISPLAY,
   PHONE_TEL,
-  SQUARE_BOOKING_URL,
+  BOOKINGS_PATH,
+  DEPOSIT_AMOUNT_DISPLAY,
   MOVE_DAY_CHECKLIST_URL,
 } from "@/lib/contact";
 
@@ -37,14 +38,9 @@ export default function ThankYouPage() {
             Call us now — {PHONE_DISPLAY}
             <span className="arrow" aria-hidden />
           </a>
-          <a
-            href={SQUARE_BOOKING_URL}
-            className="btn btn-outline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Book online (Square)
-          </a>
+          <Link href={BOOKINGS_PATH} className="btn btn-outline">
+            Pay {DEPOSIT_AMOUNT_DISPLAY} deposit
+          </Link>
         </div>
 
         <p className="thanks-fine">

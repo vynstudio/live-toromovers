@@ -135,6 +135,9 @@ const nextConfig: NextConfig = {
         destination: "/es/get-my-price?service=full-service&source=meta-ad-lp-es",
         permanent: false,
       },
+      // /book was the old Square Appointments page. There is now exactly one
+      // Square link (the deposit checkout) surfaced at /bookings.
+      { source: "/book", destination: "/bookings", permanent: true },
       // All quote CTAs / legacy wizards → canonical sales funnel
       { source: "/quote", destination: "/get-my-price", permanent: true },
       { source: "/quote/:path*", destination: "/get-my-price", permanent: true },

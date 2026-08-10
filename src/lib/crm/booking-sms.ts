@@ -8,13 +8,14 @@
 import { sendSms } from "./providers";
 import type { ChannelResult } from "./types";
 import {
-  SQUARE_BOOKING_URL,
+  BOOKINGS_PATH,
+  DEPOSIT_AMOUNT_DISPLAY,
   PHONE_DISPLAY,
 } from "@/lib/contact";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
 const CHECKLIST = `${SITE}/move-day-checklist`;
-const BOOK = SQUARE_BOOKING_URL;
+const BOOK = `${SITE}${BOOKINGS_PATH}`;
 const REVIEW =
   process.env.GOOGLE_REVIEW_URL ||
   "https://g.page/r/CYAKurQHh5TvEAI/review";
@@ -54,7 +55,7 @@ export function bookOnlineSms(opts: {
       `El depósito se paga en Square al reservar.`,
       ``,
       `────────`,
-      `Book online:`,
+      `Paga tu depósito de ${DEPOSIT_AMOUNT_DISPLAY}:`,
       BOOK,
       `────────`,
       ``,
@@ -70,7 +71,7 @@ export function bookOnlineSms(opts: {
     `Deposit is paid in Square when you reserve.`,
     ``,
     `────────`,
-    `Book here:`,
+    `Pay your ${DEPOSIT_AMOUNT_DISPLAY} deposit:`,
     BOOK,
     `────────`,
     ``,

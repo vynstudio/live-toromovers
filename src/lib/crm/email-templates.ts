@@ -10,14 +10,16 @@ import {
   EMAIL,
   PHONE_DISPLAY,
   PHONE_TEL,
-  SQUARE_BOOKING_URL,
+  BOOKINGS_PATH,
+  DEPOSIT_AMOUNT_DISPLAY,
   SLOGAN,
   GOOGLE_MAPS_REVIEWS_URL,
 } from "@/lib/contact";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
 const CHECKLIST = `${SITE}/move-day-checklist`;
-const BOOK = SQUARE_BOOKING_URL;
+/** Branded deposit page — fronts the single Square checkout link. */
+const BOOK = `${SITE}${BOOKINGS_PATH}`;
 /** Direct Google review write link (GBP). */
 const REVIEW =
   process.env.GOOGLE_REVIEW_URL ||
@@ -102,8 +104,8 @@ function progressSteps(
 ): string {
   const labels =
     lang === "es"
-      ? (["Agendar", "Depósito", "Checklist"] as const)
-      : (["Book", "Deposit", "Checklist"] as const);
+      ? (["Depósito", "Confirmado", "Checklist"] as const)
+      : (["Deposit", "Confirmed", "Checklist"] as const);
   const hrefs = [BOOK, BOOK, CHECKLIST] as const;
 
   const cells = labels
@@ -258,9 +260,9 @@ export function buildBookingEmail(
             </p>
             ${progressSteps(1, lang)}
             <p style="margin:0 0 20px;color:${MUTED};font-size:14px;text-align:center;">
-              Cuando el precio te funcione, podrás <strong style="color:${INK};">agendar online</strong> y pagar el depósito en Square.
+              Cuando el precio te funcione, paga el <strong style="color:${INK};">depósito de ${DEPOSIT_AMOUNT_DISPLAY}</strong> para asegurar tu fecha. Se descuenta de la factura final.
             </p>
-            ${ctaButton(BOOK, "Ver agenda online →", NAVY)}
+            ${ctaButton(BOOK, `Pagar depósito de ${DEPOSIT_AMOUNT_DISPLAY} →`, NAVY)}
             ${ctaOutline(PHONE_TEL, `Llamar ${PHONE_DISPLAY}`)}
           `
           : `
@@ -272,9 +274,9 @@ export function buildBookingEmail(
             </p>
             ${progressSteps(1, lang)}
             <p style="margin:0 0 20px;color:${MUTED};font-size:14px;text-align:center;">
-              When the quote works for you, you can <strong style="color:${INK};">book online</strong> and pay the deposit in Square.
+              When the quote works for you, pay the <strong style="color:${INK};">${DEPOSIT_AMOUNT_DISPLAY} deposit</strong> to lock in your date. It comes off your final invoice.
             </p>
-            ${ctaButton(BOOK, "View booking calendar →", NAVY)}
+            ${ctaButton(BOOK, `Pay ${DEPOSIT_AMOUNT_DISPLAY} deposit →`, NAVY)}
             ${ctaOutline(PHONE_TEL, `Call ${PHONE_DISPLAY}`)}
           `;
 
@@ -319,40 +321,40 @@ export function buildBookingEmail(
               <tr>
                 <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
                   <strong style="color:${INK};">Qué pasa después</strong><br />
-                  1. Reservas en Square<br />
-                  2. Pagas el depósito<br />
+                  1. Pagas el depósito<br />
+                  2. Confirmamos tu fecha<br />
                   3. Completas el checklist del día de mudanza
                 </td>
               </tr>
             </table>
-            ${ctaButton(BOOK, "Book online now →")}
+            ${ctaButton(BOOK, `Pay ${DEPOSIT_AMOUNT_DISPLAY} deposit →`)}
             ${ctaOutline(PHONE_TEL, `O llama ${PHONE_DISPLAY}`)}
           `
           : `
             <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
-              Book your move
+              Secure your move date
             </h1>
             <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
-              Hi ${esc(name)} — pick your date and time online. Deposit is paid in Square when you reserve and applies to your final invoice.
+              Hi ${esc(name)} — pay the ${DEPOSIT_AMOUNT_DISPLAY} deposit to hold your move date. It applies to your final invoice.
             </p>
             ${progressSteps(1, lang)}
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px;background:${BG};border-radius:12px;">
               <tr>
                 <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
                   <strong style="color:${INK};">What happens next</strong><br />
-                  1. Book in Square<br />
-                  2. Pay the deposit<br />
+                  1. Pay the deposit<br />
+                  2. We confirm your date<br />
                   3. Complete the moving day checklist
                 </td>
               </tr>
             </table>
-            ${ctaButton(BOOK, "Book online now →")}
+            ${ctaButton(BOOK, `Pay ${DEPOSIT_AMOUNT_DISPLAY} deposit →`)}
             ${ctaOutline(PHONE_TEL, `Or call ${PHONE_DISPLAY}`)}
           `;
 
       const text =
         lang === "es"
-          ? `Hola ${name},\n\nAgenda tu mudanza online (depósito en Square):\n${BOOK}\n\nO llama ${PHONE_DISPLAY}${textFooter(lang)}`
+          ? `Hola ${name},\n\nPaga el depósito para asegurar tu fecha:\n${BOOK}\n\nO llama ${PHONE_DISPLAY}${textFooter(lang)}`
           : `Hi ${name},\n\nBook your move online (deposit via Square):\n${BOOK}\n\nOr call ${PHONE_DISPLAY}${textFooter(lang)}`;
 
       return {

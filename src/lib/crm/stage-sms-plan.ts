@@ -10,7 +10,7 @@
 
 import type { StageKey } from "./types";
 
-import { SQUARE_BOOKING_URL } from "@/lib/contact";
+import { BOOKINGS_PATH } from "@/lib/contact";
 
 const PHONE_DISPLAY = "(689) 600-2720";
 const REVIEW =
@@ -19,9 +19,9 @@ const REVIEW =
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
 const CHECKLIST = `${SITE}/move-day-checklist`;
 
-/** Online book = Square Appointments (deposit collected there). */
+/** Deposit page on-site; it fronts the single Square checkout link. */
 function bookUrl(_opts?: { stepId?: string; lang?: "en" | "es" }): string {
-  return SQUARE_BOOKING_URL;
+  return `${SITE}${BOOKINGS_PATH}`;
 }
 
 export type StageSmsStep = {
