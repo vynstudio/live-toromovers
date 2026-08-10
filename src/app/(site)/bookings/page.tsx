@@ -12,9 +12,9 @@ import {
 // Transactional utility URL — a short link to hand to customers who already
 // have a quote. noindex so it can't cannibalize the SEO pages in search.
 export const metadata: Metadata = {
-  title: "Book your move — hold your date",
+  title: "Book your move — pick your time",
   description:
-    "Tell us the move, then pay your Toro Movers deposit to lock in the date. The deposit applies to your final invoice.",
+    "Tell us the move, then pick a time from live Toro Movers availability. The deposit is taken at booking and applies to your final invoice.",
   robots: { index: false, follow: true },
   alternates: { canonical: "/bookings" },
 };
@@ -38,9 +38,9 @@ export default function BookingsPage() {
           <p className="bk-eyebrow">Book online</p>
           <h1 className="bk-title">Hold your move date</h1>
           <p className="bk-lede">
-            Tell us what you&apos;re moving and when. A{" "}
-            {DEPOSIT_AMOUNT_DISPLAY} deposit locks the crew — and it comes
-            straight off your final invoice.
+            Tell us what you&apos;re moving, then pick a slot from our live
+            calendar. The {DEPOSIT_AMOUNT_DISPLAY} deposit is taken at booking
+            and comes straight off your final invoice.
           </p>
         </div>
       </section>
@@ -58,7 +58,7 @@ export default function BookingsPage() {
           .
         </p>
         <p className="book-fine">
-          Already paid?{" "}
+          Already booked?{" "}
           <Link href={MOVE_DAY_CHECKLIST_URL} className="book-link">
             Open the moving day checklist
           </Link>

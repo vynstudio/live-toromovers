@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AddressAutocomplete } from "@/components/address-autocomplete";
 import {
-  SQUARE_DEPOSIT_URL,
+  SQUARE_BOOKING_URL,
   DEPOSIT_AMOUNT_DISPLAY,
   PHONE_DISPLAY,
   PHONE_TEL,
@@ -15,30 +15,13 @@ const SERVICES = [
   { id: "packing", label: "Packing", hint: "Boxes + wrap" },
 ] as const;
 
-const WINDOWS = [
-  { id: "morning", label: "Morning (8–11am)" },
-  { id: "midday", label: "Midday (11am–2pm)" },
-  { id: "afternoon", label: "Afternoon (2–5pm)" },
-  { id: "flexible", label: "I'm flexible" },
-] as const;
-
 type ServiceId = (typeof SERVICES)[number]["id"];
 type Stage = "move" | "contact" | "done";
-
-/** Local yyyy-mm-dd — avoids the UTC shift that backdates evening entries. */
-function todayISO(): string {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
-    d.getDate(),
-  ).padStart(2, "0")}`;
-}
 
 export function BookingWidget() {
   const [stage, setStage] = useState<Stage>("move");
   const [service, setService] = useState<ServiceId>("full-service");
   const [address, setAddress] = useState("");
-  const [moveDate, setMoveDate] = useState("");
-  const [window_, setWindow] = useState<string>("morning");
 
   const [firstName, setFirstName] = useState("");
   const [phone, setPhone] = useState("");
@@ -56,14 +39,13 @@ export function BookingWidget() {
     if (stage === "done") doneRef.current?.focus();
   }, [stage]);
 
-  const moveReady = address.trim().length > 3 && moveDate !== "";
+  const moveReady = address.trim().length > 3;
   const contactReady = firstName.trim() !== "" && phone.replace(/\D/g, "").length >= 10;
 
   async function submit() {
     setBusy(true);
     setError(null);
     const svc = SERVICES.find((s) => s.id === service);
-    const win = WINDOWS.find((w) => w.id === window_);
     try {
       const res = await fetch("/api/crm/lead", {
         method: "POST",
@@ -73,15 +55,12 @@ export function BookingWidget() {
           phone: phone.trim(),
           email: email.trim() || undefined,
           serviceType: service,
-          moveDate,
           funnel: "bookings",
           source: "bookings-widget",
           note: [
             `Service: ${svc?.label ?? service}`,
             `Pickup: ${address.trim()}`,
-            `Date: ${moveDate}`,
-            `Start: ${win?.label ?? window_}`,
-            "Heading to deposit checkout.",
+            "Heading to the Square calendar to pick a slot.",
           ].join("\n"),
           hp,
           elapsedMs: Date.now() - mountedAt.current,
@@ -93,7 +72,7 @@ export function BookingWidget() {
       // Never trap the customer behind a failed request — they can still pay,
       // and the phone number is right there.
       setError(
-        "We couldn't save those details. You can still pay the deposit, or call us and we'll take it down.",
+        "We couldn't save those details. You can still pick a time below, or call us and we'll take it down.",
       );
       setStage("done");
     } finally {
@@ -107,7 +86,7 @@ export function BookingWidget() {
         <ol className="bw-steps" aria-label="Booking progress">
           <li className={stage === "move" ? "on" : "done"}>1. Your move</li>
           <li className={stage === "contact" ? "on" : ""}>2. Your details</li>
-          <li>3. Deposit</li>
+          <li>3. Pick your time</li>
         </ol>
       )}
 
@@ -140,32 +119,6 @@ export function BookingWidget() {
                 ariaLabel="Pickup address"
               />
             </label>
-
-            <label className="bw-field">
-              <span className="bw-label">Move date</span>
-              <input
-                type="date"
-                className="bw-input"
-                value={moveDate}
-                min={todayISO()}
-                onChange={(e) => setMoveDate(e.target.value)}
-              />
-            </label>
-
-            <label className="bw-field">
-              <span className="bw-label">Start time</span>
-              <select
-                className="bw-input"
-                value={window_}
-                onChange={(e) => setWindow(e.target.value)}
-              >
-                {WINDOWS.map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.label}
-                  </option>
-                ))}
-              </select>
-            </label>
           </div>
 
           <button
@@ -178,7 +131,7 @@ export function BookingWidget() {
             <span className="arrow" aria-hidden />
           </button>
           {!moveReady && (
-            <p className="bw-hint">Add your pickup address and move date to continue.</p>
+            <p className="bw-hint">Add your pickup address to continue.</p>
           )}
         </div>
       )}
@@ -240,7 +193,7 @@ export function BookingWidget() {
               disabled={!contactReady || busy}
               onClick={submit}
             >
-              {busy ? "Saving…" : `Continue to ${DEPOSIT_AMOUNT_DISPLAY} deposit`}
+              {busy ? "Saving…" : "Continue"}
               <span className="arrow" aria-hidden />
             </button>
             <button type="button" className="bw-back" onClick={() => setStage("move")}>
@@ -256,10 +209,11 @@ export function BookingWidget() {
       {stage === "done" && (
         <div className="bw-pane" ref={doneRef} tabIndex={-1}>
           <p className="bw-done-eyebrow">Details saved</p>
-          <h2 className="bw-done-title">Last step — hold your date</h2>
+          <h2 className="bw-done-title">Last step — pick your time</h2>
           <p className="bw-done-body">
-            Your {DEPOSIT_AMOUNT_DISPLAY} deposit locks the slot and comes off
-            your final invoice. It is not an extra fee.
+            Choose from our live availability. The {DEPOSIT_AMOUNT_DISPLAY}{" "}
+            deposit is taken when you book and comes off your final invoice —
+            it is not an extra fee.
           </p>
 
           <dl className="bw-summary">
@@ -271,14 +225,6 @@ export function BookingWidget() {
               <dt>Pickup</dt>
               <dd>{address}</dd>
             </div>
-            <div>
-              <dt>Date</dt>
-              <dd>{moveDate}</dd>
-            </div>
-            <div>
-              <dt>Start</dt>
-              <dd>{WINDOWS.find((w) => w.id === window_)?.label}</dd>
-            </div>
           </dl>
 
           {error && <p className="bw-error">{error}</p>}
@@ -286,11 +232,11 @@ export function BookingWidget() {
           <div className="bw-actions">
             <a
               className="bw-cta"
-              href={SQUARE_DEPOSIT_URL}
+              href={SQUARE_BOOKING_URL}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Pay {DEPOSIT_AMOUNT_DISPLAY} deposit
+              Pick your time
               <span className="arrow" aria-hidden />
             </a>
             <a href={PHONE_TEL} className="bw-back">
@@ -298,7 +244,7 @@ export function BookingWidget() {
             </a>
           </div>
           <p className="bw-hint">
-            Payment is handled by Square in a new tab — we never see your card details.
+            Opens the Toro Movers booking calendar on Square in a new tab. Payment is handled by Square — we never see your card details.
           </p>
         </div>
       )}

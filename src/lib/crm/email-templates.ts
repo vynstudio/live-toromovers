@@ -104,8 +104,8 @@ function progressSteps(
 ): string {
   const labels =
     lang === "es"
-      ? (["Depósito", "Confirmado", "Checklist"] as const)
-      : (["Deposit", "Confirmed", "Checklist"] as const);
+      ? (["Agendar", "Confirmado", "Checklist"] as const)
+      : (["Book", "Confirmed", "Checklist"] as const);
   const hrefs = [BOOK, BOOK, CHECKLIST] as const;
 
   const cells = labels
@@ -260,9 +260,9 @@ export function buildBookingEmail(
             </p>
             ${progressSteps(1, lang)}
             <p style="margin:0 0 20px;color:${MUTED};font-size:14px;text-align:center;">
-              Cuando el precio te funcione, paga el <strong style="color:${INK};">depósito de ${DEPOSIT_AMOUNT_DISPLAY}</strong> para asegurar tu fecha. Se descuenta de la factura final.
+              Cuando el precio te funcione, elige tu horario en el <strong style="color:${INK};">calendario</strong>. El depósito de ${DEPOSIT_AMOUNT_DISPLAY} se cobra al reservar y se descuenta de la factura final.
             </p>
-            ${ctaButton(BOOK, `Pagar depósito de ${DEPOSIT_AMOUNT_DISPLAY} →`, NAVY)}
+            ${ctaButton(BOOK, "Ver horarios disponibles →", NAVY)}
             ${ctaOutline(PHONE_TEL, `Llamar ${PHONE_DISPLAY}`)}
           `
           : `
@@ -274,9 +274,9 @@ export function buildBookingEmail(
             </p>
             ${progressSteps(1, lang)}
             <p style="margin:0 0 20px;color:${MUTED};font-size:14px;text-align:center;">
-              When the quote works for you, pay the <strong style="color:${INK};">${DEPOSIT_AMOUNT_DISPLAY} deposit</strong> to lock in your date. It comes off your final invoice.
+              When the quote works for you, pick a slot from our <strong style="color:${INK};">live calendar</strong>. The ${DEPOSIT_AMOUNT_DISPLAY} deposit is taken at booking and comes off your final invoice.
             </p>
-            ${ctaButton(BOOK, `Pay ${DEPOSIT_AMOUNT_DISPLAY} deposit →`, NAVY)}
+            ${ctaButton(BOOK, "See available times →", NAVY)}
             ${ctaOutline(PHONE_TEL, `Call ${PHONE_DISPLAY}`)}
           `;
 
@@ -321,40 +321,40 @@ export function buildBookingEmail(
               <tr>
                 <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
                   <strong style="color:${INK};">Qué pasa después</strong><br />
-                  1. Pagas el depósito<br />
-                  2. Confirmamos tu fecha<br />
+                  1. Eliges tu horario<br />
+                  2. Pagas el depósito al reservar<br />
                   3. Completas el checklist del día de mudanza
                 </td>
               </tr>
             </table>
-            ${ctaButton(BOOK, `Pay ${DEPOSIT_AMOUNT_DISPLAY} deposit →`)}
+            ${ctaButton(BOOK, "Book your time →")}
             ${ctaOutline(PHONE_TEL, `O llama ${PHONE_DISPLAY}`)}
           `
           : `
             <h1 style="margin:0 0 12px;font:700 24px/1.25 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:${INK};letter-spacing:-0.02em;text-align:center;">
-              Secure your move date
+              Book your move
             </h1>
             <p style="margin:0 0 16px;color:${MUTED};text-align:center;">
-              Hi ${esc(name)} — pay the ${DEPOSIT_AMOUNT_DISPLAY} deposit to hold your move date. It applies to your final invoice.
+              Hi ${esc(name)} — pick your slot from our live calendar. The ${DEPOSIT_AMOUNT_DISPLAY} deposit is taken at booking and applies to your final invoice.
             </p>
             ${progressSteps(1, lang)}
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px;background:${BG};border-radius:12px;">
               <tr>
                 <td style="padding:16px 18px;font-size:14px;color:${MUTED};text-align:center;">
                   <strong style="color:${INK};">What happens next</strong><br />
-                  1. Pay the deposit<br />
-                  2. We confirm your date<br />
+                  1. Pick your time<br />
+                  2. Deposit taken at booking<br />
                   3. Complete the moving day checklist
                 </td>
               </tr>
             </table>
-            ${ctaButton(BOOK, `Pay ${DEPOSIT_AMOUNT_DISPLAY} deposit →`)}
+            ${ctaButton(BOOK, "Book your time →")}
             ${ctaOutline(PHONE_TEL, `Or call ${PHONE_DISPLAY}`)}
           `;
 
       const text =
         lang === "es"
-          ? `Hola ${name},\n\nPaga el depósito para asegurar tu fecha:\n${BOOK}\n\nO llama ${PHONE_DISPLAY}${textFooter(lang)}`
+          ? `Hola ${name},\n\nElige tu horario (depósito al reservar):\n${BOOK}\n\nO llama ${PHONE_DISPLAY}${textFooter(lang)}`
           : `Hi ${name},\n\nBook your move online (deposit via Square):\n${BOOK}\n\nOr call ${PHONE_DISPLAY}${textFooter(lang)}`;
 
       return {

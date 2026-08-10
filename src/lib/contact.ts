@@ -12,17 +12,24 @@ export const EMAIL = "hello@toromovers.net";
 export const EMAIL_HREF = "mailto:hello@toromovers.net";
 
 /**
- * THE Square link. Single source of truth — a checkout link that takes the
- * move-date deposit. The old Square Appointments URL was retired on purpose;
- * do not reintroduce a second Square link.
+ * THE Square link. Single source of truth — the Appointments calendar, which
+ * shows real availability AND takes the deposit at booking (owner-confirmed
+ * 2026-08-10). One link, one payment.
+ *
+ * Do NOT add a second Square link. A standalone deposit checkout link
+ * (square.link/u/…) was tried and retired: it let customers pay for a slot we
+ * might already be booked on, and Square payment links carry no metadata, so
+ * the money arrived with nothing tying it to a booking.
  *
  * Customer-facing surfaces should link to /bookings (BOOKINGS_PATH), not this
- * URL directly — the branded page explains the deposit before handing off.
+ * URL directly — that page captures service + pickup address first, which the
+ * Square calendar does not collect.
  */
-export const SQUARE_DEPOSIT_URL = "https://square.link/u/mmDKXQjf";
-/** Deposit charged by SQUARE_DEPOSIT_URL. Keep in sync with the Square item. */
+export const SQUARE_BOOKING_URL =
+  "https://app.squareup.com/appointments/book/81n62yjpmpqdfr/L5D6N73XD7ADG/start";
+/** Deposit Square takes at booking. Keep in sync with the Square service. */
 export const DEPOSIT_AMOUNT_DISPLAY = "$75";
-/** On-site deposit page that fronts SQUARE_DEPOSIT_URL. */
+/** On-site page that fronts SQUARE_BOOKING_URL. */
 export const BOOKINGS_PATH = "/bookings";
 export const MOVE_DAY_CHECKLIST_URL = "/move-day-checklist";
 

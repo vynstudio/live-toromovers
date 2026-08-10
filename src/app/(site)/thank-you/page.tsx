@@ -39,7 +39,7 @@ export default function ThankYouPage() {
             <span className="arrow" aria-hidden />
           </a>
           <Link href={BOOKINGS_PATH} className="btn btn-outline">
-            Pay {DEPOSIT_AMOUNT_DISPLAY} deposit
+            Book your time
           </Link>
         </div>
 
