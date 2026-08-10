@@ -5371,3 +5371,129 @@ html[data-jsf="1"] .sticky-cta { display: none !important; }
   font-weight: 700;
   text-underline-offset: 2px;
 }
+
+/* ============================================================
+   /bookings — scheduler-style booking widget over a hero band.
+   Card deliberately overlaps the hero so the form is the first
+   thing on screen (see docs: MovingHelp-pattern booking).
+   ============================================================ */
+.bk-page { background: #fff; min-height: 100vh; }
+
+.bk-hero {
+  background: linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 100%);
+  color: #fff;
+  padding: 48px 20px 104px;
+}
+.bk-hero-inner { max-width: 980px; margin: 0 auto; }
+.bk-eyebrow {
+  text-transform: uppercase; letter-spacing: .12em; font-size: 12px;
+  font-weight: 700; color: #fff; opacity: .72; margin: 0 0 10px;
+}
+.bk-title {
+  font: 700 clamp(30px, 5vw, 46px)/1.1 var(--font-serif, inherit);
+  letter-spacing: -.02em; margin: 0 0 12px;
+}
+.bk-lede { margin: 0; max-width: 60ch; font-size: 16px; line-height: 1.6; opacity: .9; }
+
+.bk-widget-wrap { max-width: 980px; margin: -72px auto 0; padding: 0 20px; }
+
+.bw-card {
+  background: #fff; border-radius: 16px; padding: 22px;
+  box-shadow: 0 18px 48px rgba(16, 28, 58, .18);
+  border: 1px solid rgba(16, 28, 58, .08);
+}
+
+.bw-steps {
+  display: flex; gap: 18px; flex-wrap: wrap; list-style: none;
+  margin: 0 0 18px; padding: 0 0 14px;
+  border-bottom: 1px solid rgba(16,28,58,.1);
+  font-size: 13px; font-weight: 600; color: #6B7280;
+}
+.bw-steps .on { color: var(--red); }
+.bw-steps .done { color: var(--navy); }
+
+.bw-q { margin: 0 0 10px; font-weight: 700; color: var(--navy-deep); font-size: 15px; }
+
+.bw-chips { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 18px; }
+.bw-chip {
+  flex: 1 1 170px; text-align: left; cursor: pointer;
+  background: #fff; border: 1.5px solid rgba(16,28,58,.18);
+  border-radius: 12px; padding: 11px 14px; transition: .15s ease;
+}
+.bw-chip:hover { border-color: var(--navy); }
+.bw-chip.is-on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.bw-chip-label { display: block; font-weight: 700; font-size: 14px; }
+.bw-chip-hint { display: block; font-size: 12px; opacity: .7; margin-top: 2px; }
+
+.bw-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 16px; }
+.bw-field { flex: 1 1 180px; display: block; min-width: 0; }
+.bw-field-wide { flex: 2 1 300px; }
+.bw-label {
+  display: block; font-size: 12px; font-weight: 700; letter-spacing: .02em;
+  color: #4B5563; margin: 0 0 6px;
+}
+.bw-opt { font-weight: 500; color: #9CA3AF; }
+.bw-input {
+  width: 100%; box-sizing: border-box; height: 46px; padding: 0 12px;
+  border: 1.5px solid rgba(16,28,58,.18); border-radius: 10px;
+  font-size: 16px; /* 16px stops iOS zoom-on-focus */
+  background: #fff; color: var(--navy-deep);
+}
+.bw-input:focus-visible { outline: 2px solid var(--navy); outline-offset: 1px; }
+/* The address field renders its own input — match it to the rest. */
+.bw-field input[type="text"] {
+  width: 100%; box-sizing: border-box; height: 46px; padding: 0 12px;
+  border: 1.5px solid rgba(16,28,58,.18); border-radius: 10px; font-size: 16px;
+}
+
+.bw-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.bw-cta {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  background: var(--red); color: #fff; border: 0; border-radius: 10px;
+  padding: 14px 22px; font-size: 16px; font-weight: 700; text-decoration: none;
+  transition: .15s ease;
+}
+.bw-cta:hover { filter: brightness(.93); }
+.bw-cta:disabled { background: #D1D5DB; color: #6B7280; cursor: not-allowed; }
+.bw-back {
+  background: none; border: 0; cursor: pointer; text-decoration: underline;
+  color: var(--navy); font-size: 15px; font-weight: 600; padding: 10px 4px;
+}
+.bw-hint { margin: 10px 0 0; font-size: 13px; color: #6B7280; }
+.bw-error {
+  margin: 0 0 14px; padding: 10px 12px; border-radius: 8px; font-size: 14px;
+  background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA;
+}
+.bw-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+.bw-done-eyebrow {
+  text-transform: uppercase; letter-spacing: .12em; font-size: 12px;
+  font-weight: 700; color: var(--red); margin: 0 0 8px;
+}
+.bw-done-title {
+  margin: 0 0 8px; font: 700 24px/1.2 var(--font-serif, inherit);
+  color: var(--navy-deep);
+}
+.bw-done-body { margin: 0 0 16px; color: #4B5563; line-height: 1.6; }
+.bw-summary {
+  margin: 0 0 18px; padding: 14px; border-radius: 12px; background: var(--navy-soft);
+  display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.bw-summary div { min-width: 0; }
+.bw-summary dt {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+  font-weight: 700; color: #6B7280; margin: 0 0 2px;
+}
+.bw-summary dd {
+  margin: 0; font-size: 14px; font-weight: 600; color: var(--navy-deep);
+  overflow-wrap: anywhere;
+}
+
+.bk-foot { max-width: 980px; margin: 26px auto 0; padding: 0 20px 60px; }
+
+@media (max-width: 640px) {
+  .bk-hero { padding: 34px 18px 92px; }
+  .bw-card { padding: 18px; border-radius: 14px; }
+  .bw-chip { flex: 1 1 100%; }
+  .bw-cta { width: 100%; justify-content: center; }
+}
