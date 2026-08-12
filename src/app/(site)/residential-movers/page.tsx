@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     description: S.metadata.description,
     type: "website",
     locale: "en_US",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+    images: [{ url: "https://toromovers.com/og/default.jpg", width: 1200, height: 630 }],
   },
 };
 

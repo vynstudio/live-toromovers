@@ -11,6 +11,34 @@ const SEARCHABLE_SITE_TOKEN =
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
+  // Deliberately noindex (paid traffic only), but the URL still gets pasted
+  // into texts and DMs — without these it unfurls as a bare link with no card.
+  title: "Get your price — Toro Movers",
+  description:
+    "Tell us the move, get an up-front hourly price. Orlando and Central Florida.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://toromovers.com/get-my-price",
+    siteName: "Toro Movers",
+    title: "Get your price in 60 seconds — Toro Movers",
+    description:
+      "Tell us the move, get an up-front hourly price. No hidden fees.",
+    images: [
+      {
+        url: "https://toromovers.com/og/get-my-price.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Toro Movers — get your price in 60 seconds",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Get your price in 60 seconds — Toro Movers",
+    description: "Tell us the move, get an up-front hourly price.",
+    images: ["https://toromovers.com/og/get-my-price.jpg"],
+  },
 };
 
 /**

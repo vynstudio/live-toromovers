@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/blog" },
-  openGraph: { title: TITLE, description: DESCRIPTION, type: "website", locale: "en_US", images: [{ url: "/opengraph-image", width: 1200, height: 630 }] },
+  openGraph: { title: TITLE, description: DESCRIPTION, type: "website", locale: "en_US", images: [{ url: "https://toromovers.com/og/default.jpg", width: 1200, height: 630 }] },
 };
 
 export default function Page() {

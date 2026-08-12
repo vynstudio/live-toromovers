@@ -77,12 +77,16 @@ export const metadata: Metadata = {
     title: "Trusted Orlando & Central Florida Movers · 5★ | Toro Movers",
     description:
       "Family-owned Orlando movers with truck & crew. Upfront hourly pricing, no hidden fees. Serving Central Florida. Quote in 60s.",
+    // Absolute URL on the design host. The /opengraph-image file convention
+    // is served by Next at a HASHED path (/opengraph-image-<hash>), so the
+    // bare path 404s — and the hashed one isn't in toromovers.com's proxy
+    // list either. A static card on the domain that owns DNS is stable.
     images: [
       {
-        url: "/opengraph-image",
+        url: "https://toromovers.com/og/default.jpg",
         width: 1200,
         height: 630,
-        alt: "Trusted Orlando & Central Florida movers — Toro Movers · 5★",
+        alt: "Toro Movers — Orlando and Central Florida movers who quote up front",
       },
     ],
   },
@@ -91,7 +95,7 @@ export const metadata: Metadata = {
     title: "Trusted Orlando & Central Florida Movers | Toro Movers",
     description:
       "Family-owned Orlando movers. Upfront hourly pricing, no hidden fees. 5★ on Google. Quote in 60s.",
-    images: ["/opengraph-image"],
+    images: ["https://toromovers.com/og/default.jpg"],
   },
   robots: {
     index: true,
@@ -113,7 +117,7 @@ const movingCompanyJsonLd = {
   url: SITE_URL,
   telephone: "+16896002720",
   email: EMAIL,
-  image: `${SITE_URL}/opengraph-image`,
+  image: `${SITE_URL}/og/default.jpg`,
   logo: {
     "@type": "ImageObject",
     url: `${SITE_URL}/bull.svg`,

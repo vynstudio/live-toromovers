@@ -17,6 +17,33 @@ export const metadata: Metadata = {
     "Tell us the move, then pick a time from live Toro Movers availability. The deposit is taken at booking and applies to your final invoice.",
   robots: { index: false, follow: true },
   alternates: { canonical: "/bookings" },
+  // This link gets pasted into SMS and WhatsApp far more than it gets crawled,
+  // so the share card matters more than the search snippet. noindex above does
+  // not suppress OG — messaging apps still unfurl it.
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://toromovers.com/bookings",
+    siteName: BUSINESS_NAME,
+    title: "Book your move — Toro Movers",
+    description:
+      "Pick a slot from live availability. The $75 deposit is taken at booking and comes off your final invoice.",
+    images: [
+      {
+        url: "https://toromovers.com/og/bookings.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Toro Movers — hold your move date, book online",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Book your move — Toro Movers",
+    description:
+      "Pick a slot from live availability. $75 deposit comes off your final invoice.",
+    images: ["https://toromovers.com/og/bookings.jpg"],
+  },
 };
 
 export default function BookingsPage() {
