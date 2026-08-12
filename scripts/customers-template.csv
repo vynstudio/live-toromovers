@@ -1,0 +1,6 @@
+name,phone,email,lang
+Maria Gonzalez,4075550139,maria@example.com,es
+John Carter,(689) 555-0186,,en
+Ana Ruiz,,ana.ruiz@example.com,es
+Bad Row No Contact,,,en
+John Carter,689-555-0186,,en

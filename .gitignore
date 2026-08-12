@@ -49,3 +49,8 @@ next-env.d.ts
 output/meta-audits/
 output/meta-launches/
 
+
+# Review-request batches — real customer PII, never commit
+scripts/.review-sent.log
+scripts/customers*.csv
+!scripts/customers-template.csv
