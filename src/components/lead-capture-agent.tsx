@@ -117,7 +117,8 @@ export function LeadCaptureAgent({
   useEffect(() => {
     if (typeof window === "undefined") return;
     const q = new URLSearchParams(window.location.search);
-    const s = q.get("service")?.toLowerCase();
+    // Meta ad URLs historically send `servicetype`; `/get-quote` redirects keep it.
+    const s = (q.get("service") ?? q.get("servicetype"))?.toLowerCase();
     if (s === "labor" || s === "labor-only") {
       setService("labor");
       prefillService.current = "labor";

@@ -141,6 +141,21 @@ const nextConfig: NextConfig = {
       // All quote CTAs / legacy wizards → canonical sales funnel
       { source: "/quote", destination: "/get-my-price", permanent: true },
       { source: "/quote/:path*", destination: "/get-my-price", permanent: true },
+      // Live Meta ads land on /get-quote?servicetype=… but the funnel reads
+      // `service`. Canonicalize so the service prefill survives the hop.
+      // Must precede the bare /get-quote rules — first match wins.
+      {
+        source: "/get-quote",
+        has: [{ type: "query", key: "servicetype", value: "(?<svc>.*)" }],
+        destination: "/get-my-price?service=:svc",
+        permanent: true,
+      },
+      {
+        source: "/get-quote/:path*",
+        has: [{ type: "query", key: "servicetype", value: "(?<svc>.*)" }],
+        destination: "/get-my-price?service=:svc",
+        permanent: true,
+      },
       { source: "/get-quote", destination: "/get-my-price", permanent: true },
       { source: "/get-quote/:path*", destination: "/get-my-price", permanent: true },
       // Packing was never a standalone offer — send old links to full-service.
