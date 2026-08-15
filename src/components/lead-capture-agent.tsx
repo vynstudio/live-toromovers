@@ -15,7 +15,13 @@ import {
   type HomeSize,
   type ServiceKind,
 } from "@/lib/price-bands";
-import { newEventId, trackFormStart, trackFormSubmit, trackLead } from "@/lib/track";
+import {
+  newEventId,
+  trackFormStart,
+  trackFormSubmit,
+  trackInitiateCheckout,
+  trackLead,
+} from "@/lib/track";
 import { getAttribution, getAttributionSummary } from "@/lib/utm";
 
 type Phase =
@@ -79,6 +85,25 @@ async function postLead(payload: Record<string, unknown>) {
   return res.json().catch(() => ({ ok: true }));
 }
 
+/** sessionStorage key holding the event id shared by every pixel event in this
+ *  browser session. A component ref alone resets on reload, which let the same
+ *  visitor fire a second conversion under a fresh id. */
+const EVENT_ID_KEY = "tm_gmp_event_id";
+
+/** Run `fn` at most once per browser session. Survives reload and back-nav,
+ *  unlike a ref. If storage is unavailable (private mode) we fire anyway —
+ *  losing an event is worse than a rare duplicate. */
+function oncePerSession(key: string, fn: () => void) {
+  if (typeof window === "undefined") return;
+  try {
+    if (window.sessionStorage.getItem(key)) return;
+    window.sessionStorage.setItem(key, "1");
+  } catch {
+    /* storage blocked — fall through and fire */
+  }
+  fn();
+}
+
 type Props = {
   defaultService?: ServiceKind | "";
   /** @deprecated city chips removed — ZIP only */
@@ -116,6 +141,17 @@ export function LeadCaptureAgent({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // Reuse one event id for the whole browser session. Without this a reload
+    // mints a fresh id, and the dedupe guards below would let the same visitor
+    // report a second conversion. Also the id a future CAPI call must reuse.
+    try {
+      const saved = window.sessionStorage.getItem(EVENT_ID_KEY);
+      if (saved) eventIdRef.current = saved;
+      else window.sessionStorage.setItem(EVENT_ID_KEY, eventIdRef.current);
+    } catch {
+      /* storage blocked — keep the per-mount id */
+    }
+
     const q = new URLSearchParams(window.location.search);
     // Meta ad URLs historically send `servicetype`; `/get-quote` redirects keep it.
     const s = (q.get("service") ?? q.get("servicetype"))?.toLowerCase();
@@ -204,7 +240,11 @@ export function LeadCaptureAgent({
         funnel: funnelOf(service || prefillService.current),
         source: "get-my-price",
         serviceType: "Pending qualify",
-        note: "Soft capture (contact first · name + phone) — still qualifying",
+        note: [
+          "Soft capture (contact first · name + phone) — still qualifying",
+          "lead_stage=soft",
+          `event_id=${eventId}`,
+        ].join(" — "),
         lang: es ? "es" : "en",
         consentSms: smsConsent,
         consentEmail: false,
@@ -216,7 +256,9 @@ export function LeadCaptureAgent({
         elapsedMs: Math.max(Date.now() - startRef.current, 0),
         eventId,
       });
-      trackLead(eventId);
+      // Early intent only — the visitor still has 5 steps to abandon. Firing
+      // the standard Lead here taught Meta to optimize for form starters.
+      oncePerSession(`tm_ic_${eventId}`, trackInitiateCheckout);
       trackFormSubmit("agent_soft_capture");
       setCaptured(true);
       return true;
@@ -262,6 +304,7 @@ export function LeadCaptureAgent({
               ? "🔥 PRIORITY — move soon — call ASAP"
               : "",
             "Full agent funnel complete",
+            "lead_stage=complete",
             SERVICE_LABELS[resolvedSvc] && `Service: ${SERVICE_LABELS[resolvedSvc]}`,
             fromZip && `From ZIP: ${fromZip}`,
             toZip && `To ZIP: ${toZip}`,
@@ -283,6 +326,9 @@ export function LeadCaptureAgent({
           elapsedMs: Math.max(Date.now() - startRef.current, 0),
           eventId: `${eventId}-full`,
         });
+        // Only here is the lead deliverable: the CRM accepted the full record
+        // and the team can follow up. eventID stays wired for CAPI dedupe.
+        oncePerSession(`tm_lead_${eventId}`, () => trackLead(eventId));
         trackFormSubmit("agent_full");
         goTo("done");
       } catch {
