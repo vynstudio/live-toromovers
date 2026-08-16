@@ -32,7 +32,9 @@ export type CityImageSet = {
 };
 
 const FALLBACK_HERO = "/hero/slide-02.webp";
-const FALLBACK_MID = "/hero/slide-02.webp";
+/** Real local-move photo — cities without their own asset used to render the
+ *  hero slide twice on one page. */
+const FALLBACK_MID = "/city/central-florida-local-move.webp";
 
 /** Per-city assets. Prefer /city/{slug}-* when generated; falls back to site heroes. */
 export const CITY_IMAGES: Record<string, CityImageSet> = {
@@ -86,7 +88,7 @@ export function getCityImages(slug: string): CityImageSet {
     },
     mid: {
       src: FALLBACK_MID,
-      alt: "Toro Movers handling furniture on a local Central Florida move",
+      alt: "Toro Movers crew unloading a moving truck and carrying boxes into a home on a local Central Florida move",
       caption: "Local moves across Central Florida with upfront hourly pricing.",
       runwayPrompt: "Generic apartment/home move mid image",
     },
