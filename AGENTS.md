@@ -4,14 +4,32 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# Toro Movers agent notes (2026-07-23)
+# Toro Movers agent notes (updated 2026-08-20)
 
-## Quote funnel (canonical)
-- Live path: `/get-my-price` (`LeadCaptureAgent` + `(funnel)/gmp.css`)
-- Steps: name+phone → service → ZIPs → size → when → done (3s → `/`)
-- Leads: soft then full POST `/api/crm/lead` — no public rates, no email field
-- All Get Quote CTAs: `openQuote()` / `QuoteModal` → `/get-my-price`
+## Phone (do not mix)
+- **Public / click-to-call / JSON-LD / customer-facing copy:** `(321) 758-0094` · `tel:+13217580094` — `src/config/business.ts` (re-exported from `src/lib/contact.ts`)
+- **OpenPhone outbound confirmation SMS `from`:** `(689) 600-2720` · keep `OPENPHONE_FROM_NUMBER=+16896002720`
+- Do not set `OPENPHONE_FROM_NUMBER=+13217580094` until 321 SMS send+receive is tested and the owner approves
+- Never overwrite customer phones stored on leads
+
+## Claims
+- Toro is **not licensed or insured**. Do not state or imply licensed, insured, bonded, certified, authorized, DOT/FMCSA-approved, cargo protection, guaranteed, or similar. See `CLAIMS_FORBIDDEN` in `src/config/quote-form.ts`.
+
+## Quote funnel (live production)
+- Live ads + CTAs: `/get-my-price` (`LeadCaptureAgent` + `(funnel)/gmp.css`)
+- Leads: POST `/api/crm/lead` — Telegram + one OpenPhone confirmation SMS. No Neon. No HubSpot on this path.
+- All Get Quote CTAs: `openQuote()` / `QuoteModal` → `/get-my-price` until Step K
+- `/get-a-quote` is a **preview** of the universal form (still posts `/api/crm/lead`). Not the Meta Final URL.
 - Do not resurrect deleted wizards (`intake-wizard`, `quote-form`, `/api/ad-funnel`, `/api/booking`)
+- No public rates on the funnel
+
+## Phase A (architecture accepted — do not skip gates)
+- Spec: `docs/quote-system-architecture.md` · checklist: `docs/phase-a-access-checklist.md`
+- Future: `/get-a-quote` + `POST /api/v1/leads` · Neon source of truth · HubSpot Contact + Mudanzas Deal (fail-open)
+- Step B (Neon/schema/outbox) waits on Neon prod+staging, HubSpot Private App + pipeline/stage IDs, staging Telegram
+- Redirect `/get-my-price` → `/get-a-quote`: **307 only when testing**; **no 301 until Step L**
+- Do not send live Meta traffic to `/get-a-quote` until Step J (insert, HubSpot, notify, attribution, Pixel/CAPI `event_id=lead_id`) and the owner approves production
+- Nine request types stay enabled in `src/config/quote-form.ts` `REQUEST_TYPES`
 
 ## Meta ads
 - Image winners only under Full Service Trust; $25/day total; all Final URLs = `/get-my-price`
