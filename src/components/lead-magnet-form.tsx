@@ -14,6 +14,9 @@ import {
   trackFormSubmit,
 } from "@/lib/track";
 import { getAttributionSummary, getAttribution } from "@/lib/utm";
+import {
+  PHONE_DISPLAY,
+} from "@/lib/contact";
 
 const MOVE_TYPES = Object.keys(MOVE_TYPE_LABEL) as MoveType[];
 const emailValid = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -103,7 +106,7 @@ export function LeadMagnetForm() {
       router.push("/thank-you-checklist");
     } catch {
       setSubmitError(
-        "Something went wrong sending your checklist. Please try again, or call us at (689) 600-2720.",
+        `Something went wrong sending your checklist. Please try again, or call us at ${PHONE_DISPLAY}.`,
       );
       setSubmitting(false);
     }
@@ -159,7 +162,7 @@ export function LeadMagnetForm() {
           value={phone}
           onChange={(e) => onPhoneChange(e.target.value)}
           onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
-          placeholder="(689) 600-2720"
+          placeholder={PHONE_DISPLAY}
           aria-invalid={Boolean(show("phone"))}
           autoComplete="tel"
           inputMode="tel"

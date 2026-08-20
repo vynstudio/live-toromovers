@@ -1,12 +1,11 @@
 /**
  * Client automation copy — email + SMS by lifecycle step.
- * Phone: (689) 600-2720 · Brand: Toro Movers
+ * Public callback number: src/config/business.ts
  */
 
 import type { SequenceKey } from "./types";
+import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
 
-const PHONE_DISPLAY = "(689) 600-2720";
-const PHONE_TEL = "+16896002720";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://toromovers.com";
 const QUOTE = `${SITE}/get-my-price`;
 const REVIEW =
@@ -27,7 +26,7 @@ function esc(s: string) {
 }
 
 function wrap(body: string) {
-  return `<div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#fff;font:15px/1.6 system-ui,sans-serif;color:#0A0A0A">${body}<p style="color:#6B6B72;font-size:13px;margin:28px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Up-front pricing · Hablamos español<br>Toro Movers · <a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p></div>`;
+  return `<div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#fff;font:15px/1.6 system-ui,sans-serif;color:#0A0A0A">${body}<p style="color:#6B6B72;font-size:13px;margin:28px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Up-front pricing · Hablamos español<br>Toro Movers · <a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p></div>`;
 }
 
 export function buildSequence(
@@ -65,8 +64,8 @@ export function buildSequence(
             : "Toro Movers — a team member will contact you shortly",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hola ${esc(name)},</h2><p>Gracias por tu interés en mudanzas full-service en Florida Central. Un miembro del equipo te llama pronto al número que nos diste.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hi ${esc(name)},</h2><p>Thanks for checking out full-service movers in Central Florida. A team member will contact you in a couple minutes at the number you used.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hola ${esc(name)},</h2><p>Gracias por tu interés en mudanzas full-service en Florida Central. Un miembro del equipo te llama pronto al número que nos diste.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hi ${esc(name)},</h2><p>Thanks for checking out full-service movers in Central Florida. A team member will contact you in a couple minutes at the number you used.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
           ),
           text: es
             ? `Hola ${name}, Toro Movers te contacta pronto. ${PHONE_DISPLAY}`
@@ -85,8 +84,8 @@ export function buildSequence(
             : "Toro Movers — we got your price request",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hola ${esc(name)},</h2><p>Recibimos tu solicitud. Un miembro del equipo te contacta en minutos con disponibilidad y precio por hora.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Agregar más detalles →</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hi ${esc(name)},</h2><p>We got your price request. A team member will contact you in minutes with availability and up-front hourly pricing.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Add more details →</a></p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hola ${esc(name)},</h2><p>Recibimos tu solicitud. Un miembro del equipo te contacta en minutos con disponibilidad y precio por hora.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Agregar más detalles →</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Hi ${esc(name)},</h2><p>We got your price request. A team member will contact you in minutes with availability and up-front hourly pricing.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Add more details →</a></p>`,
           ),
           text: es
             ? `Hola ${name}, Toro recibió tu solicitud. ${PHONE_DISPLAY}`
@@ -105,8 +104,8 @@ export function buildSequence(
             : "Still planning your move?",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">${esc(name)}, ¿seguimos?</h2><p>Recibimos tu solicitud de <strong>${esc(funnel)}</strong>. Si aún no hablamos, responde este correo o llama:</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Ver cotización →</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">${esc(name)}, still moving?</h2><p>We got your <strong>${esc(funnel)}</strong> request. If we haven't connected yet, reply to this email or call:</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Review quote details →</a></p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">${esc(name)}, ¿seguimos?</h2><p>Recibimos tu solicitud de <strong>${esc(funnel)}</strong>. Si aún no hablamos, responde este correo o llama:</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Ver cotización →</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">${esc(name)}, still moving?</h2><p>We got your <strong>${esc(funnel)}</strong> request. If we haven't connected yet, reply to this email or call:</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p><p><a href="${QUOTE}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui;padding:12px 22px;border-radius:8px">Review quote details →</a></p>`,
           ),
           text: es
             ? `${name}, ¿sigues con la mudanza? Llama ${PHONE_DISPLAY} o cotiza: ${QUOTE}`
@@ -125,8 +124,8 @@ export function buildSequence(
             : "Truck + crew included",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Full-service sin sorpresas</h2><p>Hola ${esc(name)}, en Toro Movers traemos camión, cuadrilla y protección. Precio por hora al frente — sin cargos ocultos en Florida Central.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Full-service, no surprises</h2><p>Hi ${esc(name)}, Toro brings the truck, crew, and furniture protection. Up-front hourly pricing — no hidden fees across Central Florida.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Full-service sin sorpresas</h2><p>Hola ${esc(name)}, en Toro Movers traemos camión, cuadrilla y protección. Precio por hora al frente — sin cargos ocultos en Florida Central.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Full-service, no surprises</h2><p>Hi ${esc(name)}, Toro brings the truck, crew, and furniture protection. Up-front hourly pricing — no hidden fees across Central Florida.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
           ),
           text: es
             ? `Full-service Toro: camión + cuadrilla. ${PHONE_DISPLAY}`
@@ -143,8 +142,8 @@ export function buildSequence(
           subject: es ? "¿Cerramos la fecha?" : "Ready to lock a date?",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Último seguimiento</h2><p>${esc(name)}, si tu mudanza sigue en pie, respondemos el mismo día cuando llamas. Estamos en Florida Central · bilingües.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Last follow-up</h2><p>${esc(name)}, if your move is still on, we usually reply the same day when you call. Central Florida · bilingual crew.</p><p style="font:600 18px system-ui"><a href="tel:${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Último seguimiento</h2><p>${esc(name)}, si tu mudanza sigue en pie, respondemos el mismo día cuando llamas. Estamos en Florida Central · bilingües.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Last follow-up</h2><p>${esc(name)}, if your move is still on, we usually reply the same day when you call. Central Florida · bilingual crew.</p><p style="font:600 18px system-ui"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>`,
           ),
           text: es
             ? `Toro Movers — ¿agendamos? ${PHONE_DISPLAY}`
@@ -188,8 +187,8 @@ export function buildSequence(
           subject: es ? "Mudanza confirmada — Toro Movers" : "Move confirmed — Toro Movers",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">¡Estás agendado, ${esc(name)}!</h2><p>Depósito recibido. Completa el <a href="${checklist}">checklist del día de mudanza</a> (direcciones, hora, inventario) para mandar el crew correcto. ¿Preguntas? <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">You're booked, ${esc(name)}!</h2><p>Deposit received. Complete the <a href="${checklist}">moving day checklist</a> (addresses, start time, inventory) so we send the right crew. Questions? <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">¡Estás agendado, ${esc(name)}!</h2><p>Depósito recibido. Completa el <a href="${checklist}">checklist del día de mudanza</a> (direcciones, hora, inventario) para mandar el crew correcto. ¿Preguntas? <a href="${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">You're booked, ${esc(name)}!</h2><p>Deposit received. Complete the <a href="${checklist}">moving day checklist</a> (addresses, start time, inventory) so we send the right crew. Questions? <a href="${PHONE_TEL}">${PHONE_DISPLAY}</a></p>`,
           ),
           text: es
             ? `Mudanza Toro confirmada.\n\nChecklist:\n${checklist}\n\n${PHONE_DISPLAY}`
@@ -207,8 +206,8 @@ export function buildSequence(
           subject: es ? "Mañana es el día — Toro Movers" : "Move day tomorrow — Toro Movers",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Mañana mudamos contigo</h2><p>${esc(name)}, ten listos accesos, elevadores y llaves. Si cambia algo, avísanos al <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a>.</p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">We move you tomorrow</h2><p>${esc(name)}, please have access, elevators, and keys ready. If anything changes, call <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a>.</p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Mañana mudamos contigo</h2><p>${esc(name)}, ten listos accesos, elevadores y llaves. Si cambia algo, avísanos al <a href="${PHONE_TEL}">${PHONE_DISPLAY}</a>.</p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">We move you tomorrow</h2><p>${esc(name)}, please have access, elevators, and keys ready. If anything changes, call <a href="${PHONE_TEL}">${PHONE_DISPLAY}</a>.</p>`,
           ),
           text: es
             ? `Mañana mudanza Toro. ${PHONE_DISPLAY}`
@@ -242,8 +241,8 @@ export function buildSequence(
             : "Your moving checklist — Toro",
           html: wrap(
             es
-              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Planifica sin estrés</h2><p>${esc(name)}, cuando estés listo para la cuadrilla, estamos a un llamado: <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> o <a href="${QUOTE}">cotiza aquí</a>.</p>`
-              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Plan without the stress</h2><p>${esc(name)}, when you're ready for a crew, we're one call away: <a href="tel:${PHONE_TEL}">${PHONE_DISPLAY}</a> or <a href="${QUOTE}">get a quote</a>.</p>`,
+              ? `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Planifica sin estrés</h2><p>${esc(name)}, cuando estés listo para la cuadrilla, estamos a un llamado: <a href="${PHONE_TEL}">${PHONE_DISPLAY}</a> o <a href="${QUOTE}">cotiza aquí</a>.</p>`
+              : `<h2 style="font:600 22px/1.3 system-ui;margin:0 0 10px">Plan without the stress</h2><p>${esc(name)}, when you're ready for a crew, we're one call away: <a href="${PHONE_TEL}">${PHONE_DISPLAY}</a> or <a href="${QUOTE}">get a quote</a>.</p>`,
           ),
           text: es
             ? `Checklist Toro — cotiza: ${QUOTE} · ${PHONE_DISPLAY}`

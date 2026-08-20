@@ -9,6 +9,9 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { GoogleAddressInput } from "./google-address-input";
+import {
+  PHONE_DISPLAY,
+} from "@/lib/contact";
 
 type Yn = "yes" | "no" | "";
 type ItemCounts = Record<string, number>;
@@ -399,7 +402,7 @@ export function IntakeForm() {
         }),
       });
       if (!res.ok) {
-        setError("Couldn't save. Call us at (689) 600-2720.");
+        setError(`Couldn't save. Call us at ${PHONE_DISPLAY}.`);
         setSubmitting(false);
         return;
       }
@@ -640,7 +643,7 @@ export function IntakeForm() {
                 type="tel"
                 value={data.phone}
                 onChange={(e) => update({ phone: e.target.value })}
-                placeholder="(689) 555-0000"
+                placeholder={PHONE_DISPLAY}
                 autoComplete="tel"
               />
             </label>

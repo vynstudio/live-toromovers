@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import {
+  PHONE_DISPLAY,
+} from "@/lib/contact";
+import { resolveOpenPhoneSmsFrom } from "@/config/business";
 
 // ===========================================================================
 // REVIEW REQUEST — automate the post-job Google review ask.
@@ -49,12 +53,12 @@ function emailCopy(
   if (lang === "es") {
     return {
       subject: "¿Cómo estuvo tu mudanza? 🚚",
-      html: `<p>Hola ${firstName},</p><p>¡Gracias por elegir Toro Movers! Si todo salió bien, ¿nos dejarías una reseña en Google? Toma 30 segundos y ayuda muchísimo a nuestro negocio familiar:</p><p><a href="${REVIEW_URL}">Dejar una reseña en Google</a></p><p>— El equipo de Toro Movers · (689) 600-2720</p>`,
+      html: `<p>Hola ${firstName},</p><p>¡Gracias por elegir Toro Movers! Si todo salió bien, ¿nos dejarías una reseña en Google? Toma 30 segundos y ayuda muchísimo a nuestro negocio familiar:</p><p><a href="${REVIEW_URL}">Dejar una reseña en Google</a></p><p>— El equipo de Toro Movers · ${PHONE_DISPLAY}</p>`,
     };
   }
   return {
     subject: "How was your move? 🚚",
-    html: `<p>Hi ${firstName},</p><p>Thank you for choosing Toro Movers! If everything went well, would you take 30 seconds to leave us a Google review? It genuinely helps our small family business:</p><p><a href="${REVIEW_URL}">Leave a Google review</a></p><p>— The Toro Movers team · (689) 600-2720</p>`,
+    html: `<p>Hi ${firstName},</p><p>Thank you for choosing Toro Movers! If everything went well, would you take 30 seconds to leave us a Google review? It genuinely helps our small family business:</p><p><a href="${REVIEW_URL}">Leave a Google review</a></p><p>— The Toro Movers team · ${PHONE_DISPLAY}</p>`,
   };
 }
 
@@ -120,8 +124,8 @@ export async function POST(req: Request) {
 /* ---- OpenPhone SMS ---- */
 async function openphoneSms(phone: string, content: string): Promise<boolean> {
   const key = process.env.OPENPHONE_API_KEY;
-  const from = process.env.OPENPHONE_FROM_NUMBER;
-  if (!key || !from) return false;
+  const from = resolveOpenPhoneSmsFrom();
+  if (!key) return false;
   try {
     const res = await fetch("https://api.openphone.com/v1/messages", {
       method: "POST",

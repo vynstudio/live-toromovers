@@ -56,7 +56,7 @@ const fEmail = {
     method: "POST", url: "https://api.resend.com/emails",
     authentication: "genericCredentialType", genericAuthType: "httpHeaderAuth",
     sendBody: true, specifyBody: "json",
-    jsonBody: `={\n  "from": "Toro Movers <hello@toromovers.net>",\n  "to": ["{{ $('Find contact').first().json.results[0].properties.email }}"],\n  "subject": "We tried to reach you — Toro Movers",\n  "html": "<p>Hi ${fn}, we just tried calling about your move and missed you. Reply to this email, call <a href=\\"tel:+16896002720\\">(689) 600-2720</a>, or grab your up-front quote here: <a href=\\"https://toromovers.com/quote\\">toromovers.com/quote</a>.</p><p>— Toro Movers · Family-owned · Insured · Hablamos espanol</p>"\n}`,
+    jsonBody: `={\n  "from": "Toro Movers <hello@toromovers.net>",\n  "to": ["{{ $('Find contact').first().json.results[0].properties.email }}"],\n  "subject": "We tried to reach you — Toro Movers",\n  "html": "<p>Hi ${fn}, we just tried calling about your move and missed you. Reply to this email, call <a href=\\"tel:+13217580094\\">(321) 758-0094</a>, or grab your up-front quote here: <a href=\\"https://toromovers.com/quote\\">toromovers.com/quote</a>.</p><p>— Toro Movers · Family-owned · Hablamos espanol</p>"\n}`,
     options: {},
   },
   name: "Follow-up Email", type: "n8n-nodes-base.httpRequest", typeVersion: 4.2, position: [980, 220],

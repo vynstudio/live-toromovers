@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 import { trackFunnelView, trackCompleteRegistration } from "@/lib/track";
-import { PHONE_TEL } from "@/lib/contact";
+import { PHONE_TEL, PHONE_SMS_HREF } from "@/lib/contact";
 
-const SMS_HREF = "sms:+16896002720";
+const SMS_HREF = PHONE_SMS_HREF;
 
 /** Fires funnel_view on landing-page mount. */
 export function FunnelView({ funnel }: { funnel: string }) {

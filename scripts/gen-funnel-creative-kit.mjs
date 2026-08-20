@@ -24,13 +24,13 @@ const FUNNELS = [
     url: "toromovers.com/labor-only-moving",
     headlines: [
       "Labor-Only Movers in Orlando & Central Florida",
-      "Loading & Unloading Help — Hourly, Insured Crews",
+      "Loading & Unloading Help — Hourly Crews",
       "You Bring the Truck. We Bring the Crew.",
       "Need Moving Muscle Today? Hourly Labor in Central FL",
     ],
     subhead:
       "Loading, unloading, stairs & heavy lifting. Up-front hourly pricing — you keep your truck.",
-    ctas: ["Get My Hourly Quote", "Check Availability", "Get Labor Help Now", "Call (689) 600-2720"],
+    ctas: ["Get My Hourly Quote", "Check Availability", "Get Labor Help Now", "Call (321) 758-0094"],
   },
   {
     name: "FULL-SERVICE FUNNEL",
@@ -42,12 +42,12 @@ const FUNNELS = [
       "Stress-Free Local Moves Across Central Florida",
     ],
     subhead:
-      "Packing, supplies, transport, unloading & setup. Careful insured crew, up-front hourly pricing.",
-    ctas: ["Get My Quote", "Request Full-Service Pricing", "Check Availability", "Call (689) 600-2720"],
+      "Packing, supplies, transport, unloading & setup. Careful crew, up-front hourly pricing.",
+    ctas: ["Get My Quote", "Request Full-Service Pricing", "Check Availability", "Call (321) 758-0094"],
   },
 ];
 
-const TRUST = "Family-owned  ·  Fully insured  ·  Bilingual  ·  4.9 on Google  ·  Up-front hourly pricing  ·  Central Florida local";
+const TRUST = "Family-owned  ·  Bilingual  ·  4.9 on Google  ·  Up-front hourly pricing  ·  Central Florida local";
 
 // ---- PDF primitives ----
 const PW = 612, PH = 792, ML = 50, MR = 50, MB = 56;
@@ -70,7 +70,7 @@ const txt = (x, yy, s, size, color = "0 0 0", font = "F1") => ops.push(`BT /${fo
 
 const BLACK = hex("#0B0B0D"), RED = hex("#C8102E"), WHITE = "1 1 1", INK = hex("#141414"), MUTED = hex("#6B6B72");
 
-const footer = () => txt(ML, 36, "Toro Movers  ·  (689) 600-2720  ·  toromovers.com  ·  Type: Schibsted Grotesk (display) + Inter (body)", 8, MUTED);
+const footer = () => txt(ML, 36, "Toro Movers  ·  (321) 758-0094  ·  toromovers.com  ·  Type: Schibsted Grotesk (display) + Inter (body)", 8, MUTED);
 
 const newPage = (first) => {
   if (ops.length) { footer(); pages.push(ops); }

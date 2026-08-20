@@ -4,6 +4,7 @@
  */
 
 import { normalizePhone } from "@/lib/verify";
+import { resolveOpenPhoneSmsFrom } from "@/config/business";
 import type { ChannelResult } from "./types";
 
 const RESEND = "https://api.resend.com/emails";
@@ -76,8 +77,7 @@ export async function sendTeamEmail(subject: string, html: string, text: string)
 
 export async function sendSms(toRaw: string, content: string): Promise<ChannelResult> {
   const apiKey = process.env.OPENPHONE_API_KEY || process.env.QUO_API_KEY;
-  const from =
-    process.env.OPENPHONE_FROM_NUMBER || process.env.QUO_FROM_NUMBER;
+  const from = resolveOpenPhoneSmsFrom();
   if (!apiKey || !from) {
     return {
       ok: false,

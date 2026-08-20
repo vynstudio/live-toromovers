@@ -73,7 +73,7 @@ curl -X POST https://toromovers.com/api/crm/lead \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
   -d '{
     "name": "Maria G",
-    "phone": "6896002720",
+    "phone": "4075550100",
     "funnel": "call",
     "source": "meta_call",
     "city": "Orlando",
@@ -104,7 +104,7 @@ curl -X POST https://toromovers.com/api/crm/sequences/run \
     "sequence": "followup_24h",
     "firstName": "Maria",
     "email": "maria@example.com",
-    "phone": "+16895550100",
+    "phone": "+14075550100",
     "lang": "en",
     "funnel": "full-service",
     "channels": ["email", "sms"]
@@ -124,7 +124,7 @@ Sequences: `call_instant` · `followup_1h` · `followup_24h` · `followup_72h` �
 | `RESEND_FROM_EMAIL` | e.g. `hello@toromovers.net` |
 | `LEAD_NOTIFICATION_EMAIL` | Team alert inbox |
 | `OPENPHONE_API_KEY` or `QUO_API_KEY` | SMS |
-| `OPENPHONE_FROM_NUMBER` or `QUO_FROM_NUMBER` | E.164 e.g. `+16896002720` |
+| `OPENPHONE_FROM_NUMBER` or `QUO_FROM_NUMBER` | SMS sender E.164: keep `+16896002720` until 321 SMS migration is approved |
 | `TELEGRAM_BOT_TOKEN` | Internal alerts |
 | `TELEGRAM_CHAT_ID` | Group/user id |
 | `LEAD_INTAKE_SECRET` | Internal API auth |
@@ -186,7 +186,7 @@ https://toromovers.com/api/crm/stage?e={{email}}&s=c
 3. URL: `https://toromovers.com/api/crm/webhooks/openphone`  
 4. Optional header secret → `OPENPHONE_WEBHOOK_SECRET`
 
-Contacts **must** store phone in **E.164** (`+1689…`) so inbound matches — `intake` + funnel routes already normalize.
+Contacts **must** store phone in **E.164** (`+1…`) so inbound matches — `intake` + funnel routes already normalize.
 
 ---
 
@@ -233,7 +233,7 @@ Meta Call Now does **not** send a server webhook with the caller’s number to y
 2. **OpenPhone call summary** — if Quo fires call.completed webhooks, extend `webhooks/openphone`  
 3. **Form + Call** — keep Call Now for intent; retarget engagers with Get Quote  
 
-Phone **(689) 600-2720** is the brand number used across sequences.
+Phone **(321) 758-0094** is the brand number used across sequences.
 
 ### Booking-flow SMS (OpenPhone) — live
 
@@ -244,19 +244,19 @@ After quote → Square book → deposit → checklist:
 curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
-  -d '{"kind":"book_online","firstName":"Maria","phone":"+16896002720"}'
+  -d '{"kind":"book_online","firstName":"Maria","phone":"+13217580094"}'
 
 # 2) After Square book + deposit paid
 curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
-  -d '{"kind":"booked_confirm","firstName":"Maria","phone":"+16896002720","moveDate":"Fri Aug 15"}'
+  -d '{"kind":"booked_confirm","firstName":"Maria","phone":"+13217580094","moveDate":"Fri Aug 15"}'
 
 # 3) Checklist nudge
 curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
-  -d '{"kind":"checklist_reminder","firstName":"Maria","phone":"+16896002720"}'
+  -d '{"kind":"checklist_reminder","firstName":"Maria","phone":"+13217580094"}'
 ```
 
 Kinds: `book_online` · `booked_confirm` · `checklist_reminder`  

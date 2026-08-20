@@ -34,7 +34,11 @@ function isPriorityLead(lead: CrmLead): boolean {
 
 function isAgentLead(lead: CrmLead): boolean {
   const blob = `${lead.source} ${lead.landingPage || ""} ${lead.note || ""}`.toLowerCase();
-  return blob.includes("get-my-price") || blob.includes("agent funnel");
+  return (
+    blob.includes("get-my-price") ||
+    blob.includes("get-a-quote") ||
+    blob.includes("agent funnel")
+  );
 }
 
 function summarize(lead: CrmLead): string {

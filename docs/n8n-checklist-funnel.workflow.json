@@ -175,7 +175,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Need help with your Central Florida move?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — Toro Movers is family-owned, fully insured, and rated 4.9 on Google by Central Florida families. When you're ready, we'll lock in your slot.</p><p><a href='https://toromovers.com/quote'>Request a Quote</a> · (689) 600-2720</p>\"\n}",
+        "jsonBody": "={\n  \"from\": \"Toro Movers <hello@toromovers.net>\",\n  \"to\": [\"{{ $('Webhook').item.json.body.email }}\"],\n  \"subject\": \"Need help with your Central Florida move?\",\n  \"html\": \"<p>Hi {{ $('Webhook').item.json.body.firstName }} — Toro Movers is family-owned and rated 4.9 on Google by Central Florida families. When you're ready, we'll lock in your slot.</p><p><a href='https://toromovers.com/quote'>Request a Quote</a> · (321) 758-0094</p>\"\n}",
         "options": {}
       },
       "id": "email5",
@@ -290,7 +290,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"We're family-owned, insured, and bilingual — ready to help with your Central Florida move. Get your quote: https://toromovers.com/quote — Toro Movers. STOP to opt out.\"\n}",
+        "jsonBody": "={\n  \"from\": \"{{$env.OPENPHONE_FROM_NUMBER}}\",\n  \"to\": [\"{{ $('Webhook').item.json.body.phone }}\"],\n  \"content\": \"We're family-owned and bilingual — ready to help with your Central Florida move. Get your quote: https://toromovers.com/quote — Toro Movers. STOP to opt out.\"\n}",
         "options": {}
       },
       "id": "sms3",

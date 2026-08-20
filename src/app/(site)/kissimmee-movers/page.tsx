@@ -65,7 +65,7 @@ const FAQS = [
   },
   {
     q: "How far in advance should I book movers in Kissimmee?",
-    a: "Book one to two weeks ahead when you can, especially for weekends, month-end lease turnovers, and peak tourist-season days when parking near US-192 is tight. Same-week scheduling is often available — call (689) 600-2720 or request an estimate online and we’ll tell you what’s open.",
+    a: `Book one to two weeks ahead when you can, especially for weekends, month-end lease turnovers, and peak tourist-season days when parking near US-192 is tight. Same-week scheduling is often available — call ${PHONE_DISPLAY} or request an estimate online and we’ll tell you what’s open.`,
   },
   {
     q: "What makes Toro Movers different from franchise moving companies?",

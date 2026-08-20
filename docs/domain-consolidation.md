@@ -52,7 +52,7 @@ Query strings (UTMs, `fbclid`, `gclid`) are preserved by Netlify.
 
 1. Open each active ad set / ad.
 2. Change website URL from `toromoveit.com` or `go.toromovers.net` → `toromovers.com/...` above.
-3. Call Now ads: keep phone `(689) 600-2720`; website URL still matters for pixel/view-through.
+3. Call Now ads: keep phone `(321) 758-0094`; website URL still matters for pixel/view-through.
 4. Events Manager: confirm pixel fires on toromovers.com (already installed).
 5. After 48h, old domains should only show as 301 in crawls — no content.
 

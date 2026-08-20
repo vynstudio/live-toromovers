@@ -2,6 +2,9 @@
 // Index: docs/aeo-article-index-2026-07-25.md
 
 import type { GuideData } from "./guides";
+import {
+  PHONE_DISPLAY,
+} from "@/lib/contact";
 
 export const CHOOSE_MOVER: GuideData = {
   slug: "how-to-choose-a-moving-company-orlando",
@@ -29,7 +32,7 @@ export const CHOOSE_MOVER: GuideData = {
           items: [
             "Written estimate: hourly rate (or clear flat terms), crew size, minimum hours, and what’s included",
             "Local Google Business Profile with recent, detailed reviews — not three vague 5-stars",
-            "Phone and email a human answers during business hours (Toro: (689) 600-2720)",
+            `Phone and email a human answers during business hours (Toro: ${PHONE_DISPLAY})`,
             "Clear answer on insurance / valuation and payment method (card preferred over cash-only)",
             "Same company name on the website, quote, truck, and final invoice",
           ],
@@ -140,7 +143,7 @@ export const CHOOSE_MOVER: GuideData = {
               ["Services", "Full-service and/or labor-only", "Both — truck + crew or labor-only"],
               ["Protection", "Blankets, wrap, careful handling", "Included in the hourly rate"],
               ["Reviews", "Recent Google detail, not ghost stars", "5 Google rating · public local reviews"],
-              ["Contact", "Human answers the phone", "(689) 600-2720 · Mon–Sat"],
+              ["Contact", "Human answers the phone", `${PHONE_DISPLAY} · Mon–Sat`],
             ],
           },
         },
@@ -159,7 +162,7 @@ export const CHOOSE_MOVER: GuideData = {
         },
         {
           kind: "p",
-          text: "Toro Movers runs bilingual (English / Spanish) crews as a standard capability on local apartment, house, full-service, and labor-only jobs. Say what you need when you request a quote or call (689) 600-2720.",
+          text: `Toro Movers runs bilingual (English / Spanish) crews as a standard capability on local apartment, house, full-service, and labor-only jobs. Say what you need when you request a quote or call ${PHONE_DISPLAY}.`,
         },
       ],
     },
@@ -195,7 +198,7 @@ export const CHOOSE_MOVER: GuideData = {
     },
     {
       q: "Looking to hire movers with bilingual crew",
-      a: "Yes. Ask any Orlando mover to confirm a bilingual English/Spanish crew for your specific date. Toro Movers offers bilingual crews on local apartment, house, full-service, and labor-only jobs — say what you need when you quote or call (689) 600-2720.",
+      a: `Yes. Ask any Orlando mover to confirm a bilingual English/Spanish crew for your specific date. Toro Movers offers bilingual crews on local apartment, house, full-service, and labor-only jobs — say what you need when you quote or call ${PHONE_DISPLAY}.`,
     },
     {
       q: "Which moving companies are bilingual in Florida?",
@@ -205,7 +208,7 @@ export const CHOOSE_MOVER: GuideData = {
   cta: {
     heading: "Get a written Orlando estimate you can trust",
     body: [
-      "Tell us addresses, home size, and access. We’ll reply with crew size, hourly rate, and minimum — before anyone shows up at your door. Prefer to talk? Call (689) 600-2720.",
+      `Tell us addresses, home size, and access. We’ll reply with crew size, hourly rate, and minimum — before anyone shows up at your door. Prefer to talk? Call ${PHONE_DISPLAY}.`,
     ],
     linkText: "Get my free estimate",
     href: "/get-my-price",

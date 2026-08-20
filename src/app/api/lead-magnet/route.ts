@@ -7,6 +7,11 @@ import {
   type LeadMagnetInput,
 } from "@/lib/lead-magnet-schema";
 import { normalizePhone } from "@/lib/verify";
+import {
+  PHONE_TEL,
+  PHONE_DISPLAY,
+} from "@/lib/contact";
+import { resolveOpenPhoneSmsFrom } from "@/config/business";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
 const PDF_URL = `${SITE_URL}/central-florida-moving-checklist.pdf`;
@@ -126,7 +131,7 @@ async function sendCustomerChecklistEmail(
     <p style="margin:0 0 22px;color:#3A3A3A">${tip}</p>
     <p style="margin:0 0 4px">When you're ready, we'll give you an up-front hourly price — no surprises:</p>
     <p style="margin:0 0 22px"><a href="${QUOTE_URL}" style="display:inline-block;background:#0A0A0A;color:#fff;text-decoration:none;font:600 15px system-ui,sans-serif;padding:12px 22px;border-radius:8px">Request a Quote →</a></p>
-    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Local Central Florida movers · Hablamos español<br>Toro Movers · <a href="tel:+16896002720" style="color:#6B6B72">(689) 600-2720</a></p>
+    <p style="color:#6B6B72;font-size:13px;margin:24px 0 0;border-top:1px solid #ECECEC;padding-top:16px">Family-owned · Local Central Florida movers · Hablamos español<br>Toro Movers · <a href="${PHONE_TEL}" style="color:#6B6B72">${PHONE_DISPLAY}</a></p>
   </div>`;
 
   const textBody = [
@@ -139,7 +144,7 @@ async function sendCustomerChecklistEmail(
     ``,
     `Ready for an up-front price? Request a quote: ${QUOTE_URL}`,
     ``,
-    `Family-owned · Hablamos español · Toro Movers · (689) 600-2720`,
+    `Family-owned · Hablamos español · Toro Movers · ${PHONE_DISPLAY}`,
   ].join("\n");
 
   try {
@@ -234,8 +239,8 @@ async function sendTelegram(text: string): Promise<boolean> {
  *  phone). Uses OpenPhone / Quo, same creds as lib/verify. */
 async function sendChecklistSms(phone: string, firstName: string): Promise<boolean> {
   const apiKey = process.env.OPENPHONE_API_KEY;
-  const fromNumber = process.env.OPENPHONE_FROM_NUMBER;
-  if (!apiKey || !fromNumber) return false;
+  const fromNumber = resolveOpenPhoneSmsFrom();
+  if (!apiKey) return false;
   try {
     const res = await fetch("https://api.openphone.com/v1/messages", {
       method: "POST",

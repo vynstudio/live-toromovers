@@ -1,5 +1,10 @@
 import type { Config } from "@netlify/functions";
 import { getStore } from "@netlify/blobs";
+import {
+  phoneDisplay as PHONE_DISPLAY,
+  phoneTelHref as PHONE_TEL,
+  resolveOpenPhoneSmsFrom,
+} from "../../src/config/business";
 
 /**
  * Lead follow-up sequence (SMS + email) for Toro Movers.
@@ -31,8 +36,6 @@ const TOUCHES = [
 // Leave leads alone once the sequence window has fully passed.
 const MAX_AGE_MS = 4 * 24 * HOUR;
 
-const PHONE_DISPLAY = "(689) 600-2720";
-
 type Lang = "en" | "es";
 
 function pickLang(hsLanguage?: string): Lang {
@@ -45,7 +48,7 @@ const SMS_ES: ((n: string) => string)[] = [
   (n) => `Hola${n}, ¿viste nuestro mensaje? Podemos apartar tu fecha de mudanza hoy. Llama o escribe al ${PHONE_DISPLAY}. (STOP para salir)`,
   (n) => `Hola${n}, precio por hora, sin tarifas ocultas y fechas esta misma semana. ¿Te paso una cotización rápida? ${PHONE_DISPLAY}. (STOP para salir)`,
   (n) => `Hola${n}, ¿sigues planeando tu mudanza? Tenemos cuadrillas disponibles esta semana — ${PHONE_DISPLAY}. (STOP para salir)`,
-  (n) => `Hola${n}, 4.9★ en Google, empresa familiar y asegurada. Con gusto te ayudamos con tu mudanza — ${PHONE_DISPLAY}. (STOP para salir)`,
+  (n) => `Hola${n}, 4.9★ en Google, empresa familiar. Con gusto te ayudamos con tu mudanza — ${PHONE_DISPLAY}. (STOP para salir)`,
   (n) => `Hola${n}, último aviso: vamos a liberar tu espacio. Llama al ${PHONE_DISPLAY} si aún necesitas mudanza. (STOP para salir)`,
 ];
 const SMS_EN: ((n: string) => string)[] = [
@@ -53,7 +56,7 @@ const SMS_EN: ((n: string) => string)[] = [
   (n) => `Hi${n}, just making sure you saw us — we can hold your moving date today. Call or text ${PHONE_DISPLAY}. (Reply STOP to opt out)`,
   (n) => `Hi${n}, hourly pricing, no hidden fees, and same-week dates. Want a quick quote? ${PHONE_DISPLAY}. (Reply STOP to opt out)`,
   (n) => `Hi${n}, still planning your move? We have crews open this week — ${PHONE_DISPLAY}. (Reply STOP to opt out)`,
-  (n) => `Hi${n}, 4.9★ on Google, family-owned & insured. Happy to help with your move — ${PHONE_DISPLAY}. (Reply STOP to opt out)`,
+  (n) => `Hi${n}, 4.9★ on Google, family-owned. Happy to help with your move — ${PHONE_DISPLAY}. (Reply STOP to opt out)`,
   (n) => `Hi${n}, last check-in — we're about to release your slot. Call ${PHONE_DISPLAY} if you still need movers. (Reply STOP to opt out)`,
 ];
 
@@ -61,17 +64,17 @@ const SMS_EN: ((n: string) => string)[] = [
 const EMAIL_ES: { subject: (n: string) => string; lead: string }[] = [
   { subject: (n) => `¿Seguimos con tu mudanza${n}?`, lead: "Recibimos tu solicitud de cotización y queríamos retomarla." },
   { subject: () => `¿Apartamos tu fecha?`, lead: "Podemos asegurar tu fecha de mudanza hoy — solo dinos." },
-  { subject: () => `Sin tarifas ocultas, fechas esta semana`, lead: "Precio por hora, asegurados, y probablemente tenemos tu fecha libre esta semana." },
+  { subject: () => `Sin tarifas ocultas, fechas esta semana`, lead: "Precio por hora, y probablemente tenemos tu fecha libre esta semana." },
   { subject: () => `Cuadrillas disponibles esta semana`, lead: "¿Sigues planeando tu mudanza? Tenemos cuadrillas disponibles esta semana." },
-  { subject: () => `4.9★ y empresa familiar`, lead: "Un poco sobre nosotros: 4.9★ en Google, familiar y completamente asegurados." },
+  { subject: () => `4.9★ y empresa familiar`, lead: "Un poco sobre nosotros: 4.9★ en Google, empresa familiar." },
   { subject: () => `Último seguimiento de tu mudanza`, lead: "Estamos por liberar tu espacio — aquí seguimos si aún necesitas mudanza." },
 ];
 const EMAIL_EN: { subject: (n: string) => string; lead: string }[] = [
   { subject: (n) => `Still moving${n}?`, lead: "We got your quote request and wanted to follow up." },
   { subject: () => `Want us to hold your date?`, lead: "We can lock in your moving date today — just say the word." },
-  { subject: () => `No hidden fees, same-week dates`, lead: "Hourly pricing, fully insured, and we likely have your date open this week." },
+  { subject: () => `No hidden fees, same-week dates`, lead: "Hourly pricing, and we likely have your date open this week." },
   { subject: () => `Crews open this week`, lead: "Still planning your move? We have crews available this week." },
-  { subject: () => `4.9★ and family-owned`, lead: "A bit about us: 4.9★ on Google, family-owned and fully insured." },
+  { subject: () => `4.9★ and family-owned`, lead: "A bit about us: 4.9★ on Google, family-owned." },
   { subject: () => `Last check-in on your move`, lead: "We're about to release your slot — still here if you need movers." },
 ];
 
@@ -87,14 +90,14 @@ function emailParts(touchId: number, firstName: string, lang: Lang) {
   const ctaLine = lang === "es" ? "La forma más rápida es una llamada corta:" : "The fastest way is a quick call:";
   const replyLine = lang === "es" ? "O responde a este correo y coordinamos por aquí." : "Or just reply to this email and we'll take it from here.";
   const footer = lang === "es"
-    ? "Toro Movers · Familiar y asegurado · Hablamos español · Florida Central"
-    : "Toro Movers · Family-owned & insured · Hablamos español · Central Florida";
+    ? "Toro Movers · Empresa familiar · Hablamos español · Florida Central"
+    : "Toro Movers · Family-owned · Hablamos español · Central Florida";
   const html = `
   <div style="max-width:560px;margin:0 auto;padding:28px 24px;background:#ffffff;font:15px/1.55 system-ui,sans-serif;color:#0A0A0A">
     <h2 style="font:600 22px/1.3 system-ui,sans-serif;margin:0 0 12px">${hi} 👋</h2>
     <p>${t.lead}</p>
     <p style="margin-top:16px">${ctaLine}</p>
-    <p style="font:600 17px system-ui,sans-serif;margin:4px 0 20px"><a href="tel:+16896002720" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>
+    <p style="font:600 17px system-ui,sans-serif;margin:4px 0 20px"><a href="${PHONE_TEL}" style="color:#C81E3A;text-decoration:none">${PHONE_DISPLAY}</a></p>
     <p>${replyLine}</p>
     <p style="color:#6B6B72;font-size:13px;margin-top:24px">${footer}</p>
   </div>`;
@@ -134,9 +137,9 @@ async function searchNewLeads(token: string): Promise<HsContact[]> {
 
 async function sendSms(phone: string, body: string): Promise<boolean> {
   const apiKey = process.env.OPENPHONE_API_KEY;
-  const from = process.env.OPENPHONE_FROM_NUMBER;
-  if (!apiKey || !from) {
-    console.error("[followup] OPENPHONE_API_KEY/FROM_NUMBER missing — SMS skipped");
+  const from = resolveOpenPhoneSmsFrom();
+  if (!apiKey) {
+    console.error("[followup] OPENPHONE_API_KEY missing — SMS skipped");
     return false;
   }
   try {

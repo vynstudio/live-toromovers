@@ -1,4 +1,7 @@
 import { ImageResponse } from "next/og";
+import {
+  PHONE_DISPLAY,
+} from "@/lib/contact";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -137,7 +140,7 @@ export default function OpenGraph() {
           }}
         >
           <span>toromovers.com</span>
-          <span style={{ color: "#C8442A" }}>(689) 600-2720</span>
+          <span style={{ color: "#C8442A" }}>{PHONE_DISPLAY}</span>
         </div>
       </div>
     ),

@@ -20,19 +20,19 @@ import { rateLimit, clientIp } from "@/lib/rate-limit";
  *
  * Examples:
  *   // After quote — send Square book link
- *   { "kind": "book_online", "firstName": "Maria", "phone": "+1689..." }
+ *   { "kind": "book_online", "firstName": "Maria", "phone": "+14075550100" }
  *
  *   // After Square book + deposit
- *   { "kind": "booked_confirm", "firstName": "Maria", "phone": "+1689...", "moveDate": "Fri Aug 15" }
+ *   { "kind": "booked_confirm", "firstName": "Maria", "phone": "+14075550100", "moveDate": "Fri Aug 15" }
  *
  *   // Nudge for checklist
- *   { "kind": "checklist_reminder", "firstName": "Maria", "phone": "+1689..." }
+ *   { "kind": "checklist_reminder", "firstName": "Maria", "phone": "+14075550100" }
  *
  *   // Night before
- *   { "kind": "day_before", "firstName": "Maria", "phone": "+1689...", "moveDate": "Fri Aug 15" }
+ *   { "kind": "day_before", "firstName": "Maria", "phone": "+14075550100", "moveDate": "Fri Aug 15" }
  *
  *   // After move
- *   { "kind": "review_request", "firstName": "Maria", "phone": "+1689..." }
+ *   { "kind": "review_request", "firstName": "Maria", "phone": "+14075550100" }
  */
 
 const KINDS = new Set<BookingSmsKind>([

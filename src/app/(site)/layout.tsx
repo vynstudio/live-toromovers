@@ -16,6 +16,7 @@ import {
   SLOGAN,
   POSTAL_CODE,
   SOCIAL_PROFILES,
+  PHONE_E164
 } from "@/lib/contact";
 
 const serif = Schibsted_Grotesk({
@@ -115,7 +116,7 @@ const movingCompanyJsonLd = {
     "Family-owned full-service moving company in Orlando and Central Florida. Truck, crew, furniture protection, apartment and home moves first. Labor-only loading available as a secondary option. Bilingual. Up-front hourly pricing — quote in 60 seconds.",
   "@id": `${SITE_URL}/#movingcompany`,
   url: SITE_URL,
-  telephone: "+16896002720",
+  telephone: `${PHONE_E164}`,
   email: EMAIL,
   image: `${SITE_URL}/og/default.jpg`,
   logo: {

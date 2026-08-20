@@ -112,7 +112,7 @@ const FAQS = [
   },
   {
     q: "How do I get a quote for my city?",
-    a: "Use Get my free estimate with your addresses and move details, or call (689) 600-2720. We’ll confirm the hourly rate, minimum, and availability — including same-week dates when open.",
+    a: `Use Get my free estimate with your addresses and move details, or call ${PHONE_DISPLAY}. We’ll confirm the hourly rate, minimum, and availability — including same-week dates when open.`,
   },
 ];
 

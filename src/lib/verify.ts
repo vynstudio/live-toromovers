@@ -3,6 +3,7 @@
 // Netlify's stateless functions without a database.
 
 import { createHmac, randomInt, timingSafeEqual } from "crypto";
+import { resolveOpenPhoneSmsFrom } from "@/config/business";
 
 const SECRET =
   process.env.VERIFY_SIGNING_SECRET || "dev-only-fallback-CHANGE-ME";
@@ -104,9 +105,9 @@ export async function sendVerificationSms(
   code: string,
 ): Promise<{ delivered: "openphone" | "dev"; devCode?: string }> {
   const apiKey = process.env.OPENPHONE_API_KEY;
-  const fromNumber = process.env.OPENPHONE_FROM_NUMBER;
+  const fromNumber = resolveOpenPhoneSmsFrom();
 
-  if (!apiKey || !fromNumber) {
+  if (!apiKey) {
     console.log(
       `[verify/send] DEV mode (no OPENPHONE creds) — code for ${phone}: ${code}`,
     );
@@ -145,8 +146,8 @@ export async function sendConfirmationSms(
   firstName: string,
 ): Promise<boolean> {
   const apiKey = process.env.OPENPHONE_API_KEY;
-  const fromNumber = process.env.OPENPHONE_FROM_NUMBER;
-  if (!apiKey || !fromNumber) return false;
+  const fromNumber = resolveOpenPhoneSmsFrom();
+  if (!apiKey) return false;
   try {
     const res = await fetch("https://api.openphone.com/v1/messages", {
       method: "POST",

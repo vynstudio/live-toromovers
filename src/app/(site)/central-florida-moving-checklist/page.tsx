@@ -9,6 +9,7 @@ import {
   BUSINESS_NAME,
   GOOGLE_RATING,
   SERVICE_REGION,
+  PHONE_E164
 } from "@/lib/contact";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
@@ -105,7 +106,7 @@ const jsonLd = {
         "@type": "MovingCompany",
         name: BUSINESS_NAME,
         "@id": `${SITE_URL}/#movingcompany`,
-        telephone: "+16896002720",
+        telephone: `${PHONE_E164}`,
       },
     },
     {

@@ -1,3 +1,6 @@
+import {
+  PHONE_DISPLAY,
+} from "@/lib/contact";
 // Toro Movers — bilingual content (English-first, Spanish mirrors).
 // Real business content sourced from toromovers.net. NO invented details.
 
@@ -249,7 +252,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       lede:
         "Family-owned movers serving Orlando and Central Florida with upfront hourly pricing, bilingual crews, and no hidden fees.",
       ctaPrimary: "Get my price",
-      ctaSecondary: "Call (689) 600-2720",
+      ctaSecondary: `Call ${PHONE_DISPLAY}`,
       note: "5-star Google-rated · No fuel surcharges · No stair fees · Same-week availability",
     },
     trust: [
@@ -394,7 +397,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       headItalic: "No hidden fees.",
       sub: "Same up-front hourly rate, same crew on the day, same family-owned business behind it.",
       primary: "Get free quote",
-      secondary: "Call (689) 600-2720",
+      secondary: `Call ${PHONE_DISPLAY}`,
     },
     footer: {
       tagline: "Family-owned full-service movers across Central Florida.",
@@ -432,7 +435,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       confirm: "Send my quote request",
       successTitle: "Quote request received",
       successBody:
-        "A team member will contact you in a couple minutes with your quote. Need us now? Call (689) 600-2720.",
+        `A team member will contact you in a couple minutes with your quote. Need us now? Call ${PHONE_DISPLAY}.`,
       back: "Back",
       next: "Continue",
       submit: "Send",
@@ -460,7 +463,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       lede:
         "Compañía familiar de mudanzas en Orlando y Florida Central con precios por hora claros, cuadrilla bilingüe y sin tarifas ocultas.",
       ctaPrimary: "Ver mi precio",
-      ctaSecondary: "Llamar (689) 600-2720",
+      ctaSecondary: `Llamar ${PHONE_DISPLAY}`,
       note: "5★ en Google · Sin recargos de combustible · Sin tarifas de escaleras · Disponibilidad esta semana",
     },
     trust: [
@@ -605,7 +608,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       headItalic: "Sin tarifas ocultas.",
       sub: "La misma tarifa por hora, la misma cuadrilla el día de la mudanza, el mismo negocio familiar detrás.",
       primary: "Cotización gratis",
-      secondary: "Llamar (689) 600-2720",
+      secondary: `Llamar ${PHONE_DISPLAY}`,
     },
     footer: {
       tagline: "Mudanceros familiares de servicio completo en Florida Central.",
@@ -643,7 +646,7 @@ export const content: { en: ContentShape; es: ContentShape } = {
       confirm: "Enviar mi solicitud",
       successTitle: "Solicitud de cotización recibida",
       successBody:
-        "Un miembro del equipo te contactará en un par de minutos con tu cotización. ¿Nos necesitas ahora? Llama al (689) 600-2720.",
+        `Un miembro del equipo te contactará en un par de minutos con tu cotización. ¿Nos necesitas ahora? Llama al ${PHONE_DISPLAY}.`,
       back: "Atrás",
       next: "Continuar",
       submit: "Enviar",

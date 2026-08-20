@@ -57,7 +57,7 @@ const FAQS = [
   },
   {
     q: "How far in advance should I book movers in Lake Mary?",
-    a: "Book one to two weeks ahead when you can, especially for weekends, end-of-month dates, and HOA or gated communities that need advance notice. Same-week scheduling is often available — call (689) 600-2720 or request an estimate online and we’ll tell you what’s open.",
+    a: `Book one to two weeks ahead when you can, especially for weekends, end-of-month dates, and HOA or gated communities that need advance notice. Same-week scheduling is often available — call ${PHONE_DISPLAY} or request an estimate online and we’ll tell you what’s open.`,
   },
   {
     q: "What makes Toro Movers different from franchise moving companies?",

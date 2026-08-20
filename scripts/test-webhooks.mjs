@@ -76,19 +76,19 @@ try {
 
   // 3) submit all three funnels
   const labor = await submit("/api/funnel-lead", {
-    funnel: "labor", firstName: "Labor", email: "labor@test.com", phone: "(689) 600-2720",
+    funnel: "labor", firstName: "Labor", email: "labor@test.com", phone: "(407) 555-0100",
     moveDate: "This week", city: "Orlando", helpNeeded: ["Both"], smsConsent: true,
     utm: { utm_source: "facebook", utm_medium: "cpc", utm_campaign: "labor-test" },
     landingPage: "/labor-only-moving",
   });
   const full = await submit("/api/funnel-lead", {
-    funnel: "full-service", firstName: "Full", email: "full@test.com", phone: "(689) 600-2720",
+    funnel: "full-service", firstName: "Full", email: "full@test.com", phone: "(407) 555-0100",
     moveDate: "This month", city: "Kissimmee", propertyType: "House", packingHelp: true, smsConsent: false,
     utm: { utm_source: "google", utm_medium: "cpc", utm_campaign: "fs-test" },
     landingPage: "/full-service-moving",
   });
   const checklist = await submit("/api/lead-magnet", {
-    firstName: "Check", email: "check@test.com", phone: "(689) 600-2720",
+    firstName: "Check", email: "check@test.com", phone: "(407) 555-0100",
     city: "Lake Mary", moveType: "apartment", smsOptIn: true,
     utm: { utm_source: "newsletter" }, landingPage: "/central-florida-moving-checklist",
   });

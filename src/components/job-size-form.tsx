@@ -8,6 +8,10 @@ import {
   type ReactNode,
 } from "react";
 import { AddressAutocomplete } from "./address-autocomplete";
+import {
+  PHONE_DISPLAY,
+  PHONE_TEL,
+} from "@/lib/contact";
 
 type Yn = "" | "No" | "Yes";
 
@@ -269,11 +273,11 @@ export function JobSizeForm() {
       if (!res.ok || !data.ok) {
         const map: Record<string, string> = {
           rate_limited:
-            "Too many tries. Wait a minute or call (689) 600-2720.",
+            `Too many tries. Wait a minute or call ${PHONE_DISPLAY}.`,
           email_failed:
-            "Could not deliver to our inbox. Call or text (689) 600-2720.",
+            `Could not deliver to our inbox. Call or text ${PHONE_DISPLAY}.`,
           delivery_failed:
-            "Could not send your details. Call or text (689) 600-2720.",
+            `Could not send your details. Call or text ${PHONE_DISPLAY}.`,
           name_phone_required: "Name and phone are required.",
           move_date_required: "Please pick your move date.",
           move_time_required: "Please pick a start time.",
@@ -283,7 +287,7 @@ export function JobSizeForm() {
         };
         setErr(
           (data.error && map[data.error]) ||
-            "Could not send. Call or text (689) 600-2720 — or try again.",
+            `Could not send. Call or text ${PHONE_DISPLAY} — or try again.`,
         );
         setSending(false);
         return;
@@ -296,7 +300,7 @@ export function JobSizeForm() {
         /* ignore */
       }
     } catch {
-      setErr("Network error. Check your connection or call (689) 600-2720.");
+      setErr(`Network error. Check your connection or call ${PHONE_DISPLAY}.`);
       setSending(false);
     }
   }
@@ -310,7 +314,7 @@ export function JobSizeForm() {
           need anything else, we’ll text or call.
         </p>
         <p>
-          <a href="tel:+16896002720">(689) 600-2720</a>
+          <a href={PHONE_TEL}>{PHONE_DISPLAY}</a>
         </p>
       </div>
     );
@@ -360,7 +364,7 @@ export function JobSizeForm() {
           autoComplete="tel"
           inputMode="tel"
           required
-          placeholder="(689) 000-0000"
+          placeholder={PHONE_DISPLAY}
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
@@ -583,7 +587,7 @@ export function JobSizeForm() {
         {sending ? "Sending…" : "Send details"}
       </button>
       <p className="jsf-fine">
-        Goes to Toro only · (689) 600-2720 · Hablamos español
+        Goes to Toro only · {PHONE_DISPLAY} · Hablamos español
       </p>
     </form>
   );

@@ -1,12 +1,25 @@
 // Toro Movers — centralized business details.
-// Keep raw values OUT of components; pull from here.
+// Phone numbers live in src/config/business.ts — re-exported here so existing
+// imports keep working. Do not hard-code the public number.
+
+import {
+  phoneDisplay,
+  phoneE164,
+  phoneTelHref,
+  phoneSmsHref,
+  openPhoneSmsFromE164,
+} from "@/config/business";
 
 export const BUSINESS_NAME = "Toro Movers";
 export const LEGAL_NAME = "Toro Movers LLC";
 export const SLOGAN = "Moving People Forward";
 
-export const PHONE_DISPLAY = "(689) 600-2720";
-export const PHONE_TEL = "tel:+16896002720";
+export const PHONE_DISPLAY = phoneDisplay;
+export const PHONE_TEL = phoneTelHref;
+export const PHONE_E164 = phoneE164;
+export const PHONE_SMS_HREF = phoneSmsHref;
+/** OpenPhone outbound SMS sender. Not for click-to-call or schema. */
+export const OPENPHONE_SMS_FROM_E164 = openPhoneSmsFromE164;
 
 export const EMAIL = "hello@toromovers.net";
 export const EMAIL_HREF = "mailto:hello@toromovers.net";

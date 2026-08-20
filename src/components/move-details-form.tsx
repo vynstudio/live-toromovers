@@ -16,6 +16,9 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { GoogleAddressInput } from "./google-address-input";
+import {
+  PHONE_DISPLAY,
+} from "@/lib/contact";
 
 type Yn = "yes" | "no" | "";
 type ItemCounts = Record<string, number>;
@@ -523,7 +526,7 @@ export function MoveDetailsForm() {
         }),
       });
       if (!res.ok) {
-        setErr("Couldn't send. Call (689) 600-2720.");
+        setErr(`Couldn't send. Call ${PHONE_DISPLAY}.`);
         setBusy(false);
         return;
       }
@@ -581,7 +584,7 @@ export function MoveDetailsForm() {
                 inputMode="tel"
                 value={d.phone}
                 onChange={(e) => set({ phone: e.target.value })}
-                placeholder="(689) 555-0000"
+                placeholder={PHONE_DISPLAY}
                 autoComplete="tel"
                 enterKeyHint="next"
               />

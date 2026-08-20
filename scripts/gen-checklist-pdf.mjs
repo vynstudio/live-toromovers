@@ -17,7 +17,7 @@ const OUT = resolve(__dirname, "../public/central-florida-moving-checklist.pdf")
 const TITLE = "The Central Florida Moving Checklist";
 const SUBTITLE = "Plan your move • Pack faster • Get an accurate quote";
 const FOOTER =
-  "Toro Movers • Family-owned • Insured • Bilingual • (689) 600-2720 • toromovers.com";
+  "Toro Movers • Family-owned • Bilingual • (321) 758-0094 • toromovers.com";
 
 const CONTENT = [
   { h: "1 week before", items: [

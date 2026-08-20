@@ -15,7 +15,7 @@
 
 Template reference: `src/app/(site)/altamonte-springs-movers/page.tsx`
 
-Shared elements: H1 `[City] Movers`, trust row, 8 H2 sections, service subsections, cost, included, franchise contrast, nearby, 7 FAQs, FAQPage + MovingCompany schema (Orlando base only), CTA Get my free estimate + (689) 600-2720.
+Shared elements: H1 `[City] Movers`, trust row, 8 H2 sections, service subsections, cost, included, franchise contrast, nearby, 7 FAQs, FAQPage + MovingCompany schema (Orlando base only), CTA Get my free estimate + (321) 758-0094.
 
 ## Batch 2 — gold live (2026-07-25)
 

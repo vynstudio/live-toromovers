@@ -17,6 +17,7 @@ import { REVIEWS } from "@/lib/content";
 import {
   PHONE_DISPLAY,
   PHONE_TEL,
+  PHONE_E164,
   BUSINESS_NAME,
   EMAIL,
   GOOGLE_RATING,
@@ -25,7 +26,6 @@ import {
 } from "@/lib/contact";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
-const PHONE_E164 = PHONE_TEL.replace(/^tel:/, "");
 
 function buildServices(city: CityData) {
   const n = city.name;

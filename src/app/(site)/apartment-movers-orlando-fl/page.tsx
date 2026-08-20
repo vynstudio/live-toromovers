@@ -13,6 +13,7 @@ import {
   GOOGLE_RATING,
   REVIEW_COUNT,
   SERVICE_REGION,
+  PHONE_E164
 } from "@/lib/contact";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://toromovers.com";
@@ -95,7 +96,7 @@ const FAQS = [
   },
   {
     q: "How far in advance do I need to book?",
-    a: "We offer same-week scheduling on most dates. For weekend moves, booking 5–7 days ahead is recommended. Call (689) 600-2720 for last-minute availability.",
+    a: `We offer same-week scheduling on most dates. For weekend moves, booking 5–7 days ahead is recommended. Call ${PHONE_DISPLAY} for last-minute availability.`,
   },
   {
     q: "Do you move apartments to other cities in Central Florida?",
@@ -122,7 +123,7 @@ const jsonLd = {
         "@type": "MovingCompany",
         name: BUSINESS_NAME,
         "@id": `${SITE_URL}/#movingcompany`,
-        telephone: "+16896002720",
+        telephone: `${PHONE_E164}`,
         areaServed: { "@type": "AdministrativeArea", name: SERVICE_REGION },
         openingHoursSpecification: [
           {

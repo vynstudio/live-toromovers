@@ -10,9 +10,8 @@
 
 import type { StageKey } from "./types";
 
-import { BOOKINGS_PATH } from "@/lib/contact";
+import { BOOKINGS_PATH, PHONE_DISPLAY } from "@/lib/contact";
 
-const PHONE_DISPLAY = "(689) 600-2720";
 const REVIEW =
   process.env.GOOGLE_REVIEW_URL ||
   "https://g.page/r/CYAKurQHh5TvEAI/review";
