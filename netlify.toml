@@ -6,7 +6,9 @@
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  NEXT_PUBLIC_ASSET_PREFIX = "https://live-toro-site.netlify.app"
+  # Preview branch only: empty prefix so draft CSS/JS are not loaded from
+  # production CDN. Restore live-toro-site.netlify.app before merging to main.
+  NEXT_PUBLIC_ASSET_PREFIX = ""
   NODE_VERSION = "20"
   NEXT_TELEMETRY_DISABLED = "1"
 
