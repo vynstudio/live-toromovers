@@ -33,7 +33,7 @@ const START = typeof performance !== "undefined" ? performance.now() : Date.now(
 function loadDraft(): MoveChecklistPayload {
   if (typeof window === "undefined") return emptyPayload();
   try {
-    const raw = sessionStorage.getItem(STORAGE);
+    const raw = localStorage.getItem(STORAGE);
     if (!raw) return emptyPayload();
     return { ...emptyPayload(), ...JSON.parse(raw) };
   } catch {
@@ -43,7 +43,7 @@ function loadDraft(): MoveChecklistPayload {
 
 function saveDraft(p: MoveChecklistPayload) {
   try {
-    sessionStorage.setItem(STORAGE, JSON.stringify({ ...p, hp: "" }));
+    localStorage.setItem(STORAGE, JSON.stringify({ ...p, hp: "" }));
   } catch {
     /* quota */
   }
@@ -141,7 +141,7 @@ export function MoveChecklistWizard() {
       }
       trackChecklistSubmitted(json.id);
       try {
-        sessionStorage.removeItem(STORAGE);
+        localStorage.removeItem(STORAGE);
       } catch {
         /* */
       }
