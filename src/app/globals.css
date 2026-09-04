@@ -5497,3 +5497,263 @@ html[data-jsf="1"] .sticky-cta { display: none !important; }
   .bw-chip { flex: 1 1 100%; }
   .bw-cta { width: 100%; justify-content: center; }
 }
+
+/* —— Move-day checklist wizard (post-deposit) —— */
+.mdc-wrap {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 24px 20px 96px;
+}
+.mdc-kicker {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.mdc-title {
+  margin: 0 0 10px;
+  font-family: var(--font-serif), system-ui, sans-serif;
+  font-size: clamp(1.6rem, 6vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+.mdc-lede {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.mdc-lede a { color: var(--navy); font-weight: 600; }
+.mdc-benefits {
+  margin: 0 0 28px;
+  padding: 0 0 0 1.1rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.mdc-benefits li { margin-bottom: 8px; }
+.mdc-progress {
+  height: 5px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.mdc-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--red);
+  border-radius: 4px;
+  transition: width 0.25s ease;
+}
+.mdc-step {
+  margin: 0 0 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.mdc-field { margin-bottom: 20px; }
+.mdc-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mdc-hint { margin: 0 0 8px; font-size: 13px; color: var(--muted); }
+.mdc-subhead {
+  margin: 8px 0 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.mdc-input, .mdc-wrap .address-input-wrap > input {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px;
+  font-size: 16px;
+  color: var(--ink);
+  background: #fff;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 12px;
+  -webkit-appearance: none;
+}
+.mdc-textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+.mdc-input:focus, .mdc-wrap .address-input-wrap > input:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--red-glow);
+}
+.mdc-opts { display: grid; gap: 8px; }
+.mdc-opts-1 { grid-template-columns: 1fr; }
+.mdc-opts-2 { grid-template-columns: 1fr 1fr; }
+.mdc-opt {
+  appearance: none;
+  border: 2px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 16px 12px;
+  min-height: 52px;
+  font: 600 15px var(--font-sans), system-ui, sans-serif;
+  cursor: pointer;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.mdc-opt-wide { text-align: left; padding-left: 16px; }
+.mdc-opt.on {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 6px 16px var(--red-glow);
+}
+.mdc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 14px 22px;
+  border-radius: 6px;
+  font: 600 15px var(--font-sans), sans-serif;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+.mdc-btn-primary {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 4px 16px var(--red-glow);
+}
+.mdc-btn-ghost {
+  background: transparent;
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
+}
+.mdc-nav {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 10px;
+  margin-top: 28px;
+  position: sticky;
+  bottom: 0;
+  padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, transparent, #fff 28%);
+}
+.mdc-banner {
+  background: var(--red-soft);
+  color: var(--red-deep);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.mdc-err { color: var(--red-deep); font-size: 13px; margin: 6px 0 0; }
+.mdc-upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1.5px dashed var(--navy);
+  color: var(--navy);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.mdc-upload input { display: none; }
+.mdc-photos { margin-bottom: 16px; }
+.mdc-photo-list { list-style: none; margin: 0 0 8px; padding: 0; font-size: 13px; }
+.mdc-photo-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.mdc-link {
+  background: none;
+  border: none;
+  color: var(--red);
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+}
+.mdc-review { margin: 24px 0; }
+.mdc-review h2 { font-size: 1.05rem; margin: 0 0 12px; color: var(--navy); }
+.mdc-review-block {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.mdc-review-block header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.mdc-review-block h3 { margin: 0; font-size: 0.85rem; }
+.mdc-review-body p { margin: 0 0 4px; font-size: 14px; color: var(--ink-soft); }
+.mdc-ack {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+.mdc-ack input {
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  flex-shrink: 0;
+  accent-color: var(--red);
+}
+.mdc-flag {
+  background: var(--navy-soft);
+  color: var(--navy);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.mdc-hp {
+  position: absolute;
+  left: -9999px;
+  height: 0;
+  width: 0;
+  opacity: 0;
+}
+.mdc-wrap .address-input-wrap { position: relative; }
+.mdc-wrap .address-suggestions {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  margin-top: 4px;
+  list-style: none;
+  padding: 4px 0;
+  box-shadow: 0 12px 28px rgba(0,0,0,.12);
+}
+.mdc-wrap .address-suggestion {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.mdc-wrap .address-suggestion.active,
+.mdc-wrap .address-suggestions li:hover { background: var(--navy-soft); }
+

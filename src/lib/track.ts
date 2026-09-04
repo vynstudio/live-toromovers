@@ -164,4 +164,61 @@ export function trackCompleteRegistration(): void {
   } catch {}
 }
 
-export {};
+const MOVE_FUNNEL = "move_day_checklist";
+
+export function trackChecklistViewed(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "ChecklistPageViewed", { funnel: MOVE_FUNNEL });
+  } catch {}
+  try {
+    window.gtag?.("event", "checklist_page_viewed", { funnel: MOVE_FUNNEL });
+  } catch {}
+}
+
+export function trackChecklistStarted(): void {
+  trackFormStart(MOVE_FUNNEL);
+  try {
+    window.fbq?.("trackCustom", "ChecklistStarted", { funnel: MOVE_FUNNEL });
+  } catch {}
+  try {
+    window.gtag?.("event", "checklist_started", { funnel: MOVE_FUNNEL });
+  } catch {}
+}
+
+export function trackChecklistStep(step: number): void {
+  trackFormStepComplete(MOVE_FUNNEL, step);
+  try {
+    window.fbq?.("trackCustom", "ChecklistStepCompleted", { funnel: MOVE_FUNNEL, step });
+  } catch {}
+  try {
+    window.gtag?.("event", "checklist_step_completed", { funnel: MOVE_FUNNEL, step });
+  } catch {}
+}
+
+export function trackChecklistSubmitted(id?: string): void {
+  trackFormSubmit(MOVE_FUNNEL);
+  try {
+    window.fbq?.("trackCustom", "ChecklistSubmitted", {
+      funnel: MOVE_FUNNEL,
+      content_name: MOVE_FUNNEL,
+    });
+  } catch {}
+  try {
+    window.gtag?.("event", "checklist_submitted", { funnel: MOVE_FUNNEL, id: id || "" });
+  } catch {}
+}
+
+export function trackChecklistValidationError(step: number, message: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.fbq?.("trackCustom", "ChecklistValidationError", { funnel: MOVE_FUNNEL, step });
+  } catch {}
+  try {
+    window.gtag?.("event", "checklist_validation_error", {
+      funnel: MOVE_FUNNEL,
+      step,
+      message: message.slice(0, 80),
+    });
+  } catch {}
+}
