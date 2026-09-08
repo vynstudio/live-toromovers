@@ -4,6 +4,7 @@
 
 import { createHmac, randomInt, timingSafeEqual } from "crypto";
 import { resolveOpenPhoneSmsFrom } from "@/config/business";
+import { toUsE164 } from "@/lib/phone";
 
 const SECRET =
   process.env.VERIFY_SIGNING_SECRET || "dev-only-fallback-CHANGE-ME";
@@ -45,11 +46,7 @@ function unpack<T>(token: string | undefined): T | null {
 }
 
 export function normalizePhone(raw: string): string {
-  // Strip everything but digits; assume US if it's 10 digits (no country code).
-  const digits = raw.replace(/\D/g, "");
-  if (digits.length === 10) return `+1${digits}`;
-  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
-  return raw.startsWith("+") ? raw : `+${digits}`;
+  return toUsE164(raw) || "";
 }
 
 export function newCode(): string {

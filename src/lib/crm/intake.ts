@@ -7,6 +7,7 @@
  * HubSpot and n8n are fully removed (not feature-flagged).
  */
 
+import { toUsE164 } from "@/lib/phone";
 import { normalizePhone } from "@/lib/verify";
 import { sendTelegram } from "./providers";
 import { sendQuoteReceivedConfirmation } from "./quote-confirmation";
@@ -42,7 +43,9 @@ function isAgentLead(lead: CrmLead): boolean {
 }
 
 function summarize(lead: CrmLead): string {
-  const phone = lead.phone ? normalizePhone(lead.phone) : "—";
+  const phone = lead.phone
+    ? normalizePhone(lead.phone) || lead.phone
+    : "—";
   const priority = isPriorityLead(lead);
   const agent = isAgentLead(lead);
   return [
@@ -124,8 +127,9 @@ export function parseLooseLead(body: Record<string, unknown>): CrmLead | null {
   if (!fn) return null;
 
   const email = String(body.email || "").trim() || undefined;
-  const phone =
+  const phoneRaw =
     String(body.phone || body.phone_number || "").trim() || undefined;
+  const phone = phoneRaw ? toUsE164(phoneRaw) || phoneRaw : undefined;
   if (!email && !phone) return null;
 
   const funnel = (String(body.funnel || body.funnel_type || "full-service") ||

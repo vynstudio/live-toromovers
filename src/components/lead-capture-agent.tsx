@@ -7,8 +7,23 @@
  * Compact mobile-first steps; never show rates on-site.
  */
 
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type KeyboardEvent,
+} from "react";
 import { PHONE_DISPLAY, PHONE_TEL, GOOGLE_RATING } from "@/lib/contact";
+import {
+  caretFromDigitIndex,
+  countDigitsBefore,
+  parseUsPhone,
+  phoneValidationMessage,
+} from "@/lib/phone";
 import {
   HOME_SIZE_LABELS,
   SERVICE_LABELS,
@@ -60,20 +75,6 @@ const SIZE_OPTS: { id: Exclude<HomeSize, "">; labelEn: string; labelEs: string }
   { id: "3br+", labelEn: "3+ bedrooms", labelEs: "3+ habitaciones" },
   { id: "office", labelEn: "Office / storage", labelEs: "Oficina / bodega" },
 ];
-
-function formatPhone(raw: string) {
-  const d = String(raw || "")
-    .replace(/\D/g, "")
-    .slice(0, 10);
-  if (d.length > 6) return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
-  if (d.length > 3) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
-  if (d.length > 0) return `(${d}`;
-  return "";
-}
-
-function digits(raw: string) {
-  return String(raw || "").replace(/\D/g, "");
-}
 
 async function postLead(payload: Record<string, unknown>) {
   const res = await fetch("/api/crm/lead", {
@@ -138,6 +139,10 @@ export function LeadCaptureAgent({
   const eventIdRef = useRef(newEventId());
   const softSentRef = useRef(false);
   const prefillService = useRef(defaultService);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const phoneCaretRef = useRef<number | null>(null);
+  const parsedPhone = parseUsPhone(phone);
+  const phoneE164 = parsedPhone.e164;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -182,7 +187,7 @@ export function LeadCaptureAgent({
     return () => window.clearInterval(tick);
   }, [phase]);
 
-  const phoneOk = digits(phone).length === 10;
+  const phoneOk = parsedPhone.valid;
   const nameOk = name.trim().length >= 2;
 
   const stepTotal = PHASE_ORDER.length;
@@ -202,6 +207,61 @@ export function LeadCaptureAgent({
       setStarted(true);
       trackFormStart("agent");
     }
+  }
+
+  useLayoutEffect(() => {
+    const el = phoneRef.current;
+    const pos = phoneCaretRef.current;
+    if (el == null || pos == null) return;
+    el.setSelectionRange(pos, pos);
+    phoneCaretRef.current = null;
+  }, [phone]);
+
+  function applyPhoneInput(raw: string, digitIndex: number) {
+    const parsed = parseUsPhone(raw);
+    phoneCaretRef.current = caretFromDigitIndex(parsed.display, digitIndex);
+    setPhone(parsed.display);
+    if (parsed.reason === "letters" || parsed.reason === "too_long") {
+      setError(phoneValidationMessage(parsed.reason, es));
+    } else {
+      setError("");
+    }
+  }
+
+  function onPhoneChange(e: ChangeEvent<HTMLInputElement>) {
+    begin();
+    const el = e.currentTarget;
+    const caret = el.selectionStart ?? el.value.length;
+    applyPhoneInput(el.value, countDigitsBefore(el.value, caret));
+  }
+
+  function onPhoneKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== "Backspace" && e.key !== "Delete") return;
+    const el = e.currentTarget;
+    const start = el.selectionStart ?? 0;
+    const end = el.selectionEnd ?? 0;
+    if (start !== end) return;
+    const value = el.value;
+    if (e.key === "Backspace") {
+      if (start <= 0 || !/\D/.test(value[start - 1] || "")) return;
+      e.preventDefault();
+      const digitIdx = countDigitsBefore(value, start);
+      if (digitIdx <= 0) return;
+      const digits = value.replace(/\D/g, "");
+      applyPhoneInput(
+        digits.slice(0, digitIdx - 1) + digits.slice(digitIdx),
+        digitIdx - 1,
+      );
+      return;
+    }
+    if (start >= value.length || !/\D/.test(value[start] || "")) return;
+    e.preventDefault();
+    const digitIdx = countDigitsBefore(value, start);
+    const digits = value.replace(/\D/g, "");
+    applyPhoneInput(
+      digits.slice(0, digitIdx) + digits.slice(digitIdx + 1),
+      digitIdx,
+    );
   }
 
   function goTo(next: Phase) {
@@ -230,13 +290,14 @@ export function LeadCaptureAgent({
   }
 
   async function sendSoftLead() {
+    if (!phoneE164) return false;
     if (softSentRef.current) return true;
     softSentRef.current = true;
     const eventId = eventIdRef.current;
     try {
       await postLead({
         name: name.trim(),
-        phone: digits(phone),
+        phone: phoneE164,
         funnel: funnelOf(service || prefillService.current),
         source: "get-my-price",
         serviceType: "Pending qualify",
@@ -271,6 +332,11 @@ export function LeadCaptureAgent({
 
   const submitFull = useCallback(
     async (when: string, size: HomeSize, svc: ServiceKind | "") => {
+      if (!phoneE164) {
+        setError(phoneValidationMessage(parsedPhone.reason, es));
+        setAdvancing(false);
+        return;
+      }
       setSending(true);
       setError("");
       try {
@@ -285,7 +351,7 @@ export function LeadCaptureAgent({
 
         await postLead({
           name: name.trim(),
-          phone: digits(phone),
+          phone: phoneE164,
           funnel: funnelOf(resolvedSvc),
           source: "get-my-price",
           serviceType: [
@@ -342,7 +408,7 @@ export function LeadCaptureAgent({
         setAdvancing(false);
       }
     },
-    [name, phone, fromZip, toZip, es, smsConsent],
+    [name, phoneE164, fromZip, toZip, es, smsConsent],
   );
 
   function pickAndAdvance(apply: () => void, next: ActivePhase | "done" | "finish") {
@@ -373,11 +439,7 @@ export function LeadCaptureAgent({
       return;
     }
     if (!phoneOk) {
-      setError(
-        es
-          ? "Ingrese un teléfono de 10 dígitos."
-          : "Enter a 10-digit US phone number.",
-      );
+      setError(phoneValidationMessage(parsedPhone.reason, es));
       return;
     }
     if (!smsConsent) {
@@ -555,19 +617,32 @@ export function LeadCaptureAgent({
             <label className="lca-field">
               <span>{es ? "Teléfono móvil" : "Mobile phone"}</span>
               <input
+                ref={phoneRef}
                 type="tel"
                 name="phone"
                 inputMode="tel"
                 autoComplete="tel"
                 enterKeyHint="done"
                 value={phone}
-                onChange={(e) => setPhone(formatPhone(e.target.value))}
+                onChange={onPhoneChange}
+                onKeyDown={onPhoneKeyDown}
+                onBlur={() => {
+                  if (phone && !phoneOk) {
+                    setError(phoneValidationMessage(parsedPhone.reason, es));
+                  }
+                }}
                 onFocus={(e) =>
                   e.currentTarget.scrollIntoView({ block: "center", behavior: "smooth" })
                 }
                 placeholder={PHONE_DISPLAY}
                 required
-                aria-invalid={phone.length > 0 && !phoneOk}
+                aria-invalid={
+                  parsedPhone.reason === "letters" ||
+                  parsedPhone.reason === "too_long" ||
+                  parsedPhone.reason === "invalid" ||
+                  (Boolean(error) && !phoneOk)
+                }
+                data-phone-e164={phoneE164 || ""}
               />
             </label>
 
