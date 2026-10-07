@@ -124,7 +124,7 @@ Sequences: `call_instant` · `followup_1h` · `followup_24h` · `followup_72h` �
 | `RESEND_FROM_EMAIL` | e.g. `hello@toromovers.net` |
 | `LEAD_NOTIFICATION_EMAIL` | Team alert inbox |
 | `OPENPHONE_API_KEY` or `QUO_API_KEY` | SMS |
-| `OPENPHONE_FROM_NUMBER` or `QUO_FROM_NUMBER` | SMS sender E.164: keep `+16896002720` until 321 SMS migration is approved |
+| `OPENPHONE_FROM_NUMBER` or `QUO_FROM_NUMBER` | SMS sender E.164: `+16896002720` (same as the public line) |
 | `TELEGRAM_BOT_TOKEN` | Internal alerts |
 | `TELEGRAM_CHAT_ID` | Group/user id |
 | `LEAD_INTAKE_SECRET` | Internal API auth |
@@ -233,7 +233,7 @@ Meta Call Now does **not** send a server webhook with the caller’s number to y
 2. **OpenPhone call summary** — if Quo fires call.completed webhooks, extend `webhooks/openphone`  
 3. **Form + Call** — keep Call Now for intent; retarget engagers with Get Quote  
 
-Phone **(321) 758-0094** is the brand number used across sequences.
+Phone **(689) 600-2720** is the brand number used across sequences.
 
 ### Booking-flow SMS (OpenPhone) — live
 
@@ -244,19 +244,19 @@ After quote → Square book → deposit → checklist:
 curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
-  -d '{"kind":"book_online","firstName":"Maria","phone":"+13217580094"}'
+  -d '{"kind":"book_online","firstName":"Maria","phone":"+15555550123"}'
 
 # 2) After Square book + deposit paid
 curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
-  -d '{"kind":"booked_confirm","firstName":"Maria","phone":"+13217580094","moveDate":"Fri Aug 15"}'
+  -d '{"kind":"booked_confirm","firstName":"Maria","phone":"+15555550123","moveDate":"Fri Aug 15"}'
 
 # 3) Checklist nudge
 curl -X POST https://toromovers.com/api/crm/booking-sms \
   -H "Content-Type: application/json" \
   -H "x-lead-secret: $LEAD_INTAKE_SECRET" \
-  -d '{"kind":"checklist_reminder","firstName":"Maria","phone":"+13217580094"}'
+  -d '{"kind":"checklist_reminder","firstName":"Maria","phone":"+15555550123"}'
 ```
 
 Kinds: `book_online` · `booked_confirm` · `checklist_reminder`  

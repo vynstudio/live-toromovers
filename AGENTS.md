@@ -4,12 +4,12 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# Toro Movers agent notes (updated 2026-08-20)
+# Toro Movers agent notes (updated 2026-10-07)
 
-## Phone (do not mix)
-- **Public / click-to-call / JSON-LD / customer-facing copy:** `(321) 758-0094` · `tel:+13217580094` — `src/config/business.ts` (re-exported from `src/lib/contact.ts`)
+## Phone
+- **Public / click-to-call / JSON-LD / customer-facing copy:** `(689) 600-2720` · `tel:+16896002720` — `src/config/business.ts` (re-exported from `src/lib/contact.ts`)
 - **OpenPhone outbound confirmation SMS `from`:** `(689) 600-2720` · keep `OPENPHONE_FROM_NUMBER=+16896002720`
-- Do not set `OPENPHONE_FROM_NUMBER=+13217580094` until 321 SMS send+receive is tested and the owner approves
+- Test fixtures use `+15555550123`. Do not hard-code any other business number.
 - Never overwrite customer phones stored on leads
 
 ## Claims

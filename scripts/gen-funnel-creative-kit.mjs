@@ -30,7 +30,7 @@ const FUNNELS = [
     ],
     subhead:
       "Loading, unloading, stairs & heavy lifting. Up-front hourly pricing — you keep your truck.",
-    ctas: ["Get My Hourly Quote", "Check Availability", "Get Labor Help Now", "Call (321) 758-0094"],
+    ctas: ["Get My Hourly Quote", "Check Availability", "Get Labor Help Now", "Call (689) 600-2720"],
   },
   {
     name: "FULL-SERVICE FUNNEL",
@@ -43,7 +43,7 @@ const FUNNELS = [
     ],
     subhead:
       "Packing, supplies, transport, unloading & setup. Careful crew, up-front hourly pricing.",
-    ctas: ["Get My Quote", "Request Full-Service Pricing", "Check Availability", "Call (321) 758-0094"],
+    ctas: ["Get My Quote", "Request Full-Service Pricing", "Check Availability", "Call (689) 600-2720"],
   },
 ];
 
@@ -70,7 +70,7 @@ const txt = (x, yy, s, size, color = "0 0 0", font = "F1") => ops.push(`BT /${fo
 
 const BLACK = hex("#0B0B0D"), RED = hex("#C8102E"), WHITE = "1 1 1", INK = hex("#141414"), MUTED = hex("#6B6B72");
 
-const footer = () => txt(ML, 36, "Toro Movers  ·  (321) 758-0094  ·  toromovers.com  ·  Type: Schibsted Grotesk (display) + Inter (body)", 8, MUTED);
+const footer = () => txt(ML, 36, "Toro Movers  ·  (689) 600-2720  ·  toromovers.com  ·  Type: Schibsted Grotesk (display) + Inter (body)", 8, MUTED);
 
 const newPage = (first) => {
   if (ops.length) { footer(); pages.push(ops); }
