@@ -20,8 +20,8 @@ const PIXEL = process.env.NEXT_PUBLIC_META_PIXEL_ID || "985575491098437";
 const PAGE_ID = process.env.META_PAGE_ID || "722514634274519";
 const IG_USER = process.env.META_IG_USER_ID || "17841470412443785";
 // Keep in sync with src/config/business.ts
-const PHONE = "+13217580094";
-const PHONE_DISPLAY = "(321) 758-0094";
+const PHONE = "+16896002720";
+const PHONE_DISPLAY = "(689) 600-2720";
 
 // Budget split under $20 hard cap
 const CALL_BUDGET_CENTS = 1200; // $12 — ASAP calls

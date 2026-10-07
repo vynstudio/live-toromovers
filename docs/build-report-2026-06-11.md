@@ -16,7 +16,7 @@ tracking. All verified live in production.
 | n8n workflows (funnel + checklist) | ✅ imported + active (2 only, no dupes) |
 | Webhooks registered | ✅ `/webhook/toro-funnel-lead`, `/webhook/toro-checklist-lead` |
 | Netlify env vars (N8N_* + HUBSPOT_TOKEN) | ✅ set + deployed |
-| Instant SMS to customer (OpenPhone) | ✅ live-tested to 321-758-0094 |
+| Instant SMS to customer (OpenPhone) | ✅ live-tested |
 | Instant customer email + team alert (Resend) | ✅ delivered |
 | HubSpot contact upsert | ✅ fixed (token was missing in Netlify) |
 | Meta CAPI Lead | ✅ |

@@ -63,7 +63,7 @@ export function parseUsPhone(raw: string): UsPhoneParsed {
     if (!digits.startsWith("1")) return empty("too_long", digits);
     national = digits.slice(1);
   } else if (digits.startsWith("1") && digits.length === 10) {
-    // Country code of an incomplete +1 number. Do not treat 1321758009 as NANP.
+    // Country code of an incomplete +1 number. Do not treat 1555555012 as NANP.
     return empty("too_short", digits);
   } else {
     national = digits;

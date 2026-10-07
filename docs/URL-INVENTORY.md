@@ -2,7 +2,7 @@
 
 **Primary brand domain:** `https://toromovers.com`  
 **Email (Resend, still verified):** `hello@toromovers.net`  
-**Phone:** `(321) 758-0094` · `tel:+13217580094`  
+**Phone:** `(689) 600-2720` · `tel:+16896002720`  
 Last updated: 2026-07-29
 
 ---
@@ -224,7 +224,7 @@ Hosts: `toromoveit.com`, `www.toromoveit.com`, `go.toromovers.net`
 |---------|--------|
 | Site | https://toromovers.com |
 | Email | hello@toromovers.net |
-| Phone (public / click-to-call) | (321) 758-0094 |
+| Phone (public / click-to-call) | (689) 600-2720 |
 | OpenPhone SMS sender | +16896002720 |
 
 ---

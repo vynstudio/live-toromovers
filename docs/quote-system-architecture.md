@@ -2,12 +2,12 @@
 
 **Document:** Phase A architecture (revised)  
 **Status:** architecture **accepted**. Global public phone is in `src/config/business.ts`. **Step B (Neon/schema) is blocked** until Neon, HubSpot, and staging Telegram access is in place. No production release until staging QA passes and the owner approves.  
-**Revised:** 2026-08-20 (phone + access checklist)  
+**Revised:** 2026-10-07 (public phone is (689) 600-2720)  
 **Canonical URL:** `https://toromovers.com/get-a-quote`  
 **Production API:** `POST /api/v1/leads`  
 **Source of truth:** Neon Postgres  
 **CRM (required in Phase A):** HubSpot Contact + associated Deal on the existing Mudanzas pipeline  
-**Public business number:** `(321) 758-0094` · `tel:+13217580094`
+**Public business number:** `(689) 600-2720` · `tel:+16896002720`
 
 ---
 
@@ -21,7 +21,7 @@ Owner-approved corrections over the prior draft:
 4. **Redirect from `/get-my-price` is 302 or 307, not 301,** until live tracking, attribution, conversions, and submissions are verified. Preserve all listed query parameters.
 5. **Deployment order A–L is binding.**
 6. **Claims lock** applies to every surface, including HubSpot.
-7. **Global public number** is `(321) 758-0094` via `src/config/business.ts`. The retired `(689) 600-2720` must not appear as Toro’s callback number. Customer phones in existing leads are never rewritten.
+7. **Global public number** is `(689) 600-2720` via `src/config/business.ts`. Customer phones in existing leads are never rewritten.
 
 This file is **step A**. Step B starts only after the access checklist in §21 is complete.
 
@@ -63,10 +63,10 @@ Toro Movers’ **only** public / callback number:
 
 | Field | Value | Config |
 |-------|--------|--------|
-| Display | `(321) 758-0094` | `phoneDisplay` |
-| E.164 | `+13217580094` | `phoneE164` |
-| Click-to-call | `tel:+13217580094` | `phoneTelHref` |
-| Click-to-SMS | `sms:+13217580094` | `phoneSmsHref` |
+| Display | `(689) 600-2720` | `phoneDisplay` |
+| E.164 | `+16896002720` | `phoneE164` |
+| Click-to-call | `tel:+16896002720` | `phoneTelHref` |
+| Click-to-SMS | `sms:+16896002720` | `phoneSmsHref` |
 
 **Source of truth:** `src/config/business.ts`. `@/lib/contact` re-exports `PHONE_DISPLAY`, `PHONE_TEL`, `PHONE_E164`, `PHONE_SMS_HREF` for existing imports.
 
@@ -80,8 +80,8 @@ Use this number in: header and mobile header, footer, `/get-my-price`, `/get-a-q
 
 | Role | Number | Where |
 |------|--------|--------|
-| Public / callback / click-to-call / JSON-LD / customer-facing copy | `(321) 758-0094` | `phoneDisplay` / `phoneE164` / `phoneTelHref` |
-| Customer click-to-SMS on the website | `sms:+13217580094` | `phoneSmsHref` |
+| Public / callback / click-to-call / JSON-LD / customer-facing copy | `(689) 600-2720` | `phoneDisplay` / `phoneE164` / `phoneTelHref` |
+| Customer click-to-SMS on the website | `sms:+16896002720` | `phoneSmsHref` |
 | **Outbound confirmation SMS `from`** | `(689) 600-2720` | `OPENPHONE_FROM_NUMBER=+16896002720` |
 
 Keep:
@@ -90,22 +90,11 @@ Keep:
 OPENPHONE_FROM_NUMBER=+16896002720
 ```
 
-**Do not** set `OPENPHONE_FROM_NUMBER=+13217580094` yet. First confirm `(321) 758-0094` is in OpenPhone/Quo and can send **and** receive SMS. Only after that test passes **and** the migration is approved may the sender change.
+Code fallback: `resolveOpenPhoneSmsFrom()` in `src/config/business.ts` uses the env var, then `+16896002720`.
 
-Code fallback: `resolveOpenPhoneSmsFrom()` in `src/config/business.ts` uses the env var, then `+16896002720`. It never defaults to 321.
+SMS **body** copy that tells the customer how to reach Toro shows `(689) 600-2720`. The envelope `from` on the OpenPhone API stays `+16896002720`.
 
-SMS **body** copy that tells the customer how to reach Toro still shows `(321) 758-0094`. The envelope `from` on the OpenPhone API stays `+16896002720`.
-
-Retired as **public display** — QA must not find these in UI, JSON-LD, or click-to-call:
-
-```
-6896002720
-+16896002720
-(689) 600-2720
-689-600-2720
-```
-
-Allowlist for `+16896002720` / `(689) 600-2720`: `OPENPHONE_FROM_NUMBER`, `openPhoneSmsFromE164`, `.env.example`, and this architecture note. Treat bare `689` / `600` / `2720` as context searches only.
+Example customer phones in tests and curl fixtures use `+15555550123`. Do not hard-code any other business number.
 
 ---
 
@@ -846,7 +835,7 @@ Never commit values. Staging vs production: **different** Netlify site/context *
 | `RESEND_FROM_EMAIL` | from address |
 | `LEAD_NOTIFICATION_EMAIL` | internal To: |
 | `OPENPHONE_API_KEY` | SMS |
-| `OPENPHONE_FROM_NUMBER` | OpenPhone SMS **sender** — keep `+16896002720` until 321 SMS migration is approved |
+| `OPENPHONE_FROM_NUMBER` | OpenPhone SMS **sender** — `+16896002720` (same as the public line) |
 | `TELEGRAM_BOT_TOKEN` | crew alerts |
 | `TELEGRAM_CHAT_ID` | crew chat |
 | `TELEGRAM_ADMIN_CHAT_ID` | outbox failure pings (no PII) |
@@ -888,7 +877,7 @@ Staging Telegram **must** be a different `TELEGRAM_CHAT_ID`. Staging HubSpot **m
 | Telegram | staging chat | crew chat |
 | Telegram admin | owner | owner |
 | Resend | owner inbox only (`LEAD_NOTIFICATION_EMAIL`) | customer + crew |
-| OpenPhone | skip SMS or a dedicated test number | send-from `(689) 600-2720`; public callback `(321) 758-0094` |
+| OpenPhone | skip SMS or a dedicated test number | send-from and public callback `(689) 600-2720` |
 | Meta | Test Events / no ads traffic | CAPI after smoke test |
 | Turnstile | staging keys | production keys |
 | `/get-my-price` redirect | `QUOTE_FORM_REDIRECT_MODE=temp` on staging first | temp in prod only for redirect tests; 301 only at L |
@@ -1001,7 +990,7 @@ Prefix: `New quote request` (not “insured move”).
 ### Resend customer
 
 Subject: `We received your Toro Movers quote request`  
-Body: we received the request; a team member will contact you; phone `(321) 758-0094`. No insurance/licensing claims. No fake pricing.
+Body: we received the request; a team member will contact you; phone `(689) 600-2720`. No insurance/licensing claims. No fake pricing.
 
 ### Resend internal
 
@@ -1044,7 +1033,7 @@ Attribution capture (`src/lib/utm.ts`) must be extended to store `gbraid`, `wbra
 - Zod accepts each of the nine enabled `request_type` ids and rejects a disabled id.
 - Email normalize: `  A@B.COM ` → `a@b.com`.
 - Customer phone normalize (not the business number): `(407) 555-0100`, `+1 407-555-0100`, `14075550100` → `+14075550100`.
-- Old-number grep (must be absent as Toro callback): `6896002720`, `+16896002720`, `(689) 600-2720`, `689-600-2720`.
+- Public callback is `(689) 600-2720` from `src/config/business.ts`. Fixture customer phones use `+15555550123`.
 - Duplicate `idempotency_key` → same `lead_id`, one row, one Deal.
 - Outbox backoff schedule.
 - HubSpot mapper omits unknown properties; dealname has no claims tokens.
@@ -1074,7 +1063,7 @@ Use staging Neon, staging HubSpot, staging Telegram, staging Turnstile, Meta Tes
 | 16 | One Meta CAPI `Lead` with `event_id = lead_id`; Pixel `eventID` matches; Events Manager shows deduped (not 2) | |
 | 17 | Query-string redirect (staging `/get-my-price?...all params…`) | 307 or 302 to `/get-a-quote` with **all** params intact |
 | 18 | Copy grep: licensed, insured, bonded, certified, DOT, FMCSA, cargo, fully covered — **absent** from form, HubSpot dealname/description, emails, SMS, Telegram, thank-you |
-| 18b | Public callback in UI, JSON-LD, emails, SMS **body**, Telegram, thank-you is `(321) 758-0094`. OpenPhone API `from` remains `+16896002720`. Do not display `(689) 600-2720` as the business number. | |
+| 18b | Public callback in UI, JSON-LD, emails, SMS **body**, Telegram, thank-you is `(689) 600-2720`. OpenPhone API `from` remains `+16896002720`. | |
 | 19 | Rate limit 9th POST in 10 min | 429 |
 | 20 | Neon down (bad `DATABASE_URL`) | 503, no thank-you, no HubSpot |
 
@@ -1170,7 +1159,7 @@ Schema columns/hooks exist so these do not require a form rewrite.
 - Turnstile site/secret keys (staging + prod).
 - Terms: `/privacy` exists; `/terms` still needed beside the checkbox, or privacy-only until Terms are written.
 - Meta CAPI `META_ACCESS_TOKEN` (pixel `985575491098437`; current skill token expires 2026-09-07 — rotate before then).
-- Live Meta / Google ads that still show `(689) 600-2720` must be updated in Ads Manager (not in this repo). Do not switch Final URLs to `/get-a-quote` until Step J.
+- Live Meta / Google ads that show a phone should use `(689) 600-2720` (Ads Manager, not this repo). Do not switch Final URLs to `/get-a-quote` until Step J.
 
 ---
 
@@ -1282,7 +1271,7 @@ Send a test: `https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$STAGING_CH
 
 | | Number | Env / config |
 |--|--------|----------------|
-| Public website, click-to-call, JSON-LD, customer-facing contact | `(321) 758-0094` | `src/config/business.ts` |
+| Public website, click-to-call, JSON-LD, customer-facing contact | `(689) 600-2720` | `src/config/business.ts` |
 | OpenPhone **outbound confirmation SMS** | `(689) 600-2720` | `OPENPHONE_FROM_NUMBER=+16896002720` |
 
 Keep Netlify / `.env`:
@@ -1291,22 +1280,13 @@ Keep Netlify / `.env`:
 OPENPHONE_FROM_NUMBER=+16896002720
 ```
 
-Do **not** set `OPENPHONE_FROM_NUMBER=+13217580094` yet.
-
 Checklist:
 
-- [ ] Customers can **call** `(321) 758-0094` (inbound voice).
-- [ ] Customers may **text** `(321) 758-0094` (inbound SMS on the public line, when that line is in OpenPhone).
-- [ ] Automated confirmation SMS still **send from** `(689) 600-2720`. That OpenPhone number stays active.
-- [ ] Netlify `OPENPHONE_FROM_NUMBER` is `+16896002720` (not 321).
-- [ ] Site display already uses `(321) 758-0094` from `src/config/business.ts`.
-
-**Later, only after both pass and the owner approves a migration:**
-
-- [ ] `(321) 758-0094` is a Toro line in OpenPhone/Quo.
-- [ ] Test **send** SMS via API `from=+13217580094`.
-- [ ] Test **receive** SMS replies on that number.
-- [ ] Then — and only then — change `OPENPHONE_FROM_NUMBER=+13217580094`.
+- [ ] Customers can **call** `(689) 600-2720` (inbound voice).
+- [ ] Customers may **text** `(689) 600-2720` (inbound SMS on the public line).
+- [ ] Automated confirmation SMS **send from** `(689) 600-2720`.
+- [ ] Netlify `OPENPHONE_FROM_NUMBER` is `+16896002720`.
+- [ ] Site display uses `(689) 600-2720` from `src/config/business.ts`.
 
 ### After §21 is filled
 
@@ -1321,7 +1301,7 @@ Then Step B: Neon schema, migrations, outbox. Then C–H in order. Production de
 3. Turnstile token at submit.
 4. `POST /api/v1/leads`.
 5. On `success` + `lead_id`: `window.location.assign("/thank-you?ref=" + lead_id)`.
-6. On 4xx validation: show `field_errors`. On 503: call CTA uses `phoneDisplay` from `src/config/business.ts` — currently “Couldn’t send. Call (321) 758-0094.”
+6. On 4xx validation: show `field_errors`. On 503: call CTA uses `phoneDisplay` from `src/config/business.ts` — currently “Couldn’t send. Call (689) 600-2720.”
 7. Do not navigate to thank-you without a `lead_id`.
 
 Preview debt to remove in E: `universal-quote-form.tsx` currently `fetch("/api/crm/lead")`. That must become `/api/v1/leads`.

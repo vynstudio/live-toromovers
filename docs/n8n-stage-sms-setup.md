@@ -82,7 +82,7 @@ curl -s -X POST https://toromovers.com/api/crm/sequences/stage-run \
     "stage": "newLead",
     "stepId": "new_1h",
     "firstName": "Diler",
-    "phone": "+13217580094",
+    "phone": "+15555550123",
     "consentSms": true,
     "consentEmail": true
   }'
@@ -102,7 +102,7 @@ curl -s -X POST "https://n8n-production-d3d0.up.railway.app/webhook/toro-stage-s
     "event": "crm_lead",
     "stage": "newLead",
     "firstName": "Diler",
-    "phone": "+13217580094",
+    "phone": "+15555550123",
     "consentSms": true,
     "delayedSteps": [
       { "id": "new_1h", "delayMinutes": 1, "channel": "sms" }

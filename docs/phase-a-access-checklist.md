@@ -6,9 +6,9 @@
 
 Public callback number (already in `src/config/business.ts`):
 
-- Display: `(321) 758-0094`
-- E.164: `+13217580094`
-- Click-to-call: `tel:+13217580094`
+- Display: `(689) 600-2720`
+- E.164: `+16896002720`
+- Click-to-call: `tel:+16896002720`
 
 Do not rewrite customer phones on existing leads.
 
@@ -88,29 +88,20 @@ Incoming website Deals associate to the upserted Contact (HubSpot association ty
 
 ## 7. OpenPhone SMS and calls
 
-**Approved split now:**
+**Published line** (public contact and outbound SMS):
 
-- Public / click-to-call / JSON-LD: `(321) 758-0094`
+- Public / click-to-call / JSON-LD: `(689) 600-2720`
 - Outbound confirmation SMS sender: `(689) 600-2720`
 
 ```bash
 OPENPHONE_FROM_NUMBER=+16896002720
 ```
 
-Do **not** set `OPENPHONE_FROM_NUMBER=+13217580094` yet.
-
-- [ ] Customers can call `(321) 758-0094`
-- [ ] Customers may SMS `(321) 758-0094` (public inbound)
-- [ ] Confirmation SMS still send from `(689) 600-2720`
+- [ ] Customers can call `(689) 600-2720`
+- [ ] Customers may SMS `(689) 600-2720` (public inbound)
+- [ ] Confirmation SMS send from `(689) 600-2720`
 - [ ] Netlify `OPENPHONE_FROM_NUMBER=+16896002720`
-- [ ] Site copy uses `(321) 758-0094` from `src/config/business.ts`
-
-**SMS sender migration (later, owner-approved only):**
-
-- [ ] `(321) 758-0094` is in OpenPhone/Quo
-- [ ] Send test from `+13217580094` succeeds
-- [ ] Receive/reply test on that number succeeds
-- [ ] Then update `OPENPHONE_FROM_NUMBER=+13217580094`
+- [ ] Site copy uses `(689) 600-2720` from `src/config/business.ts`
 
 ---
 
