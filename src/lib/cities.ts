@@ -969,6 +969,89 @@ export const FERN_PARK: CityData = {
   schema: { lat: 28.6492, lng: -81.3409 },
 };
 
+export const EAST_ORLANDO: CityData = {
+  slug: "east-orlando-movers",
+  href: "/east-orlando-movers",
+  name: "East Orlando",
+  navLabel: "East Orlando movers",
+  metadata: {
+    title: "East Orlando Movers | Local Moving Company | Toro Movers",
+    description:
+      "East Orlando movers for UCF, Waterford Lakes, Avalon Park, and Union Park. Family-owned crew for homes, apartments, and rental-truck loading.",
+  },
+  h1: "East Orlando Movers",
+  subline:
+    "Local moving crew for houses, student apartments, and townhomes on the east side of Orlando.",
+  about: {
+    h2: "Moving in East Orlando: what to plan for",
+    lead: "Toro Movers serves East Orlando from its Orlando base. Common jobs are apartment moves near the University of Central Florida, single-family homes in Avalon Park and Waterford Lakes, and loading a rental truck or POD in Union Park.",
+  },
+  neighborhoods: [
+    "UCF and Alafaya Trail",
+    "Waterford Lakes",
+    "Avalon Park",
+    "Union Park",
+  ],
+  uniqueAngle: {
+    eyebrow: "east side",
+    h2: "East Orlando access",
+    body: "Campus loading zones, Avalon Park HOA streets, and the 408 and 417 toll roads shape East Orlando move days. The full page is at /east-orlando-movers.",
+  },
+  schema: { lat: 28.596, lng: -81.203 },
+};
+
+export const SOUTH_ORLANDO: CityData = {
+  slug: "south-orlando-movers",
+  href: "/south-orlando-movers",
+  name: "South Orlando",
+  navLabel: "South Orlando movers",
+  metadata: {
+    title: "South Orlando Movers | Local Moving Company | Toro Movers",
+    description:
+      "South Orlando movers for Hunters Creek, Meadow Woods, Southchase, and Pine Castle. Family-owned crew for homes, apartments, and rental-truck loading.",
+  },
+  h1: "South Orlando Movers",
+  subline:
+    "Local moving crew for master-planned houses and apartments south of downtown, toward the Turnpike and the airport.",
+  about: {
+    h2: "Moving in South Orlando: what to plan for",
+    lead: "Toro Movers serves South Orlando from its Orlando base. Common jobs are single-family homes in Hunters Creek and Southchase, apartments along John Young Parkway, and loading a rental truck or POD in Meadow Woods or Pine Castle.",
+  },
+  neighborhoods: ["Hunters Creek", "Meadow Woods", "Southchase", "Pine Castle"],
+  uniqueAngle: {
+    eyebrow: "south side",
+    h2: "South Orlando access",
+    body: "HOA streets in Hunters Creek and Southchase, Turnpike timing, and short loading zones on John Young Parkway shape these jobs. The full page is at /south-orlando-movers.",
+  },
+  schema: { lat: 28.359, lng: -81.427 },
+};
+
+export const WEST_ORLANDO: CityData = {
+  slug: "west-orlando-movers",
+  href: "/west-orlando-movers",
+  name: "West Orlando",
+  navLabel: "West Orlando movers",
+  metadata: {
+    title: "West Orlando Movers | Local Moving Company | Toro Movers",
+    description:
+      "West Orlando movers for MetroWest, Pine Hills, Kirkman Road, and the Universal area. Family-owned crew for homes, apartments, and rental-truck loading.",
+  },
+  h1: "West Orlando Movers",
+  subline:
+    "Local moving crew for condos, apartments, and houses between Kirkman Road, Pine Hills, and the Universal area.",
+  about: {
+    h2: "Moving in West Orlando: what to plan for",
+    lead: "Toro Movers serves West Orlando from its Orlando base. Common jobs are condo and apartment moves in MetroWest, houses in Pine Hills, and loading a rental truck or POD near Kirkman Road.",
+  },
+  neighborhoods: ["MetroWest", "Pine Hills", "Kirkman Road", "Universal area"],
+  uniqueAngle: {
+    eyebrow: "west side",
+    h2: "West Orlando access",
+    body: "MetroWest elevators, Pine Hills curb parking, and Kirkman Road traffic shape these jobs. The full page is at /west-orlando-movers.",
+  },
+  schema: { lat: 28.514, lng: -81.469 },
+};
+
 export const CITIES: CityData[] = [
   ORLANDO,
   LAKE_MARY,
@@ -987,6 +1070,9 @@ export const CITIES: CityData[] = [
   APOPKA,
   ST_CLOUD,
   WINDERMERE,
+  EAST_ORLANDO,
+  SOUTH_ORLANDO,
+  WEST_ORLANDO,
 ];
 
 export function otherCities(slug: string): CityData[] {

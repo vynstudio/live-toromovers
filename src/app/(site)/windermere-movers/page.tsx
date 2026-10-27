@@ -386,7 +386,8 @@ export default function WindermereMoversPage() {
               when you give us the rules, protect floors and doorways on tight
               turns, and keep the load moving so the day stays on schedule. See
               also{" "}
-              <Link href="/residential-movers">residential movers</Link>.
+              <Link href="/residential-movers">residential movers</Link> and{" "}
+              <Link href="/apartment-movers-orlando-fl">apartment moves</Link>.
             </p>
 
             <h3 className="guide-h3">Labor-only moving</h3>

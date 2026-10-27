@@ -31,6 +31,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // (480/mo, low competition). Richer than the generic /apartment-movers
     // service page; consider consolidating the two (301) to avoid overlap.
     { url: `${BASE}/apartment-movers-orlando-fl`, priority: 0.85 as const, changeFrequency: "monthly" as const },
+    { url: `${BASE}/orlando-movers-gallery`, priority: 0.4 as const, changeFrequency: "monthly" as const },
+    { url: `${BASE}/partners`, priority: 0.5 as const, changeFrequency: "monthly" as const },
+    { url: `${BASE}/move-in-checklist`, priority: 0.5 as const, changeFrequency: "monthly" as const },
+    { url: `${BASE}/blog/winter-park-movers-guide`, priority: 0.7 as const, changeFrequency: "monthly" as const },
   ];
 
   // Blog / guide articles.

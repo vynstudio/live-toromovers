@@ -103,8 +103,18 @@ export function ServicePage({ service }: { service: ServiceData }) {
                 <div className="block-eyebrow">{service.name.toLowerCase()}</div>
                 <h2 className="block-h2">{service.intro.h2}</h2>
               </div>
-              <p className="city-lead">{service.intro.lead}</p>
-            </div>
+            <p className="city-lead">{service.intro.lead}</p>
+          </div>
+          {service.slug === "labor-only-moving" ? (
+            <p className="city-lead" style={{ marginTop: 16 }}>
+              Apartment buildings are covered on{" "}
+              <Link href="/apartment-movers-orlando-fl">
+                apartment movers in Orlando
+              </Link>
+              . The city hub is{" "}
+              <Link href="/">Orlando movers</Link>.
+            </p>
+          ) : null}
             <p className="city-lead" style={{ marginTop: 16 }}>
               Planning ahead?{" "}
               <Link href="/central-florida-moving-checklist">

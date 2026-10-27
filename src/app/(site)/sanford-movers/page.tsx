@@ -389,7 +389,9 @@ export default function SanfordMoversPage() {
               Elevators, stairs, breezeways, and move-in windows are everyday work
               for our Sanford movers. We coordinate with property managers when you
               give us the rules, protect walls and floors on tight turns, and keep
-              the load moving so you stay inside your slot.
+              the load moving so you stay inside your slot. See{" "}
+              <Link href="/apartment-movers-orlando-fl">apartment moves</Link> for
+              elevator and loading-zone detail.
             </p>
 
             <h3 className="guide-h3">Labor-only moving</h3>

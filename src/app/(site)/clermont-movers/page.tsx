@@ -301,7 +301,7 @@ export default function ClermontMoversPage() {
                 carries, and basic bed and table disassembly when stairs or tight
                 turns demand it. For apartment-style jobs in town, start with our{" "}
                 <Link href="/apartment-movers-orlando-fl">
-                  apartment movers in Orlando
+                  apartment moves
                 </Link>{" "}
                 page for complex-specific detail, then book the same crew for
                 Clermont. Household and{" "}
@@ -401,7 +401,7 @@ export default function ClermontMoversPage() {
               walls and floors on tight turns, and keep the load moving so you stay
               inside your slot. See also{" "}
               <Link href="/apartment-movers-orlando-fl">
-                apartment movers in Orlando
+                apartment moves
               </Link>
               .
             </p>

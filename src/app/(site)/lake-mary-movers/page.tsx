@@ -390,7 +390,9 @@ export default function LakeMaryMoversPage() {
               rooms packed or ready, furniture protected, and careful placement at
               the new address. Stairs, long carries, and multi-stop days are
               handled by the hour — no stair surcharge. Apartments and condos get
-              the same care when elevators or breezeways are in the mix.
+              the same care when elevators or breezeways are in the mix. See{" "}
+              <Link href="/apartment-movers-orlando-fl">apartment moves</Link> for
+              that access detail.
             </p>
 
             <h3 className="guide-h3">Labor-only moving</h3>

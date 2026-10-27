@@ -390,7 +390,8 @@ export default function WinterGardenMoversPage() {
               for our Winter Garden movers. We coordinate gated entries and HOA
               windows, protect floors and walls on first-day move-ins, and handle
               larger homes with careful furniture placement. See also{" "}
-              <Link href="/residential-movers">residential movers</Link>.
+              <Link href="/residential-movers">residential movers</Link> and{" "}
+              <Link href="/apartment-movers-orlando-fl">apartment moves</Link>.
             </p>
 
             <h3 className="guide-h3">Labor-only moving</h3>

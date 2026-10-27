@@ -54,6 +54,16 @@ export default function Page() {
               before the truck arrives.
             </p>
             <div className="city-others">
+              <Link href="/blog/winter-park-movers-guide" className="city-other">
+                <span className="city-other-url">guide</span>
+                <h2 className="city-other-name">
+                  Hiring movers in Winter Park, FL: what to know
+                </h2>
+                <p className="city-other-desc">
+                  Doors, parking, and building rules, with a link to the Winter
+                  Park movers page.
+                </p>
+              </Link>
               {GUIDES.map((g) => (
                 <Link key={g.slug} href={g.href} className="city-other">
                   <span className="city-other-url">{g.readMins} min read</span>

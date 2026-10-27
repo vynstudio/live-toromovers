@@ -229,7 +229,8 @@ export default function ApartmentMoversOrlandoPage() {
               <p className="guide-p">
                 As local <Link href="/">Orlando movers</Link>, we&rsquo;ve handled
                 apartments across Orlando&rsquo;s biggest complexes and smallest
-                walk-ups. We coordinate elevator access and work within your
+                walk-ups. If you already have the truck, see{" "}
+                <Link href="/labor-only-moving">labor-only movers in Orlando</Link>. We coordinate elevator access and work within your
                 building&rsquo;s move-in window so move-in day isn&rsquo;t held up
                 at the leasing office.
               </p>

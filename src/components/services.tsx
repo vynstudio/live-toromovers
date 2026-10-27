@@ -23,6 +23,12 @@ export function Services() {
         </h2>
         <p className="block-sub reveal reveal-d2">{t.services.sub}</p>
 
+        <p className="block-sub reveal">
+          <Link href="/apartment-movers-orlando-fl">Apartment movers in Orlando</Link>
+          {" · "}
+          <Link href="/labor-only-moving">Labor-only movers in Orlando</Link>
+        </p>
+
         <div className="tiers">
           {t.services.tiers.map((tier, i) => (
             <article

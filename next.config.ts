@@ -160,6 +160,7 @@ const nextConfig: NextConfig = {
       { source: "/get-quote/:path*", destination: "/get-my-price", permanent: true },
       // Packing was never a standalone offer — send old links to full-service.
       { source: "/packing-services", destination: "/full-service-moving", permanent: true },
+      { source: "/packing-services-orlando", destination: "/full-service-moving", permanent: true },
       ...LEGACY_CONTENT.map((r) => ({ ...r, permanent: false })),
       APARTMENT_REDIRECT,
       ...CITY_LEGACY_REDIRECTS.map((r) => ({ ...r, permanent: true })),

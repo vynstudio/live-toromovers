@@ -307,7 +307,7 @@ export default function WinterParkMoversPage() {
                 and loading windows planned before the truck arrives. For
                 complex-specific detail, see our{" "}
                 <Link href="/apartment-movers-orlando-fl">
-                  apartment movers in Orlando
+                  apartment moves
                 </Link>{" "}
                 page; the same crew covers Winter Park.
               </p>
@@ -404,7 +404,7 @@ export default function WinterParkMoversPage() {
               you give us the rules, protect walls and floors on tight turns, and
               keep the load moving so you stay inside your slot. See also{" "}
               <Link href="/apartment-movers-orlando-fl">
-                apartment movers in Orlando
+                apartment moves
               </Link>
               .
             </p>
@@ -639,6 +639,18 @@ export default function WinterParkMoversPage() {
               <Link href="/fern-park-movers">Fern Park movers</Link>
               {" · "}
               <Link href="/altamonte-springs-movers">Altamonte Springs movers</Link>
+            </p>
+          </div>
+        </section>
+
+        <section className="block">
+          <div className="block-inner">
+            <p className="guide-p">
+              Planning doors, parking, and building rules first? Read the{" "}
+              <Link href="/blog/winter-park-movers-guide">
+                Winter Park moving guide
+              </Link>
+              .
             </p>
           </div>
         </section>

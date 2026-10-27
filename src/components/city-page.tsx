@@ -32,7 +32,7 @@ function buildServices(city: CityData) {
   const isOrlando = city.slug === "orlando-movers";
   return [
     {
-      title: isOrlando ? "Apartment movers in Orlando" : "Apartment & condo moves",
+      title: isOrlando ? "Apartment movers in Orlando" : "Apartment moves",
       description: isOrlando
         ? `Walk-ups, elevators, tight hallways, parking limits, and move-in windows across Orlando apartment communities — careful carries and up-front hourly rates.`
         : `Elevators, walk-ups, loading zones, and move-in windows across ${n} apartment communities — careful carries and clear hourly pricing.`,
@@ -240,7 +240,14 @@ export function CityPage({ city }: { city: CityData }) {
                 {" "}
                 or our <Link href="/orlando-movers">Orlando movers</Link> hub
               </>
-            ) : null}
+            ) : (
+              <>
+                . East, south, and west of downtown:{" "}
+                <Link href="/east-orlando-movers">East Orlando movers</Link>,{" "}
+                <Link href="/south-orlando-movers">South Orlando movers</Link>,{" "}
+                <Link href="/west-orlando-movers">West Orlando movers</Link>
+              </>
+            )}
             . Ready for a clear estimate?{" "}
             <Link href="/get-my-price">Get my price</Link>.
           </p>

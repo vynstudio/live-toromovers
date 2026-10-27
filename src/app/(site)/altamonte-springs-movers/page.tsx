@@ -298,7 +298,7 @@ export default function AltamonteSpringsMoversPage() {
                 disassembly when the stairs demand it. If you&rsquo;re comparing
                 options, start with our{" "}
                 <Link href="/apartment-movers-orlando-fl">
-                  apartment movers in Orlando
+                  apartment moves
                 </Link>{" "}
                 page for complex-specific detail, then book the same crew for
                 Altamonte.
@@ -391,7 +391,7 @@ export default function AltamonteSpringsMoversPage() {
               tight turns, and keep the load moving so you stay inside your slot.
               See also{" "}
               <Link href="/apartment-movers-orlando-fl">
-                apartment movers in Orlando
+                apartment moves
               </Link>
               .
             </p>

@@ -314,7 +314,7 @@ export default function KissimmeeMoversPage() {
                 disassembly when the stairs demand it. If you&rsquo;re comparing
                 options, start with our{" "}
                 <Link href="/apartment-movers-orlando-fl">
-                  apartment movers in Orlando
+                  apartment moves
                 </Link>{" "}
                 page for complex-specific detail, then book the same crew for
                 Kissimmee.
@@ -423,7 +423,7 @@ export default function KissimmeeMoversPage() {
               give us the rules, protect walls and floors on tight turns, and keep
               the load moving so you stay inside your slot. See also{" "}
               <Link href="/apartment-movers-orlando-fl">
-                apartment movers in Orlando
+                apartment moves
               </Link>
               .
             </p>
