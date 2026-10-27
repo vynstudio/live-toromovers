@@ -262,7 +262,7 @@ export function AreaMoversPage({ content }: { content: AreaMoversContent }) {
 
         <section className="block">
           <div className="block-inner" style={{ textAlign: "center" }}>
-            <h2 className="block-h2">Request a {content.areaName} quote</h2>
+            <h2 className="block-h2">Request a quote in {content.areaName}</h2>
             <p className="block-sub">
               Call or text {PHONE_DISPLAY}, or send the date and both addresses
               for a quote.
